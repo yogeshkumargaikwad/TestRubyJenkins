@@ -1,6 +1,6 @@
 class Test
   def initialize
-    puts 'I love India'
+    puts 'Hello Enzigma!'
   end
 end
 
