@@ -1,4 +1,5 @@
 class Test
+  
   def initialize
     puts 'Hello Enzigma!'
   end
