@@ -1,7 +1,7 @@
 class Test
 
   def initialize
-    puts 'Welcome'
+    puts 'Welcome to test ruby'
     puts 'Hello Enzigma!'
   end
   
