@@ -2,6 +2,7 @@ require "selenium-webdriver"
 require "rspec"
 describe "Google Search" do
 
+
   before(:each) do
     Selenium::WebDriver::Chrome.driver_path = "../drivers/chromedriver.exe";
     puts Selenium::WebDriver::Chrome.driver_path.to_s()
