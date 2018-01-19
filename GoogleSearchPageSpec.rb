@@ -5,8 +5,8 @@ describe "Google Search" do
   before(:each) do
     
     puts 'In Google Search Page Spec Before'
-    puts ENV['CHROMEDRIVER']+"/chromedriver.exe"    
-    Selenium::WebDriver::Chrome.driver_path = ENV['CHROMEDRIVER']+"/chromedriver.exe"
+    puts #{CHROMEDRIVER_PATH}+"/chromedriver.exe"    
+    Selenium::WebDriver::Chrome.driver_path = "/home/qa/chromedriver.exe"
     puts Selenium::WebDriver::Chrome.driver_path
     puts Selenium::WebDriver::Chrome.driver_path.to_s()
     @driver = Selenium::WebDriver.for(:chrome)
