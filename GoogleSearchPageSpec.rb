@@ -6,23 +6,23 @@ describe "Google Search" do
     puts 'In Google Search Page Spec Before'
     strJenkinsHome = ${JENKINS_HOME}
     puts 'strJenkinsHome :: #{strJenkinsHome}'
-    Selenium::WebDriver::Chrome.driver_path = strJenkinsHome + "/tools/chromedriver/chromedrive.exe";
-    puts Selenium::WebDriver::Chrome.driver_path.to_s()
-    @driver = Selenium::WebDriver.for(:chrome)
-    @base_url = "https://www.google.co.in/"
-    @driver.get @base_url
-    @driver.manage.timeouts.implicit_wait = 5000
+    #Selenium::WebDriver::Chrome.driver_path = strJenkinsHome + "/tools/chromedriver/chromedrive.exe";
+    #puts Selenium::WebDriver::Chrome.driver_path.to_s()
+    #@driver = Selenium::WebDriver.for(:chrome)
+    #@base_url = "https://www.google.co.in/"
+    #@driver.get @base_url
+    #@driver.manage.timeouts.implicit_wait = 5000
   end
 
   after(:each) do
-    @driver.quit
+    #@driver.quit
   end
 
   it "search text on google" do
-    @driver.get(@base_url + "/")
-    @driver.find_element(:id, "lst-ib").clear
-    @driver.find_element(:id, "lst-ib").send_keys "testing"
-    @driver.find_element(:id, "lst-ib").click
+    #@driver.get(@base_url + "/")
+    #@driver.find_element(:id, "lst-ib").clear
+    #@driver.find_element(:id, "lst-ib").send_keys "testing"
+    #@driver.find_element(:id, "lst-ib").click
   end
 
 end
