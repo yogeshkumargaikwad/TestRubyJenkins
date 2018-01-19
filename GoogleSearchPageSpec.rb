@@ -5,6 +5,7 @@ describe "Google Search" do
   before(:each) do
     puts 'In Google Search Page Spec Before'
     strJenkinsHome = ENV['JENKINS_HOME']
+    puts ENV['JENKINS_HOME']
     puts 'strJenkinsHome :: #{strJenkinsHome}'
     #Selenium::WebDriver::Chrome.driver_path = strJenkinsHome + "/tools/chromedriver/chromedrive.exe";
     #puts Selenium::WebDriver::Chrome.driver_path.to_s()
