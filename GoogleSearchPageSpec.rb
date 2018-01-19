@@ -7,6 +7,7 @@ describe "Google Search" do
     puts 'In Google Search Page Spec Before'
     puts ENV['CHROMEDRIVER']+"/chromedriver.exe"    
     Selenium::WebDriver::Chrome.driver_path = ENV['CHROMEDRIVER']+"/chromedriver.exe"
+    puts Selenium::WebDriver::Chrome.driver_path
     puts Selenium::WebDriver::Chrome.driver_path.to_s()
     @driver = Selenium::WebDriver.for(:chrome)
     @base_url = "https://www.google.co.in/"
