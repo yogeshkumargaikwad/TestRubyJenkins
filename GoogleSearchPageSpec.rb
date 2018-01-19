@@ -2,9 +2,9 @@ require "selenium-webdriver"
 require "rspec"
 describe "Google Search" do
 
-
   before(:each) do
-    Selenium::WebDriver::Chrome.driver_path = "../drivers/chromedriver.exe";
+    Selenium::WebDriver::Chrome.driver_path = "$JENKINS_HOME\tools\chromedriver\chromedrive.exe";
+    
     puts Selenium::WebDriver::Chrome.driver_path.to_s()
     @driver = Selenium::WebDriver.for(:chrome)
     @base_url = "https://www.google.co.in/"
