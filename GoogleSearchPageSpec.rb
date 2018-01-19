@@ -5,11 +5,12 @@ describe "Google Search" do
   before(:each) do
     
     puts 'In Google Search Page Spec Before'
-    puts #{CHROMEDRIVER_PATH}+"/chromedriver.exe"    
-    Selenium::WebDriver::Chrome.driver_path = "/home/qa/chromedriver.exe"
-    puts Selenium::WebDriver::Chrome.driver_path
-    puts Selenium::WebDriver::Chrome.driver_path.to_s()
-    @driver = Selenium::WebDriver.for(:chrome)
+    #puts #{CHROMEDRIVER_PATH}+"/chromedriver.exe"    
+    #Selenium::WebDriver::Chrome.driver_path = "/home/qa/chromedriver.exe"
+    #puts Selenium::WebDriver::Chrome.driver_path
+    #puts Selenium::WebDriver::Chrome.driver_path.to_s()
+    @driver = Selenium::WebDriver.for :firefox
+    #@driver = Selenium::WebDriver.for(:chrome)
     @base_url = "https://www.google.co.in/"
     @driver.get @base_url
     @driver.manage.timeouts.implicit_wait = 5000
