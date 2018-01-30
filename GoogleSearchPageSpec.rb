@@ -2,10 +2,9 @@ require "selenium-webdriver"
 require "rspec"
 describe "Google Search" do
 
-  before(:each) do
-    
+  before(:each) do    
     puts 'In Google Search Page Spec Before'
-    Selenium::WebDriver::Chrome.driver_path = "/home/qa/chromedriver.exe"
+    Selenium::WebDriver::Chrome.driver_path = "chromedriver"
     puts Selenium::WebDriver::Chrome.driver_path
     puts Selenium::WebDriver::Chrome.driver_path.to_s()
     #@driver = Selenium::WebDriver.for :firefox
