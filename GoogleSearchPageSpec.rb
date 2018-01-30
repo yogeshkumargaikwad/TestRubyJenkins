@@ -1,10 +1,12 @@
 require "selenium-webdriver"
 require "rspec"
 describe "Google Search" do
+
   before(:each) do
-    Selenium::WebDriver::Chrome.driver_path = "/home/qa/Browsers/chromedriver";
-    puts Selenium::WebDriver::Chrome.driver_path.to_s()
-    @driver = Selenium::WebDriver.for(:chrome)
+    Selenium::WebDriver::Firefox.driver_path = "/home/qa/Browsers/geckodriver";
+    puts Selenium::WebDriver::Firefox.driver_path.to_s()
+    #@driver = Selenium::WebDriver.for(:chrome)
+	  @driver = Selenium::WebDriver.for(:firefox)
     @base_url = "https://www.google.co.in/"
     @driver.get @base_url
     @driver.manage.timeouts.implicit_wait = 5000
@@ -22,5 +24,6 @@ describe "Google Search" do
     @driver.find_element(:id, "lst-ib").click
     @driver.manage.timeouts.implicit_wait = 10000
   end
+
 end
 
