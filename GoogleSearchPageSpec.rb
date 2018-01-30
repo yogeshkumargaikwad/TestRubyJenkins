@@ -3,6 +3,7 @@ require "rspec"
 describe "Google Search" do
 
   before(:each) do
+	  
     Selenium::WebDriver::Firefox.driver_path = "/home/qa/Browsers/geckodriver";
     puts Selenium::WebDriver::Firefox.driver_path.to_s()
     #@driver = Selenium::WebDriver.for(:chrome)
