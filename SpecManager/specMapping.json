@@ -1,0 +1,3 @@
+{
+  "BrowserCapabilities" : [{"Name" : "firefox" , "Version" : "58.0" ,"Platform" : "Windows"},{"Name" : "chrome" , "Version" : "63.0" ,"Platform" : "Windows"} ]
+}
