@@ -4,7 +4,7 @@ describe "Google Search" do
 
   before(:each) do
 	  
-    Selenium::WebDriver::Firefox.driver_path = "/home/qa/Browsers/geckodriver";
+    Selenium::WebDriver::Firefox.driver_path = "#{ENV['BROWSER']}/geckodriver.exe";
     puts Selenium::WebDriver::Firefox.driver_path.to_s()
     #@driver = Selenium::WebDriver.for(:chrome)
 	  @driver = Selenium::WebDriver.for(:firefox)
