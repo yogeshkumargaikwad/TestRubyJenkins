@@ -1,6 +1,7 @@
 require 'rspec'
 class Test
   def initialize
+    puts ENV['BROWSER']
     puts 'Hello Enzigma!'
   end
 end
