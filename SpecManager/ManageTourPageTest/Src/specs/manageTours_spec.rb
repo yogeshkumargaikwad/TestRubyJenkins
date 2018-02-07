@@ -26,6 +26,7 @@ describe ManageTours do
 		puts "successfully opened manage tour page C149 checked"
 		puts "\n"
 	end
+	=begin
 	it "C151 : to check that book tour button is disabled" do
 		puts "C151 : to check that book tour button is disabled"
 		puts "\n"
@@ -347,6 +348,7 @@ describe ManageTours do
 			puts "\n"
 		end 
 	end
+	=end
 	after(:all){
 		@objManageTours.deleteTestData
 		@driver.quit
