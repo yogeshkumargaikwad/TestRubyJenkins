@@ -1,7 +1,7 @@
 require 'rspec'
 class Test
   def initialize
-    puts ENV['BROWSER']
+    puts "#{ENV['BROWSER']}/geckodriver.exe"
     puts 'Hello Enzigma!'
   end
 end
