@@ -6,7 +6,7 @@ describe "Google Search" do
     #Selenium::WebDriver::Firefox.driver_path = "#{ENV['BROWSER']}";
     #puts Selenium::WebDriver::Firefox.driver_path.to_s()
     #@driver = Selenium::WebDriver.for(:chrome)
-    @driver = Selenium::WebDriver.for(ENV['BROWSER'])
+    @driver = Selenium::WebDriver.for(:ENV['BROWSER'])
     @base_url = "https://www.google.co.in/"
     @driver.get @base_url
     @driver.manage.timeouts.implicit_wait = 5000
