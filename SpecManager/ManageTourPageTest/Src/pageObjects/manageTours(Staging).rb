@@ -7,7 +7,6 @@ require 'selenium-webdriver'
 require 'yaml'
 require 'json'
 require 'date'
-require 'datatable'
 class ManageTours
 	@driver = nil
 	@records = nil
@@ -22,9 +21,9 @@ class ManageTours
 		recordsInJson = recordFile.read()
 		@records = JSON.parse(recordsInJson)
 		file = File.open("ManageTourPageTest/Src/testData/credentials.yaml", "r")
-		mapCredentials = YAML.load(file.read())
-		@driver.get "https://test.salesforce.com/login.jsp?pw=#{mapCredentials[sandBoxType]['password']}&un=#{mapCredentials[sandBoxType]['username']}"
-		@salesforceBulk = Salesforce.login(mapCredentials["#{sandBoxType}"]['username'],mapCredentials["#{sandBoxType}"]['password'],true)
+		@mapCredentials = YAML.load(file.read())
+		@driver.get "https://test.salesforce.com/login.jsp?pw=#{@mapCredentials[sandBoxType]['password']}&un=#{@mapCredentials[sandBoxType]['username']}"
+		@salesforceBulk = Salesforce.login(@mapCredentials["#{sandBoxType}"]['username'],@mapCredentials["#{sandBoxType}"]['password'],true)
 		EnziUIUtility.wait(driver,:id,"tsid",100)
 	end
 	def insertTestData(dataToInsert,objectType)

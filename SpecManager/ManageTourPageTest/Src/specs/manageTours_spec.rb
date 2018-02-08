@@ -1,7 +1,7 @@
 #Created By : Monika Pingale
 #Created Date : 28/12/2017
 #Modified date : 31/01/2018
-require_relative "../pageObjects/ManageTours(Staging).rb"
+require_relative "../pageObjects/manageTours(Staging).rb"
 require_relative "../utilities/EnziTestRailUtility/lib/EnziTestRailUtility.rb"
 require "selenium-webdriver"
 require "rspec"
@@ -21,7 +21,7 @@ describe ManageTours do
 	}
 	it "C149 : to check manage tour page is displayed" , :test => true do
     #begin
-      @leadsTestData[0]['email'] = "test_enzigmaPre#{rand(9999)}@examplegmail.com"
+      @leadsTestData[0]['email'] = "test_enzigmaPre#{rand(9999)}@example.com"
 		  @leadsTestData[0]['company'] = "Test_Enzigma#{rand(1111)}"
 		  puts "check for manage tour page opened"
 		  puts "\n"
@@ -38,22 +38,19 @@ describe ManageTours do
     #end
   end
 
-=begin
-	it "C151 : to check that book tour button is disabled" , regression => true do
+	it "C151 : to check that book tour button is disabled" do
 		puts "C151 : to check that book tour button is disabled"
-    begin
+    #begin
 		  puts "\n"
 		  expect(@objManageTours.buttonDisabled?).to be true
 		  puts "C151 checked"
-      @testRailUtility.postResult(151,"Result for case 151 is #{"success"}",1,@runId)
-    rescue Exception => excp
-    @testRailUtility.postResult(151,"Result for case 151 is #{excp}",5,@runId)
-      raise excp
-    end
+      #@testRailUtility.postResult(151,"Result for case 151 is #{"success"}",1,@runId)
+    #rescue Exception => excp
+    #@testRailUtility.postResult(151,"Result for case 151 is #{excp}",5,@runId)
+      #raise excp
+    #end
 
 	end
-=end
-=begin
 	it "C7 : to check that book tour button get enable" do
 		puts "C7 : to check that book tour button get enable"
 		puts "\n"
@@ -69,9 +66,7 @@ describe ManageTours do
       #raise excp
    # end
   end
-=end
 
-=begin
 	it "C79 : to check that user can select tour date without building name", :regression => true do
 		puts "C79 : to check that user can select tour date without building name"
 		puts "\n"
@@ -86,9 +81,7 @@ describe ManageTours do
       #raise excp
     #end
   end
-=end
 
-=begin
 	it "C80 : to check that user can select previous date as tour date" , :regression => true do
 		puts "C80 : to check that user can select previous date as tour date"
 		puts "\n"
@@ -104,16 +97,14 @@ describe ManageTours do
       #raise excp
     #end
 	end
-=end
-=begin
 	it "C81 : to check that user can select start time"  do
 		puts "C81 : to check that user can select start time"
 		puts "\n"
     #begin
-		  ManageTours.selectBuilding(@driver.find_element(:id,"BookTours0"),"LA-Santa Monica",@driver)
+		  ManageTours.selectBuilding(@driver.find_element(:id,"BookTours0"),"LA-Santa Monica")
 		  ManageTours.selectTourDate(@driver.find_element(:id,"BookTours0"))
-      EnziUIUtility.clickElement(@driver,:id,"1517855400000")
-		  #EnziUIUtility.selectElement(@driver.find_element(:id,"BookTours0"),"Today","a")
+      #EnziUIUtility.clickElement(@driver,:id,"1517855400000")
+		  EnziUIUtility.selectElement(@driver.find_element(:id,"BookTours0"),"Today","a")
       sleep(4)
       expect(@objManageTours.childDisabled?(ManageTours.selectTourDate(@driver.find_element(:id,"BookTours0")),ManageTours.setElementValue(@driver.find_element(:id,"BookTours0"),"startTime",nil))).to be false
       puts "C81 checked"
@@ -143,9 +134,9 @@ describe ManageTours do
 		puts "C92 : to check that proper error message is displayed when user enter single character in building field"
 		puts "\n"
     #begin
-		  ManageTours.selectBuilding(@driver.find_element(:id,"BookTours0"),nil,@driver).clear
+		  ManageTours.selectBuilding(@driver.find_element(:id,"BookTours0"),nil).clear
 		  #ManageTours.selectBuilding(@driver.find_element(:id,"BookTours0"),nil).send_keys "a"
-		  if ManageTours.selectBuilding(@driver.find_element(:id,"BookTours0"),nil,@driver).attribute('value').length > 2 then
+		  if ManageTours.selectBuilding(@driver.find_element(:id,"BookTours0"),nil).attribute('value').length > 2 then
         expect(@driver.find_element(:xpath ,"//span[starts-with(@id, 'lookup-option')]").text).to eql nil
         puts "C92 checked"
         puts "\n"
@@ -275,14 +266,13 @@ describe ManageTours do
         #raise excp
       #end
 		end
-=end
 =begin
 		it "C94 : to check that tour is booked, when user clicks on 'create account and merge' button" do
 			puts "C94 : to check that tour is booked, when user clicks on 'create account and merge' button"
 			puts "\n"
       #begin
         sleep(10)
-        @leadsTestData[0]['email'] = "test_enzigmaPre#{rand(9999)}@examplegmail.com"
+        @leadsTestData[0]['email'] = "test_enzigmaPre#{rand(9999)}@example.com"
         @leadsTestData[0]['company'] = "Test_Enzigma#{rand(1111)}"
         puts "\n"
         @objManageTours.openPageForLead(Salesforce.createRecords(@objManageTours.instance_variable_get(:@salesforceBulk),'Lead',@leadsTestData)[0]['Id'])
@@ -348,7 +338,7 @@ describe ManageTours do
 			puts "\n"
       #begin
         sleep(10)
-        @leadsTestData[0]['email'] = "test_enzigmaPre#{rand(9999)}@examplegmail.com"
+        @leadsTestData[0]['email'] = "test_enzigmaPre#{rand(9999)}@example.com"
         @objManageTours.openPageForLead(Salesforce.createRecords(@objManageTours.instance_variable_get(:@salesforceBulk),'Lead',@leadsTestData)[0]['Id'])
 
         @objManageTours.bookTour(0,true)
@@ -435,7 +425,7 @@ describe ManageTours do
 			puts "\n"
       #begin
         sleep(3)
-        @leadsTestData[0]['email'] = "test_enzigmaPre#{rand(9999)}@examplegmail.com"
+        @leadsTestData[0]['email'] = "test_enzigmaPre#{rand(9999)}@example.com"
         @leadsTestData[0]['company'] = "Test_Enzigma#{rand(1111)}"
         @objManageTours.openPageForLead(Salesforce.createRecords(@objManageTours.instance_variable_get(:@salesforceBulk),'Lead',@leadsTestData)[0]['Id'])
         @objManageTours.bookTour(0,true)
@@ -474,7 +464,7 @@ describe ManageTours do
       #end
 		end
 =end
-	#end
+	end
 
 	after(:all){
     allRecordIds = Salesforce.class_variable_get(:@@createdRecordsIds)

@@ -1,5 +1,5 @@
 require 'yaml'
-require_relative('testRail/api_client')
+require_relative('testrail/api_client')
 module EnziTestRailUtility
 	class TestRailUtility
 

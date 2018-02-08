@@ -1,10 +1,7 @@
 [
 	{"lead" : 
 			[
-				{"lastName":"test_Pingale1C","firstName":"test_Monika1C","website":"http://www.Testgmail.com","email":"test_enzigma1ZZF999999@examplegmail.com","phone":"8146185355","leadSource":"Inbound call","company":"Test_Enzigma2","company_Size__c":"21-50","lead_Source_Detail__c":"Book A Tour Form","utm_campaign__c":"San Francisco - Modifier","utm_content__c":"utm contents","utm_medium__c":"cpc","utm_source__c":"ads-google","utm_term__c":"virtual +office +san +francisco","locale__c":"US","country_Code__c":"US","number_of_Desks__c":"12","leadSource" : "Website"},
-				{"lastName":"test_Pingale2C","firstName":"test_Monika2C","website":"http://www.Testgmail.com","email":"test_enzigma2ZZF999999@examplegmail.com","phone":"8146185355","leadSource":"Inbound call","company":"Test_Enzigma3","company_Size__c":"21-50","lead_Source_Detail__c":"Book A Tour Form","utm_campaign__c":"San Francisco - Modifier","utm_content__c":"utm contents","utm_medium__c":"cpc","utm_source__c":"ads-google","utm_term__c":"virtual +office +san +francisco","locale__c":"US","country_Code__c":"US","number_of_Desks__c":"12","leadSource" : "Website"},
-				{"lastName":"test_Pingale3C","firstName":"test_Monika3C","website":"http://www.Testgmail.com","email":"test_enzigma3ZZF999999@examplegmail.com","phone":"8146185355","leadSource":"Inbound call","company":"Test_Enzigma3","company_Size__c":"21-50","lead_Source_Detail__c":"Book A Tour Form","utm_campaign__c":"San Francisco - Modifier","utm_content__c":"utm contents","utm_medium__c":"cpc","utm_source__c":"ads-google","utm_term__c":"virtual +office +san +francisco","locale__c":"US","country_Code__c":"US","number_of_Desks__c":"12","leadSource" : "Website"},
-				{"lastName":"test_Pingale4C","firstName":"test_Monika4C","website":"http://www.Testgmail.com","email":"test_enzigma4ZZF999999@examplegmail.com","phone":"8146185355","leadSource":"Inbound call","company":"Test_Enzigma3","company_Size__c":"21-50","lead_Source_Detail__c":"Book A Tour Form","utm_campaign__c":"San Francisco - Modifier","utm_content__c":"utm contents","utm_medium__c":"cpc","utm_source__c":"ads-google","utm_term__c":"virtual +office +san +francisco","locale__c":"US","country_Code__c":"US","number_of_Desks__c":"12","leadSource" : "Website"}
+				{"lastName":"test_Pingale1C","firstName":"test_Monika1C","website":"http://www.Testgmail.com","email":"test_enzigma1ZZF999999@example.com","phone":"8146185355","leadSource":"Inbound call","company":"Test_Enzigma2","company_Size__c":"21-50","lead_Source_Detail__c":"Book A Tour Form","utm_campaign__c":"San Francisco - Modifier","utm_content__c":"utm contents","utm_medium__c":"cpc","utm_source__c":"ads-google","utm_term__c":"virtual +office +san +francisco","locale__c":"US","country_Code__c":"US","number_of_Desks__c":"12","leadSource" : "Website"}
 			]
 	}, 
 	{"tour" :  
@@ -13,12 +10,12 @@
 				{"productLine":"WeWork","bookedBySalesLead":"Yes","phone":"+91-9975839755","email":"test2_enzi@gmail.com","company":"test2_enzi","name":"test2_name","companySize":"2" , "numberOfDesks":"2" , "building":"BL-Potsdamer Platz" , "opportunity" : "test2"}
 			]
 	},
-	{"contact" : [{"lastName":"test_Pingale1C","firstName":"test_Monika1C","email":"test_enzi@examplegmail.com","accountId":""}]	
+	{"contact" : [{"lastName":"test_Pingale1C","firstName":"test_Monika1C","email":"test_enzi@example.com","accountId":""}]
 	
 	}, 
-	{"account" : [{"Name":"test_HCL","email":"test_hcl@examplegmail.com"}]		
+	{"account" : [{"Name":"test_HCL","email":"test_hcl@example.com"}]
 	
 	}, 
-	{"existingAccount" : {"email":"test_enzigma2JK@examplegmail.com" , "name":"Test_Enzigma3"}}
+	{"existingAccount" : {"email":"test_enzigma2JK@example.com" , "name":"Test_Enzigma3"}}
 	
 ]

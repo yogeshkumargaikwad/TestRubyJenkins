@@ -49,7 +49,7 @@ describe ManageTours do
 	it "C80 : to check that user can select previous date as tour date" , :regression => true do 
 		puts "C80 : to check that user can select previous date as tour date"
 		puts "\n"
-		@objManageTours.childDisabled?(ManageTours.selectBuilding(@driver.find_element(:id,"BookTours0"),"LA-Santa Monica"))
+		#@objManageTours.childDisabled?(ManageTours.selectBuilding(@driver.find_element(:id,"BookTours0"),"LA-Santa Monica"))
 		ManageTours.selectTourDate(@driver.find_element(:id,"BookTours0"))
 		expect(@objManageTours.previousDateEnabled?(Date.today.to_s)).to false
 		puts "C80 checked"
