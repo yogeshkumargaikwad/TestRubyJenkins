@@ -1,0 +1,80 @@
+
+ManageTours
+[32m  insert lead[0m
+[32m  should open managetour page for given lead[0m
+[32m  C7 : to check that book tour button get enable[0m
+[31m  C79,C80 : to check that user can select tour date without building name (FAILED - 1)[0m
+[31m  C81,C83 : to check that user can select start time (FAILED - 2)[0m
+[31m  C92 : to check that proper error message is displayed when user enter single character in building field (FAILED - 3)[0m
+[32m  C91 : to check that proper lead information is displayed on manage tour page[0m
+[31m  should book a single tour (FAILED - 4)[0m
+  should test duplicate account selector functionality
+[31m    C85 : to check that new account is created, when user clicks on 'create account and don't merge' button on duplicate account selector page (FAILED - 5)[0m
+
+An error occurred in an `after(:context)` hook.
+[31mFailure/Error: @objManageTours.deleteTestData[0m
+[31m[0m
+[31mNoMethodError:[0m
+[31m  undefined method `[]' for nil:NilClass[0m
+[36m# E:/Projects/Training/ROR/Managetour Page/Src/pageObjects/ManageTours(Staging).rb:198:in `deleteTestData'[0m
+[36m# ./managetours_spec.rb:233:in `block (2 levels) in <top (required)>'[0m
+
+Failures:
+
+  1) ManageTours C79,C80 : to check that user can select tour date without building name
+     [31mFailure/Error: expect(@objManageTours.childDisabled?(ManageTours.selectBuilding(@driver.find_element(:id,"BookTours0"),nil),ManageTours.selectTourDate(@driver.find_element(:id,"BookTours0")))).to be true[0m
+     [31m[0m
+     [31mNoMethodError:[0m
+     [31m  undefined method `find_elements' for nil:NilClass[0m
+     [36m# E:/Projects/Training/ROR/Managetour Page/Src/pageObjects/ManageTours(Staging).rb:77:in `selectBuilding'[0m
+     [36m# ./managetours_spec.rb:36:in `block (2 levels) in <top (required)>'[0m
+
+  2) ManageTours C81,C83 : to check that user can select start time
+     [31mFailure/Error: expect(@objManageTours.childDisabled?(ManageTours.selectTourDate(@driver.find_element(:id,"BookTours0")),ManageTours.setElementValue(@driver.find_element(:id,"BookTours0"),"startTime",nil))).to be true[0m
+     [31m[0m
+     [31mNoMethodError:[0m
+     [31m  undefined method `find_elements' for nil:NilClass[0m
+     [36m# E:/Projects/Training/ROR/Managetour Page/Src/pageObjects/ManageTours(Staging).rb:94:in `selectTourDate'[0m
+     [36m# ./managetours_spec.rb:41:in `block (2 levels) in <top (required)>'[0m
+
+  3) ManageTours C92 : to check that proper error message is displayed when user enter single character in building field
+     [31mFailure/Error: ManageTours.selectBuilding(@driver.find_element(:id,"BookTours0"),nil).send_keys "a"[0m
+     [31m[0m
+     [31mNoMethodError:[0m
+     [31m  undefined method `find_elements' for nil:NilClass[0m
+     [36m# E:/Projects/Training/ROR/Managetour Page/Src/pageObjects/ManageTours(Staging).rb:77:in `selectBuilding'[0m
+     [36m# ./managetours_spec.rb:46:in `block (2 levels) in <top (required)>'[0m
+
+  4) ManageTours should book a single tour
+     [31mFailure/Error: @objManageTours.bookTour(0)[0m
+     [31m[0m
+     [31mNoMethodError:[0m
+     [31m  undefined method `find_elements' for nil:NilClass[0m
+     [36m# E:/Projects/Training/ROR/Managetour Page/Src/pageObjects/ManageTours(Staging).rb:107:in `setElementValue'[0m
+     [36m# E:/Projects/Training/ROR/Managetour Page/Src/pageObjects/ManageTours(Staging).rb:57:in `bookTour'[0m
+     [36m# ./managetours_spec.rb:81:in `block (2 levels) in <top (required)>'[0m
+
+  5) ManageTours should test duplicate account selector functionality C85 : to check that new account is created, when user clicks on 'create account and don't merge' button on duplicate account selector page
+     [31mFailure/Error: @objManageTours.duplicateAccountSelector("Create Account and Don't Merge",nil)[0m
+     [31m[0m
+     [31mErrno::ECONNREFUSED:[0m
+     [31m  Failed to open TCP connection to 127.0.0.1:9515 (No connection could be made because the target machine actively refused it. - connect(2) for "127.0.0.1" port 9515)[0m
+     [36m# E:/Projects/Training/ROR/Managetour Page/Src/pageObjects/ManageTours(Staging).rb:131:in `duplicateAccountSelector'[0m
+     [36m# ./managetours_spec.rb:86:in `block (3 levels) in <top (required)>'[0m
+     [36m# ------------------[0m
+     [36m# --- Caused by: ---[0m
+     [36m# Errno::ECONNREFUSED:[0m
+     [36m#   No connection could be made because the target machine actively refused it. - connect(2) for "127.0.0.1" port 9515[0m
+     [36m#   E:/Projects/Training/ROR/Managetour Page/Src/pageObjects/ManageTours(Staging).rb:131:in `duplicateAccountSelector'[0m
+
+Finished in 4 minutes 8.1 seconds (files took 19.7 seconds to load)
+[31m9 examples, 5 failures, 1 error occurred outside of examples[0m
+
+Failed examples:
+
+[31mrspec ./managetours_spec.rb:33[0m [36m# ManageTours C79,C80 : to check that user can select tour date without building name[0m
+[31mrspec ./managetours_spec.rb:39[0m [36m# ManageTours C81,C83 : to check that user can select start time[0m
+[31mrspec ./managetours_spec.rb:44[0m [36m# ManageTours C92 : to check that proper error message is displayed when user enter single character in building field[0m
+[31mrspec ./managetours_spec.rb:80[0m [36m# ManageTours should book a single tour[0m
+[31mrspec ./managetours_spec.rb:85[0m [36m# ManageTours should test duplicate account selector functionality C85 : to check that new account is created, when user clicks on 'create account and don't merge' button on duplicate account selector page[0m
+
