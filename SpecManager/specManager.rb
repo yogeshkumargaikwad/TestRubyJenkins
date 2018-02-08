@@ -2,7 +2,7 @@
 #Created Date : 31/01/2018
 #Modified date :
 require 'yaml'
-require '/var/lib/gems/2.3.0/gems/rspec-core-3.7.1/lib/rspec'
+require 'rspec'
 require 'json'
 require_relative "CustomRESTAPITest/Src/utilities/EnziTestRailUtility/lib/EnziTestRailUtility.rb"
 puts "Input is :: #{ARGV}"
