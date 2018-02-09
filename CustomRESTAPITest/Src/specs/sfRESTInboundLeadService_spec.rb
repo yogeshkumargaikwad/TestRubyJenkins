@@ -31,7 +31,7 @@ describe SfRESTService do
 	it "To check lead is created when only required values are provided in payload" , :"363" => true  do
 		puts "\n"
 		puts "C363 : To check lead is created when only required values are provided in payload"
-		begin
+		#begin
 			payloadHash = JSON.parse(@testRailUtility.getPayloadsFromSteps(@testRailUtility.getCase(363)['custom_steps_separated'])[0]['expected'])
 			payloadHash['body']['email'] = "test_Bond#{rand(1000)}@example.com"
 			buildingTestData = @testData['Building']
@@ -80,10 +80,10 @@ describe SfRESTService do
 			puts "Checking open activities..."
 			expect(Salesforce.getRecords(@salesforceBulk,'Task',"SELECT id FROM Task WHERE WhoId = '#{getResponse['lead_sfid']}'",nil).result.records[0].fetch('Id')).to_not eql nil
 			puts "Open activities created successfully"
-			@testRailUtility.postResult(363,"Result for case 363 is #{getResponse['success']}",1,@runId)
-		rescue
-			@testRailUtility.postResult(363,"Result for case 363 is #{@executionResult.status}",5,@runId)
-		end
+			#@testRailUtility.postResult(363,"Result for case 363 is #{getResponse['success']}",1,@runId)
+		#rescue
+			#@testRailUtility.postResult(363,"Result for case 363 is #{@executionResult.status}",5,@runId)
+		#end
 	end
 
 	it "To check lead is created when only required values are provided in payload" , :"364" => true do
