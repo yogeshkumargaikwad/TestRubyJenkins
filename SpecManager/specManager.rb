@@ -86,6 +86,7 @@ if !ARGV.empty? then
             end
           else
             RSpec::Core::Runner.run([spec['path']], $stderr, $stdout)
+            RSpec.clear_examples
           end
         end
       end
