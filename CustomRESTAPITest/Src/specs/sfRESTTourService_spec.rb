@@ -145,6 +145,7 @@ describe SfRESTService do
 			puts "Account created successfully"
 			contact = @testData['Contact']
 			contact[0]['accountId'] = account[0]['Id']
+			contact[0]['email'] = "test_enzi#{rand(100)}@example.com"
     	puts contact
 			primaryMember = Salesforce.createRecords(@salesforceBulk,"Contact",contact)
 			createdContact = Salesforce.getRecords(@salesforceBulk,"Contact","SELECT name,UUID__c,Email FROM Contact WHERE id = '#{primaryMember[0]['Id']}'",nil).result.records[0]
@@ -392,6 +393,7 @@ describe SfRESTService do
 			puts "Account created successfully"
 			contact = @testData['Contact']
 			contact[0]['accountId'] = account[0]['Id']
+		  contact[0]['email'] = "test_enzi#{rand(100)}@example.com"
 			puts contact
 			primaryMember = Salesforce.createRecords(@salesforceBulk,"Contact",contact)
 			createdAccount = Salesforce.getRecords(@salesforceBulk,"Account","SELECT UUID__c FROM Account WHERE id = '#{account[0]['Id']}'",nil).result.records[0]
@@ -437,6 +439,7 @@ describe SfRESTService do
 			puts "Account created successfully"
 			contact = @testData['Contact']
 			contact[0]['accountId'] = account[0]['Id']
+		  contact[0]['email'] = "test_enzi#{rand(100)}@example.com"
 			puts contact
 			contactId = Salesforce.createRecords(@salesforceBulk,"Contact",contact)
 			journey = @testData['Journey']
