@@ -9,7 +9,10 @@ puts "Input is :: #{ARGV}"
 specMap = Hash.new
 config = YAML.load_file('CustomRESTAPITest/Src/testData/credentials.yaml')
 testRailUtility = EnziTestRailUtility::TestRailUtility.new(config['TestRail']['username'],config['TestRail']['password'])
- ARGV = ["project:#{ENV['PROJECT_ID']}", "suit:#{ENV['SUIT_ID']}" , "section:#{ENV['SECTION_ID']}"]
+#If specManager is executed by rspec command then we cant pass arguments hence we are creating new argument string
+if ARGV.size == 1 then
+  ARGV = ["project:#{ENV['PROJECT_ID']}", "suit:#{ENV['SUIT_ID']}" , "section:#{ENV['SECTION_ID']}"]
+end
 if !ARGV.empty? then
   ARGV.each do |input|
     containerInfo = input.split(":")
