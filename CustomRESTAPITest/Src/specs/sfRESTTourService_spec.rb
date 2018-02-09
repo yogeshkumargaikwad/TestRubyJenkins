@@ -50,10 +50,6 @@ describe SfRESTService do
 			Salesforce.addRecordsToDelete('Tour',getResponse['result'])
 			puts "Service call response is #{getResponse['success']}"
 			puts "\n"
-			puts "Checking open activities..."
-			expect(Salesforce.getRecords(@salesforceBulk,'Task',"SELECT id FROM Task WHERE WhatId = '#{getResponse['result'].delete('"')}'",nil).result.records[0].fetch('Id')).to_not eql nil
-			puts "Open activities created successfully"
-			puts "\n"
 			puts "Checking contact creation for given account uuid..."
 			createdContact = Salesforce.getRecords(@salesforceBulk,"Contact","SELECT id,Account.Name FROM Contact WHERE Account.id = '#{account[0]['Id']}'",nil).result.records[0]
 			expect(createdContact.fetch('Id')).to_not eql nil
@@ -69,6 +65,10 @@ describe SfRESTService do
 				puts "Opportunity created successfully"
 				puts "\n"
 			end
+			puts "Checking open activities..."
+			expect(Salesforce.getRecords(@salesforceBulk,'Task',"SELECT id FROM Task WHERE WhatId = '#{getResponse['result'].delete('"')}'",nil).result.records[0].fetch('Id')).to_not eql nil
+			puts "Open activities created successfully"
+			puts "\n"
 			#@testRailUtility.postResult(767,"Result for case 767 is #{getResponse['success']}",1,@runId)
 		#rescue Exception => excp
 			#@testRailUtility.postResult(767,"Result for case 767 is #{getResponse['success']}",5,@runId)
@@ -102,10 +102,6 @@ describe SfRESTService do
 			Salesforce.addRecordsToDelete('Tour',getResponse['result'].delete('"'))
 			puts "Service call response is #{getResponse['success']}"
 			puts "\n"
-			puts "Checking open activities..."
-			expect(Salesforce.getRecords(@salesforceBulk,'Task',"SELECT id FROM Task WHERE WhatId = '#{getResponse['result'].delete('"')}'",nil).result.records[0].fetch('Id')).to_not eql nil
-			puts "Open activities created successfully"
-			puts "\n"
 			puts "Checking contact creation"
 			expect(Salesforce.getRecords(@salesforceBulk,"Contact","SELECT id FROM Contact WHERE Email = '#{payloadHash['body']['email']}'",nil).result.records[0].fetch('Id')).to_not eql nil
 			puts "Contact created successfully"
@@ -121,6 +117,10 @@ describe SfRESTService do
 			expect(createdOpportunity).to_not eql nil
 			Salesforce.addRecordsToDelete('Opportunity',createdOpportunity)
 			puts "Opportunity created successfully"
+			puts "\n"
+			puts "Checking open activities..."
+			expect(Salesforce.getRecords(@salesforceBulk,'Task',"SELECT id FROM Task WHERE WhatId = '#{getResponse['result'].delete('"')}'",nil).result.records[0].fetch('Id')).to_not eql nil
+			puts "Open activities created successfully"
 			puts "\n"
 			#@testRailUtility.postResult(773,"Result for case 773 is #{getResponse['success']}",1,@runId)
 		#rescue Exception => excp
@@ -160,10 +160,6 @@ describe SfRESTService do
 			Salesforce.addRecordsToDelete('Tour',getResponse['result'].delete('"'))
 			puts "Service call response is #{getResponse['success']}"
 			puts "\n"
-			puts "Checking open activities..."
-			expect(Salesforce.getRecords(@salesforceBulk,'Task',"SELECT id FROM Task WHERE WhatId = '#{getResponse['result'].delete('"')}'",nil).result.records[0].fetch('Id')).to_not eql nil
-			puts "Open activities created successfully"
-			puts "\n"
 			createdTour = Salesforce.getRecords(@salesforceBulk,"Tour_Outcome__c","SELECT Primary_Member__r.Name,Company_Name__c,Tour_Scheduled_With_Email__c FROM Tour_Outcome__c WHERE id = '#{getResponse['result'].delete('"')}'",nil).result.records[0]
 			puts "Checking primary member on tour..."
 			expect(createdTour.fetch('Primary_Member__r.Name')).to eql "#{contact[0]['firstName']} #{contact[0]['lastName']}"
@@ -179,6 +175,10 @@ describe SfRESTService do
 			expect(createdTour.fetch('Tour_Scheduled_With_Email__c')).to eql createdContact.fetch('Email')
 			puts "Tour scheduled with email is :: #{createdTour.fetch('Tour_Scheduled_With_Email__c')}"
 			puts "Tour scheduled with email checked successfully"
+			puts "\n"
+			puts "Checking open activities..."
+			expect(Salesforce.getRecords(@salesforceBulk,'Task',"SELECT id FROM Task WHERE WhatId = '#{getResponse['result'].delete('"')}'",nil).result.records[0].fetch('Id')).to_not eql nil
+			puts "Open activities created successfully"
 			puts "\n"
 			#@testRailUtility.postResult(774,"Result for case 774 is #{getResponse['success']}",1,@runId)
 		#rescue Exception => excp
@@ -219,10 +219,6 @@ describe SfRESTService do
 			Salesforce.addRecordsToDelete('Tour',getResponse2['result'].delete('"'))
 			puts "Service call response is #{getResponse['success']}"
 			puts "\n"
-			puts "Checking open activities..."
-			expect(Salesforce.getRecords(@salesforceBulk,'Task',"SELECT id FROM Task WHERE WhatId = '#{getResponse['result'].delete('"')}'",nil).result.records[0].fetch('Id')).to_not eql nil
-			puts "Open activities created successfully"
-			puts "\n"
 			puts "Checking contact creation for given account uuid..."
 			createdContact = Salesforce.getRecords(@salesforceBulk,"Contact","SELECT id,Account.Name FROM Contact WHERE Account.id = '#{account[0]['Id']}'",nil).result.records[0]
 			expect(createdContact.fetch('Id')).to_not eql nil
@@ -239,6 +235,10 @@ describe SfRESTService do
 				puts "Opportunity created successfully"
 				puts "\n"
 			end
+			puts "Checking open activities..."
+			expect(Salesforce.getRecords(@salesforceBulk,'Task',"SELECT id FROM Task WHERE WhatId = '#{getResponse['result'].delete('"')}'",nil).result.records[0].fetch('Id')).to_not eql nil
+			puts "Open activities created successfully"
+			puts "\n"
 			#@testRailUtility.postResult(772,"Result for case 772 is #{getResponse['success']}",1,@runId)
 		#rescue Exception => excp
 			#@testRailUtility.postResult(772,"Result for case 772 is #{getResponse['success']}",5,@runId)
@@ -348,10 +348,6 @@ describe SfRESTService do
 			Salesforce.addRecordsToDelete('Tour',getResponse2['result'].delete('"'))
 			puts "Service call response is #{getResponse2['success']}"
 			puts "\n"
-			puts "Checking open activities..."
-			expect(Salesforce.getRecords(@salesforceBulk,'Task',"SELECT id FROM Task WHERE WhatId = '#{getResponse['result'].delete('"')}'",nil).result.records[0].fetch('Id')).to_not eql nil
-			puts "Open activities created successfully"
-			puts "\n"
 			puts "Checking contact creation for given account uuid..."
 			createdContact = Salesforce.getRecords(@salesforceBulk,"Contact","SELECT id,Account.Name FROM Contact WHERE Account.id = '#{account[0]['Id']}'",nil).result.records[0]
 			expect(createdContact.fetch('Id')).to_not eql nil
@@ -366,6 +362,10 @@ describe SfRESTService do
 				puts "Opportunity created successfully"
 				puts "\n"
       end
+			puts "\n"
+			puts "Checking open activities..."
+			expect(Salesforce.getRecords(@salesforceBulk,'Task',"SELECT id FROM Task WHERE WhatId = '#{getResponse['result'].delete('"')}'",nil).result.records[0].fetch('Id')).to_not eql nil
+			puts "Open activities created successfully"
 			puts "\n"
 			puts "Checking open activities..."
 			expect(Salesforce.getRecords(@salesforceBulk,'Task',"SELECT id FROM Task WHERE WhatId = '#{getResponse2['result'].delete('"')}'",nil).result.records[0].fetch('Id')).to_not eql nil
@@ -407,15 +407,15 @@ describe SfRESTService do
 			Salesforce.addRecordsToDelete('Tour',getResponse['result'].delete('"'))
 			puts "Service call response is #{getResponse['success']}"
 			puts "\n"
-			puts "Checking open activities..."
-			expect(Salesforce.getRecords(@salesforceBulk,'Task',"SELECT id FROM Task WHERE WhatId = '#{getResponse['result'].delete('"')}'",nil).result.records[0].fetch('Id')).to_not eql nil
-			puts "Open activities created successfully"
-			puts "\n"
 			puts "Checking Booked by contact id on tour..."
     	puts Salesforce.getRecords(@salesforceBulk,"Tour_Outcome__c","SELECT Booked_by_contact_id__c FROM Tour_Outcome__c WHERE id = '#{getResponse['result'].delete('"')}'",nil).result.records.inspect
 		  puts primaryMember[0]['Id']
       expect(Salesforce.getRecords(@salesforceBulk,"Tour_Outcome__c","SELECT Booked_by_contact_id__c FROM Tour_Outcome__c WHERE id = '#{getResponse['result'].delete('"')}'",nil).result.records[0].fetch('booked_by_contact_id__c')).to eql primaryMember[0]['Id']
 			puts "Booked by contact id checked successfully"
+			puts "\n"
+			puts "Checking open activities..."
+			expect(Salesforce.getRecords(@salesforceBulk,'Task',"SELECT id FROM Task WHERE WhatId = '#{getResponse['result'].delete('"')}'",nil).result.records[0].fetch('Id')).to_not eql nil
+			puts "Open activities created successfully"
 			puts "\n"
 			#@testRailUtility.postResult(817,"Result for case 817 is #{getResponse['success']}",1,@runId)
 		#rescue Exception => excp
@@ -458,10 +458,6 @@ describe SfRESTService do
 			Salesforce.addRecordsToDelete('Tour',getResponse['result'].delete('"'))
 			puts "Service call response is #{getResponse['success']}"
 			puts "\n"
-			puts "Checking open activities..."
-			expect(Salesforce.getRecords(@salesforceBulk,'Task',"SELECT id FROM Task WHERE WhatId = '#{getResponse['result'].delete('"')}'",nil).result.records[0].fetch('Id')).to_not eql nil
-			puts "Open activities created successfully"
-			puts "\n"
 			puts "Checking Journey on tour..."
     	bookedTour = Salesforce.getRecords(@salesforceBulk,"Tour_Outcome__c","SELECT Status__c ,Journey__c,Journey__r.Status__c FROM Tour_Outcome__c WHERE id = '#{getResponse['result'].delete('"')}'",nil).result.records[0]
 			expect(bookedTour.fetch('Journey__c')).to eql journeyId[0]['Id']
@@ -475,6 +471,10 @@ describe SfRESTService do
 			expect(bookedTour.fetch('Journey__r.Status__c')).to eql "Completed"
     	puts "Status of tour is :: #{bookedTour.fetch('Journey__r.Status__c')}"
     	puts "Status of tour checked successfully"
+			puts "Checking open activities..."
+			expect(Salesforce.getRecords(@salesforceBulk,'Task',"SELECT id FROM Task WHERE WhatId = '#{getResponse['result'].delete('"')}'",nil).result.records[0].fetch('Id')).to_not eql nil
+			puts "Open activities created successfully"
+			puts "\n"
 			#@testRailUtility.postResult(842,"Result for case 842 is #{getResponse['success']}",1,@runId)
 		#rescue Exception => excp
 			#@testRailUtility.postResult(842,"Result for case 842 is #{getResponse['success']}",5,@runId)
@@ -500,15 +500,15 @@ describe SfRESTService do
 			Salesforce.addRecordsToDelete('Tour',getResponse['result'].delete('"'))
 			puts "Service call response is #{getResponse['success']}"
 			puts "\n"
-			puts "Checking open activities..."
-			expect(Salesforce.getRecords(@salesforceBulk,'Task',"SELECT id FROM Task WHERE WhatId = '#{getResponse['result'].delete('"')}'",nil).result.records[0].fetch('Id')).to_not eql nil
-			puts "Open activities created successfully"
-			puts "\n"
 			puts "Checking Journey on tour..."
 			bookedTour = Salesforce.getRecords(@salesforceBulk,"Tour_Outcome__c","SELECT UUID__c,Status__c ,Journey__c FROM Tour_Outcome__c WHERE id = '#{getResponse['result'].delete('"')}'",nil).result.records[0]
 			expect(bookedTour.fetch('Journey__c')).to eql payloadHash['body']['sf_journey_uuid']
       Salesforce.addRecordsToDelete('TourUUID',bookedTour.fetch('UUID__c'))
 			puts "Journey checked successfully"
+			puts "\n"
+			puts "Checking open activities..."
+			expect(Salesforce.getRecords(@salesforceBulk,'Task',"SELECT id FROM Task WHERE WhatId = '#{getResponse['result'].delete('"')}'",nil).result.records[0].fetch('Id')).to_not eql nil
+			puts "Open activities created successfully"
 			puts "\n"
 			#@testRailUtility.postResult(847,"Result for case 847 is #{getResponse['success']}",1,@runId)
 		#rescue Exception => excp
