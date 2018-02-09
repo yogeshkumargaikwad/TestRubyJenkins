@@ -73,7 +73,11 @@ module EnziTestRailUtility
 
 		def getSections(suitId, projectId)
 			@client.send_get("get_sections/#{projectId}&suite_id=#{suitId}")
-    end
+    		end
+			
+		def getSection(sectionId)
+			@client.send_get("get_section/#{sectionId}")
+		end
 
 		def getSpecLocations(caseId,sectionId,suitId,planId,projectId)
 			specLocations = Array.new
@@ -157,10 +161,6 @@ module EnziTestRailUtility
 
 			def getTest(testId)
 				@client.send_get("get_test/#{testId}")
-			end
-
-			def getSection(sectionId)
-				@client.send_get("get_section/#{sectionId}")
 			end
 
 			#StatusId ::
