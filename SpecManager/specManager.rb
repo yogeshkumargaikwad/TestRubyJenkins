@@ -2,13 +2,16 @@
 #Created Date : 31/01/2018
 #Modified date :
 require 'yaml'
-#require 'rspec'
+require 'rspec'
 require 'json'
 require_relative "CustomRESTAPITest/Src/utilities/EnziTestRailUtility/lib/EnziTestRailUtility.rb"
 puts "Input is :: #{ARGV}"
 specMap = Hash.new
 config = YAML.load_file('CustomRESTAPITest/Src/testData/credentials.yaml')
 testRailUtility = EnziTestRailUtility::TestRailUtility.new(config['TestRail']['username'],config['TestRail']['password'])
+if ARGV.empty? then
+  ARGV = ["project:#{ENV['PROJECT_ID']}", "suit:#{ENV['SUIT_ID']}" , "section:#{ENV['SECTION_ID']}"]
+end
 if !ARGV.empty? then
   ARGV.each do |input|
     containerInfo = input.split(":")
@@ -66,8 +69,6 @@ if !ARGV.empty? then
       end
     end
     if !specs.empty? then
-      require 'rspec'
-      include RSpec
       specMapping = JSON.parse(File.read("specMapping.json"))
       specs.each do |spec|
         #Run spec in multiple browsers
