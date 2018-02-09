@@ -4,7 +4,7 @@
 #Modified date :
 require "rspec"
 require 'salesforce'
-require 'SecureRandom'
+require 'securerandom'
 require_relative "../pageObjects/sfRESTService.rb"
 require_relative "../utilities/EnziTestRailUtility/lib/EnziTestRailUtility.rb"
 describe SfRESTService do
