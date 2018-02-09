@@ -16,7 +16,7 @@ describe SfRESTService do
 		@testData = JSON.parse(testDataInJson)
 		SfRESTService.loginRequest
 		@salesforceBulk = Salesforce.login(SfRESTService.class_variable_get(:@@credentails)['QAAuto']['username'],SfRESTService.class_variable_get(:@@credentails)['QAAuto']['password'],true)
-		config = YAML.load_file('../testData/credentials.yaml')
+		config = YAML.load_file('CustomRESTAPITest/Src/testData/credentials.yaml')
 		@testRailUtility = EnziTestRailUtility::TestRailUtility.new(config['TestRail']['username'],config['TestRail']['password'])
 		#@runId = @testRailUtility.addRun("RESTAPI Inbound Lead Service",4,26)['id']
 
