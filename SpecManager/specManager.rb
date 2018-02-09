@@ -2,7 +2,7 @@
 #Created Date : 31/01/2018
 #Modified date :
 require 'yaml'
-require 'rspec'
+#require 'rspec'
 require 'json'
 require_relative "CustomRESTAPITest/Src/utilities/EnziTestRailUtility/lib/EnziTestRailUtility.rb"
 puts "Input is :: #{ARGV}"
@@ -66,6 +66,8 @@ if !ARGV.empty? then
       end
     end
     if !specs.empty? then
+      require 'rspec'
+      include RSpec
       specMapping = JSON.parse(File.read("specMapping.json"))
       specs.each do |spec|
         #Run spec in multiple browsers
