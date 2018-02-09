@@ -290,6 +290,7 @@ describe SfRESTService do
 		payloadHash = JSON.parse(@testRailUtility.getPayloadsFromSteps(@testRailUtility.getCase(450)['custom_steps_separated'])[0]['expected'])
 		payloadHash['body']['email'] = "test_Bond#{rand(1000)}@example.com"
 		payloadHash['body']['referrer_sfid'] = Salesforce.class_variable_get(:@@createdRecordsIds)['Contact'][0]['Id']
+		buildingTestData = @testData['Building']
 		buildingTestData[0]['uuid__c'] = SecureRandom.uuid
 		buildingTestData = @testData['Building']
 		payloadHash['body']['buildings_interested_uuids'][0] = Salesforce.getRecords(@salesforceBulk,"Building__c","SELECT UUID__c FROM Building__c WHERE id = '#{Salesforce.createRecords(@salesforceBulk,"Building__c",@testData['Building'])[0]['Id']}'",nil).result.records[0].fetch('UUID__c')
