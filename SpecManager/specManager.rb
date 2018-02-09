@@ -71,7 +71,7 @@ if !ARGV.empty? then
     end
     if !specs.empty? then
       specMapping = JSON.parse(File.read("SpecManager/specMapping.json"))
-      specs.each do |spec|
+      specs.uniq.each do |spec|
         #Run spec in multiple browsers
         if !spec.nil? then
           puts "spec to run :: #{spec}"
