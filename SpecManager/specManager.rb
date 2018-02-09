@@ -9,9 +9,7 @@ puts "Input is :: #{ARGV}"
 specMap = Hash.new
 config = YAML.load_file('CustomRESTAPITest/Src/testData/credentials.yaml')
 testRailUtility = EnziTestRailUtility::TestRailUtility.new(config['TestRail']['username'],config['TestRail']['password'])
-if ARGV.empty? then
-  ARGV = ["project:#{ENV['PROJECT_ID']}", "suit:#{ENV['SUIT_ID']}" , "section:#{ENV['SECTION_ID']}"]
-end
+ ARGV = ["project:#{ENV['PROJECT_ID']}", "suit:#{ENV['SUIT_ID']}" , "section:#{ENV['SECTION_ID']}"]
 if !ARGV.empty? then
   ARGV.each do |input|
     containerInfo = input.split(":")
