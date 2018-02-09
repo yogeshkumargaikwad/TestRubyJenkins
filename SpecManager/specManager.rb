@@ -67,7 +67,7 @@ if !ARGV.empty? then
       end
     end
     if !specs.empty? then
-      specMapping = JSON.parse(File.read("specMapping.json"))
+      specMapping = JSON.parse(File.read("SpecManager/specMapping.json"))
       specs.each do |spec|
         #Run spec in multiple browsers
         if !spec.nil? then
