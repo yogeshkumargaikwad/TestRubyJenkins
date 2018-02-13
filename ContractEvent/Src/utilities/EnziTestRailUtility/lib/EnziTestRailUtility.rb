@@ -1,5 +1,5 @@
 require 'yaml'
-require_relative File.expand_path('',Dir.pwd)+'/ContractEvent/src/utilities/EnziTestRailUtility/lib/testrail/testrail.rb' 
+require_relative File.expand_path('',Dir.pwd)+'/ContractEvent/Src/utilities/EnziTestRailUtility/lib/testrail/testrail.rb' 
 module EnziTestRailUtility
 	class TestRailUtility
 
