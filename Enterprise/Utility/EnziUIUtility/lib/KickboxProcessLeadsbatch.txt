@@ -1,0 +1,51 @@
+/** 
+* @Created By   	: Mayuresh Ghodke
+* @Created Date 	: 21st Dec 17 
+* @Comment			: Move all Kickbox related processing in Batch Apex.
+*/
+global class KickboxProcessLeadsBatch implements Database.Batchable<sObject>, Database.Stateful{
+   string csvFile;
+   string generateJourney;
+   Id kickBoxVerificationRecordId;
+   String filePart;
+   Decimal num = 0;
+   String objType='Lead';
+    
+   
+   Map<String, Schema.SObjectType> schemaMap = Schema.getGlobalDescribe();
+   Schema.SObjectType leadSchema = schemaMap.get(objType);
+   Map<String, Schema.SObjectField> fieldMap = leadSchema.getDescribe().fields.getMap();
+   List<Lead> lstLeadCreate = new List<Lead>();
+   List<sObject> lstLeadCreateNew = new List<sObject>();
+   List<sObject> lstLeadNotCreated = new List<sObject>();
+   set<Id> setInsertedLeads = new set<Id>();
+   Map<String, String> mapEmailWithErrors = new Map<String, String>();
+   boolean sendInsertFailRecords = false; 
+    
+   
+   global KickboxProcessLeadsBatch(string csvFile, string generateJourney, Id kickBoxVerificationRecordId, String filePart){
+        this.csvFile = csvFile;
+        this.generateJourney = generateJourney;
+        this.kickBoxVerificationRecordId = kickBoxVerificationRecordId;
+        this.filePart = filePart;
+    }
+
+    global Database.QueryLocator start(Database.BatchableContext bc) {
+        String query='Select Id,FirstName,LastName FROM Lead Limit 1000';
+        return database.getQueryLocator(query);
+    }
+
+    global void execute(Database.BatchableContext bc,List<lead> lstLeads){
+        // process each batch of records
+       Debug.log('lstLeads==>'+lstLeads.size());
+       Debug.log('csvFile==>'+csvFile);
+       Debug.log('generateJourney==>'+generateJourney);
+       num = num + lstLeads.size();
+       Debug.log('num==>'+num);
+        
+    }    
+
+    global void finish(Database.BatchableContext bc){
+        // execute any post-processing operations
+    }   
+}

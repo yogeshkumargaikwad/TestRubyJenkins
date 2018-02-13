@@ -1,0 +1,13 @@
+{"contact":{"LastName":"Sharma","Email":"robin.sharma123@example.com","AccountId":""},
+ "account":{"Name":"Alchemist"},
+ "scenario:1":{"ResetForm":["Select Preset Views", "Select City", "Minimum_Capacity__c", "Maximum_Capacity__c", "Minimum_Price_Range__c", "Maximum_Price_Range__c"]},
+ "scenario:2":{"SetCity":"Paris"},
+ "scenario:3":{"SetAvailableForm":["2019-2-23", "2017-1-25"]},
+ "scenario:4":{"SetPresetView":["Available 1ps in NYC","SF07-MidMarket"]},
+ "scenario:5":{"SetMinCapacity":[10,20,5,6,21,20,19,4]},
+ "scenario:6":{"SetMaxCapacity":[10,20,5,6,21,20,19,4]},
+ "scenario:7":{"setMinPriceRange":[1000,2000,1500,1700]},
+ "scenario:8":{"setMaxPriceRange":[1000,2000,1500,1700]},
+ "scenario:9":{"buildings":[{"name":"AUS-Domain"},{"name":"AUS-Congress"},{"name":"AUS-Labs"}]},
+ "scenario:10":{"CreatePresetView":["TestPresetView1","TestPresetView2","TestPresetView3","TestPresetView4","TestPresetView5"]}
+}

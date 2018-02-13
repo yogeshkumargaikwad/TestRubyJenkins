@@ -1,0 +1,6 @@
+{"profile":["WeWork NMD User", "Enterprise Member Success Manager", "Enterprise Real Estate", "WeWork Enterprise Solutions", "Sales Analyst", "Enterprise Product Design Manager"],
+  "account":["TestAccount1","TestAccount2","TestAccount3","TestAccount4","TestAccount5"],
+  "CreateQualifyingOpportunity":{"opportunityRole":"Primary Member", "oppRoleContact":"Amit Kasar NMD", "buildingName":"CHI-National Building",
+                                  "accountName":"Enzigma Enterprise 01", "noOfFTE":"2", "noOfDeskInterestedIn":"2",
+                                  "monthlyBudget":"100", "moveInDate":"2018-2-23", "term":"2" }
+}
