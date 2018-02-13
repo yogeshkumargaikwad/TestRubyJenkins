@@ -7,40 +7,52 @@ require 'selenium-webdriver'
 require 'yaml'
 require 'json'
 require 'date'
+require 'datatable'
 class ManageTours
 	@driver = nil
 	@records = nil
 	@recordsInJson = nil
 	@@recordInsertedIds = nil
+	@recordInsertedIdsToDelete = nil
 	def initialize(driver,sandBoxType)
 		@driver = driver
 		@recordInsertedIdsToDelete = Hash.new
 		@@recordInsertedIds = Hash.new
-		recordFile = File.open(File.expand_path(Dir.pwd+"/ManageTourPageTest/Src/testData/records.json"), "r")
+		recordFile = File.open(Dir.pwd+"/ManageTourPageTest/Src/testData/records.json", "r")
 		recordsInJson = recordFile.read()
 		@records = JSON.parse(recordsInJson)
-		@mapCredentials = YAML.load('credentials.yaml')
+		file = File.open("credentials.yaml", "r")
+		@mapCredentials = YAML.load_file('credentials.yaml')
 		@driver.get "https://test.salesforce.com/login.jsp?pw=#{@mapCredentials[sandBoxType]['password']}&un=#{@mapCredentials[sandBoxType]['username']}"
 		@salesforceBulk = Salesforce.login(@mapCredentials["#{sandBoxType}"]['username'],@mapCredentials["#{sandBoxType}"]['password'],true)
 		EnziUIUtility.wait(driver,:id,"tsid",100)
 	end
+	def insertTestData(dataToInsert,objectType)
+		@@recordInsertedIds["#{objectType}"] = Salesforce.createRecords(@salesforceBulk,objectType,dataToInsert)
+		if !@recordInsertedIdsToDelete.key?("#{objectType}") then
+			@recordInsertedIdsToDelete["#{objectType}"] = [@@recordInsertedIds["#{objectType}"]]
+		else
+			@recordInsertedIdsToDelete["#{objectType}"] << @@recordInsertedIds["#{objectType}"]
+		end
+		puts @@recordInsertedIds["#{objectType}"]
+	end
 	def openPage(objectRecordId,findBy,value)
-    url = @driver.current_url();
-    newUrl = url.split('/home')
-    @driver.get "#{newUrl[0]}"+"/#{objectRecordId}"
-    EnziUIUtility.wait(@driver,findBy,"#{value}",10)
-    btn = @driver.find_element(findBy,"#{value}")
-    btn.click
-    newWindow = @driver.current_url();
-    EnziUIUtility.switchToWindow(@driver,newWindow)
-    EnziUIUtility.wait(@driver,:id,"FTE",100)
+		url = @driver.current_url();
+		newUrl = url.split('/home')
+    	@driver.get "#{newUrl[0]}"+"/#{objectRecordId}"
+    	EnziUIUtility.wait(@driver,findBy,"#{value}",10)
+    	btn = @driver.find_element(findBy,"#{value}")
+    	btn.click
+    	newWindow = @driver.current_url();
+    	EnziUIUtility.switchToWindow(@driver,newWindow)
+    	EnziUIUtility.wait(@driver,:id,"FTE",100)
 	end
 	def bookTour(count, bookTour)
 		wait = Selenium::WebDriver::Wait.new(:timeout => 100)
 		wait.until { !@driver.find_elements(:id ,"FTE").empty? }
     	if !@driver.find_elements(:id,"Phone").empty? && @driver.find_element(:id,"Phone").attribute('value').eql?("") then
     		EnziUIUtility.setValue(@driver,:id,"Phone","#{@records[1]['tour'][count]['phone']}")
-    	end 
+    	end
     	if !@driver.find_elements(:id,"FTE").empty? && @driver.find_element(:id,"FTE").attribute('value').eql?("") then
     		EnziUIUtility.setValue(@driver,:id,"FTE","#{@records[1]['tour'][count]['companySize']}")
     	end
@@ -54,13 +66,13 @@ class ManageTours
 		    container = @driver.find_element(:id,"BookTours#{count}")
     		#ManageTours.setElementValue(container,"tourBySalesLead","#{@records[1]['tour'][count]['bookedBySalesLead']}")
     		ManageTours.setElementValue(container,"productLine","#{@records[1]['tour'][count]['productLine']}")
-    		ManageTours.selectBuilding(container,"#{@records[1]['tour'][count]['building']}",@driver)
+    		ManageTours.selectBuilding(container,"#{@records[1]['tour'][count]['building']}")
     		wait.until {!@driver.find_element(:id ,"spinner").displayed?}
     		ManageTours.selectTourDate(container)
     		wait.until {!@driver.find_element(:id ,"spinner").displayed?}
-    		EnziUIUtility.clickElement(@driver,:id,"1517855400000")
+    		#EnziUIUtility.clickElement(@driver,:id,"1515349800000")
     		wait.until {!@driver.find_element(:id ,"spinner").displayed?}
-    		#EnziUIUtility.selectElement(container,"Today","a")
+    		EnziUIUtility.selectElement(container,"Today","a")
     		wait.until {!@driver.find_element(:id ,"spinner").displayed?}
     		ManageTours.setElementValue(container,"startTime",nil)
     	end
@@ -72,7 +84,7 @@ class ManageTours
     		EnziUIUtility.wait(@driver,:id,"enzi-data-table-container",100)
     	end
 	end
-	def self.selectBuilding(container,value,driver)
+	def self.selectBuilding(container,value)
 		wait = Selenium::WebDriver::Wait.new(:timeout => 100)
 		innerDiv = container.find_elements(:class,"building")
 		innerFields = innerDiv[0].find_elements(:class,"cEnziField")
@@ -88,9 +100,8 @@ class ManageTours
 		wait.until { inputFieldInnerDiv[11].find_elements(:class,"slds-lookup__list")}
 		list = inputFieldInnerDiv[11].find_elements(:tag_name,"ul")
 		value = list[0].find_elements(:tag_name,"li")
-		sleep(30)
+		sleep(20)
 		wait.until {value[1].displayed?}
-		driver.execute_script("arguments[0].scrollIntoView();" , value[1])
 		value[1].click
 	end
 	def self.selectTourDate(container)
@@ -134,7 +145,7 @@ class ManageTours
 		return childFound
 	end
 	def duplicateAccountSelector(option,account)
-		wait = Selenium::WebDriver::Wait.new(:timeout => 2000)
+		wait = Selenium::WebDriver::Wait.new(:timeout => 100)
 		if account.eql? nil then
 			EnziUIUtility.wait(@driver,:id,"header43",100)
 			EnziUIUtility.selectElement(@driver,"#{option}","button")
@@ -182,7 +193,13 @@ class ManageTours
 			@@recordInsertedIds["Lead1"] = result.result.records[0]
 			puts "Lead created => #{@@recordInsertedIds['Lead1']}"
 		end
-    Salesforce.addRecordsToDelete(object,result.result.records[0].fetch('Id'))
+		if !@recordInsertedIdsToDelete.key?("#{object}") then
+			@recordInsertedIdsToDelete["#{object}"] = [@@recordInsertedIds["#{object}"]]
+			puts "Id to delete of #{object} is #{@recordInsertedIdsToDelete[object]}"
+		else
+			@recordInsertedIdsToDelete["#{object}"] << @@recordInsertedIds["#{object}"]
+			puts "Id to delete of #{object} is #{@recordInsertedIdsToDelete[object]}"
+		end
 		puts "#{object} created => #{@@recordInsertedIds[object]}"
 		result.result.records
 	end
@@ -194,7 +211,7 @@ class ManageTours
 	end
 	def openPageForLead(id)
 		puts "opening page for id = #{id}"
-		newUrl = @driver.current_url.split("=")[0] 
+		newUrl = @driver.current_url.split("=")[0]
 		EnziUIUtility.navigateToUrl(@driver,"#{newUrl}=#{id}")
 		puts "navigated to #{@driver.current_url()}"
 		newWindow = @driver.current_url();
@@ -202,6 +219,14 @@ class ManageTours
 	end
 	def checkError(errorMessage)
 		 @driver.find_elements(:class,"slds-theme--error")[0].text.eql? "#{errorMessage}"
+	end
+	def deleteTestData
+		Salesforce.deleteRecords(@salesforceBulk,"Lead",@recordInsertedIdsToDelete['Lead'][0])
+		Salesforce.deleteRecords(@salesforceBulk,"Journey__c",@recordInsertedIdsToDelete['Journey__c'])
+		Salesforce.deleteRecords(@salesforceBulk,"Account",@recordInsertedIdsToDelete['Account'])
+		Salesforce.deleteRecords(@salesforceBulk,"Contact",@recordInsertedIdsToDelete['Contact'])
+		Salesforce.deleteRecords(@salesforceBulk,"Opportunity",@recordInsertedIdsToDelete['Opportunity'])
+		Salesforce.deleteRecords(@salesforceBulk,"Tour_Outcome__c",@recordInsertedIdsToDelete['Tour_Outcome__c'])
 	end
 	def rescheduleTour
 		wait = Selenium::WebDriver::Wait.new(:timeout => 100)
@@ -214,11 +239,11 @@ class ManageTours
 		EnziUIUtility.selectElement(@driver,"Save","button")
 		#EnziUIUtility.wait(@driver,:id,"Reschedule",1000)
 		wait.until { @driver.find_element(:id ,"enzi-data-table-container").displayed? }
-		#res.fetch('Status__c').eql?("Scheduled") && res.fetch('Original_Tour__c').eql?("#{@@recordInsertedIds['Tour_Outcome__c']['Id']}")	
+		#res.fetch('Status__c').eql?("Scheduled") && res.fetch('Original_Tour__c').eql?("#{@@recordInsertedIds['Tour_Outcome__c']['Id']}")
 	end
-	def tourStatusChecked?(statusToCheck , primaryMemberEmail)
+	def tourStatusChecked?(statusToCheck)
 		tourStatusChecked = false
-		rescheduledTours = Salesforce.getRecords(@salesforceBulk,"Tour_Outcome__c","SELECT id,Status__c,Original_Tour__c FROM Tour_Outcome__c WHERE Primary_Member__r.email = '#{primaryMemberEmail}'",nil)
+		rescheduledTours = Salesforce.getRecords(@salesforceBulk,"Tour_Outcome__c","SELECT id,Status__c,Original_Tour__c FROM Tour_Outcome__c WHERE Primary_Member__r.email = '#{@records[0]['lead'][3]['email']}'",nil)
 		rescheduledTours.result.records.each do |res|
 			@@recordInsertedIds['Tour_Outcome__c1'] = res
 			if res.fetch('Status__c').eql? "#{statusToCheck}" then
