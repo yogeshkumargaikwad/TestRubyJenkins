@@ -1,7 +1,7 @@
 #Created By : Kishor Shinde
 #Created Date : 19/1/2018
 #Modified date :
-require_relative File.expand_path('',Dir.pwd)+'/ContractEvent/src/utilities/sfRESTService.rb'
+require_relative File.expand_path('',Dir.pwd)+'/ContractEvent/Src/utilities/sfRESTService.rb'
 require 'enziUIUtility'
 require 'salesforce'
 require 'selenium-webdriver'
@@ -23,7 +23,7 @@ class ContractEvent
 		@recordToDelete = Hash.new
 		file = File.open(File.expand_path('',Dir.pwd)+"/credentials.yaml", "r")
 		@mapCredentials = YAML.load(file.read())
-		sObjectRecordsJson = File.read(File.expand_path('',Dir.pwd)+"/ContractEvent/src/testData/testRecords.json")
+		sObjectRecordsJson = File.read(File.expand_path('',Dir.pwd)+"/ContractEvent/Src/testData/testRecords.json")
 		@sObjectRecords = JSON.parse(sObjectRecordsJson)
 		@sfBulk = Salesforce.login(@mapCredentials['Staging']['username'],@mapCredentials['Staging']['password'],true)
 		recordTypeIds = Salesforce.getRecords(@sfBulk,'RecordType',"Select id,Name from RecordType where SObjectType = 'Account'")
