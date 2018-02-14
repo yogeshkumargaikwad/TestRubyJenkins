@@ -1,8 +1,8 @@
 #Created By : Kishor Shinde
 #Created Date : 19/1/2018
 #Modified date :
-require_relative File.expand_path('',Dir.pwd)+'/ContractEvent/src/pageObjects/restAPITestContractEvent.rb'
-require_relative File.expand_path('',Dir.pwd)+'/ContractEvent/src/utilities/EnziTestRailUtility/lib/EnziTestRailUtility.rb'
+require_relative File.expand_path('',Dir.pwd)+'/ContractEvent/Src/pageObjects/restAPITestContractEvent.rb'
+require_relative File.expand_path('',Dir.pwd)+'/ContractEvent/Src/utilities/EnziTestRailUtility/lib/EnziTestRailUtility.rb'
 require "selenium-webdriver"
 require "rspec"
 require 'date'
@@ -16,7 +16,7 @@ require 'securerandom'
 describe ContractEvent do
 	before(:all){
 		puts "--------------------------------------------------------------------------------"
-		testDataFile = File.open(File.expand_path('',Dir.pwd)+"/ContractEvent/src/testData/testRecords.json", "r")
+		testDataFile = File.open(File.expand_path('',Dir.pwd)+"/ContractEvent/Src/testData/testRecords.json", "r")
 		testDataInJson = testDataFile.read()
 		@testData = JSON.parse(testDataInJson)
 		@sfRESTService = SfRESTService.new()

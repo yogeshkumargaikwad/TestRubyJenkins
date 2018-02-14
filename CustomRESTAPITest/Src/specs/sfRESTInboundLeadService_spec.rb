@@ -368,7 +368,7 @@ describe SfRESTService do
 			expect(Salesforce.getRecords(@salesforceBulk,'Task',"SELECT id FROM Task WHERE WhoId = '#{getResponse['lead_sfid']}'",nil).result.records.size == 1).to be true
 			puts "Open activities created successfully"
 			puts "\n"
-			payloadHash2 = JSON.parse(@testRailUtility.getPayloadsFromSteps(@testRailUtility.getCase(722228)['custom_steps_separated'])[1]['expected'])
+			payloadHash2 = JSON.parse(@testRailUtility.getPayloadsFromSteps(@testRailUtility.getCase(728)['custom_steps_separated'])[1]['expected'])
 			payloadHash2['body']['email'] = payloadHash['body']['email']
 			getResponse2 = SfRESTService.postData(''+payloadHash2.to_json,"#{@testData['ServiceUrls'][1]['inboundLead']}",true)
 			Salesforce.addRecordsToDelete('Lead',getResponse['lead_sfid'])
