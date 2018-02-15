@@ -171,6 +171,31 @@ module EnziTestRailUtility
 				return specLocations.uniq
 			end
 
+			def getSuitByName(projectId,suitName)
+				suitJSON = getSuites(projectId)
+				index = 0
+				until suitJSON[index] == nil do
+					if suitJSON[index]["name"] == suitName then
+						return suitJSON[index]["id"]
+					end
+					index +=1
+				end
+			end
+
+			def getProjectByName(projectName)
+				arrProject = getProjects()
+				index = 0
+				id = nil
+				until arrProject[index] == nil do
+					if arrProject[index]["name"] == projectName.to_s then
+						id = arrProject[index]["id"]
+						break
+					end
+					index +=1
+				end
+				return id
+			end
+
 			def getPlan(planId)
 				@client.send_get("get_plan/#{planId}")
 			end
