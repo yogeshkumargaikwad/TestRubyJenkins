@@ -36,7 +36,7 @@ end
 describe ContractEvent do
   before(:all) {
     puts "--------------------------------------------------------------------------------"
-    testDataFile = File.open(File.expand_path('', Dir.pwd) + "/ContractEvent/src/testData/testRecords.json", "r")
+    testDataFile = File.open(File.expand_path('', Dir.pwd) + "/ContractEvent/Src/testData/testRecords.json", "r")
     testDataInJson = testDataFile.read()
     @testData = JSON.parse(testDataInJson)
     @sfRESTService = SfRESTService.new()

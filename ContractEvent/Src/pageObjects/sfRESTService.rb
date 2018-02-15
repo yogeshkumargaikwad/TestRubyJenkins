@@ -9,8 +9,6 @@ class SfRESTService
   @@response = nil
   @@postedData = nil
   def self.loginRequest
-    
-
     puts "path in SfRESTService"
     puts File.expand_path('',Dir.pwd)
     puts File.expand_path(Dir.pwd+"************")
