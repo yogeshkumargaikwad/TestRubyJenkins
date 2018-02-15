@@ -50,21 +50,20 @@ describe ContractEvent do
 
     projectId = ENV['PROJECT_ID'].delete(" ")
     puts projectId
-    suitId = ENV['SUIT_ID'].delete(" ")
-    puts suitId
+
     sectionId =  ENV['SECTION_ID'].delete(" ")
     puts sectionId
     
     if !ENV['PROJECT_ID'].nil? && !ENV['SUIT_ID'].nil? && !ENV['SECTION_ID'].nil? && ENV['CASE_ID'].nil? then
       @testRailUtility.getCases(ENV['PROJECT_ID'], ENV['SUIT_ID'], ENV['SECTION_ID']).each do |caseId|
         arrCaseIds.push(caseId['id'])
-      end
+      end                                                                     
     else
       arrCaseIds.push(ENV['CASE_ID'])
     end
     puts "casecids :: #{arrCaseIds}"
 
-    @run = @testRailUtility.addRun("Rest API Test ContractEvent", ENV['PROJECT_ID'], ENV['SUIT_ID'],arrCaseIds)
+    @run = @testRailUtility.addRun("Rest API Test ContractEvent", 4, 26,arrCaseIds)
   }
   
   before(:each) {
