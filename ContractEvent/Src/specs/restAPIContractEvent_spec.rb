@@ -56,6 +56,7 @@ describe ContractEvent do
     puts sectionId
 =end
 
+    
     if !ENV['PROJECT_ID'].nil? && !ENV['SUIT_ID'].nil? && !ENV['SECTION_ID'].nil? && ENV['CASE_ID'].nil? then
       @testRailUtility.getCases(ENV['PROJECT_ID'], ENV['SUIT_ID'], ENV['SECTION_ID']).each do |caseId|
         arrCaseIds.push(caseId['id'])
