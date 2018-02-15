@@ -2,7 +2,7 @@
 #Created Date : 19/1/2018
 #Modified date :
 require_relative File.expand_path('', Dir.pwd) + '/ContractEvent/Src/pageObjects/restAPITestContractEvent.rb'
-require_relative File.expand_path('', Dir.pwd) + '/utilities/EnziTestRailUtility/lib/EnziTestRailUtility.rb'
+require_relative File.expand_path('', Dir.pwd) + '/ContractEvent/Src/pageObjects/sfRESTService.rb'
 require "selenium-webdriver"
 require "rspec"
 require 'date'
@@ -10,18 +10,32 @@ require 'securerandom'
 
 #createOpportunity(stageName = nil, buildingNumber = nil ,contractUUID = nil,contractStage = nil)
 #@contractEvent.setUpPayload(eventName,opportunity_id = nil,company_uuid = nil,membership_agreement_uuid = nil)
-
+@config = YAML.load_file(File.expand_path('', Dir.pwd) + '/credentials.yaml')
+@testRailUtility = EnziTestRailUtility::TestRailUtility.new(@config['TestRail']['username'], @config['TestRail']['password'])
+arrCaseIds = Array.new
+string = ""
+=begin
+if !ENV['PROJECT_ID'].nil? && !ENV['SUIT_ID'].nil? && !ENV['SECTION_ID'].nil? && ENV['CASE_ID'].nil? then
+  @testRailUtility.getCases(ENV['PROJECT_ID'], ENV['SUIT_ID'], ENV['SECTION_ID']).each do |caseId|
+    arrCaseIds.push(caseId['id'])
+    string += "c.filter_run :'"+"#{caseId['id']}"+"'\n"
+  end
+else
+  arrCaseIds.push(ENV['CASE_ID'])
+  string += c.filter_run :caseId['id']
+end
+puts string
 RSpec.configure do |c|
   c.treat_symbols_as_metadata_keys_with_true_values = true
-  c.filter_run :'451'
+  puts "**********"
+  "#{string}"
+  #c.filter_run :'452'
+  #c.filter_run :'452'
 end
+=end
 describe ContractEvent do
   before(:all) {
     puts "--------------------------------------------------------------------------------"
-    #puts "ContractEvent in spec"
-    #puts File.expand_path('',Dir.pwd)
-    #puts File.expand_path(Dir.pwd+"************")
-    #@driver = Selenium::WebDriver.for :chrome
     testDataFile = File.open(File.expand_path('', Dir.pwd) + "/ContractEvent/src/testData/testRecords.json", "r")
     testDataInJson = testDataFile.read()
     @testData = JSON.parse(testDataInJson)
@@ -33,20 +47,25 @@ describe ContractEvent do
     @config = YAML.load_file(File.expand_path('', Dir.pwd) + '/credentials.yaml')
     @testRailUtility = EnziTestRailUtility::TestRailUtility.new(@config['TestRail']['username'], @config['TestRail']['password'])
     arrCaseIds = Array.new
+=begin
     projectId = ENV['PROJECT_ID'].delete(" ")
     puts projectId
     suitId = ENV['SUIT_ID'].delete(" ")
     puts suitId
     sectionId =  ENV['SECTION_ID'].delete(" ")
     puts sectionId
-    if !ENV['PROJECT_ID'].nil? && !ENV['SUIT_ID'].nil? && !ENV['SECTION_ID'].nil? then
+=end
+
+    if !ENV['PROJECT_ID'].nil? && !ENV['SUIT_ID'].nil? && !ENV['SECTION_ID'].nil? && ENV['CASE_ID'].nil? then
       @testRailUtility.getCases(ENV['PROJECT_ID'], ENV['SUIT_ID'], ENV['SECTION_ID']).each do |caseId|
         arrCaseIds.push(caseId['id'])
       end
+    else
+      arrCaseIds.push(ENV['CASE_ID'])
     end
     puts "casecids :: #{arrCaseIds}"
 
-    @run = @testRailUtility.addRun("Rest API Test ContractEvent", ENV['PROJECT_ID'], ENV['SUIT_ID'], arrCaseIds)
+    @run = @testRailUtility.addRun("Rest API Test ContractEvent", ENV['PROJECT_ID'], ENV['SUIT_ID'],arrCaseIds)
   }
   
   before(:each) {
@@ -54,7 +73,7 @@ describe ContractEvent do
     puts "--------------------------------------------------------------------------------"
   }
 
-  context 'ContractEvent-->sent', :contractSent => true do
+  context 'ContractEvent-->sent', :'72' => true do
     before(:all) {
     }
     before(:each) {
@@ -183,7 +202,7 @@ describe ContractEvent do
     end
 
 
-    it 'C:452 In Upgrade event, To check if opportunity id in the payload is matched with the opportunity_id in the system after hitting payload then existing opportunity in the system will be updated.', :'452' => true do
+    it 'C:452 In Upgrade event, To check if opportunity id in the payload is matched with the opportunity_id in the system after hitting payload then existing opportunity in the system will be updated.', :'452' do
       begin
         puts 'C:452 In Upgrade event, To check if opportunity id in the payload is matched with the opportunity_id in the system after hitting payload then existing opportunity in the system will be updated.'
         contractUUID = SecureRandom.uuid

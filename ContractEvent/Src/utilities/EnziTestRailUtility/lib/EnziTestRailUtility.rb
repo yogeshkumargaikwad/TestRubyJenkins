@@ -9,12 +9,17 @@ module EnziTestRailUtility
 			@client.password = password
 		end
 
-		def addRun(test_run_name,projectId,suiteId)
-			@client.send_post("add_run/#{projectId}", {
-					"suite_id": "#{suiteId}",
-					"name": "#{test_run_name}- #{Time.now.asctime}",
-					"include_all": true
-			})
+		def addRun(test_run_name,projectId,suiteId,caseIDs)
+			if caseIDs.size > 0 then
+				data = {
+						"suite_id": "#{suiteId}",
+						"name": "#{test_run_name}- #{Time.now.asctime}",
+						"include_all": false,
+						"case_ids": caseIDs
+				}else
+					 data = {"suite_id": "#{suiteId}","name": "#{test_run_name}- #{Time.now.asctime}","include_all": true}
+			end
+			@client.send_post("add_run/#{projectId}", data)
 		end
 
     #StatusId ::

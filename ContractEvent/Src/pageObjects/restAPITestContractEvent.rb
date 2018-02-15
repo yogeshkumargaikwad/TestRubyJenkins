@@ -1,7 +1,7 @@
 #Created By : Kishor Shinde
 #Created Date : 19/1/2018
 #Modified date :
-require_relative File.expand_path('',Dir.pwd)+'/utilities/sfRESTService.rb'
+require_relative File.expand_path('',Dir.pwd)+'/ContractEvent/Src/pageObjects/sfRESTService.rb'
 require 'enziUIUtility'
 require 'salesforce'
 require 'selenium-webdriver'
