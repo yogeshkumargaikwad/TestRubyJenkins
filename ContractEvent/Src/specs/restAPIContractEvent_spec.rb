@@ -47,15 +47,13 @@ describe ContractEvent do
     @config = YAML.load_file(File.expand_path('', Dir.pwd) + '/credentials.yaml')
     @testRailUtility = EnziTestRailUtility::TestRailUtility.new(@config['TestRail']['username'], @config['TestRail']['password'])
     arrCaseIds = Array.new
-=begin
+
     projectId = ENV['PROJECT_ID'].delete(" ")
     puts projectId
     suitId = ENV['SUIT_ID'].delete(" ")
     puts suitId
     sectionId =  ENV['SECTION_ID'].delete(" ")
     puts sectionId
-=end
-
     
     if !ENV['PROJECT_ID'].nil? && !ENV['SUIT_ID'].nil? && !ENV['SECTION_ID'].nil? && ENV['CASE_ID'].nil? then
       @testRailUtility.getCases(ENV['PROJECT_ID'], ENV['SUIT_ID'], ENV['SECTION_ID']).each do |caseId|
