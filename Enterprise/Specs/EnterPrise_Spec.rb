@@ -374,10 +374,8 @@ describe "Enterprise" do
         puts "Opportunity Owner Auto Assign field is successfully checked."
 
         #contactId = @objEnterPrise.getOpportunityFields(recordId).fetch("Decision_Maker__c")
-        contactId = createdOpp.fetch("Decision_Maker__c")
-        contactDetails = @objEnterPrise.getContactFieldsById(contactId)
-        expect(contactDetails.fetch("Name")).to eq "Amit Kasar NMD"
-        puts "Opportunity Decision Maker is Successfully Assigned."
+        expect(createdOpp.fetch("Decision_Maker__r.Name")).to be_empty
+        puts "Opportunity Decision Maker is Successfully Empty."
 
         #buildingId = @objEnterPrise.getOpportunityFields(recordId).fetch("Building__c")
         buildingId = createdOpp.fetch("Building__c")
@@ -441,10 +439,8 @@ describe "Enterprise" do
         puts "Opportunity Owner Auto Assign field is successfully checked."
 
         #contactId = @objEnterPrise.getOpportunityFields(recordId).fetch("Decision_Maker__c")
-        contactId = createdOpp.fetch("Decision_Maker__c")
-        contactDetails = @objEnterPrise.getContactFieldsById(contactId)
-        expect(contactDetails.fetch("Name")).to eq "Amit Kasar NMD"
-        puts "Opportunity Decision Maker is Successfully Assigned."
+        expect(createdOpp.fetch("Decision_Maker__r.Name")).to be_empty
+        puts "Opportunity Decision Maker is Successfully Empty."
 
         #buildingId = @objEnterPrise.getOpportunityFields(recordId).fetch("Building__c")
         buildingId = createdOpp.fetch("Building__c")
