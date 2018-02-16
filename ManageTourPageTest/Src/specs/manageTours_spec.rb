@@ -20,7 +20,7 @@ describe ManageTours do
     @testRailUtility = EnziTestRailUtility::TestRailUtility.new(@objManageTours.instance_variable_get(:@mapCredentials)['TestRail']['username'],@objManageTours.instance_variable_get(:@mapCredentials)['TestRail']['password'])
     arrCaseIds = Array.new
     if !ENV['SECTION_ID'].nil? && ENV['CASE_ID'].nil? then
-      testRailUtility.getCases(ENV['PROJECT_ID'], ENV['SUIT_ID'], ENV['SECTION_ID']).each do |caseId|
+      @testRailUtility.getCases(ENV['PROJECT_ID'], ENV['SUIT_ID'], ENV['SECTION_ID']).each do |caseId|
         arrCaseIds.push(caseId['id'])
       end
     else
