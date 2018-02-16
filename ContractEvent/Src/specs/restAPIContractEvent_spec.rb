@@ -8,12 +8,7 @@ require "rspec"
 require 'date'
 require 'securerandom'
 
-#createOpportunity(stageName = nil, buildingNumber = nil ,contractUUID = nil,contractStage = nil)
-#@contractEvent.setUpPayload(eventName,opportunity_id = nil,company_uuid = nil,membership_agreement_uuid = nil)
-@config = YAML.load_file(File.expand_path('', Dir.pwd) + '/credentials.yaml')
-@testRailUtility = EnziTestRailUtility::TestRailUtility.new(@config['TestRail']['username'], @config['TestRail']['password'])
-arrCaseIds = Array.new
-string = ""
+
 =begin
 if !ENV['PROJECT_ID'].nil? && !ENV['SUIT_ID'].nil? && !ENV['SECTION_ID'].nil? && ENV['CASE_ID'].nil? then
   @testRailUtility.getCases(ENV['PROJECT_ID'], ENV['SUIT_ID'], ENV['SECTION_ID']).each do |caseId|
@@ -36,7 +31,7 @@ end
 describe ContractEvent do
   before(:all) {
     puts "--------------------------------------------------------------------------------"
-    testDataFile = File.open(File.expand_path('', Dir.pwd) + "/ContractEvent/src/testData/testRecords.json", "r")
+    testDataFile = File.open(File.expand_path('', Dir.pwd) + "/ContractEvent/Src/testData/testRecords.json", "r")
     testDataInJson = testDataFile.read()
     @testData = JSON.parse(testDataInJson)
     @sfRESTService = SfRESTService.new()
@@ -47,26 +42,33 @@ describe ContractEvent do
     @config = YAML.load_file(File.expand_path('', Dir.pwd) + '/credentials.yaml')
     @testRailUtility = EnziTestRailUtility::TestRailUtility.new(@config['TestRail']['username'], @config['TestRail']['password'])
     arrCaseIds = Array.new
-=begin
+
     projectId = ENV['PROJECT_ID'].delete(" ")
     puts projectId
-    suitId = ENV['SUIT_ID'].delete(" ")
-    puts suitId
+
     sectionId =  ENV['SECTION_ID'].delete(" ")
     puts sectionId
-=end
 
-    if !ENV['PROJECT_ID'].nil? && !ENV['SUIT_ID'].nil? && !ENV['SECTION_ID'].nil? && ENV['CASE_ID'].nil? then
+    caseID =  ENV['CASE_ID']
+    puts caseID
+    
+    if !ENV['PROJECT_ID'].nil? && !ENV['SECTION_ID'].nil? && ENV['CASE_ID'].nil? then
       @testRailUtility.getCases(ENV['PROJECT_ID'], ENV['SUIT_ID'], ENV['SECTION_ID']).each do |caseId|
         arrCaseIds.push(caseId['id'])
-      end
+      end                                                                     
     else
       arrCaseIds.push(ENV['CASE_ID'])
     end
     puts "casecids :: #{arrCaseIds}"
 
-    @run = @testRailUtility.addRun("Rest API Test ContractEvent", ENV['PROJECT_ID'], ENV['SUIT_ID'],arrCaseIds)
+    @run = @testRailUtility.addRun("Rest API Test ContractEvent", 4, 26,arrCaseIds)
   }
+
+
+
+
+
+  
   
   before(:each) {
     puts ""
