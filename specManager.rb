@@ -4,15 +4,12 @@
 require 'yaml'
 require 'rspec'
 require 'json'
-
 require_relative File.expand_path("GemUtilities/EnziTestRailUtility/lib/EnziTestRailUtility.rb")
-
-puts "Input is :: #{ARGV}"
 specMap = Hash.new
 config = YAML.load_file('credentials.yaml')
 testRailUtility = EnziTestRailUtility::TestRailUtility.new(config['TestRail']['username'],config['TestRail']['password'])
 if ARGV.size == 1 &&  !ENV['PROJECT_ID'].nil? then
-  ARGV = ["project:#{ENV['PROJECT_ID']}", "suit:#{ENV['SUIT_ID']}" , "section:#{ENV['SECTION_ID']}" , "browser:#{ENV['BROWSERS']}" ,"case:#{ENV['CASE_ID']}"]
+  ARGV = ["project:#{ENV['PROJECT_ID']}", "suit:#{ENV['SUIT_ID']}" , "section:#{ENV['SECTION_ID']}" , "browser:#{ENV['BROWSERS']}"]
 end
 if !ARGV.empty? then
   ARGV.each do |input|
@@ -26,7 +23,6 @@ if !ARGV.empty? then
     end
   end
   specs = Array.new
-  puts "Spec Map :: #{specMap}"
   if !specMap.empty? && !specMap.values.empty? then
     if specMap.key?('case') then
       RSpec.configuration.filter_run_including specMap.fetch('case')[0].to_sym
@@ -53,10 +49,12 @@ if !ARGV.empty? then
     if !specMap.key?('case') &&!(specMap.key?('section')) && specMap.key?('suit') then
       if specMap.key?('project') then
         specMap.fetch('suit').each do |suitId|
+          ENV['RUN_ID'] = testRailUtility.addRun(testRailUtility.getSuite(suitId)['name'],specMap.fetch('project')[0],suitId,nil)['id']
           specs.concat(testRailUtility.getSpecLocations(nil,nil,suitId,nil,specMap.fetch('project')[0]))
         end
       else
         specMap.fetch('suit').each do |suitId|
+          ENV['RUN_ID'] = testRailUtility.addRun(testRailUtility.getSuite(suitId)['name'],specMap.fetch('project')[0],suitId,nil)['id']
           specs.concat(testRailUtility.getSpecLocations(nil,nil,suitId,nil,testRailUtility.getSuite(suitId)['project_id']))
         end
       end
@@ -78,8 +76,6 @@ if !ARGV.empty? then
       #Run spec in multiple browsers
       if !spec.nil? then
         puts "spec to run :: #{spec}"
-        puts "spec path :: #{spec['path']}"
-        puts "browser :: #{spec['isBrowserDependent']}"
 =begin
           arrCaseIds = Array.new
           if !ENV['SECTION_ID'].nil? then

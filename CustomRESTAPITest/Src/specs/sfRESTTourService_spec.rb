@@ -30,7 +30,11 @@ describe SfRESTService do
         arrCaseIds.push(ENV['CASE_ID'])
       end
     end
-    @runId = @testRailUtility.addRun("RESTAPI Tour Service",4,26,arrCaseIds)['id']
+    if !ENV['SUIT_ID'].nil? && (!ENV['SECTION_ID'].nil? || !ENV['CASE_ID'].nil?) then
+      @runId = @testRailUtility.addRun("RESTAPI Tour Service",4,26,arrCaseIds)['id']
+    else
+      @runId = ENV['RUN_ID']
+    end
   }
 
   before(:each){
@@ -216,7 +220,7 @@ describe SfRESTService do
       expect(account[0]['Id']).to_not eql nil
       puts "Account created successfully"
       payloadHash = JSON.parse(@testRailUtility.getPayloadsFromSteps(@testRailUtility.getCase(772)['custom_steps_separated'])[0]['expected'])
-      payloadHash['body']['email'] = "test_HP#{rand(1000)}@example.com"
+      payloadHash['body']['email'] = "test_HP#{rand(9000)}@example.com"
       buildingTestData = @testData['Building']
       buildingTestData[0]['uuid__c'] = SecureRandom.uuid
       payloadHash['body']['buildings_interested_uuids'][0] = Salesforce.getRecords(@salesforceBulk,"Building__c","SELECT UUID__c FROM Building__c WHERE id = '#{Salesforce.createRecords(@salesforceBulk,"Building__c",@testData['Building'])[0]['Id']}'",nil).result.records[0].fetch('UUID__c')
@@ -275,7 +279,7 @@ describe SfRESTService do
       expect(account[0]['Id']).to_not eql nil
       puts "Account created successfully"
       payloadHash = JSON.parse(@testRailUtility.getPayloadsFromSteps(@testRailUtility.getCase(775)['custom_steps_separated'])[0]['expected'])
-      payloadHash['body']['email'] = "test_HP#{rand(1000)}@example.com"
+      payloadHash['body']['email'] = "test_HP#{rand(9000)}@example.com"
       buildingTestData = @testData['Building']
       payloadHash['body']['company_name'] = @testData['Account'][0]['Name']
       buildingTestData = @testData['Building']
