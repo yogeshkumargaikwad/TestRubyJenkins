@@ -27,7 +27,6 @@ require_relative File.expand_path(Dir.pwd + '/Enterprise/Utilities/httparty/SfRE
 describe "Enterprise" do
   RSpec.shared_examples "test" do |index|
 
-
     it 'Login by user' do
       EnziUIUtility.wait(@driver, :id, 'phSearchInput', @timeSetting['Wait']['Environment']['Classic'])
       @objEnterPrise.loginForUser(@testRecords['profile'][index])
@@ -510,22 +509,21 @@ describe "Enterprise" do
     @testRailUtility = EnziTestRailUtility::TestRailUtility.new(config['TestRail']['username'], config['TestRail']['password'])
     #@run = @testRailUtility.addRun("EnterPriseRun", 4, @testRailUtility.getSuitByName(4, "Enterprise"))
     arrCaseIds = Array.new
-    puts ENV['PROJECT_ID']
-    puts ENV['SUIT_ID']
-    puts ENV['SECTION_ID']
-    puts ENV['CASE_ID']
 
-    if !ENV['PROJECT_ID'].nil? && !ENV['SECTION_ID'].nil? && ENV['CASE_ID'].nil? then
+    if !ENV['SECTION_ID'].nil? && ENV['CASE_ID'].nil? then
       @testRailUtility.getCases(ENV['PROJECT_ID'], ENV['SUIT_ID'], ENV['SECTION_ID']).each do |caseId|
         arrCaseIds.push(caseId['id'])
       end
     else
-      arrCaseIds.push(ENV['CASE_ID'])
+      if !ENV['CASE_ID'].nil? then
+        arrCaseIds.push(ENV['CASE_ID'])
+      end
     end
-    puts "casecids :: #{arrCaseIds}"
-
-    @run = @testRailUtility.addRun("EnterPriseRun", 4, 30,arrCaseIds)
-    puts "cg : #{@testRailUtility}"
+    if !ENV['SUIT_ID'].nil? && (!ENV['SECTION_ID'].nil? || !ENV['CASE_ID'].nil?) then
+      @run = @testRailUtility.addRun("EnterPrise Run",4,30,arrCaseIds)['id']
+    else
+      @run = ENV['RUN_ID']
+    end
   }
 
   context 'Navigaton to Manage Users' do
@@ -543,11 +541,11 @@ describe "Enterprise" do
     it "should select view as EnterPrise Demo Users", :sanity => true do
       EnziUIUtility.selectOption(@driver, :id, "fcf", "Enterprise Demo Users")
       #EnziUIUtility.wait(@driver,nil,nil,10)
-      puts "Successfully selected Enterprise Demo Users" #c1 s2 r d s r3
+      puts "Successfully selected Enterprise Demo Users" #c1 s2 r d s n r3 m4 n s
     end
   end
 
-  context 'Navigation to Create opportunity with global action' do
+  context 'Navigation to Different Profiles' do
     index = 1
     loop do
       include_examples "test", index
@@ -558,61 +556,8 @@ describe "Enterprise" do
       end
     end
   end
+
+  after (:all){
+    @driver.quit
+  }
 end
-
-=begin
-
-	context 'Login With Different Users' do
-		it "Login With " do
-			@objEnterPrise.loginForUser(@testRecords['profile'][1])
-			#@driver.navigate().back();
-		end
-	end
-
-	context 'Navigation to Create opportunity with Account' do
-		it 'Check for button Enability of New Organization with Account' do
-			@objEnterPrise.navigateToAccountDetails("Accounts")
-			@objEnterPrise.createOpportunityFromAccounts()
-					#@objEnterPrise.createOpportunityFromAccounts()
-					drpdwn = @driver.find_element(:class,'oneActionsDropDown')
-					puts "drpdwn: #{drpdwn}"
-					puts "drpdwn first div class: #{drpdwn.find_elements(:tag_name,"div")[0].attribute('class')}"
-					anchorRedirect = drpdwn.find_elements(:tag_name,"div")[0].find_elements(:tag_name,"div")[0].find_elements(:tag_name,"div")[0].find_elements(:tag_name,"div")[0]
-					puts "anchorRedirect: #{anchorRedirect}"
-					puts "anchorRedirect class: #{anchorRedirect.find_element(:tag_name,'a').attribute('class')}"
-					anchorElement = anchorRedirect.find_element(:tag_name,'a')
-					puts "anchorElement: #{anchorElement}"
-					puts "#{anchorElement.attribute('role')}"
-					anchorElement.click
-					#puts anchorElement.find_element(:tag_name,'svg')
-					#anchorElement.find_element(:tag_name,'svg').click
-					#EnziUIUtility.wait(@driver,nil,nil,5)
-					#@driver.find_element(:link, 'Show more actions').click
-					#EnziUIUtility.wait(@driver,nil,nil,5)
-					#spans = anchorElement.find_elements(:tag_name,'span')
-					#spans[0].click
-					#sleep(5)
-					#spans[1].click
-					#spans[2].click
-					#anchorElement.find_elements(:tag_name,'span')[1].click
-					#anchorElement.find_elements(:tag_name,'span')[2].click
-					#puts "Spans: #{spans}"
-					#@driver.find_element(:link, 'Create Opportunity').click
-					#@objEnterPrise.selectElement(@driver,"Show more actions","a")
-					#@objEnterPrise.selectElement(@driver,"Create Opportunity","a")
-		end
-	end
-
-	context 'Navigation to Create opportunity with Contact' do
-		it 'Check for button Enability of New Organization with Contact' do
-			@objEnterPrise.navigateToAccountDetails("Contacts")
-			@objEnterPrise.createOpportunityFromAccounts()
-		end
-	end
-
-	context 'Logout from user' do
-		it "Logout for current User" do
-			@objEnterPrise.logOut()
-		end
-	end
-=end
