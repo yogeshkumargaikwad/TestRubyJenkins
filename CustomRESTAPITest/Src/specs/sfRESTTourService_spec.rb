@@ -473,7 +473,8 @@ describe SfRESTService do
       puts journey.inspect
       journeyId = Salesforce.createRecords(@salesforceBulk,"Journey__c",journey)
       createdAccount = Salesforce.getRecords(@salesforceBulk,"Account","SELECT UUID__c FROM Account WHERE id = '#{account[0]['Id']}'",nil).result.records[0]
-      payloadHash['body']['sf_journey_uuid'] = Salesforce.getRecords(@salesforceBulk,"Journey__c","SELECT UUID__c FROM Journey__c WHERE id = '#{journeyId[0]['Id']}'",nil).result.records[0].fetch('UUID__c')
+      Salesforce.addRecordsToDelete('CompletedJourney',Salesforce.getRecords(@salesforceBulk,"Journey__c","SELECT UUID__c FROM Journey__c WHERE id = '#{journeyId[0]['Id']}'",nil).result.records[0].fetch('UUID__c'))
+      payloadHash['body']['sf_journey_uuid'] = Salesforce.class_variable_get(:@@createdRecordsIds)['JourneyUUID'][0]
       payloadHash['body']['account_uuid'] = createdAccount.fetch('UUID__c')
       getResponse = SfRESTService.postData(''+payloadHash.to_json,"#{@testData['ServiceUrls'][0]['tour']}",true)
       puts "\n"
@@ -489,10 +490,11 @@ describe SfRESTService do
       puts "Open activities created successfully"
       puts "\n"
       puts "Checking Journey on tour..."
-      bookedTour = Salesforce.getRecords(@salesforceBulk,"Tour_Outcome__c","SELECT Status__c ,Journey__c,Journey__r.Status__c FROM Tour_Outcome__c WHERE id = '#{getResponse['result'].delete('"')}'",nil).result.records[0]
+      bookedTour = Salesforce.getRecords(@salesforceBulk,"Tour_Outcome__c","SELECT id,UUID__c,Status__c ,Journey__c,Journey__r.Status__c FROM Tour_Outcome__c WHERE id = '#{getResponse['result'].delete('"')}'",nil).result.records[0]
       expect(bookedTour.fetch('Journey__c')).to eql journeyId[0]['Id']
       puts "Journey checked successfully"
       puts "\n"
+      Salesforce.addRecordsToDelete('TourUUID',bookedTour.fetch('UUID__c'))
       puts "Checking status on tour"
       expect(bookedTour.fetch('Status__c')).to eql "Scheduled"
       puts "Satus of tour is :: #{bookedTour.fetch('Status__c')}"
@@ -517,7 +519,7 @@ describe SfRESTService do
       buildingTestData[0]['uuid__c'] = SecureRandom.uuid
       payloadHash['body']['buildings_interested_uuids'][0] = Salesforce.getRecords(@salesforceBulk,"Building__c","SELECT UUID__c FROM Building__c WHERE id = '#{Salesforce.createRecords(@salesforceBulk,"Building__c",@testData['Building'])[0]['Id']}'",nil).result.records[0].fetch('UUID__c')
 
-      payloadHash['body']['sf_journey_uuid'] = Salesforce.getRecords(@salesforceBulk,"Journey__c","SELECT UUID__c FROM Journey__c WHERE id = '#{Salesforce.class_variable_get(:@@createdRecordsIds)['Journey__c'][0]}'",nil).result.records[0].fetch('UUID__c')
+      payloadHash['body']['sf_journey_uuid'] = Salesforce.class_variable_get(:@@createdRecordsIds)['JourneyUUID'][0]
       getResponse = SfRESTService.postData(''+payloadHash.to_json,"#{@testData['ServiceUrls'][0]['tour']}",true)
       puts "\n"
       sleep(@timeSettingMap['Sleep']['Environment']['Classic'])
@@ -531,7 +533,6 @@ describe SfRESTService do
       bookedTour = Salesforce.getRecords(@salesforceBulk,"Tour_Outcome__c","SELECT UUID__c,Status__c ,Journey__c FROM Tour_Outcome__c WHERE id = '#{getResponse['result'].delete('"')}'",nil).result.records[0]
       puts bookedTour.inspect
       expect(bookedTour.fetch('Journey__c')).to eql payloadHash['body']['sf_journey_uuid']
-      Salesforce.addRecordsToDelete('TourUUID',bookedTour.fetch('UUID__c'))
       puts "Journey checked successfully"
       puts "\n"
       puts "Checking open activities..."
