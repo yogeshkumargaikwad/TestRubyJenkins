@@ -53,7 +53,7 @@ describe ManageTours do
       @objManageTours.openPage(Salesforce.createRecords(@objManageTours.instance_variable_get(:@salesforceBulk),'Lead',@leadsTestData)[0]['Id'],:name,"lightning_manage_tours")
 
       #@objManageTours.openPage(@objManageTours.checkRecordCreated("Journey__c","SELECT id FROM Journey__c WHERE Primary_Email__c = '#{@objManageTours.instance_variable_get(:@records)[0]['lead'][0]['email']}'")[0].fetch('Id'),:id,"taction:0")
-      puts @objManageTours.checkRecordCreated("Journey__c","SELECT id FROM Journey__c WHERE Primary_Email__c = '#{@leadsTestData[0]['email']}'")
+      Salesforce.addRecordsToDelete('Journey__c',@objManageTours.checkRecordCreated("Journey__c","SELECT id FROM Journey__c WHERE Primary_Email__c = '#{@leadsTestData[0]['email']}'")[0].fetch('Id'))
       expect(@driver.title).to eql "Manage Tours"
       puts "successfully opened manage tour page C149 checked"
       puts "\n"
@@ -187,8 +187,8 @@ describe ManageTours do
       raise excp
     end
   end
-  it "C85 : to check that user can view duplicate account selector page while booking a tour" do
-    puts "C85 : to check that user can view duplicate account selector page while booking a tour"
+  it "C85,C171 : to check that user can view duplicate account selector page while booking a tour" do
+    puts "C85,C171 : to check that user can view duplicate account selector page while booking a tour"
     puts "\n"
     begin
       @objManageTours.bookTour(0,true)
@@ -199,7 +199,9 @@ describe ManageTours do
       expect(@driver.find_element(:id,"header43").text.eql? "Duplicate Account Selector").to be true
       puts "C85 checked"
       puts "\n"
+
       @testRailUtility.postResult(85,"Result for case 85 is #{"success"}",1,@runId)
+
     rescue Exception => excp
       @testRailUtility.postResult(85,"Result for case 85 is #{excp}",5,@runId)
       raise excp
@@ -279,8 +281,8 @@ describe ManageTours do
       end
     end
 
-    it "C94 : to check that tour is booked, when user clicks on 'create account and merge' button" do
-      puts "C94 : to check that tour is booked, when user clicks on 'create account and merge' button"
+    it "C94,C362 : to check that tour is booked, when user clicks on 'create account and merge' button" do
+      puts "C94,C362 : to check that tour is booked, when user clicks on 'create account and merge' button"
       puts "\n"
       begin
         sleep(@objManageTours.instance_variable_get(:@timeSettingMap)['Sleep']['Environment']['Lightening'])
@@ -288,6 +290,7 @@ describe ManageTours do
         @leadsTestData[0]['company'] = "Test_Enzigma#{rand(1111)}"
         puts "\n"
         @objManageTours.openPageForLead(Salesforce.createRecords(@objManageTours.instance_variable_get(:@salesforceBulk),'Lead',@leadsTestData)[0]['Id'])
+        Salesforce.addRecordsToDelete('Journey__c',@objManageTours.checkRecordCreated("Journey__c","SELECT id FROM Journey__c WHERE Primary_Email__c = '#{@leadsTestData[0]['email']}'")[0].fetch('Id'))
         @objManageTours.bookTour(0,true)
         sleep(@objManageTours.instance_variable_get(:@timeSettingMap)['Sleep']['Environment']['Lightening'])
         @objManageTours.duplicateAccountSelector("Create Account and Merge",nil)
@@ -323,12 +326,12 @@ describe ManageTours do
         puts "total number of scheduled tours => #{ManageTours.class_variable_get(:@@recordInsertedIds)['Contact'].fetch('Total_Scheduled_Tours__c')}\t\n"
         puts "to check tour is created"
         puts "\n"
-        expect(@objManageTours.checkRecordCreated("tour_Outcome__c","SELECT id,Status__c FROM tour_Outcome__c WHERE Primary_Member__r.email = '#{@leadsTestData[0]['email']}'")[0].fetch("Id")).to_not eql nil
+        expect(@objManageTours.checkRecordCreated("Tour_Outcome__c","SELECT id,Status__c FROM Tour_Outcome__c WHERE Primary_Member__r.email = '#{@leadsTestData[0]['email']}'")[0].fetch("Id")).to_not eql nil
         puts "tour creataed successfully"
         puts "\n"
         puts "to check tour status"
         puts "\n"
-        expect(ManageTours.class_variable_get(:@@recordInsertedIds)['tour_Outcome__c'].fetch('Status__c').eql? "Scheduled").to be true
+        expect(ManageTours.class_variable_get(:@@recordInsertedIds)['Tour_Outcome__c'].fetch('Status__c').eql? "Scheduled").to be true
         puts "status checked successfully"
         puts "\n"
         puts "to check open activities"
@@ -340,8 +343,30 @@ describe ManageTours do
         puts "C94 checked"
         puts "\n"
         @testRailUtility.postResult(94,"Result for case 94 is #{"success"}",1,@runId)
+        @testRailUtility.postResult(362,"Result for case 94 is #{"success"}",1,@runId)
       rescue Exception => excp
         @testRailUtility.postResult(94,"Result for case 94 is #{excp}",5,@runId)
+        @testRailUtility.postResult(362,"Result for case 94 is #{"success"}",5,@runId)
+        raise excp
+      end
+    end
+    it "C129 : to check user can cancel a tour"  , :test => true do
+      puts "C129 : to check user can cancel a tour"
+      puts "\n"
+      begin
+        sleep(@objManageTours.instance_variable_get(:@timeSettingMap)['Sleep']['Environment']['Lightening'])
+        EnziUIUtility.selectElement(@driver,"Cancel","button")
+        EnziUIUtility.selectChild(@driver,:id,"Cancellation_Reason__c","No reason (didn't provide)","option")
+        sleep(@objManageTours.instance_variable_get(:@timeSettingMap)['Sleep']['Environment']['Lightening'])
+        EnziUIUtility.selectElement(@driver,"Save","button")
+        puts "to check user can cancel a tour"
+        puts "\n"
+        expect(@objManageTours.tourStatusChecked?("Cancelled" , @leadsTestData[0]['email'])).to be true
+        puts "C129 checked"
+        puts "\n"
+        @testRailUtility.postResult(129,"Result for case 129 is #{"success"}",1,@runId)
+      rescue Exception => excp
+        @testRailUtility.postResult(129,"Result for case 129 is #{excp}",5,@runId)
         raise excp
       end
     end
@@ -353,6 +378,7 @@ describe ManageTours do
         @leadsTestData[0]['email'] = "test_enzigmaPre#{rand(9999)}@example.com"
         @objManageTours.openPageForLead(Salesforce.createRecords(@objManageTours.instance_variable_get(:@salesforceBulk),'Lead',@leadsTestData)[0]['Id'])
         #@objManageTours.openPage(Salesforce.createRecords(@objManageTours.instance_variable_get(:@salesforceBulk),'Lead',@leadsTestData)[0]['Id'],:name,"lightning_manage_tours")
+        Salesforce.addRecordsToDelete('Journey__c',@objManageTours.checkRecordCreated("Journey__c","SELECT id FROM Journey__c WHERE Primary_Email__c = '#{@leadsTestData[0]['email']}'")[0].fetch('Id'))
         sleep(@objManageTours.instance_variable_get(:@timeSettingMap)['Sleep']['Environment']['Lightening'])
         @objManageTours.bookTour(0,true)
         @objManageTours.duplicateAccountSelector("Use Selected Account","Yes")
@@ -391,46 +417,14 @@ describe ManageTours do
         puts "\n"
         expect(@objManageTours.numberOfTourBooked == 3).to be true
         puts "C102 checked\n"
-        @testRailUtility.postResult(94,"Result for case 94 is #{"success"}",1,@runId)
+        @testRailUtility.postResult(102,"Result for case 102 is #{"success"}",1,@runId)
       rescue Exception => excp
-        @testRailUtility.postResult(94,"Result for case 94 is #{excp}",5,@runId)
+        @testRailUtility.postResult(102,"Result for case 102 is #{excp}",5,@runId)
         raise excp
       end
     end
   end
 
-  context "check multiple tour booking" do
-    it "C96 : to check that user can book multiple tour" do
-      puts "C96 : to check that user can book multiple tour"
-      puts "\n"
-      begin
-        sleep(@objManageTours.instance_variable_get(:@timeSettingMap)['Sleep']['Environment']['Lightening'])
-        @objManageTours.bookNewTour
-        sleep(@objManageTours.instance_variable_get(:@timeSettingMap)['Sleep']['Environment']['Lightening'])
-        @objManageTours.bookTour(0,true)
-        sleep(@objManageTours.instance_variable_get(:@timeSettingMap)['Sleep']['Environment']['Lightening'])
-        @objManageTours.bookTour(1,true)
-        sleep(@objManageTours.instance_variable_get(:@timeSettingMap)['Sleep']['Environment']['Lightening'])
-        @objManageTours.duplicateAccountSelector("Create Account and Don't Merge",nil)
-        sleep(30)
-        puts "created tours =>  #{@objManageTours.checkRecordCreated("Tour_Outcome__c","SELECT id,Status__c FROM Tour_Outcome__c WHERE Primary_Member__r.email = '#{@leadsTestData[0]['email']}'").size }\t\n"
-        expect(@objManageTours.checkRecordCreated("Tour_Outcome__c","SELECT id,Status__c FROM Tour_Outcome__c WHERE Primary_Member__r.email = '#{@leadsTestData[0]['email']}'").size > 1).to be true
-        puts "\n"
-        sleep(@objManageTours.instance_variable_get(:@timeSettingMap)['Sleep']['Environment']['Lightening'])
-        puts "to check open activities"
-        expect(@objManageTours.checkRecordCreated('Task',"SELECT id FROM Task WHERE whatId = '#{ManageTours.class_variable_get(:@@recordInsertedIds)['Tour_Outcome__c'].fetch('Id')}'").fetch('Id')).to_not eql nil
-        puts "to check that user can view booked tours information"
-        puts "\n"
-        expect(@objManageTours.numberOfTourBooked == 5).to be true
-        puts "C96 checked"
-        puts "\n"
-        @testRailUtility.postResult(96,"Result for case 96 is #{"success"}",1,@runId)
-      rescue Exception => excp
-        @testRailUtility.postResult(96,"Result for case 96 is #{excp}",5,@runId)
-        raise excp
-      end
-    end
-  end
   context "should check reschedule functionality" do
     it "C115 : to check that user can reschedule a tour" , :test => true do
       puts "C115 : to check that user can reschedule a tour"
@@ -441,7 +435,7 @@ describe ManageTours do
         @leadsTestData[0]['company'] = "Test_Enzigma#{rand(1111)}"
         @objManageTours.openPageForLead(Salesforce.createRecords(@objManageTours.instance_variable_get(:@salesforceBulk),'Lead',@leadsTestData)[0]['Id'])
         #@objManageTours.openPage(Salesforce.createRecords(@objManageTours.instance_variable_get(:@salesforceBulk),'Lead',@leadsTestData)[0]['Id'],:name,"lightning_manage_tours")
-
+        Salesforce.addRecordsToDelete('Journey__c',@objManageTours.checkRecordCreated("Journey__c","SELECT id FROM Journey__c WHERE Primary_Email__c = '#{@leadsTestData[0]['email']}'")[0].fetch('Id'))
         @objManageTours.bookTour(0,true)
         sleep(@objManageTours.instance_variable_get(:@timeSettingMap)['Sleep']['Environment']['Lightening'])
         @objManageTours.duplicateAccountSelector("Create Account and Don't Merge",nil)
@@ -458,23 +452,36 @@ describe ManageTours do
         raise excp
       end
     end
-    it "C129 : to check user can cancel a tour"  , :test => true do
-      puts "C129 : to check user can cancel a tour"
+  end
+  context "check multiple tour booking" do
+    it "C96 : to check that user can book multiple tour" do
+      puts "C96 : to check that user can book multiple tour"
       puts "\n"
       begin
         sleep(@objManageTours.instance_variable_get(:@timeSettingMap)['Sleep']['Environment']['Lightening'])
-        EnziUIUtility.selectElement(@driver,"Cancel","button")
-        EnziUIUtility.selectChild(@driver,:id,"Cancellation_Reason__c","No reason (didn't provide)","option")
+        @objManageTours.bookNewTour
         sleep(@objManageTours.instance_variable_get(:@timeSettingMap)['Sleep']['Environment']['Lightening'])
-        EnziUIUtility.selectElement(@driver,"Save","button")
-        puts "to check user can cancel a tour"
+        @objManageTours.bookTour(0,true)
+        sleep(@objManageTours.instance_variable_get(:@timeSettingMap)['Sleep']['Environment']['Lightening'])
+        @objManageTours.bookTour(1,true)
+        sleep(@objManageTours.instance_variable_get(:@timeSettingMap)['Sleep']['Environment']['Lightening'])
+        @objManageTours.duplicateAccountSelector("Create Account and Don't Merge",nil)
+        sleep(30)
+        bookedTours = @objManageTours.checkRecordCreated("Tour_Outcome__c","SELECT id,Status__c FROM Tour_Outcome__c WHERE Primary_Member__r.email = '#{@leadsTestData[0]['email']}'")
+        puts "created tours =>  #{bookedTours.inspect}\t\n"
+        expect(bookedTours.size > 1).to be true
         puts "\n"
-        expect(@objManageTours.tourStatusChecked?("Cancelled" , @leadsTestData[0]['email'])).to be true
-        puts "C129 checked"
+        sleep(@objManageTours.instance_variable_get(:@timeSettingMap)['Sleep']['Environment']['Lightening'])
+        puts "to check open activities"
+        expect(@objManageTours.checkRecordCreated('Task',"SELECT id FROM Task WHERE whatId = '#{bookedTours[0].fetch('Id')}'")[0].fetch('Id')).to_not eql nil
+        puts "to check that user can view booked tours information"
         puts "\n"
-        @testRailUtility.postResult(129,"Result for case 129 is #{"success"}",1,@runId)
+        expect(@objManageTours.numberOfTourBooked == 5).to be true
+        puts "C96 checked"
+        puts "\n"
+        @testRailUtility.postResult(96,"Result for case 96 is #{"success"}",1,@runId)
       rescue Exception => excp
-        @testRailUtility.postResult(129,"Result for case 129 is #{excp}",5,@runId)
+        @testRailUtility.postResult(96,"Result for case 96 is #{excp}",5,@runId)
         raise excp
       end
     end
