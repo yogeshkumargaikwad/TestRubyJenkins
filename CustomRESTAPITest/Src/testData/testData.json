@@ -20,5 +20,5 @@
 
   "Campaign" : [{"Name" : "test_Web9W"}],
 
-  "Journey" : [{"Name" : "Test3-WeWork.com" , "Primary_Contact__c" : "" , "NMD_Next_Contact_Date__c" : "" , "Status__c" : "Started" , "Lead_Source__c" : "Event"}]
+  "Journey" : [{"Name" : "Test3-WeWork.com" , "Primary_Contact__c" : "" , "NMD_Next_Contact_Date__c" : "" , "Status__c" : "Started" , "Lead_Source__c" : "Event", "Lead_Source_Detail__c" : "Book A Tour Form"}]
 }

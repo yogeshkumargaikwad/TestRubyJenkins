@@ -7,7 +7,6 @@ require 'selenium-webdriver'
 require 'yaml'
 require 'json'
 require 'date'
-require 'datatable'
 class ManageTours
 	@driver = nil
 	@records = nil
