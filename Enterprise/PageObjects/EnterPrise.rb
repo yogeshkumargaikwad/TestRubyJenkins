@@ -469,13 +469,9 @@ class EnterPrise
 	def logOut()
 		userNameWords = @@userName.split(/\W+/)
 		arrSize = userNameWords.size
-		puts "userNameWords size: #{arrSize}"
 
 		puts userNameWords[arrSize-1]
 		puts "user Name Words: #{userNameWords}"
-		puts userNameWords[0]
-		puts userNameWords[1]
-		puts userNameWords[2]
 		if arrSize == 3
 			selectElement(@driver,"Log out as #{userNameWords[arrSize-1]} #{userNameWords[0]} #{userNameWords[1]}","a")
 		elsif arrSize == 4
