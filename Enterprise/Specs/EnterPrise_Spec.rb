@@ -45,9 +45,9 @@ describe "Enterprise" do
       puts "New Organization button is enabled in create Opportunity with Global Action"
       #@objEnterPrise.selectElement(@driver,"Close","button")
 
-      @testRailUtility.postResult(1012,"comment",1,@run["id"])
+      @testRailUtility.postResult(1012,"comment",1,@run)
     rescue Exception => e
-      @testRailUtility.postResult(1012,"comment",5,@run["id"])
+      @testRailUtility.postResult(1012,"comment",5,@run)
       puts e
       raise e
       end
@@ -60,9 +60,9 @@ describe "Enterprise" do
       expect(accountId = @objEnterPrise.getAccountFields(@testRecords['account'][0]).fetch("Id")).should_not nil
       puts "New Organization is Created"
       Salesforce.addRecordsToDelete("Account", "#{accountId}")
-      @testRailUtility.postResult(868,"comment",1,@run["id"])
+      @testRailUtility.postResult(868,"comment",1,@run)
       rescue Exception => e
-        @testRailUtility.postResult(868,e,5,@run["id"])
+        @testRailUtility.postResult(868,e,5,@run)
         puts e
         raise e
       end
@@ -79,9 +79,9 @@ describe "Enterprise" do
       expect(@objEnterPrise.checkError("div","You can't create duplicate Organization.")).to eq true
       puts "Duplicate Organization cannot be created"
 
-      @testRailUtility.postResult(869,"comment",1,@run["id"])
+      @testRailUtility.postResult(869,"comment",1,@run)
       rescue Exception => e
-        @testRailUtility.postResult(869,e,5,@run["id"])
+        @testRailUtility.postResult(869,e,5,@run)
         puts e
         raise e
       end
@@ -94,9 +94,9 @@ describe "Enterprise" do
         expect(contactName = @objEnterPrise.getContactFields("contacttest@demo.com").fetch("Name")).to eq "Test Contact1"
         puts "New Contact is Created"
         Salesforce.addRecordsToDelete("Contact", "#{@@contactId}")
-        @testRailUtility.postResult(1011,"comment",1,@run["id"])
+        @testRailUtility.postResult(1011,"comment",1,@run)
         rescue Exception => e
-        @testRailUtility.postResult(1011,e,5,@run["id"])
+        @testRailUtility.postResult(1011,e,5,@run)
         puts e
         raise e
       end
@@ -114,9 +114,9 @@ describe "Enterprise" do
         expect(oppDetails.fetch("Stage_Details__c")).to eq "Qualify Opportunity"
         puts "Opportunity is created with stage as Qualifying and stage detail as Qualify Opportunity"
         Salesforce.addRecordsToDelete("Opportunity", "#{recordId}")
-        @testRailUtility.postResult(870,"comment",1,@run["id"])
+        @testRailUtility.postResult(870,"comment",1,@run)
         rescue Exception => e
-          @testRailUtility.postResult(870,e,5,@run["id"])
+          @testRailUtility.postResult(870,e,5,@run)
           puts e
           raise e
         end
@@ -135,9 +135,9 @@ describe "Enterprise" do
       Salesforce.addRecordsToDelete("Opportunity", "#{recordId}")
       #sleep(120)
 
-      @testRailUtility.postResult(873,"comment",1,@run["id"])
+      @testRailUtility.postResult(873,"comment",1,@run)
       rescue Exception => e
-        @testRailUtility.postResult(873,e,5,@run["id"])
+        @testRailUtility.postResult(873,e,5,@run)
         puts e
         raise e
       end
@@ -205,9 +205,9 @@ describe "Enterprise" do
         #expect(@objEnterPrise.getAccountFieldsById(accountId).fetch("Primary_Member__c "))
         #expect(@objEnterPrise.getOpportunityFields(recordId).fetch("Main_Contact_ID__c")).to eq ""
 
-        @testRailUtility.postResult(953, "comment", 1, @run["id"])
+        @testRailUtility.postResult(953, "comment", 1, @run)
       rescue Exception => e
-        @testRailUtility.postResult(953, e, 5, @run["id"])
+        @testRailUtility.postResult(953, e, 5, @run)
         puts e
         raise e
       end
@@ -276,9 +276,9 @@ describe "Enterprise" do
         #expect(@objEnterPrise.getAccountFieldsById(accountId).fetch("Primary_Member__c "))
         #expect(@objEnterPrise.getOpportunityFields(recordId).fetch("Main_Contact_ID__c")).to eq ""
 
-        @testRailUtility.postResult(867, "comment", 1, @run["id"])
+        @testRailUtility.postResult(867, "comment", 1, @run)
       rescue Exception => e
-        @testRailUtility.postResult(867, e, 5, @run["id"])
+        @testRailUtility.postResult(867, e, 5, @run)
         puts e
         raise e
       end
@@ -341,9 +341,9 @@ describe "Enterprise" do
         #expect(@objEnterPrise.getAccountFieldsById(accountId).fetch("Primary_Member__c "))
         #expect(@objEnterPrise.getOpportunityFields(recordId).fetch("Main_Contact_ID__c")).to eq ""
 
-        @testRailUtility.postResult(954, "comment", 1, @run["id"])
+        @testRailUtility.postResult(954, "comment", 1, @run)
       rescue Exception => e
-        @testRailUtility.postResult(954, e, 5, @run["id"])
+        @testRailUtility.postResult(954, e, 5, @run)
         puts e
         raise e
       end
@@ -406,9 +406,9 @@ describe "Enterprise" do
         #expect(@objEnterPrise.getAccountFieldsById(accountId).fetch("Primary_Member__c "))
         #expect(@objEnterPrise.getOpportunityFields(recordId).fetch("Main_Contact_ID__c")).to eq ""
 
-        @testRailUtility.postResult(955, "comment", 1, @run["id"])
+        @testRailUtility.postResult(955, "comment", 1, @run)
       rescue Exception => e
-        @testRailUtility.postResult(955, e, 5, @run["id"])
+        @testRailUtility.postResult(955, e, 5, @run)
         puts e
         raise e
       end
@@ -471,9 +471,9 @@ describe "Enterprise" do
         #expect(@objEnterPrise.getAccountFieldsById(accountId).fetch("Primary_Member__c "))
         #expect(@objEnterPrise.getOpportunityFields(recordId).fetch("Main_Contact_ID__c")).to eq ""
 
-        @testRailUtility.postResult(957, "comment", 1, @run["id"])
+        @testRailUtility.postResult(957, "comment", 1, @run)
       rescue Exception => e
-        @testRailUtility.postResult(957, "comment", 5, @run["id"])
+        @testRailUtility.postResult(957, "comment", 5, @run)
         puts e
         raise e
       end
