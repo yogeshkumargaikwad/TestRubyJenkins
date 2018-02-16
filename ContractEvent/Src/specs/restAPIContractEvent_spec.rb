@@ -48,6 +48,12 @@ describe ContractEvent do
 
     @run = @testRailUtility.addRun("Rest API Test ContractEvent", ENV['PROJECT_ID'], ENV['SUIT_ID'], arrCaseIds)
   }
+
+
+
+
+
+  
   
   before(:each) {
     puts ""

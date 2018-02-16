@@ -18,7 +18,11 @@ class EnterPrise
 		@driver.get "https://test.salesforce.com/login.jsp?pw=#{mapCredentials['ENTQA']['password']}&un=#{mapCredentials['ENTQA']['username']}"
 		@salesforceBulk = Salesforce.login(mapCredentials['ENTQA']['username'],mapCredentials['ENTQA']['password'],true)
 		@@userName = nil
-		EnziUIUtility.wait(@driver,:id,"phSearchInput",100)
+		file = File.open("timeSettings.yaml", "r")
+		@timeSetting = YAML.load(file.read())
+
+		#EnziUIUtility.wait(@driver,:id,"phSearchInput",100)
+		EnziUIUtility.wait(@driver,:id,"phSearchInput",@timeSetting['Wait']['Environment']['Classic'])
 		#@driver.find_element(id: 'Contact_Tab').click
 	end
 
@@ -68,7 +72,7 @@ class EnterPrise
 
 	#Use:This function is use to set the date
 	def setMoveInDate(date)
-		EnziUIUtility.wait(@driver,:id,'Term__c',15)
+		EnziUIUtility.wait(@driver,:id,'Term__c',@timeSetting['Wait']['Environment']['Lightening'])
 		#@driver.find_element(:name,'Move_In_Date__c').click
 		arr_date = date.split('-')
 		year_to_select = arr_date[0]
@@ -137,27 +141,52 @@ class EnterPrise
 
 	#Use: This function is Used to Navigate To Create Opportunity
 	def navigateToCreateOpportunity()
-		EnziUIUtility.wait(@driver,:class,"globalCreateTrigger",200)
+		EnziUIUtility.wait(@driver,:class,"globalCreateTrigger",@timeSetting['Wait']['Environment']['Lightening'])
 		@driver.find_element(:class,'globalCreateTrigger').click
 		@driver.find_element(:link, 'Create Opportunity').click
 	end
 
 	def createNewOrganization(orgName, noOfEmployees = nil)
-		EnziUIUtility.wait(@driver,:id,'GlobalActionManager:New_Organization',20)
+		EnziUIUtility.wait(@driver,:id,'GlobalActionManager:New_Organization',@timeSetting['Wait']['Environment']['Lightening'])
 		EnziUIUtility.clickElement(@driver,:id,"GlobalActionManager:New_Organization")
-		EnziUIUtility.wait(@driver,:id,'Name',20)
+		EnziUIUtility.wait(@driver,:id,'Name',@timeSetting['Wait']['Environment']['Lightening'])
 		EnziUIUtility.setValue(@driver,:id,'Name',"#{orgName}")
 		if noOfEmployees != nil
 			EnziUIUtility.setValue(@driver,:id,'Number_of_Full_Time_Employees__c',"#{noOfEmployees}")
 		end
 		selectElement(@driver,"Save","button")
 		#expect(@objEnterPrise.checkStage("div","Account created.")).to eq true
-		EnziUIUtility.wait(@driver,:id, "Budget_Monthly__c",5)
+		EnziUIUtility.wait(@driver,:id, "Budget_Monthly__c",@timeSetting['Wait']['Environment']['Lightening'])
+	end
+
+	def createNewContact(accountName, contactName, emailId)
+		@driver.navigate.refresh
+		navigateToCreateOpportunity()
+		EnziUIUtility.wait(@driver,:id,'Budget_Monthly__c',@timeSetting['Wait']['Environment']['Lightening'])
+		selectElement(@driver,"Maximize","button")
+		EnziUIUtility.setValue(@driver,:id,"AccountRec","#{accountName}")
+		sleep(10)
+		@driver.find_element(:id,'AccountReclist').find_elements(:tag_name,"li").each do |list|
+			if list.attribute('title') == "#{accountName}"
+				puts "list title: #{list.attribute('title')}"
+				wait = Selenium::WebDriver::Wait.new(:timeout => 30);
+				#sleep(20)
+				wait.until {list.displayed?}
+				list.click
+			end
+		end
+		EnziUIUtility.wait(@driver,:id,'actionManager:New_Decision_Maker',@timeSetting['Wait']['Environment']['Lightening'])
+		sleep(5)
+		EnziUIUtility.clickElement(@driver,:id,"actionManager:New_Decision_Maker")
+		EnziUIUtility.wait(@driver,:id,'Name',@timeSetting['Wait']['Environment']['Lightening'])
+		EnziUIUtility.setValue(@driver,:id,'Name',"#{contactName}")
+		EnziUIUtility.setValue(@driver,:id,'Email',"#{emailId}")
+		selectElement(@driver,"Save","button")
 	end
 
 	#Use: This function is Used to check button Enability
 	def buttonEnabled?(buttonId)
-		EnziUIUtility.wait(@driver,:id,"#{buttonId}",30)
+		EnziUIUtility.wait(@driver,:id,"#{buttonId}",@timeSetting['Wait']['Environment']['Lightening'])
 		buttonEnability = @driver.find_element(:id, "#{buttonId}").enabled?
 		puts "button Enability?: #{buttonEnability}"
 		return buttonEnability
@@ -182,7 +211,7 @@ class EnterPrise
 	#Use: This function is Used to Navigate To AccountDetails
 	def navigateToAccountDetails(tab_name)
 		@driver.find_element(:link, "#{tab_name}").click
-		EnziUIUtility.wait(@driver,nil,nil,15)
+		EnziUIUtility.wait(@driver,nil,nil,@timeSetting['Sleep']['Environment']['Lightening'])
 		arrTable = @driver.find_elements(:tag_name,'table')
 		accountTable = nil
 		#puts "tables: #{arrTable}"
@@ -212,24 +241,53 @@ class EnterPrise
 
 	#Use: This function is used to get Opportunity fields
 	def getOpportunityFields(recordId)
-		recordDetails = Salesforce.getRecords(@salesforceBulk,"Opportunity","select Id, isdeleted, StageName, Stage_Details__c from Opportunity where Id = '#{recordId}'",key = nil)
+		recordDetails = Salesforce.getRecords(@salesforceBulk,"Opportunity","select Id, isdeleted, StageName, Stage_Details__c, Opportunity_Account_Name__c, Owner_Auto_Assign__c, Main_Contact_ID__c, AccountId, Decision_Maker__c, Building__c, OwnerId, Owner.Name, Decision_Maker__r.Name from Opportunity where Id = '#{recordId}'",key = nil)
 		return recordDetails.result.records[0]#.fetch("Id"), recordDetails.result.records[0].fetch("IsDeleted"), recordDetails.result.records[0].fetch("StageName")
 	end
 
 	#Use: This function is used to get Account fields
 	def getAccountFields(recordName)
 		recordDetails = Salesforce.getRecords(@salesforceBulk,"Account","select Id, isdeleted from Account where Name = '#{recordName}'",key = nil)
+		accId = recordDetails.result.records[0].fetch("Id")
+		#puts "accId: #{accId}"
+		return recordDetails.result.records[0]
+	end
+
+	def getAccountFieldsById(recordId)
+		recordDetails = Salesforce.getRecords(@salesforceBulk,"Account","select Id, Name, isdeleted from Account where Id = '#{recordId}'",key = nil)
 		#@@accountId = recordDetails.result.records[0].fetch("Id")
 		return recordDetails.result.records[0]
+	end
+
+	def getContactFields(recordEmail)
+		recordDetails = Salesforce.getRecords(@salesforceBulk,"Contact","select Id, Name, isdeleted from Contact where Email = '#{recordEmail}'",key = nil)
+		#@@accountId = recordDetails.result.records[0].fetch("Id")
+		return recordDetails.result.records[0]
+	end
+
+	def getContactFieldsById(recordId)
+		recordDetails = Salesforce.getRecords(@salesforceBulk,"Contact","select Name, isdeleted from Contact where Id = '#{recordId}'",key = nil)
+		#@@accountId = recordDetails.result.records[0].fetch("Id")
+		return recordDetails.result.records[0]
+	end
+
+	def getBuildingFields(recordId)
+		recordDetails = Salesforce.getRecords(@salesforceBulk,"Building__c","select Name from Building__c where Id = '#{recordId}'",key = nil)
+		return recordDetails.result.records[0]#.fetch("Id"), recordDetails.result.records[0].fetch("IsDeleted"), recordDetails.result.records[0].fetch("StageName")
+	end
+
+	def getOpportunity_RoleFields(oppId)
+		recordDetails = Salesforce.getRecords(@salesforceBulk,"Opportunity_Role__c","select Name, Id, Is_Primary_Member__c, Role__c from Opportunity_Role__c where Opportunity__c = '#{oppId}'",key = nil)
+		return recordDetails.result.records[0]#.fetch("Id"), recordDetails.result.records[0].fetch("IsDeleted"), recordDetails.result.records[0].fetch("StageName")
 	end
 
 	#Use: This function is Used to switching to lightening from classic
 	def switchToLightening()
 		if !(driver.current_url().include? "lightning")
 			#puts "String not 'lightning'"
-			EnziUIUtility.wait(driver,:id,"userNav-arrow",30)
+			EnziUIUtility.wait(driver,:id,"userNav-arrow",@timeSetting['Wait']['Environment']['Classic'])
 			driver.find_element(:id, "userNav-arrow").click
-			EnziUIUtility.wait(driver,:id,"userNav-arrow",30)
+			EnziUIUtility.wait(driver,:id,"userNav-arrow",@timeSetting['Wait']['Environment']['Classic'])
 			driver.find_element(:link , "Switch to Lightning Experience").click
 		else
 			puts "You are already on lightening..."
@@ -240,9 +298,9 @@ class EnterPrise
 	def switchToClassic()
 		if (@driver.current_url().include? "lightning")
 			#puts "String 'lightning'"
-			EnziUIUtility.wait(@driver,:class,"oneUserProfileCardTrigger",60)
+			EnziUIUtility.wait(@driver,:class,"oneUserProfileCardTrigger",@timeSetting['Wait']['Environment']['Lightening'])
 			@driver.find_element(:class, "oneUserProfileCardTrigger").click
-			EnziUIUtility.wait(@driver,:class,"profile-card-footer",60)
+			EnziUIUtility.wait(@driver,:class,"profile-card-footer",@timeSetting['Wait']['Environment']['Lightening'])
 			@driver.find_element(:link , "Switch to Salesforce Classic").click
 		else
 			puts "You are already on Classic..."
@@ -303,28 +361,28 @@ class EnterPrise
 
 	def delRecord(objName)
 		allRecords = Salesforce.class_variable_get(:@@createdRecordsIds)
-		puts "allRecords: #{allRecords}"
+		#puts "allRecords: #{allRecords}"
 		Salesforce.deleteRecords(@salesforceBulk,"#{objName}",allRecords["#{objName}"])
 	end
 
 	def createOpportunity(opportunityRole, oppRoleContact, buildingName, accountName, noOfFTE = nil, noOfDeskInterestedIn = nil, monthlyBudget = nil, location = nil, officeFormat = nil, moveInDate = nil, sqFeet = nil, term = nil, useCase = nil)
 		@driver.navigate.refresh
 		navigateToCreateOpportunity()
-		EnziUIUtility.wait(@driver,:id,'Budget_Monthly__c',20)
+		EnziUIUtility.wait(@driver,:id,'Budget_Monthly__c',@timeSetting['Wait']['Environment']['Lightening'])
 		selectElement(@driver,"Maximize","button")
 
 		EnziUIUtility.setValue(@driver,:id,"AccountRec","#{accountName}")
 		sleep(10)
 		@driver.find_element(:id,'AccountReclist').find_elements(:tag_name,"li").each do |list|
 			if list.attribute('title') == "#{accountName}"
-				puts "list title: #{list.attribute('title')}"
+				#puts "list title: #{list.attribute('title')}"
 				wait = Selenium::WebDriver::Wait.new(:timeout => 30);
 				#sleep(20)
 				wait.until {list.displayed?}
 				list.click
 			end
 		end
-		EnziUIUtility.wait(@driver,nil,nil,5)
+		EnziUIUtility.wait(@driver,nil,nil,@timeSetting['Sleep']['Environment']['Lightening'])
 		if(noOfFTE != nil)
 			EnziUIUtility.setValue(@driver,:id,"Number_of_Full_Time_Employees__c","#{noOfFTE}")
 		end
@@ -338,18 +396,19 @@ class EnterPrise
 		end
 
 		EnziUIUtility.selectOption(@driver,:id,"Role__c","#{opportunityRole}")
+		@driver.find_element(:id, "OppRoleContact").clear()
 		EnziUIUtility.setValue(@driver,:id,"OppRoleContact","#{oppRoleContact}")
 		sleep(10)
 		@driver.find_element(:id,'OppRoleContactlist').find_elements(:tag_name,"li").each do |list|
 			if list.attribute('title') == "#{oppRoleContact}"
-				puts "list title: #{list.attribute('title')}"
-				wait = Selenium::WebDriver::Wait.new(:timeout => 30);
+				#puts "list title: #{list.attribute('title')}"
+				wait = Selenium::WebDriver::Wait.new(:timeout => 40);
 				#sleep(30)
 				wait.until {list.displayed?}
 				list.click
 			end
 		end
-		EnziUIUtility.wait(@driver,nil,nil,5)
+		EnziUIUtility.wait(@driver,nil,nil,@timeSetting['Sleep']['Environment']['Lightening'])
 		@driver.execute_script("arguments[0].scrollIntoView();" , @driver.find_element(:id ,"Term__c"))
 
 		EnziUIUtility.setValue(@driver,:id,"Building","#{buildingName}")
@@ -357,20 +416,20 @@ class EnterPrise
 		sleep(10)
 		@driver.find_element(:id,'Buildinglist').find_elements(:tag_name,"li").each do |list|
 			if list.attribute('title') == "#{buildingName}"
-				puts "list title: #{list.attribute('title')}"
+				#puts "list title: #{list.attribute('title')}"
 				wait = Selenium::WebDriver::Wait.new(:timeout => 30);
 				#sleep(30)
 				wait.until {list.displayed?}
 				list.click
 			end
 		end
-		EnziUIUtility.wait(@driver,nil,nil,2)
+		EnziUIUtility.wait(@driver,nil,nil,@timeSetting['Sleep']['Environment']['Lightening'])
 		if(officeFormat != nil)
 			EnziUIUtility.selectOption(@driver,:id,"OfficeFormat","#{officeFormat}")
 		end
 
 		if(moveInDate != nil)
-			EnziUIUtility.wait(@driver,:id,'Move_In_Date__c',15)
+			EnziUIUtility.wait(@driver,:id,'Move_In_Date__c',@timeSetting['Wait']['Environment']['Lightening'])
 			@driver.find_element(:id,'Move_In_Date__c').click
 			setMoveInDate(moveInDate)
 		end
@@ -400,8 +459,8 @@ class EnterPrise
 		selectElement(@driver,"Save & Close","button")
 		sleep(10)
 		urlArr = @driver.current_url.split('/')
-		puts "urlArr: #{urlArr}"
-		puts "urlArr[6]: #{urlArr[6]}"
+		#puts "urlArr: #{urlArr}"
+		#puts "urlArr[6]: #{urlArr[6]}"
 		oppId = urlArr[6]
 		return oppId
 	end
