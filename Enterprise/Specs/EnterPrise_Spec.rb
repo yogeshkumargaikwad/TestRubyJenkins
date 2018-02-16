@@ -510,6 +510,7 @@ describe "Enterprise" do
     @timeSetting = YAML.load(file.read())
 
     config = YAML.load_file('credentials.yaml')
+    
     @testRailUtility = EnziTestRailUtility::TestRailUtility.new(config['TestRail']['username'], config['TestRail']['password'])
     #@run = @testRailUtility.addRun("EnterPriseRun", 4, @testRailUtility.getSuitByName(4, "Enterprise"))
     arrCaseIds = Array.new

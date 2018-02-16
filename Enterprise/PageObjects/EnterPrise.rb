@@ -13,7 +13,7 @@ class EnterPrise
 
 	def initialize(driver)
 		@driver = driver
-		file = File.open("Credentials.yaml", "r")
+		file = File.open("credentials.yaml", "r")
 		mapCredentials = YAML.load(file.read())
 		@driver.get "https://test.salesforce.com/login.jsp?pw=#{mapCredentials['ENTQA']['password']}&un=#{mapCredentials['ENTQA']['username']}"
 		@salesforceBulk = Salesforce.login(mapCredentials['ENTQA']['username'],mapCredentials['ENTQA']['password'],true)
