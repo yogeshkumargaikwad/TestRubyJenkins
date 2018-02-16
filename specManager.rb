@@ -30,9 +30,7 @@ if !ARGV.empty? then
   if !specMap.empty? && !specMap.values.empty? then
     if specMap.key?('case') then
       if !ENV['CASE_ID'].nil? then
-        RSpec.configuration do |config|
-          RSpec.configuration.filter_run_including ENV['CASE_ID'].to_sym
-        end
+        RSpec.configuration.filter_run_including ENV['CASE_ID'].to_sym
       else
         RSpec.configuration.filter_run_including specMap.fetch('case')[0].to_sym
       end
@@ -64,7 +62,7 @@ if !ARGV.empty? then
       else
         specMap.fetch('suit').each do |suitId|
           specs.concat(testRailUtility.getSpecLocations(nil,nil,suitId,nil,testRailUtility.getSuite(suitId)['project_id']))
-       end
+        end
       end
     end
     if specMap.key?('plan') then
@@ -78,14 +76,14 @@ if !ARGV.empty? then
       end
     end
   end
-    if !specs.empty? then
-      #RSpec::Core::Formatters::BaseTextFormatter "--pattern **/*_spec.rb --format ParallelTests::RSpec::FailuresLogger --out rspec.txt
-      specs.uniq.each do |spec|
-        #Run spec in multiple browsers
-        if !spec.nil? then
-          puts "spec to run :: #{spec}"
-          puts "spec path :: #{spec['path']}"
-          puts "browser :: #{spec['isBrowserDependent']}"
+  if !specs.empty? then
+    #RSpec::Core::Formatters::BaseTextFormatter "--pattern **/*_spec.rb --format ParallelTests::RSpec::FailuresLogger --out rspec.txt
+    specs.uniq.each do |spec|
+      #Run spec in multiple browsers
+      if !spec.nil? then
+        puts "spec to run :: #{spec}"
+        puts "spec path :: #{spec['path']}"
+        puts "browser :: #{spec['isBrowserDependent']}"
 =begin
           arrCaseIds = Array.new
           if !ENV['SECTION_ID'].nil? then
@@ -100,22 +98,22 @@ if !ARGV.empty? then
           ENV['RUN_ID'] = testRailUtility.addRun(spec['path'].split("/specs/")[1].split("_spec")[0], ENV['PROJECT_ID'], ENV['SECTION_ID'], arrCaseIds)
 
 =end
-          if spec['isBrowserDependent'] then
-            arrBrowsers =Array.new
-            if !specMap.key?('browser') || specMap.fetch('browser').nil? then
-                specMapping = YAML.load_file("specMapping.json")
-                arrBrowsers.push(specMapping['BrowserCapabilities']['Name'])
-            else
-              arrBrowsers = specMap.fetch('browser')[0].split(" ")
-            end
-            arrBrowsers.each do |browser|
-                ENV['BROWSER'] = browser
-                RSpec::Core::Runner.run([spec['path']], $stderr, $stdout)
-                RSpec.clear_examples
-              end
-            else
-              RSpec::Core::Runner.run([spec['path']], $stderr, $stdout)
-            #puts "Failed examples are :: #{RSpec.configuration.reporter.failed_examples}"
+        if spec['isBrowserDependent'] then
+          arrBrowsers =Array.new
+          if !specMap.key?('browser') || specMap.fetch('browser').nil? then
+            specMapping = YAML.load_file("specMapping.json")
+            arrBrowsers.push(specMapping['BrowserCapabilities']['Name'])
+          else
+            arrBrowsers = specMap.fetch('browser')[0].split(" ")
+          end
+          arrBrowsers.each do |browser|
+            ENV['BROWSER'] = browser
+            RSpec::Core::Runner.run([spec['path']], $stderr, $stdout)
+            RSpec.clear_examples
+          end
+        else
+          RSpec::Core::Runner.run([spec['path']], $stderr, $stdout)
+          #puts "Failed examples are :: #{RSpec.configuration.reporter.failed_examples}"
 =begin
             if !RSpec.configuration.reporter.failed_examples.empty? then
               out_file = File.new("exceptions.txt", "w")
@@ -127,12 +125,12 @@ if !ARGV.empty? then
               puts "Successfully tested"
             end
 =end
-              RSpec.clear_examples
-          end
+          RSpec.clear_examples
         end
       end
     end
   end
+end
 =begin
 if !ARGV.empty? then
   specMapping = JSON.parse(File.read("specMapping.json"))
