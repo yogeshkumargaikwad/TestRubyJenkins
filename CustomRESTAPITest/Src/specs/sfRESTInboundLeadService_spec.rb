@@ -31,7 +31,6 @@ describe SfRESTService do
 				arrCaseIds.push(ENV['CASE_ID'])
 			end
     end
-		puts "ids added to run are :: #{arrCaseIds}"
 		@runId = @testRailUtility.addRun("RESTAPI Inbound Lead Service",4,26,arrCaseIds)['id']
 
 	}

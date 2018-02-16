@@ -64,15 +64,15 @@ describe ManageTours do
     end
   end
 
-  it "C151 : to check that book tour button is disabled" do
-    puts "C151 : to check that book tour button is disabled"
+  it "C883 : to check that book tour button is disabled" do
+    puts "C883 : to check that book tour button is disabled"
     begin
       puts "\n"
       expect(@objManageTours.buttonDisabled?).to be true
-      puts "C151 checked"
-      @testRailUtility.postResult(151,"Result for case 151 is #{"success"}",1,@runId)
+      puts "C883 checked"
+      @testRailUtility.postResult(883,"Result for case 883 is #{"success"}",1,@runId)
     rescue Exception => excp
-      @testRailUtility.postResult(151,"Result for case 151 is #{excp}",5,@runId)
+      @testRailUtility.postResult(883,"Result for case 883 is #{excp}",5,@runId)
       raise excp
     end
 
@@ -94,17 +94,17 @@ describe ManageTours do
     end
   end
 
-  it "C79 : to check that user can select tour date without building name", :regression => true do
-    puts "C79 : to check that user can select tour date without building name"
+  it "C885 : to check that user can select tour date without building name", :regression => true do
+    puts "C885  : to check that user can select tour date without building name"
     puts "\n"
     begin
       sleep(@objManageTours.instance_variable_get(:@timeSettingMap)['Sleep']['Environment']['Lightening'])
       expect(@objManageTours.childDisabled?(ManageTours.selectBuilding(@driver.find_element(:id,"BookTours0"),nil,@objManageTours.instance_variable_get(:@timeSettingMap)),ManageTours.selectTourDate(@driver.find_element(:id,"BookTours0"),@objManageTours.instance_variable_get(:@timeSettingMap)))).to be false
-      puts "C79 checked"
+      puts "C885  checked"
       puts "\n"
-      @testRailUtility.postResult(79,"Result for case 79 is #{"success"}",1,@runId)
+      @testRailUtility.postResult(885 ,"Result for case 885  is #{"success"}",1,@runId)
     rescue Exception => excp
-      @testRailUtility.postResult(79,"Result for case 79 is #{excp}",5,@runId)
+      @testRailUtility.postResult(885 ,"Result for case 885  is #{excp}",5,@runId)
       raise excp
     end
   end
@@ -126,18 +126,18 @@ describe ManageTours do
       raise excp
     end
   end
-  it "C83 : to check that user can get end time automatically after entering start time" do
-    puts "C83 : to check that user can get end time automatically after entering start time"
+  it "C887 : to check that user can get end time automatically after entering start time" do
+    puts "C887 : to check that user can get end time automatically after entering start time"
     puts "\n"
     begin
       ManageTours.setElementValue(@driver.find_element(:id,"BookTours0"),"startTime",nil)
       sleep(@objManageTours.instance_variable_get(:@timeSettingMap)['Sleep']['Environment']['Lightening'])
       expect(ManageTours.getElement("input","endTime",@driver.find_element(:id,"BookTours0"))).to_not eql nil
-      puts "C83 checked"
+      puts "C887 checked"
       puts "\n"
-      @testRailUtility.postResult(83,"Result for case 83 is #{"success"}",1,@runId)
+      @testRailUtility.postResult(887,"Result for case 887 is #{"success"}",1,@runId)
     rescue Exception => excp
-      @testRailUtility.postResult(83,"Result for case 83 is #{excp}",5,@runId)
+      @testRailUtility.postResult(887,"Result for case 887 is #{excp}",5,@runId)
       raise excp
     end
   end
