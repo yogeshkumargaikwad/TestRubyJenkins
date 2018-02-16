@@ -10,7 +10,7 @@ module EnziTestRailUtility
 		end
 
     def addRun(test_run_name,projectId,suiteId,caseIDs)
-      if caseIDs.size > 0 then
+      if !caseIDs.nil? && caseIDs.size > 0 then
         data = {
             "suite_id": "#{suiteId}",
             "name": "#{test_run_name}- #{Time.now.asctime}",
