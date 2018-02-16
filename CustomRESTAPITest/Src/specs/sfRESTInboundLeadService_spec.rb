@@ -28,9 +28,10 @@ describe SfRESTService do
 			end
 		else
 			if !ENV['CASE_ID'].nil? then
-				arrCaseIds.push(ENV['CASE_ID'].to_i)
+				arrCaseIds.push(ENV['CASE_ID'])
 			end
-		end
+    end
+		puts "ids added to run are :: #{arrCaseIds}"
 		@runId = @testRailUtility.addRun("RESTAPI Inbound Lead Service",4,26,arrCaseIds)['id']
 
 	}
