@@ -49,12 +49,12 @@ if !ARGV.empty? then
     if !specMap.key?('case') &&!(specMap.key?('section')) && specMap.key?('suit') then
       if specMap.key?('project') then
         specMap.fetch('suit').each do |suitId|
-          ENV['RUN_ID'] = testRailUtility.addRun(testRailUtility.getSuite(suitId)['name'],specMap.fetch('project')[0],suitId,nil)['id']
+          ENV['RUN_ID'] = testRailUtility.addRun(testRailUtility.getSuite(suitId)['name'],specMap.fetch('project')[0],suitId,nil)['id'].to_s
           specs.concat(testRailUtility.getSpecLocations(nil,nil,suitId,nil,specMap.fetch('project')[0]))
         end
       else
         specMap.fetch('suit').each do |suitId|
-          ENV['RUN_ID'] = testRailUtility.addRun(testRailUtility.getSuite(suitId)['name'],specMap.fetch('project')[0],suitId,nil)['id']
+          ENV['RUN_ID'] = testRailUtility.addRun(testRailUtility.getSuite(suitId)['name'],specMap.fetch('project')[0],suitId,nil)['id'].to_s
           specs.concat(testRailUtility.getSpecLocations(nil,nil,suitId,nil,testRailUtility.getSuite(suitId)['project_id']))
         end
       end
