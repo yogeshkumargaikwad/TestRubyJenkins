@@ -398,7 +398,7 @@ describe SfRESTService do
 			puts "\n"
 			puts "Checking number open activities..."
 			puts Salesforce.getRecords(@salesforceBulk,'Task',"SELECT id FROM Task WHERE WhoId = '#{getResponse['lead_sfid']}'",nil).result.inspect
-			expect(Salesforce.getRecords(@salesforceBulk,'Task',"SELECT id FROM Task WHERE WhoId = '#{getResponse['lead_sfid']}'",nil).result.records.size == 1).to be true
+			expect(Salesforce.getRecords(@salesforceBulk,'Task',"SELECT id FROM Task WHERE WhoId = '#{getResponse['lead_sfid']}'",nil).result.records.size > 2).to be true
 			puts "Open activities created successfully"
 
 			@testRailUtility.postResult(728,"Result for case 728 is #{getResponse['success']}",1,@runId)
