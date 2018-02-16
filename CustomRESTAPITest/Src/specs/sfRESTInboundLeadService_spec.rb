@@ -31,7 +31,11 @@ describe SfRESTService do
 				arrCaseIds.push(ENV['CASE_ID'])
 			end
     end
-		@runId = @testRailUtility.addRun("RESTAPI Inbound Lead Service",4,26,arrCaseIds)['id']
+    if !ENV['SUIT_ID'].nil? && (!ENV['SECTION_ID'].nil? || !ENV['CASE_ID'].nil?) then
+      @runId = @testRailUtility.addRun("RESTAPI Tour Service",4,26,arrCaseIds)['id']
+    else
+      @runId = ENV['RUN_ID']
+    end
 
 	}
 
@@ -413,6 +417,7 @@ describe SfRESTService do
 		allRecordIds = Salesforce.class_variable_get(:@@createdRecordsIds)
 		puts "Created data to be deleted :: #{@createdLeadIds}....#{allRecordIds}...#{@createdJourneyIds}"
 		Salesforce.deleteRecords(@salesforceBulk,"Journey__c",allRecordIds['Journey__c'])
+    Salesforce.deleteRecords(@salesforceBulk,"Opportunity",allRecordIds['Opportunity'])
 		Salesforce.deleteRecords(@salesforceBulk,"Lead",allRecordIds['Lead'])
 		Salesforce.deleteRecords(@salesforceBulk,"Account",allRecordIds['Account'])
 		Salesforce.deleteRecords(@salesforceBulk,"Campaign",allRecordIds['Campaign'])
