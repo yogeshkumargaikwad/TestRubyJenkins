@@ -12,7 +12,7 @@ specMap = Hash.new
 config = YAML.load_file('credentials.yaml')
 testRailUtility = EnziTestRailUtility::TestRailUtility.new(config['TestRail']['username'],config['TestRail']['password'])
 if ARGV.size == 1 &&  !ENV['PROJECT_ID'].nil? then
-  ARGV = ["project:#{ENV['PROJECT_ID']}", "suit:#{ENV['SUIT_ID']}" , "section:#{ENV['SECTION_ID']}" , "browser:#{BROWSERS}"]
+  ARGV = ["project:#{ENV['PROJECT_ID']}", "suit:#{ENV['SUIT_ID']}" , "section:#{ENV['SECTION_ID']}" , "browser:#{ENV['BROWSERS']}"]
 end
 if !ARGV.empty? then
   ARGV.each do |input|
