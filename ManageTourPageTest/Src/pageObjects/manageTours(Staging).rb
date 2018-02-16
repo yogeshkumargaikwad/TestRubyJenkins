@@ -18,7 +18,7 @@ class ManageTours
 		recordFile = File.open(Dir.pwd+"/ManageTourPageTest/Src/testData/records.json", "r")
 		recordsInJson = recordFile.read()
 		@records = JSON.parse(recordsInJson)
-		@timeSettingMap = YAML.load_file(Dir.pwd+'/timeSettings')
+		@timeSettingMap = YAML.load_file(Dir.pwd+'/timeSettings.yaml')
 		@mapCredentials = YAML.load_file('credentials.yaml')
 		@driver.get "https://test.salesforce.com/login.jsp?pw=#{@mapCredentials[sandBoxType]['password']}&un=#{@mapCredentials[sandBoxType]['username']}"
 		@salesforceBulk = Salesforce.login(@mapCredentials["#{sandBoxType}"]['username'],@mapCredentials["#{sandBoxType}"]['password'],true)

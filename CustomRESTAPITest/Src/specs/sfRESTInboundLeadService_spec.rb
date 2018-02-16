@@ -20,7 +20,7 @@ describe SfRESTService do
 		@salesforceBulk = Salesforce.login(SfRESTService.class_variable_get(:@@credentails)['QAAuto']['username'],SfRESTService.class_variable_get(:@@credentails)['QAAuto']['password'],true)
 		config = YAML.load_file('credentials.yaml')
 		@testRailUtility = EnziTestRailUtility::TestRailUtility.new(config['TestRail']['username'],config['TestRail']['password'])
-		@timeSettingMap = YAML.load_file(Dir.pwd+'/timeSettings')
+		@timeSettingMap = YAML.load_file(Dir.pwd+'/timeSettings.yaml')
 		arrCaseIds = Array.new
 		if !ENV['SECTION_ID'].nil? then
 			testRailUtility.getCases(ENV['PROJECT_ID'], ENV['SUIT_ID'], ENV['SECTION_ID']).each do |caseId|
