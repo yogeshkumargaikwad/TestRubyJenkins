@@ -5,7 +5,10 @@ require 'yaml'
 require 'rspec'
 require 'json'
 
-require_relative File.expand_path('',Dir.pwd)+"/CustomRESTAPITest/Src/utilities/EnziTestRailUtility/lib/EnziTestRailUtility.rb"
+
+
+
+require_relative File.expand_path('',Dir.pwd)+"/ContractEvent/Src/utilities/EnziTestRailUtility/lib/EnziTestRailUtility.rb"
 puts "Input is :: #{ARGV}"
 specMap = Hash.new
 config = YAML.load_file('credentials.yaml')

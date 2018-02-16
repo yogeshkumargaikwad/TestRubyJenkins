@@ -16,6 +16,8 @@ class UIComponentUtility < SalesforceUtility
   @@uiUtilityObj = Hash.new
   #@@sfRecordsMap = Hash.new
 
+
+  
   #define a constructor
   def initialize(driver)
     @@driver = driver
