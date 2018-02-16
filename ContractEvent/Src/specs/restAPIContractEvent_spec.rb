@@ -23,11 +23,12 @@ end
 puts string
 =end
 
+
 =begin
 RSpec.configure do |conf|
   #c.treat_symbols_as_metadata_keys_with_true_values = true
   puts "**********"
-  conf.filter_run_including :'C451' => /^tr/
+  conf.filter_run_including :'C451' => true
   #conf.before(:all, type: :model) do |group|
    # group.include_examples "451"
   #end
@@ -43,15 +44,21 @@ describe ContractEvent do
     @config = YAML.load_file(File.expand_path('', Dir.pwd) + '/credentials.yaml')
     @testRailUtility = EnziTestRailUtility::TestRailUtility.new(@config['TestRail']['username'], @config['TestRail']['password'])
     arrCaseIds = Array.new
-    if !ENV['PROJECT_ID'].nil? && !ENV['SECTION_ID'].nil? && ENV['CASE_ID'].nil? then
+    if !ENV['SECTION_ID'].nil? && ENV['CASE_ID'].nil? then
       @testRailUtility.getCases(ENV['PROJECT_ID'], ENV['SUIT_ID'], ENV['SECTION_ID']).each do |caseId|
         arrCaseIds.push(caseId['id'])
       end
     else
-      arrCaseIds.push(ENV['CASE_ID'])
+      if !ENV['CASE_ID'].nil? then
+        arrCaseIds.push(ENV['CASE_ID'])
+      end
     end
-    #puts "casecids :: #{arrCaseIds}"
-    @run = @testRailUtility.addRun("Rest API Test ContractEvent", 4, 26,arrCaseIds)
+    if !ENV['SUIT_ID'].nil? && (!ENV['SECTION_ID'].nil? || !ENV['CASE_ID'].nil?) then
+      @run = @testRailUtility.addRun("ContractEvent Run",4,19,arrCaseIds)['id']
+    else
+      @run = ENV['RUN_ID']
+    end
+
 
     testDataFile = File.open(File.expand_path('', Dir.pwd) + "/ContractEvent/Src/testData/testRecords.json", "r")
     testDataInJson = testDataFile.read()
@@ -85,7 +92,7 @@ describe ContractEvent do
     }
 
     #******************************** upgrade ****************************************
-    it 'C:451 In Upgrade event, To check if the membership_agreement_uuid matched with the existing membership_agreement_uuid while hitting payload then existing opportunity should be updated.', :C451 => 'true' do
+    it 'C:451 In Upgrade event, To check if the membership_agreement_uuid matched with the existing membership_agreement_uuid while hitting payload then existing opportunity should be updated.', :C451 => true do
       begin
         puts 'C:451 In Upgrade event, To check if the membership_agreement_uuid matched with the existing membership_agreement_uuid while hitting payload then existing opportunity should be updated.'
         contractUUID = SecureRandom.uuid
