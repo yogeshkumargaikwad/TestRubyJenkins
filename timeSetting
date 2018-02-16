@@ -1,0 +1,8 @@
+Sleep:
+ Environment:
+  Classic: 0
+  Lightening: 10
+Wait:
+ Environment:
+  Classic: 60
+  Lightening: 120

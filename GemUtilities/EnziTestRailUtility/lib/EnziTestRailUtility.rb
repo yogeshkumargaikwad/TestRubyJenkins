@@ -9,107 +9,25 @@ module EnziTestRailUtility
 			@client.password = password
 		end
 
-		def addRun(test_run_name,projectId,suiteId,caseIDs)
-			if caseIDs.size > 0 then
-				data = {
-						"suite_id": "#{suiteId}",
-						"name": "#{test_run_name}- #{Time.now.asctime}",
-						"include_all": false,
-						"case_ids": caseIDs
-				}else
-					 data = {"suite_id": "#{suiteId}","name": "#{test_run_name}- #{Time.now.asctime}","include_all": true}
-			end
-			@client.send_post("add_run/#{projectId}", data)
-		end
-
-		#StatusId ::
-		#1  Passed
-		#2  Blocked
-		#3  Untested (not allowed when adding a result)
-		#4  Retest
-		#5  Failed
-		def postResult(caseId,comment,statusId,testRunId)
-			url = "add_result_for_case/#{testRunId}/#{caseId}"
-			puts url
-			@client.send_post(url, { :status_id => statusId, :comment => "#{comment}" })
-		end
-
-		def getCase(caseId)
-			url = "get_case/#{caseId}"
-			return @client.send_get(url)
-		end
-
-		def getCases(projectId, suiteId, sectionId)
-			if !sectionId.nil? && !suiteId.nil? && !projectId.nil? then
-				return @client.send_get("get_cases/#{projectId}&suite_id=#{suiteId}&section_id=#{sectionId}")
-			end
-			if !sectionId.nil? then
-				return @client.send_get("get_cases/#{projectId}&section_id=#{sectionId}")
-			else
-				#Getting cases from suit id only if project is operating in single suit mode otherwise required
-				if getSuites(projectId).size == 1 && !suiteId.nil? then
-					return @client.send_get("get_cases/#{projectId}&suite_id=#{suiteId}")
-					#Getting cases from project id is valid iff project is operating in single suit mode
-				else
-					if getSuites(projectId).size == 1 && !projectId.nil? then
-						return @client.send_get("get_cases/#{projectId}")
-					end
-				end
-			end
-		end
-
-		def getSuite(suiteId)
-			url = "get_suite/#{suiteId}"
-			return @client.send_get(url)
-		end
-
-		def getSuites(projectId)
-			url = "get_suites/#{projectId}"
-			return @client.send_get(url)
-		end
-
-		def getProject(projectId)
-			url = "get_project/#{projectId}"
-			return @client.send_get(url)
-		end
-
-		def getProjects()
-			return @client.send_get('get_projects')
-		end
-
-
-		def getRuns(suitId,sectionId,projectId)
-			@client.send_get("get_runs/#{projectId}&suite_id=#{suitId}&section_id=#{sectionId}")
-		end
-
-		def getPayloadsFromSteps(steps)
-			payloads = Array.new
-			steps.each do |cases|
-				if cases.has_value?("Payload") then
-					payloads.push(cases)
-				end
-			end
-			return payloads
-		end
-
-		def getCaseFields
-			@client.send_get("get_case_fields")
-		end
-
-		def getSections(suitId, projectId)
-			@client.send_get("get_sections/#{projectId}&suite_id=#{suitId}")
-		end
-
-		def getSection(sectionId)
-			@client.send_get("get_section/#{sectionId}")
-		end
-
+    def addRun(test_run_name,projectId,suiteId,caseIDs)
+      if caseIDs.size > 0 then
+        data = {
+            "suite_id": "#{suiteId}",
+            "name": "#{test_run_name}- #{Time.now.asctime}",
+            "include_all": false,
+            "case_ids": caseIDs
+        }else
+           data = {"suite_id": "#{suiteId}","name": "#{test_run_name}- #{Time.now.asctime}","include_all": true}
+      end
+      @client.send_post("add_run/#{projectId}", data)
+    end
 		def getSpecLocations(caseId,sectionId,suitId,planId,projectId)
 			specLocations = Array.new
 			if !caseId.nil? then
-				specLocations.push(Hash["path"=>testCase.fetch('custom_spec_location'),"isBrowserDependent"=>testCase.fetch('custom_is_browser_dependent')])
-
-			else
+        puts "getting spec loaction from case #{caseId}"
+        testCase = getCase(caseId)
+        specLocations.push(Hash["path"=>testCase.fetch('custom_spec_location'),"isBrowserDependent"=>testCase.fetch('custom_is_browser_dependent')])
+        else
 				if !sectionId.nil? && getSuites(projectId).size == 1  then
 					puts "getting specs from section #{sectionId}"
 					getCases(projectId, nil, sectionId).each do |testCase|
@@ -175,43 +93,122 @@ module EnziTestRailUtility
 				puts "spec to be run are :: #{specLocations}"
 				return specLocations.uniq
 			end
+		end
+    #StatusId ::
+    #1  Passed
+    #2  Blocked
+    #3  Untested (not allowed when adding a result)
+    #4  Retest
+    #5  Failed
+    def postResult(caseId,comment,statusId,testRunId)
+      url = "add_result_for_case/#{testRunId}/#{caseId}"
+      puts url
+      @client.send_post(url, { :status_id => statusId, :comment => "#{comment}" })
+    end
 
-			def getSuitByName(projectId,suitName)
-				suitJSON = getSuites(projectId)
-				index = 0
-				until suitJSON[index] == nil do
-					if suitJSON[index]["name"] == suitName then
-						return suitJSON[index]["id"]
+    def getCase(caseId)
+			url = "get_case/#{caseId}"
+			return @client.send_get(url)
+		end
+
+		def getCases(projectId, suiteId, sectionId)
+			if !sectionId.nil? && !suiteId.nil? && !projectId.nil? then
+				return @client.send_get("get_cases/#{projectId}&suite_id=#{suiteId}&section_id=#{sectionId}")
+			end
+			if !sectionId.nil? then
+				return @client.send_get("get_cases/#{projectId}&section_id=#{sectionId}")
+			else
+				#Getting cases from suit id only if project is operating in single suit mode otherwise required
+				if getSuites(projectId).size == 1 && !suiteId.nil? then
+					return @client.send_get("get_cases/#{projectId}&suite_id=#{suiteId}")
+					#Getting cases from project id is valid iff project is operating in single suit mode
+				else
+					if getSuites(projectId).size == 1 && !projectId.nil? then
+						return @client.send_get("get_cases/#{projectId}")
 					end
-					index +=1
 				end
 			end
+		end
 
-			def getProjectByName(projectName)
-				arrProject = getProjects()
-				index = 0
-				id = nil
-				until arrProject[index] == nil do
-					if arrProject[index]["name"] == projectName.to_s then
-						id = arrProject[index]["id"]
-						break
-					end
-					index +=1
+		def getSuite(suiteId)
+			url = "get_suite/#{suiteId}"
+			return @client.send_get(url)
+		end
+
+		def getSuites(projectId)
+			url = "get_suites/#{projectId}"
+			return @client.send_get(url)
+		end
+
+		def getProject(projectId)
+			url = "get_project/#{projectId}"
+			return @client.send_get(url)
+		end
+
+		def getProjects()
+			return @client.send_get('get_projects')
+		end
+		def getSuitByName(projectId,suitName)
+			suitJSON = getSuites(projectId)
+			index = 0
+			until suitJSON[index] == nil do
+				if suitJSON[index]["name"] == suitName then
+					return suitJSON[index]["id"]
 				end
-				return id
+				index +=1
 			end
+		end
 
-			def getPlan(planId)
-				@client.send_get("get_plan/#{planId}")
+		def getProjectByName(projectName)
+			arrProject = getProjects()
+			index = 0
+			id = nil
+			until arrProject[index] == nil do
+				if arrProject[index]["name"] == projectName.to_s then
+					id = arrProject[index]["id"]
+					break
+				end
+				index +=1
 			end
+			return id
+		end
 
-			def getTests(runId)
-				@client.send_get("get_tests/#{runId}")
-			end
+		def getRuns(suitId,sectionId,projectId)
+			@client.send_get("get_runs/#{projectId}&suite_id=#{suitId}&section_id=#{sectionId}")
+		end
 
-			def getTest(testId)
-				@client.send_get("get_test/#{testId}")
+		def getPayloadsFromSteps(steps)
+			payloads = Array.new
+			steps.each do |cases|
+				if cases.has_value?("Payload") then
+					payloads.push(cases)
+				end
 			end
+			return payloads
+		end
+
+		def getCaseFields
+			@client.send_get("get_case_fields")
+		end
+
+		def getSections(suitId, projectId)
+			@client.send_get("get_sections/#{projectId}&suite_id=#{suitId}")
+		end
+
+		def getSection(sectionId)
+			@client.send_get("get_section/#{sectionId}")
+		end
+
+		def getPlan(planId)
+			@client.send_get("get_plan/#{planId}")
+		end
+
+		def getTests(runId)
+			@client.send_get("get_tests/#{runId}")
+		end
+
+		def getTest(testId)
+			@client.send_get("get_test/#{testId}")
 		end
 	end
 end

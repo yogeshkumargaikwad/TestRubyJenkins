@@ -15,3 +15,4 @@ require 'rspec'
   notifications = loader.send(:notifications_for, RSpec::Core::Formatters::JsonFormatter)
   reporter.register_listener(formatter, *notifications)
 
+

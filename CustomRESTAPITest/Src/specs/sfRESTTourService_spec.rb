@@ -9,7 +9,7 @@ require 'date'
 require 'salesforce'
 require 'securerandom'
 require_relative File.expand_path(Dir.pwd+"/CustomRESTAPITest/Src/pageObjects/sfRESTService.rb")
-require_relative File.expand_path(Dir.pwd+"/CustomRESTAPITest/Src/utilities/EnziTestRailUtility/lib/EnziTestRailUtility.rb")
+require_relative File.expand_path("GemUtilities/EnziTestRailUtility/lib/EnziTestRailUtility.rb")
 describe SfRESTService do
   before(:all){
     testDataFile = File.open(File.expand_path(Dir.pwd+"/CustomRESTAPITest/Src/testData/testData.json"), "r")
@@ -18,8 +18,19 @@ describe SfRESTService do
     SfRESTService.loginRequest
     @salesforceBulk = Salesforce.login(SfRESTService.class_variable_get(:@@credentails)['QAAuto']['username'],SfRESTService.class_variable_get(:@@credentails)['QAAuto']['password'],true)
     config = YAML.load_file('credentials.yaml')
+    @timeSettingMap = YAML.load_file(Dir.pwd+'/timeSettings')
     @testRailUtility = EnziTestRailUtility::TestRailUtility.new(config['TestRail']['username'],config['TestRail']['password'])
-    @runId = @testRailUtility.addRun("RESTAPI Inbound Lead Service",4,26)['id']
+    arrCaseIds = Array.new
+    if !ENV['SECTION_ID'].nil? then
+      testRailUtility.getCases(ENV['PROJECT_ID'], ENV['SUIT_ID'], ENV['SECTION_ID']).each do |caseId|
+        arrCaseIds.push(caseId['id'])
+      end
+    else
+      if ENV['CASE_ID'] then
+        arrCaseIds.push(ENV['CASE_ID'])
+      end
+    end
+    @runId = @testRailUtility.addRun("RESTAPI Tour Service",4,26,arrCaseIds)['id']
   }
 
   before(:each){
@@ -44,6 +55,7 @@ describe SfRESTService do
       payloadHash['body']['account_uuid'] = createdAccount.fetch('UUID__c')
       getResponse = SfRESTService.postData(''+payloadHash.to_json,"#{@testData['ServiceUrls'][0]['tour']}",true)
       puts "\n"
+      sleep(@timeSettingMap['Sleep']['Environment']['Classic'])
       puts "Checking service call response..."
       expect(getResponse['success']).to be true
       expect(getResponse['result']).to_not eql nil
@@ -102,6 +114,7 @@ describe SfRESTService do
 
       getResponse = SfRESTService.postData(''+payloadHash.to_json,"#{@testData['ServiceUrls'][0]['tour']}",true)
       puts "\n"
+      sleep(@timeSettingMap['Sleep']['Environment']['Classic'])
       puts "Checking service call response..."
       expect(getResponse['success']).to be true
       expect(getResponse['result']).to_not eql nil
@@ -151,7 +164,7 @@ describe SfRESTService do
       puts "Account created successfully"
       contact = @testData['Contact']
       contact[0]['accountId'] = account[0]['Id']
-      contact[0]['email'] = "test_enzi#{rand(100)}@example.com"
+      contact[0]['email'] = "test_enzi#{rand(10000)}@example.com"
       puts contact
       primaryMember = Salesforce.createRecords(@salesforceBulk,"Contact",contact)
       createdContact = Salesforce.getRecords(@salesforceBulk,"Contact","SELECT name,UUID__c,Email FROM Contact WHERE id = '#{primaryMember[0]['Id']}'",nil).result.records[0]
@@ -160,6 +173,7 @@ describe SfRESTService do
       payloadHash['body']['contact_uuid'] = createdContact.fetch('UUID__c')
       getResponse = SfRESTService.postData(''+payloadHash.to_json,"#{@testData['ServiceUrls'][0]['tour']}",true)
       puts "\n"
+      sleep(@timeSettingMap['Sleep']['Environment']['Classic'])
       puts "Checking service call response..."
       expect(getResponse['success']).to be true
       expect(getResponse['result']).to_not eql nil
@@ -212,6 +226,7 @@ describe SfRESTService do
       payloadHash['body']['tour_building_uuid'] = Salesforce.getRecords(@salesforceBulk,"Building__c","SELECT UUID__c FROM Building__c WHERE name = 'LA-Santa Monica'",nil).result.records[0]
       getResponse = SfRESTService.postData(''+payloadHash.to_json,"#{@testData['ServiceUrls'][0]['tour']}",true)
       puts "\n"
+      sleep(@timeSettingMap['Sleep']['Environment']['Classic'])
       puts "Checking service call response..."
       expect(getResponse['success']).to be true
       expect(getResponse['result']).to_not eql nil
@@ -259,7 +274,7 @@ describe SfRESTService do
       puts "Checking account insertion..."
       expect(account[0]['Id']).to_not eql nil
       puts "Account created successfully"
-      payloadHash = JSON.parse(@testRailUtility.getPayloadsFromSteps(@testRailUtility.getCase(773)['custom_steps_separated'])[0]['expected'])
+      payloadHash = JSON.parse(@testRailUtility.getPayloadsFromSteps(@testRailUtility.getCase(775)['custom_steps_separated'])[0]['expected'])
       payloadHash['body']['email'] = "test_HP#{rand(1000)}@example.com"
       buildingTestData = @testData['Building']
       payloadHash['body']['company_name'] = @testData['Account'][0]['Name']
@@ -269,6 +284,7 @@ describe SfRESTService do
 
       getResponse = SfRESTService.postData(''+payloadHash.to_json,"#{@testData['ServiceUrls'][0]['tour']}",true)
       puts "\n"
+      sleep(@timeSettingMap['Sleep']['Environment']['Classic'])
       puts "Checking service call response..."
       expect(getResponse['success']).to be true
       expect(getResponse['result']).to_not eql nil
@@ -331,7 +347,7 @@ describe SfRESTService do
       puts "Checking account insertion..."
       expect(account[0]['Id']).to_not eql nil
       puts "Account created successfully"
-      payloadHash = JSON.parse(@testRailUtility.getPayloadsFromSteps(@testRailUtility.getCase(772)['custom_steps_separated'])[0]['expected'])
+      payloadHash = JSON.parse(@testRailUtility.getPayloadsFromSteps(@testRailUtility.getCase(817)['custom_steps_separated'])[0]['expected'])
       payloadHash['body']['email'] = "test_HP#{rand(1000)}@example.com"
       buildingTestData = @testData['Building']
       buildingTestData[0]['uuid__c'] = SecureRandom.uuid
@@ -342,6 +358,7 @@ describe SfRESTService do
       payloadHash['body']['tour_building_uuid'] = Salesforce.getRecords(@salesforceBulk,"Building__c","SELECT UUID__c FROM Building__c WHERE name = 'LA-Santa Monica'",nil).result.records[0]
       getResponse = SfRESTService.postData(''+payloadHash.to_json,"#{@testData['ServiceUrls'][0]['tour']}",true)
       puts "\n"
+      sleep(@timeSettingMap['Sleep']['Environment']['Classic'])
       puts "Checking service call response..."
       expect(getResponse['success']).to be true
       expect(getResponse['result']).to_not eql nil
@@ -387,7 +404,7 @@ describe SfRESTService do
   it "To check tour is created and it is Booked by the contact which is provided in payload" , :"833" => true do
     puts "C833: To check tour is created and it is Booked by the contact which is provided in payload"
     begin
-      payloadHash = JSON.parse(@testRailUtility.getPayloadsFromSteps(@testRailUtility.getCase(774)['custom_steps_separated'])[0]['expected'])
+      payloadHash = JSON.parse(@testRailUtility.getPayloadsFromSteps(@testRailUtility.getCase(833)['custom_steps_separated'])[0]['expected'])
       payloadHash['body']['email'] = "test_HP#{rand(1000)}@example.com"
       buildingTestData = @testData['Building']
       buildingTestData[0]['uuid__c'] = SecureRandom.uuid
@@ -408,6 +425,7 @@ describe SfRESTService do
       payloadHash['body']['booked_by_contact_id'] = primaryMember[0]['Id']
       getResponse = SfRESTService.postData(''+payloadHash.to_json,"#{@testData['ServiceUrls'][0]['tour']}",true)
       puts "\n"
+      sleep(@timeSettingMap['Sleep']['Environment']['Classic'])
       puts "Checking service call response..."
       expect(getResponse['success']).to be true
       expect(getResponse['result']).to_not eql nil
@@ -424,202 +442,115 @@ describe SfRESTService do
       expect(Salesforce.getRecords(@salesforceBulk,"Tour_Outcome__c","SELECT Booked_by_contact_id__c FROM Tour_Outcome__c WHERE id = '#{getResponse['result'].delete('"')}'",nil).result.records[0].fetch('booked_by_contact_id__c')).to eql primaryMember[0]['Id']
       puts "Booked by contact id checked successfully"
       puts "\n"
-      @testRailUtility.postResult(817,"Result for case 817 is #{getResponse['success']}",1,@runId)
+      @testRailUtility.postResult(833,"Result for case 833 is #{getResponse['success']}",1,@runId)
     rescue Exception => excp
-      @testRailUtility.postResult(817,"Result for case 817 is #{excp}",5,@runId)
+      @testRailUtility.postResult(833,"Result for case 833 is #{excp}",5,@runId)
       raise excp
     end
   end
-  it "To check tour is created for a journey, whose UUID is passed in payload" do
-    puts "C842 : To check tour is created for a journey, whose UUID is passed in payload"
-    #begin
-    payloadHash = JSON.parse(@testRailUtility.getPayloadsFromSteps(@testRailUtility.getCase(842)['custom_steps_separated'])[0]['expected'])
-    payloadHash['body']['email'] = "test_HP#{rand(1000)}@example.com"
-    buildingTestData = @testData['Building']
-    buildingTestData[0]['uuid__c'] = SecureRandom.uuid
-    payloadHash['body']['buildings_interested_uuids'][0] = Salesforce.getRecords(@salesforceBulk,"Building__c","SELECT UUID__c FROM Building__c WHERE id = '#{Salesforce.createRecords(@salesforceBulk,"Building__c",@testData['Building'])[0]['Id']}'",nil).result.records[0].fetch('UUID__c')
-
-    account = Salesforce.createRecords(@salesforceBulk,"Account",@testData['Account'])
-    puts "\n"
-    puts "Checking account insertion..."
-    expect(account[0]['Id']).to_not eql nil
-    puts "Account created successfully"
-    contact = @testData['Contact']
-    contact[0]['accountId'] = account[0]['Id']
-    puts contact
-    contactId = Salesforce.createRecords(@salesforceBulk,"Contact",contact)
-    journey = @testData['Journey']
-    journey[0]['Primary_Contact__c'] = contactId[0]['Id']
-    journey[0]['NMD_Next_Contact_Date__c'] = Date.today.to_s
-    puts journey
-    journeyId = Salesforce.createRecords(@salesforceBulk,"Journey__c",journey)
-    createdAccount = Salesforce.getRecords(@salesforceBulk,"Account","SELECT UUID__c FROM Account WHERE id = '#{account[0]['Id']}'",nil).result.records[0]
-    getResponse = SfRESTService.postData(''+payloadHash.to_json,"#{@testData['ServiceUrls'][0]['tour']}",true)
-    puts "\n"
-    puts "Checking service call response..."
-    expect(getResponse['success']).to be true
-    expect(getResponse['result']).to_not eql nil
-    Salesforce.addRecordsToDelete('Tour',getResponse['result'].delete('"'))
-    puts "Service call response is #{getResponse['success']}"
-    puts "\n"
-    puts "Checking open activities..."
-    expect(Salesforce.getRecords(@salesforceBulk,'Task',"SELECT id FROM Task WHERE WhatId = '#{getResponse['result'].delete('"')}'",nil).result.records[0].fetch('Id')).to_not eql nil
-    puts "Open activities created successfully"
-    puts "\n"
-    puts "Checking Journey on tour..."
-    bookedTour = Salesforce.getRecords(@salesforceBulk,"Tour_Outcome__c","SELECT Status__c ,Journey__c,Journey__r.Status__c FROM Tour_Outcome__c WHERE id = '#{getResponse['result'].delete('"')}'",nil).result.records[0]
-    expect(bookedTour.fetch('Journey__c')).to eql journeyId[0]['Id']
-    puts "Journey checked successfully"
-    puts "\n"
-    puts "Checking status on tour"
-    expect(bookedTour.fetch('Status__c')).to eql "Scheduled"
-    puts "Satus of tour is :: #{bookedTour.fetch('Status__c')}"
-    puts "\n"
-    puts "Checking status of booked tour"
-    expect(bookedTour.fetch('Journey__r.Status__c')).to eql "Completed"
-    puts "Status of tour is :: #{bookedTour.fetch('Journey__r.Status__c')}"
-    puts "Status of tour checked successfully"
-    #@testRailUtility.postResult(842,"Result for case 842 is #{getResponse['success']}",1,@runId)
-    #rescue
-    #@testRailUtility.postResult(842,"Result for case 842 is #{getResponse['success']}",5,@runId)
-    #end
-  end
-  it "To check tour is created for completed journey whose UUID is passed in payload" , :"847" => true do
-    puts "C847 : To check tour is created for completed journey whose UUID is passed in payload"
-    #begin
-    payloadHash = JSON.parse(@testRailUtility.getPayloadsFromSteps(@testRailUtility.getCase(842)['custom_steps_separated'])[0]['expected'])
-    payloadHash['body']['email'] = "test_HP#{rand(1000)}@example.com"
-    buildingTestData = @testData['Building']
-    buildingTestData[0]['uuid__c'] = SecureRandom.uuid
-    payloadHash['body']['buildings_interested_uuids'][0] = Salesforce.getRecords(@salesforceBulk,"Building__c","SELECT UUID__c FROM Building__c WHERE id = '#{Salesforce.createRecords(@salesforceBulk,"Building__c",@testData['Building'])[0]['Id']}'",nil).result.records[0].fetch('UUID__c')
-
-    payloadHash['body']['sf_journey_uuid'] = Salesforce.class_variable_get(:@@createdRecordsIds)['Journey__c'][0]['Id']
-    getResponse = SfRESTService.postData(''+payloadHash.to_json,"#{@testData['ServiceUrls'][0]['tour']}",true)
-    puts "\n"
-    puts "Checking service call response..."
-    expect(getResponse['success']).to be true
-    expect(getResponse['result']).to_not eql nil
-    Salesforce.addRecordsToDelete('Tour',getResponse['result'].delete('"'))
-    puts "Service call response is #{getResponse['success']}"
-    puts "\n"
-    puts "Checking open activities..."
-    expect(Salesforce.getRecords(@salesforceBulk,'Task',"SELECT id FROM Task WHERE WhatId = '#{getResponse['result'].delete('"')}'",nil).result.records[0].fetch('Id')).to_not eql nil
-    puts "Open activities created successfully"
-    puts "\n"
-    puts "Checking Journey on tour..."
-    bookedTour = Salesforce.getRecords(@salesforceBulk,"Tour_Outcome__c","SELECT Status__c ,Journey__c FROM Tour_Outcome__c WHERE id = '#{getResponse['result'].delete('"')}'",nil).result.records[0]
-    expect(bookedTour.fetch('Journey__c')).to eql payloadHash['body']['sf_journey_uuid']
-    puts "Journey checked successfully"
-    puts "\n"
-    #@testRailUtility.postResult(847,"Result for case 847 is #{getResponse['success']}",1,@runId)
-    #rescue
-    #@testRailUtility.postResult(847,"Result for case 847 is #{getResponse['success']}",5,@runId)
-    #end
-  end
-
-=begin
   it "To check tour is created for a journey, whose UUID is passed in payload" ,:"842" => true do
     puts "C842 : To check tour is created for a journey, whose UUID is passed in payload"
-		begin
-			payloadHash = JSON.parse(@testRailUtility.getPayloadsFromSteps(@testRailUtility.getCase(842)['custom_steps_separated'])[0]['expected'])
-			payloadHash['body']['email'] = "test_HP#{rand(1000)}@example.com"
+    begin
+      payloadHash = JSON.parse(@testRailUtility.getPayloadsFromSteps(@testRailUtility.getCase(842)['custom_steps_separated'])[0]['expected'])
+      payloadHash['body']['email'] = "test_HP#{rand(1000)}@example.com"
       buildingTestData = @testData['Building']
       buildingTestData[0]['uuid__c'] = SecureRandom.uuid
       payloadHash['body']['buildings_interested_uuids'][0] = Salesforce.getRecords(@salesforceBulk,"Building__c","SELECT UUID__c FROM Building__c WHERE id = '#{Salesforce.createRecords(@salesforceBulk,"Building__c",@testData['Building'])[0]['Id']}'",nil).result.records[0].fetch('UUID__c')
 
       account = Salesforce.createRecords(@salesforceBulk,"Account",[{"Name":"test_HCL_Bandra#{rand(10)}"}])
-			puts "\n"
-			puts "Checking account insertion..."
-			expect(account[0]['Id']).to_not eql nil
-			puts "Account created successfully"
-			contact = @testData['Contact']
-			contact[0]['accountId'] = account[0]['Id']
-		  contact[0]['email'] = "test_enzi#{rand(100)}@example.com"
-			puts contact.inspect
-			contactId = Salesforce.createRecords(@salesforceBulk,"Contact",contact)
-			journey = @testData['Journey']
-			journey[0]['Primary_Contact__c'] = contactId[0]['Id']
-			journey[0]['NMD_Next_Contact_Date__c'] = Date.today.to_s
-    	puts journey.inspect
-			journeyId = Salesforce.createRecords(@salesforceBulk,"Journey__c",journey)
-			createdAccount = Salesforce.getRecords(@salesforceBulk,"Account","SELECT UUID__c FROM Account WHERE id = '#{account[0]['Id']}'",nil).result.records[0]
+      puts "\n"
+      puts "Checking account insertion..."
+      expect(account[0]['Id']).to_not eql nil
+      puts "Account created successfully"
+      contact = @testData['Contact']
+      contact[0]['accountId'] = account[0]['Id']
+      contact[0]['email'] = "test_enzi#{rand(100)}@example.com"
+      puts contact.inspect
+      contactId = Salesforce.createRecords(@salesforceBulk,"Contact",contact)
+      journey = @testData['Journey']
+      journey[0]['Primary_Contact__c'] = contactId[0]['Id']
+      journey[0]['NMD_Next_Contact_Date__c'] = Date.today.to_s
+      puts journey.inspect
+      journeyId = Salesforce.createRecords(@salesforceBulk,"Journey__c",journey)
+      createdAccount = Salesforce.getRecords(@salesforceBulk,"Account","SELECT UUID__c FROM Account WHERE id = '#{account[0]['Id']}'",nil).result.records[0]
       payloadHash['body']['sf_journey_uuid'] = Salesforce.getRecords(@salesforceBulk,"Journey__c","SELECT UUID__c FROM Journey__c WHERE id = '#{journeyId[0]['Id']}'",nil).result.records[0].fetch('UUID__c')
       payloadHash['body']['account_uuid'] = createdAccount.fetch('UUID__c')
       getResponse = SfRESTService.postData(''+payloadHash.to_json,"#{@testData['ServiceUrls'][0]['tour']}",true)
-			puts "\n"
-			puts "Checking service call response..."
-			expect(getResponse['success']).to be true
-			expect(getResponse['result']).to_not eql nil
-			Salesforce.addRecordsToDelete('Tour',getResponse['result'].delete('"'))
-			puts "Service call response is #{getResponse['success']}"
-			puts "\n"
-			puts "Checking open activities..."
-			expect(Salesforce.getRecords(@salesforceBulk,'Task',"SELECT id FROM Task WHERE WhatId = '#{getResponse['result'].delete('"')}'",nil).result.records[0].fetch('Id')).to_not eql nil
-			puts "Open activities created successfully"
-			puts "\n"
-			puts "Checking Journey on tour..."
-    	bookedTour = Salesforce.getRecords(@salesforceBulk,"Tour_Outcome__c","SELECT Status__c ,Journey__c,Journey__r.Status__c FROM Tour_Outcome__c WHERE id = '#{getResponse['result'].delete('"')}'",nil).result.records[0]
-			expect(bookedTour.fetch('Journey__c')).to eql journeyId[0]['Id']
-			puts "Journey checked successfully"
-			puts "\n"
-    	puts "Checking status on tour"
-			expect(bookedTour.fetch('Status__c')).to eql "Scheduled"
-    	puts "Satus of tour is :: #{bookedTour.fetch('Status__c')}"
-			puts "\n"
-    	puts "Checking status of booked tour"
-			expect(bookedTour.fetch('Journey__r.Status__c')).to eql "Completed"
-    	puts "Status of tour is :: #{bookedTour.fetch('Journey__r.Status__c')}"
-    	puts "Status of tour checked successfully"
-			@testRailUtility.postResult(842,"Result for case 842 is #{getResponse['success']}",1,@runId)
-		rescue Exception => excp
-			@testRailUtility.postResult(842,"Result for case 842 is #{excp}",5,@runId)
-			raise excp
-		end
+      puts "\n"
+      sleep(@timeSettingMap['Sleep']['Environment']['Classic'])
+      puts "Checking service call response..."
+      expect(getResponse['success']).to be true
+      expect(getResponse['result']).to_not eql nil
+      Salesforce.addRecordsToDelete('Tour',getResponse['result'].delete('"'))
+      puts "Service call response is #{getResponse['success']}"
+      puts "\n"
+      puts "Checking open activities..."
+      expect(Salesforce.getRecords(@salesforceBulk,'Task',"SELECT id FROM Task WHERE WhatId = '#{getResponse['result'].delete('"')}'",nil).result.records[0].fetch('Id')).to_not eql nil
+      puts "Open activities created successfully"
+      puts "\n"
+      puts "Checking Journey on tour..."
+      bookedTour = Salesforce.getRecords(@salesforceBulk,"Tour_Outcome__c","SELECT Status__c ,Journey__c,Journey__r.Status__c FROM Tour_Outcome__c WHERE id = '#{getResponse['result'].delete('"')}'",nil).result.records[0]
+      expect(bookedTour.fetch('Journey__c')).to eql journeyId[0]['Id']
+      puts "Journey checked successfully"
+      puts "\n"
+      puts "Checking status on tour"
+      expect(bookedTour.fetch('Status__c')).to eql "Scheduled"
+      puts "Satus of tour is :: #{bookedTour.fetch('Status__c')}"
+      puts "\n"
+      puts "Checking status of booked tour"
+      expect(bookedTour.fetch('Journey__r.Status__c')).to eql "Completed"
+      puts "Status of tour is :: #{bookedTour.fetch('Journey__r.Status__c')}"
+      puts "Status of tour checked successfully"
+      @testRailUtility.postResult(842,"Result for case 842 is #{getResponse['success']}",1,@runId)
+    rescue Exception => excp
+      @testRailUtility.postResult(842,"Result for case 842 is #{excp}",5,@runId)
+      raise excp
+    end
   end
 
   it "To check tour is created for completed journey whose UUID is passed in payload" , :"847" => true do
     puts "C847 : To check tour is created for completed journey whose UUID is passed in payload"
-		begin
-			payloadHash = JSON.parse(@testRailUtility.getPayloadsFromSteps(@testRailUtility.getCase(842)['custom_steps_separated'])[0]['expected'])
-			payloadHash['body']['email'] = "test_HP#{rand(1000)}@example.com"
+    begin
+      payloadHash = JSON.parse(@testRailUtility.getPayloadsFromSteps(@testRailUtility.getCase(847)['custom_steps_separated'])[0]['expected'])
+      payloadHash['body']['email'] = "test_HP#{rand(1000)}@example.com"
       buildingTestData = @testData['Building']
       buildingTestData[0]['uuid__c'] = SecureRandom.uuid
       payloadHash['body']['buildings_interested_uuids'][0] = Salesforce.getRecords(@salesforceBulk,"Building__c","SELECT UUID__c FROM Building__c WHERE id = '#{Salesforce.createRecords(@salesforceBulk,"Building__c",@testData['Building'])[0]['Id']}'",nil).result.records[0].fetch('UUID__c')
 
       payloadHash['body']['sf_journey_uuid'] = Salesforce.getRecords(@salesforceBulk,"Journey__c","SELECT UUID__c FROM Journey__c WHERE id = '#{Salesforce.class_variable_get(:@@createdRecordsIds)['Journey__c'][0]}'",nil).result.records[0].fetch('UUID__c')
-			getResponse = SfRESTService.postData(''+payloadHash.to_json,"#{@testData['ServiceUrls'][0]['tour']}",true)
-			puts "\n"
-			puts "Checking service call response..."
-			expect(getResponse['success']).to be true
-			expect(getResponse['result']).to_not eql nil
-			Salesforce.addRecordsToDelete('Tour',getResponse['result'].delete('"'))
-			puts "Service call response is #{getResponse['success']}"
-			puts "\n"
-			puts "Checking Journey on tour..."
-			bookedTour = Salesforce.getRecords(@salesforceBulk,"Tour_Outcome__c","SELECT UUID__c,Status__c ,Journey__c FROM Tour_Outcome__c WHERE id = '#{getResponse['result'].delete('"')}'",nil).result.records[0]
-			puts bookedTour.inspect
+      getResponse = SfRESTService.postData(''+payloadHash.to_json,"#{@testData['ServiceUrls'][0]['tour']}",true)
+      puts "\n"
+      sleep(@timeSettingMap['Sleep']['Environment']['Classic'])
+      puts "Checking service call response..."
+      expect(getResponse['success']).to be true
+      expect(getResponse['result']).to_not eql nil
+      Salesforce.addRecordsToDelete('Tour',getResponse['result'].delete('"'))
+      puts "Service call response is #{getResponse['success']}"
+      puts "\n"
+      puts "Checking Journey on tour..."
+      bookedTour = Salesforce.getRecords(@salesforceBulk,"Tour_Outcome__c","SELECT UUID__c,Status__c ,Journey__c FROM Tour_Outcome__c WHERE id = '#{getResponse['result'].delete('"')}'",nil).result.records[0]
+      puts bookedTour.inspect
       expect(bookedTour.fetch('Journey__c')).to eql payloadHash['body']['sf_journey_uuid']
       Salesforce.addRecordsToDelete('TourUUID',bookedTour.fetch('UUID__c'))
-			puts "Journey checked successfully"
-			puts "\n"
+      puts "Journey checked successfully"
+      puts "\n"
       puts "Checking open activities..."
       expect(Salesforce.getRecords(@salesforceBulk,'Task',"SELECT id FROM Task WHERE WhatId = '#{getResponse['result'].delete('"')}'",nil).result.records[0].fetch('Id')).to_not eql nil
       puts "Open activities created successfully"
       puts "\n"
-			@testRailUtility.postResult(847,"Result for case 847 is #{getResponse['success']}",1,@runId)
-		rescue Exception => excp
-			@testRailUtility.postResult(847,"Result for case 847 is #{excp}",5,@runId)
-			raise excp
-		end
+      @testRailUtility.postResult(847,"Result for case 847 is #{getResponse['success']}",1,@runId)
+    rescue Exception => excp
+      @testRailUtility.postResult(847,"Result for case 847 is #{excp}",5,@runId)
+      raise excp
+    end
   end
-=end
   #
   #Dependent on above example, Because the booked tour in above example is used below.
   #
   it "To check tour is created and it is associated with original tour whose UUID is passed in payload" , :"851" => true do
     puts "C851 : To check tour is created and it is associated with original tour whose UUID is passed in payload"
     begin
-      payloadHash = JSON.parse(@testRailUtility.getPayloadsFromSteps(@testRailUtility.getCase(842)['custom_steps_separated'])[0]['expected'])
+      payloadHash = JSON.parse(@testRailUtility.getPayloadsFromSteps(@testRailUtility.getCase(851)['custom_steps_separated'])[0]['expected'])
       payloadHash['body']['email'] = "test_HP#{rand(1000)}@example.com"
       buildingTestData = @testData['Building']
       buildingTestData[0]['uuid__c'] = SecureRandom.uuid
@@ -628,6 +559,7 @@ describe SfRESTService do
       payloadHash['body']['original_tour_uuid'] = Salesforce.class_variable_get(:@@createdRecordsIds)['TourUUID']
       getResponse = SfRESTService.postData(''+payloadHash.to_json,"#{@testData['ServiceUrls'][0]['tour']}",true)
       puts "\n"
+      sleep(@timeSettingMap['Sleep']['Environment']['Classic'])
       puts "Checking service call response..."
       expect(getResponse['success']).to be true
       expect(getResponse['result']).to_not eql nil
@@ -644,7 +576,7 @@ describe SfRESTService do
       @testRailUtility.postResult(851,"Result for case 851 is #{excp}",5,@runId)
       raise excp
     end
-end
+  end
   after(:each){
     puts "\n"
     puts "---------------------------------------------------------------------------------------------------------------------------"
