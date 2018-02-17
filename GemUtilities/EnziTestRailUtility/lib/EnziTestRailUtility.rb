@@ -85,16 +85,20 @@ module EnziTestRailUtility
 								puts "getting specs from project id"
 								specLocation = nil
 								getSuites(projectId).each do |suit|
-									getSections(suit['id'],projectId).each do |section|
-										getCases(projectId, suit['id'], section['id']).each do |testCase|
+                  sections = getSections(suit['id'],projectId)
+                  if sections.size > 0 then
+                    cases = getCases(projectId, suit['id'], section['id'])
+                    if cases.size > 0 then
+                      runId = addRun(suit['name'],projectId,suit['id'],nil)['id'].to_s
+                    end
+                  end
+                  sections.each do |section|
+                    cases.each do |testCase|
 											if testCase.key?('custom_spec_location') && !testCase.fetch('custom_spec_location').nil? then
-												specLocations.push(Hash["path"=>testCase.fetch('custom_spec_location'),"isBrowserDependent"=>testCase.fetch('custom_is_browser_dependent')])
+												specLocations.push(Hash["path"=>testCase.fetch('custom_spec_location'),"isBrowserDependent"=>testCase.fetch('custom_is_browser_dependent')],"runId" => runId)
 												break;
 											end
 										end
-                  end
-                  if specLocations.size > 0 then
-                    specLocations.last['runId'] = addRun(suit['name'],projectId,suit['id'],nil)['id'].to_s
                   end
 								end
 							end
