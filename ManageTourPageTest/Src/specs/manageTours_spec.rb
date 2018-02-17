@@ -33,6 +33,7 @@ describe ManageTours do
     else
       @runId = ENV['RUN_ID']
     end
+    @runId = @testRailUtility.addRun("Manage Tour by lead",4,19,arrCaseIds)['id']
   }
 
   after(:all){
@@ -57,7 +58,7 @@ describe ManageTours do
       @objManageTours.openPage(Salesforce.createRecords(@objManageTours.instance_variable_get(:@salesforceBulk),'Lead',@leadsTestData)[0]['Id'],:name,"lightning_manage_tours")
 
       #@objManageTours.openPage(@objManageTours.checkRecordCreated("Journey__c","SELECT id FROM Journey__c WHERE Primary_Email__c = '#{@objManageTours.instance_variable_get(:@records)[0]['lead'][0]['email']}'")[0].fetch('Id'),:id,"taction:0")
-      Salesforce.addRecordsToDelete('Journey__c',@objManageTours.checkRecordCreated("Journey__c","SELECT id FROM Journey__c WHERE Primary_Email__c = '#{@leadsTestData[0]['email']}'")[0].fetch('Id'))
+      puts @objManageTours.checkRecordCreated("Journey__c","SELECT id FROM Journey__c WHERE Primary_Email__c = '#{@leadsTestData[0]['email']}'")[0].fetch('Id')
       expect(@driver.title).to eql "Manage Tours"
       puts "successfully opened manage tour page C149 checked"
       puts "\n"
@@ -112,14 +113,30 @@ describe ManageTours do
       raise excp
     end
   end
+  it "C1016: to check that user can select previous date" do
+    puts "C1016: to check that user can select previous date"
+    begin
+      ManageTours.selectTourDate(@driver.find_element(:id,"BookTours0"),@objManageTours.instance_variable_get(:@timeSettingMap))
+      EnziUIUtility.clickElement(@driver,:id,Date.today.prev_day.to_s)
+      sleep(@objManageTours.instance_variable_get(:@timeSettingMap)['Sleep']['Environment']['Lightening'])
+      expect(EnziUIUtility.checkErrorMessage(@driver,'h2','No times slots available for the selected date')).to be true
+      @testRailUtility.postResult(1016 ,"Result for case 1016  is #{"success"}",1,@runId)
+    rescue Exception => excp
+      @testRailUtility.postResult(1016 ,"Result for case 1016  is #{excp}",5,@runId)
+      raise excp
+    end
+  end
   it "C81 : to check that user can select start time"  do
     puts "C81 : to check that user can select start time"
     puts "\n"
     begin
       ManageTours.selectBuilding(@driver.find_element(:id,"BookTours0"),"LA-Santa Monica",@objManageTours.instance_variable_get(:@timeSettingMap))
       ManageTours.selectTourDate(@driver.find_element(:id,"BookTours0"),@objManageTours.instance_variable_get(:@timeSettingMap))
-      #EnziUIUtility.clickElement(@driver,:id,"1517855400000")
-      EnziUIUtility.selectElement(@driver.find_element(:id,"BookTours0"),"Today","a")
+      if Date.today.saturday? || Date.today.sunday? then
+        EnziUIUtility.clickElement(@driver,:id,Date.today.next_day(2).to_s)
+      else
+        EnziUIUtility.selectElement(@driver.find_element(:id,"BookTours0"),"Today","a")
+      end
       sleep(@objManageTours.instance_variable_get(:@timeSettingMap)['Sleep']['Environment']['Lightening'])
       expect(@objManageTours.childDisabled?(ManageTours.selectTourDate(@driver.find_element(:id,"BookTours0"),@objManageTours.instance_variable_get(:@timeSettingMap)),ManageTours.setElementValue(@driver.find_element(:id,"BookTours0"),"startTime",nil))).to be false
       puts "C81 checked"
@@ -205,7 +222,7 @@ describe ManageTours do
       puts "\n"
 
       @testRailUtility.postResult(85,"Result for case 85 is #{"success"}",1,@runId)
-
+      #@objManageTours.getAllData(false).values
     rescue Exception => excp
       @testRailUtility.postResult(85,"Result for case 85 is #{excp}",5,@runId)
       raise excp
@@ -326,7 +343,7 @@ describe ManageTours do
         @leadsTestData[0]['company'] = "Test_Enzigma#{rand(1111)}"
         puts "\n"
         @objManageTours.openPageForLead(Salesforce.createRecords(@objManageTours.instance_variable_get(:@salesforceBulk),'Lead',@leadsTestData)[0]['Id'])
-        Salesforce.addRecordsToDelete('Journey__c',@objManageTours.checkRecordCreated("Journey__c","SELECT id FROM Journey__c WHERE Primary_Email__c = '#{@leadsTestData[0]['email']}'")[0].fetch('Id'))
+        puts @objManageTours.checkRecordCreated("Journey__c","SELECT id FROM Journey__c WHERE Primary_Email__c = '#{@leadsTestData[0]['email']}'")[0].fetch('Id')
         @objManageTours.bookTour(0,true)
         sleep(@objManageTours.instance_variable_get(:@timeSettingMap)['Sleep']['Environment']['Lightening'])
         @objManageTours.duplicateAccountSelector("Create Account and Merge",nil)
@@ -415,7 +432,7 @@ describe ManageTours do
         @leadsTestData[0]['email'] = "test_enzigmaPre#{rand(9999)}@example.com"
         @objManageTours.openPageForLead(Salesforce.createRecords(@objManageTours.instance_variable_get(:@salesforceBulk),'Lead',@leadsTestData)[0]['Id'])
         #@objManageTours.openPage(Salesforce.createRecords(@objManageTours.instance_variable_get(:@salesforceBulk),'Lead',@leadsTestData)[0]['Id'],:name,"lightning_manage_tours")
-        Salesforce.addRecordsToDelete('Journey__c',@objManageTours.checkRecordCreated("Journey__c","SELECT id FROM Journey__c WHERE Primary_Email__c = '#{@leadsTestData[0]['email']}'")[0].fetch('Id'))
+       @objManageTours.checkRecordCreated("Journey__c","SELECT id FROM Journey__c WHERE Primary_Email__c = '#{@leadsTestData[0]['email']}'")[0].fetch('Id')
         sleep(@objManageTours.instance_variable_get(:@timeSettingMap)['Sleep']['Environment']['Lightening'])
         @objManageTours.bookTour(0,true)
         @objManageTours.duplicateAccountSelector("Use Selected Account","Yes")

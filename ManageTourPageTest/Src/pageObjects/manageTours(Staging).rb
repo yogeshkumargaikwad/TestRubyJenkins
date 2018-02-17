@@ -60,7 +60,11 @@ class ManageTours
     		wait.until {!@driver.find_element(:id ,"spinner").displayed?}
     		#EnziUIUtility.clickElement(@driver,:id,"1515349800000")
     		wait.until {!@driver.find_element(:id ,"spinner").displayed?}
-    		EnziUIUtility.selectElement(container,"Today","a")
+				if Date.today.saturday? || Date.today.sunday? then
+					EnziUIUtility.clickElement(@driver,:id,Date.today.next_day(2).to_s)
+				else
+					EnziUIUtility.selectElement(@driver.find_element(:id,"BookTours0"),"Today","a")
+				end
     		wait.until {!@driver.find_element(:id ,"spinner").displayed?}
     		ManageTours.setElementValue(container,"startTime",nil)
     	end
@@ -204,7 +208,79 @@ class ManageTours
 	end
 	def checkError(errorMessage)
 		 @driver.find_elements(:class,"slds-theme--error")[0].text.eql? "#{errorMessage}"
-	end
+  end
+  def getData(onlySelected)
+    puts "in GetDAta"
+    EnziUIUtility.wait(@driver, nil, nil, 10)
+    EnziUIUtility.wait(@driver, :id, "enzi-data-table-container", 100)
+    arrTable = @driver.find_elements(:id, 'enzi-data-table-container')
+    mapOfDataOnEachPage = nil
+    mapOfDataOnEachPageHashMap = Hash.new
+    arrTable.each do |table|
+      if table.attribute('tag_name') != 'table' then
+        mapOfDataOnEachPage = table
+      end
+    end
+    tBodyEle = mapOfDataOnEachPage.find_element(:tag_name, 'tbody')
+    arrRows = tBodyEle.find_elements(:tag_name, 'tr')
+    totalRows = tBodyEle.find_elements(:tag_name, 'tr').length
+    totalRows -= 1
+    rowCount = 0
+    if onlySelected == true then
+      arrRows.each do |row|
+        if rowCount == totalRows then
+          break
+        end
+        isRowSelected = @driver.find_element(:id, "checkbox:#{rowCount}").selected?
+        if isRowSelected == true then
+          arr = Array.new
+          row.find_elements(:tag_name, 'td').each do |col|
+            if col.text == "Select Row" then
+              arr.push(isRowSelected)
+            else
+              arr.push(col.text)
+            end
+          end
+          mapOfDataOnEachPageHashMap.store("#{rowCount}", arr)
+        end
+        rowCount = rowCount + 1
+      end
+    else
+      arrRows.each do |row|
+        if rowCount == totalRows then
+          break
+        end
+        isRowSelected = @driver.find_element(:id, "checkbox:#{rowCount}").selected?
+        arr = Array.new
+        row.find_elements(:tag_name, 'td').each do |col|
+          arr.push(col.text)
+        end
+        mapOfDataOnEachPageHashMap.store("#{rowCount}", arr)
+        rowCount = rowCount + 1
+      end
+    end
+    return mapOfDataOnEachPageHashMap
+  end
+  def getAllData(onlySelected)
+    pageNumber = 1
+    mapOfAllData = Hash.new
+    clickElement("btnFirst")
+    loop do
+      mapOfDataOnEachPage = getData(onlySelected)
+      if mapOfDataOnEachPage != nil then
+        mapOfAllData.store("#{pageNumber}",mapOfDataOnEachPage)
+      end
+      pageNumber += 1
+      EnziUIUtility.wait(@driver,nil,nil,5)
+      if(@driver.find_element(:id, "btnNext").enabled? == true)
+        puts "btnNextEnability: #{@driver.find_element(:id, "btnNext").enabled?}"
+        clickElement("btnNext")
+      else
+        break
+      end
+    end
+    return mapOfAllData
+  end
 	def rescheduleTour
 		wait = Selenium::WebDriver::Wait.new(:timeout => @timeSettingMap['Wait']['Environment']['Lightening'])
 		EnziUIUtility.wait(@driver,:id,"enzi-data-table-container",@timeSettingMap['Wait']['Environment']['Lightening'])
@@ -219,6 +295,8 @@ class ManageTours
 		#res.fetch('Status__c').eql?("Scheduled") && res.fetch('Original_Tour__c').eql?("#{@@recordInsertedIds['Tour_Outcome__c']['Id']}")
 	end
 	def tourStatusChecked?(statusToCheck,primaryMember)
+		wait = Selenium::WebDriver::Wait.new(:timeout => @timeSettingMap['Wait']['Environment']['Lightening'])
+    wait.until {!@driver.find_element(:id ,"spinner").displayed?}
 		tourStatusChecked = false
 		rescheduledTours = Salesforce.getRecords(@salesforceBulk,"Tour_Outcome__c","SELECT id,Status__c,Original_Tour__c FROM Tour_Outcome__c WHERE Primary_Member__r.email = '#{primaryMember}'",nil)
 		puts "tours :: #{rescheduledTours.inspect}"
