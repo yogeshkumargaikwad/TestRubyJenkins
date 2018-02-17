@@ -87,9 +87,7 @@ module EnziTestRailUtility
 								getSuites(projectId).each do |suit|
                   sections = getSections(suit['id'],projectId)
                   if sections.size > 0 then
-                    if cases.size > 0 then
                       runId = addRun(suit['name'],projectId,suit['id'],nil)['id'].to_s
-                    end
                   end
                   sections.each do |section|
                     getCases(projectId, suit['id'], section['id']).each do |testCase|
