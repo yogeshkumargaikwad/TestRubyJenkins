@@ -39,7 +39,7 @@ module EnziTestRailUtility
 				if !sectionId.nil? && getSuites(projectId).size == 1  then
 					puts "getting specs from section #{sectionId}"
 					getCases(projectId, nil, sectionId).each do |testCase|
-						if testCase.key?('custom_spec_location') && !testCase.key?('custom_spec_location').nil? then
+						if testCase.key?('custom_spec_location') && !testCase.fetch('custom_spec_location').nil? then
 							specLocations.push(Hash["path"=>testCase.fetch('custom_spec_location'),"isBrowserDependent"=>testCase.fetch('custom_is_browser_dependent')])
 							break;
 						end
@@ -50,7 +50,7 @@ module EnziTestRailUtility
 						if !sectionId.nil? then
 							puts "getting specs from section #{sectionId}"
 							getCases(projectId, suitId, sectionId).each do |testCase|
-								if testCase.key?('custom_spec_location') && !testCase.key?('custom_spec_location').nil? then
+								if testCase.key?('custom_spec_location') && !testCase.fetch('custom_spec_location').nil? then
 									specLocations.push(Hash["path"=>testCase.fetch('custom_spec_location'),"isBrowserDependent"=>testCase.fetch('custom_is_browser_dependent')])
 									break;
 								end
@@ -59,7 +59,7 @@ module EnziTestRailUtility
 							puts "getting specs from suit #{suitId}"
 							getSections(suitId,projectId).each do |section|
 								getCases(projectId, suitId, section['id']).each do |testCase|
-									if testCase.key?('custom_spec_location') && !testCase.key?('custom_spec_location').nil? then
+									if testCase.key?('custom_spec_location') && !testCase.fetch('custom_spec_location').nil? then
 										specLocations.push(Hash["path"=>testCase.fetch('custom_spec_location'),"isBrowserDependent"=>testCase.fetch('custom_is_browser_dependent')])
 										break;
 									end
@@ -73,7 +73,7 @@ module EnziTestRailUtility
 								suit = entry['suite_id']
 								getSections(suit,projectId).each do |section|
 									getCases(projectId, suit, section['id']).each do |testCase|
-										if testCase.key?('custom_spec_location') && !testCase.key?('custom_spec_location').nil? then
+										if testCase.key?('custom_spec_location') && !testCase.fetch('custom_spec_location').nil? then
 											specLocations.push(Hash["path"=>testCase.fetch('custom_spec_location'),"isBrowserDependent"=>testCase.fetch('custom_is_browser_dependent')])
 											break;
 										end
@@ -87,7 +87,7 @@ module EnziTestRailUtility
 								getSuites(projectId).each do |suit|
 									getSections(suit['id'],projectId).each do |section|
 										getCases(projectId, suit['id'], section['id']).each do |testCase|
-											if testCase.key?('custom_spec_location') && !testCase.key?('custom_spec_location').nil? then
+											if testCase.key?('custom_spec_location') && !testCase.fetch('custom_spec_location').nil? then
 												specLocations.push(Hash["path"=>testCase.fetch('custom_spec_location'),"isBrowserDependent"=>testCase.fetch('custom_is_browser_dependent')])
 												break;
 											end
