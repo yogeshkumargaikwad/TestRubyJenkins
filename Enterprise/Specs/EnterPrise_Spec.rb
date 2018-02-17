@@ -29,6 +29,7 @@ describe "Enterprise" do
 
     context "Create Opportunity with global Action" do
       before(:example){
+        puts ""
         puts "-----------------------------------------------------------------------------------------------"
       }
       it 'Login by user' do
@@ -128,8 +129,6 @@ describe "Enterprise" do
 
       it 'C873: To check opportunity is created with stage "Selling".' do
         begin
-        #@driver.navigate.refresh
-        #@objEnterPrise.navigateToCreateOpportunity()
         recordId = @objEnterPrise.createOpportunity("Decision Maker", "Amit Kasar NMD", "CHI-National Building", "Enzigma Enterprise 01", nil, "2", "100", nil, nil, "2018-2-23", nil, "2", nil)
         #puts "recordId: #{recordId}"
         oppDetails = @objEnterPrise.getOpportunityFields(recordId)
