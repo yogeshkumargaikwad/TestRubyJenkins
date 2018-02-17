@@ -93,7 +93,6 @@ module EnziTestRailUtility
 											end
 										end
 									end
-									end
 								end
 							end
 						end
