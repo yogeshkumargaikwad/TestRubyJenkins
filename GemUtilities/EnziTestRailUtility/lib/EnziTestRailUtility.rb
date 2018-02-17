@@ -80,23 +80,19 @@ module EnziTestRailUtility
 									end
 								end
 							end
-						else
-							if !projectId.nil? then
+            else
+              if !projectId.nil? then
 								puts "getting specs from project id"
 								specLocation = nil
 								getSuites(projectId).each do |suit|
 									getSections(suit['id'],projectId).each do |section|
 										getCases(projectId, suit['id'], section['id']).each do |testCase|
 											if testCase.key?('custom_spec_location') && !testCase.fetch('custom_spec_location').nil? then
-												specLocations.push(Hash["path"=>testCase.fetch('custom_spec_location'),"isBrowserDependent"=>testCase.fetch('custom_is_browser_dependent')])
+												specLocations.push(Hash["path"=>testCase.fetch('custom_spec_location'),"isBrowserDependent"=>testCase.fetch('custom_is_browser_dependent'),"runId"=>addRun(suit['name'],projectId,suit['id'],nil)['id'].to_s])
 												break;
 											end
 										end
 									end
-									if specLocations.size > 0 then
-                    if !specLocations.last['path'].nil? then
-                      specLocations.last['runId'] = addRun(suit['name'],projectId,suit['id'],nil)['id'].to_s
-                    end
 									end
 								end
 							end
