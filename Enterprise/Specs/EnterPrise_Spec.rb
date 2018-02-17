@@ -494,7 +494,7 @@ describe "Enterprise" do
         @objEnterPrise.logOut()
       end
 
-      After(:example){
+      after(:example){
         puts "-----------------------------------------------------------------------------------------------"
       }
     end
