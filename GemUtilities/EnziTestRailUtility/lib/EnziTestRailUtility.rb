@@ -94,7 +94,9 @@ module EnziTestRailUtility
 										end
 									end
 									if specLocations.size > 0 then
-										specLocations.last['runId'] = addRun(suit['name'],projectId,suit['id'],nil)['id'].to_s
+                    if !specLocations.last['path'].nil? then
+                      specLocations.last['runId'] = addRun(suit['name'],projectId,suit['id'],nil)['id'].to_s
+                    end
 									end
 								end
 							end
