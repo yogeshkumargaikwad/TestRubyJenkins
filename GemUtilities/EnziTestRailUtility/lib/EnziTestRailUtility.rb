@@ -88,11 +88,14 @@ module EnziTestRailUtility
 									getSections(suit['id'],projectId).each do |section|
 										getCases(projectId, suit['id'], section['id']).each do |testCase|
 											if testCase.key?('custom_spec_location') && !testCase.fetch('custom_spec_location').nil? then
-												specLocations.push(Hash["path"=>testCase.fetch('custom_spec_location'),"isBrowserDependent"=>testCase.fetch('custom_is_browser_dependent'),"runId"=>addRun(suit['name'],projectId,suit['id'],nil)['id'].to_s])
+												specLocations.push(Hash["path"=>testCase.fetch('custom_spec_location'),"isBrowserDependent"=>testCase.fetch('custom_is_browser_dependent')])
 												break;
 											end
 										end
-									end
+                  end
+                  if specLocations.size > 0 then
+                    specLocations.last['runId'] = addRun(suit['name'],projectId,suit['id'],nil)['id'].to_s
+                  end
 								end
 							end
 						end

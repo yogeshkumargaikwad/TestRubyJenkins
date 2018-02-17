@@ -105,6 +105,7 @@ if !ARGV.empty? then
             ENV['BROWSER'] = browser
             puts [spec['path']]
             RSpec::Core::Runner.run([spec['path']], $stderr, $stdout)
+=begin
             if !RSpec.configuration.reporter.failed_examples.empty? then
               out_file = File.new("exceptions.txt", "w")
               out_file.puts(RSpec.configuration.reporter.failed_examples.to_s)
@@ -114,6 +115,7 @@ if !ARGV.empty? then
             else
               puts "Successfully tested"
             end
+=end
             RSpec.clear_examples
             RSpec.reset
           end
@@ -121,6 +123,7 @@ if !ARGV.empty? then
           puts [spec['path']]
           RSpec::Core::Runner.run([spec['path']], $stderr, $stdout)
           #puts "Failed examples are :: #{RSpec.configuration.reporter.failed_examples}"
+=begin
             if !RSpec.configuration.reporter.failed_examples.empty? then
               out_file = File.new("exceptions.txt", "w")
               out_file.puts(RSpec.configuration.reporter.failed_examples.to_s)
@@ -130,6 +133,7 @@ if !ARGV.empty? then
             else
               puts "Successfully tested"
             end
+=end
             RSpec.clear_examples
             RSpec.reset
         end
