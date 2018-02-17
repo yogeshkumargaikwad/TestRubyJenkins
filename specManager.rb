@@ -100,11 +100,16 @@ if !ARGV.empty? then
           end
           arrBrowsers.each do |browser|
             ENV['BROWSER'] = browser
+            puts [spec['path']]
             RSpec::Core::Runner.run([spec['path']], $stderr, $stdout)
             RSpec.clear_examples
+            RSpec.reset
           end
         else
+          puts [spec['path']]
           RSpec::Core::Runner.run([spec['path']], $stderr, $stdout)
+          RSpec.clear_examples
+          RSpec.reset
           #puts "Failed examples are :: #{RSpec.configuration.reporter.failed_examples}"
 =begin
             if !RSpec.configuration.reporter.failed_examples.empty? then
@@ -117,7 +122,7 @@ if !ARGV.empty? then
               puts "Successfully tested"
             end
 =end
-          RSpec.clear_examples
+
         end
       end
     end
