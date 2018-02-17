@@ -506,7 +506,7 @@ describe "Enterprise" do
     #@driver = Selenium::WebDriver.for :chrome
     @objEnterPrise = EnterPrise.new(@driver)
     testRecordFile = File.open(File.expand_path(Dir.pwd + '/Enterprise/TestData/UserSettings.json', "r"))
-    #testRecordFile = File.open("E:/Projects/WeWork/SF-QA-Automation/Enterprise/TestData/UserSettings.json", "r")
+    #testRecordFile = File.open("E:/Projects/WeWork/SF-QA-Automation/Enterprise/TestData/UserSettings.json", "r" )
     testRecordsInJson = testRecordFile.read()
     @testRecords = JSON.parse(testRecordsInJson)
 
