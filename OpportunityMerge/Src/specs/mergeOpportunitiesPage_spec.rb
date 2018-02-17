@@ -33,14 +33,14 @@ describe MergeOpportunities do
 		#expect(@objMergeOpportunities.numberOfOpportunitiesInSalesforce() == @objMergeOpportunities.calculateNumberOfRows(false)).to eq true
 
 		puts "Checking progress bar"
-		expect(@objMergeOpportunities.getProgress).to eq "0px%"
+		expect(@objMergeOpportunities.getProgress).to eq "0%"
 
 		puts "Checking error message when user does not select any of the opportunity from the opportunity Information page and clicks on the Next button."
-		@objMergeOpportunities.searchText("test")
+		@objMergeOpportunities.searchText("test_enzi")
 		EnziUIUtility.wait(@driver,nil,nil,10)
-		puts @objMergeOpportunities.clickElement("next")
-		puts @objMergeOpportunities.getErrorMessage(:id,"divErrorToaster")
-		#expect(@objMergeOpportunities.clickNextWithoutSelectingOpportunity()).to eq "Select atleast two opportunities."
+		#puts @objMergeOpportunities.clickElement("next")
+		#puts @objMergeOpportunities.getErrorMessage(:id,"divErrorToaster")
+		expect(@objMergeOpportunities.clickNextWithoutSelectingOpportunity()).to eq "Select atleast two opportunities."
 		@objMergeOpportunities.closeErrorMessage
 
 		puts "Checking error message when user selects single opportunity from opportunity information page and click on next buttton."

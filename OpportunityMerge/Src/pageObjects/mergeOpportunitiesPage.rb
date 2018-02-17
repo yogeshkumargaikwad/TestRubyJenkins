@@ -262,7 +262,6 @@ class MergeOpportunities
   end
 
   def clickElement(id)
-
     begin
       #sleep for 5 sec to load page
       EnziUIUtility.wait(@driver, nil, nil, 5)
@@ -369,9 +368,11 @@ class MergeOpportunities
         mapOfAllData.store("#{pageNumber}", mapOfDataOnEachPage)
       end
       pageNumber += 1
-      isBtnEnable = clickElement("btnNext")
-      puts  isBtnEnable
-      break if isBtnEnable == false
+      if checkBtnEnabled('btnNext') == true then
+        clickElement("btnNext")
+      else
+        break
+      end
     end
     clickElement("btnFirst")
     return mapOfAllData
@@ -488,5 +489,7 @@ class MergeOpportunities
 end
 object = MergeOpportunities.new(Selenium::WebDriver.for :firefox)
 object.clickOnTab("Opportunity_Tab","Opportunity Merge").click
+object.searchText('test_enzi')
+EnziUIUtility.wait(nil,nil,nil, 30)
 #puts object.numberOfOpportunitiesInSalesforce
 puts  object.calculateNumberOfRows(false)

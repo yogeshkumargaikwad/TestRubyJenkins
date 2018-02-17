@@ -24,6 +24,7 @@ puts string
 =end
 
 
+=begin
 RSpec.configure do |conf|
   #c.treat_symbols_as_metadata_keys_with_true_values = true
   puts "**********"
@@ -35,6 +36,7 @@ RSpec.configure do |conf|
   #c.include_examples :'452'
   #c.filter_run :'452'
 end
+=end
 
 describe ContractEvent do
   before(:all) {
