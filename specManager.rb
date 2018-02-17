@@ -76,6 +76,9 @@ if !ARGV.empty? then
       #Run spec in multiple browsers
       if !spec.nil? then
         puts "spec to run :: #{spec}"
+        if !ENV['PROJECT_ID'].nil? && ENV['SUIT_ID'].nil? && ENV['SECTION_ID'].nil? then
+          ENV['RUN_ID'] = spec['runId']
+        end
 =begin
           arrCaseIds = Array.new
           if !ENV['SECTION_ID'].nil? then
@@ -102,16 +105,6 @@ if !ARGV.empty? then
             ENV['BROWSER'] = browser
             puts [spec['path']]
             RSpec::Core::Runner.run([spec['path']], $stderr, $stdout)
-            RSpec.clear_examples
-            RSpec.reset
-          end
-        else
-          puts [spec['path']]
-          RSpec::Core::Runner.run([spec['path']], $stderr, $stdout)
-          RSpec.clear_examples
-          RSpec.reset
-          #puts "Failed examples are :: #{RSpec.configuration.reporter.failed_examples}"
-=begin
             if !RSpec.configuration.reporter.failed_examples.empty? then
               out_file = File.new("exceptions.txt", "w")
               out_file.puts(RSpec.configuration.reporter.failed_examples.to_s)
@@ -121,8 +114,24 @@ if !ARGV.empty? then
             else
               puts "Successfully tested"
             end
-=end
-
+            RSpec.clear_examples
+            RSpec.reset
+          end
+        else
+          puts [spec['path']]
+          RSpec::Core::Runner.run([spec['path']], $stderr, $stdout)
+          #puts "Failed examples are :: #{RSpec.configuration.reporter.failed_examples}"
+            if !RSpec.configuration.reporter.failed_examples.empty? then
+              out_file = File.new("exceptions.txt", "w")
+              out_file.puts(RSpec.configuration.reporter.failed_examples.to_s)
+              out_file.close
+              mailUtility = MailUtility.new("monika.pingale@enzigma.in","arya@1994")
+              mailUtility.sendMail('monika.pingale@enzigma.in',"exceptions.txt")
+            else
+              puts "Successfully tested"
+            end
+            RSpec.clear_examples
+            RSpec.reset
         end
       end
     end

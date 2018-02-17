@@ -33,9 +33,15 @@ describe ManageTours do
     else
       @runId = ENV['RUN_ID']
     end
-    @runId = @testRailUtility.addRun("Manage Tour by lead",4,19,arrCaseIds)['id']
   }
-
+  before(:each){
+    puts "\n"
+    puts "---------------------------------------------------------------------------------------------------------------------------"
+  }
+  after(:each){
+    puts "\n"
+    puts "---------------------------------------------------------------------------------------------------------------------------"
+  }
   after(:all){
     allRecordIds = Salesforce.class_variable_get(:@@createdRecordsIds)
     puts "Records to delete :: #{allRecordIds}"
@@ -53,14 +59,14 @@ describe ManageTours do
     begin
       @leadsTestData[0]['email'] = "test_enzigmaPre#{rand(9999)}@example.com"
       @leadsTestData[0]['company'] = "Test_Enzigma#{rand(1111)}"
-      puts "check for manage tour page opened"
+      puts "Checking manage tour page opened"
       puts "\n"
       @objManageTours.openPage(Salesforce.createRecords(@objManageTours.instance_variable_get(:@salesforceBulk),'Lead',@leadsTestData)[0]['Id'],:name,"lightning_manage_tours")
 
       #@objManageTours.openPage(@objManageTours.checkRecordCreated("Journey__c","SELECT id FROM Journey__c WHERE Primary_Email__c = '#{@objManageTours.instance_variable_get(:@records)[0]['lead'][0]['email']}'")[0].fetch('Id'),:id,"taction:0")
-      puts @objManageTours.checkRecordCreated("Journey__c","SELECT id FROM Journey__c WHERE Primary_Email__c = '#{@leadsTestData[0]['email']}'")[0].fetch('Id')
+      @objManageTours.checkRecordCreated("Journey__c","SELECT id FROM Journey__c WHERE Primary_Email__c = '#{@leadsTestData[0]['email']}'")[0].fetch('Id')
       expect(@driver.title).to eql "Manage Tours"
-      puts "successfully opened manage tour page C149 checked"
+      puts "Successfully opened manage tour page C149 checked"
       puts "\n"
       @testRailUtility.postResult(149,"Result for case 149 is #{"success"}",1,@runId)
     rescue Exception => excp
@@ -74,7 +80,7 @@ describe ManageTours do
     begin
       puts "\n"
       expect(@objManageTours.buttonDisabled?).to be true
-      puts "C883 checked"
+      puts "C883 : successfully checked"
       @testRailUtility.postResult(883,"Result for case 883 is #{"success"}",1,@runId)
     rescue Exception => excp
       @testRailUtility.postResult(883,"Result for case 883 is #{excp}",5,@runId)
@@ -90,7 +96,7 @@ describe ManageTours do
       @objManageTours.bookTour(0,false)
       sleep(@objManageTours.instance_variable_get(:@timeSettingMap)['Sleep']['Environment']['Lightening'])
       expect(@objManageTours.buttonDisabled?).to be true
-      puts "C7 checked"
+      puts "C7 : successfully checked"
       puts "\n"
       @testRailUtility.postResult(7,"Result for case 7 is #{"success"}",1,@runId)
     rescue Exception => excp
@@ -105,7 +111,7 @@ describe ManageTours do
     begin
       sleep(@objManageTours.instance_variable_get(:@timeSettingMap)['Sleep']['Environment']['Lightening'])
       expect(@objManageTours.childDisabled?(ManageTours.selectBuilding(@driver.find_element(:id,"BookTours0"),nil,@objManageTours.instance_variable_get(:@timeSettingMap)),ManageTours.selectTourDate(@driver.find_element(:id,"BookTours0"),@objManageTours.instance_variable_get(:@timeSettingMap)))).to be false
-      puts "C885  checked"
+      puts "C885 : successfully checked"
       puts "\n"
       @testRailUtility.postResult(885 ,"Result for case 885  is #{"success"}",1,@runId)
     rescue Exception => excp
@@ -120,6 +126,7 @@ describe ManageTours do
       EnziUIUtility.clickElement(@driver,:id,Date.today.prev_day.to_s)
       sleep(@objManageTours.instance_variable_get(:@timeSettingMap)['Sleep']['Environment']['Lightening'])
       expect(EnziUIUtility.checkErrorMessage(@driver,'h2','No times slots available for the selected date')).to be true
+      puts "successfully checked C1016"
       @testRailUtility.postResult(1016 ,"Result for case 1016  is #{"success"}",1,@runId)
     rescue Exception => excp
       @testRailUtility.postResult(1016 ,"Result for case 1016  is #{excp}",5,@runId)
@@ -139,7 +146,7 @@ describe ManageTours do
       end
       sleep(@objManageTours.instance_variable_get(:@timeSettingMap)['Sleep']['Environment']['Lightening'])
       expect(@objManageTours.childDisabled?(ManageTours.selectTourDate(@driver.find_element(:id,"BookTours0"),@objManageTours.instance_variable_get(:@timeSettingMap)),ManageTours.setElementValue(@driver.find_element(:id,"BookTours0"),"startTime",nil))).to be false
-      puts "C81 checked"
+      puts "C81 : successfully checked"
       puts "\n"
       @testRailUtility.postResult(81,"Result for case 81 is #{"success"}",1,@runId)
     rescue Exception => excp
@@ -154,7 +161,7 @@ describe ManageTours do
       ManageTours.setElementValue(@driver.find_element(:id,"BookTours0"),"startTime",nil)
       sleep(@objManageTours.instance_variable_get(:@timeSettingMap)['Sleep']['Environment']['Lightening'])
       expect(ManageTours.getElement("input","endTime",@driver.find_element(:id,"BookTours0"))).to_not eql nil
-      puts "C887 checked"
+      puts "C887 : successfully checked"
       puts "\n"
       @testRailUtility.postResult(887,"Result for case 887 is #{"success"}",1,@runId)
     rescue Exception => excp
@@ -170,7 +177,7 @@ describe ManageTours do
       #ManageTours.selectBuilding(@driver.find_element(:id,"BookTours0"),nil).send_keys "a"
       if ManageTours.selectBuilding(@driver.find_element(:id,"BookTours0"),nil,@objManageTours.instance_variable_get(:@timeSettingMap)).attribute('value').length > 2 then
         expect(@driver.find_element(:xpath ,"//span[starts-with(@id, 'lookup-option')]").text).to eql nil
-        puts "C92 checked"
+        puts "C92 : successfully checked"
         puts "\n"
       else
         expect(@driver.find_element(:xpath ,"//span[starts-with(@id, 'lookup-option')]")).to_not eql nil
@@ -189,19 +196,16 @@ describe ManageTours do
       if !@driver.find_elements(:id,"Name").empty? then
         expect(@driver.find_element(:id,"Name").attribute('value').eql? "").to be false
         expect(@driver.find_element(:id,"Name").attribute('value').eql? "#{@objManageTours.instance_variable_get(:@records)[0]['lead'][0]['firstName']}#{@objManageTours.instance_variable_get(:@records)[0]['lead'][0]['lastName']}")
-        puts "C91 checked\n"
       end
       if !@driver.find_elements(:id,"Company").empty? then
         expect(@driver.find_element(:id,"Company").attribute('value').eql? "").to be false
         expect(@driver.find_element(:id,"Company").attribute('value').eql? "#{@leadsTestData[0]['company']}")
-        puts "C91 checked\n"
       end
       if !@driver.find_elements(:id,"Email").empty? then
         expect(@driver.find_element(:id,"Email").attribute('value').eql? "").to be false
         expect(@driver.find_element(:id,"Email").attribute('value').eql? "#{@leadsTestData[0]['email']}")
-        puts "C91 checked\n"
       end
-      puts "\n"
+      puts "C91 : successfully checked\n"
       @testRailUtility.postResult(91,"Result for case 91 is #{"success"}",1,@runId)
     rescue Exception => excp
       @testRailUtility.postResult(91,"Result for case 91 is #{excp}",5,@runId)
@@ -209,16 +213,16 @@ describe ManageTours do
     end
   end
   it "C85,C171 : to check that user can view duplicate account selector page while booking a tour" do
-    puts "C85,C171 : to check that user can view duplicate account selector page while booking a tour"
+    puts "C85,C171 : to check that user can view duplicate account selector page while booking a tour and user can book a tour"
     puts "\n"
     begin
       @objManageTours.bookTour(0,true)
       sleep(@objManageTours.instance_variable_get(:@timeSettingMap)['Sleep']['Environment']['Lightening'])
-      puts "header is #{@driver.find_element(:id,"header43").text}"
+      puts "#{@driver.find_element(:id,"header43").text} opened successfully"
       puts "\n"
       EnziUIUtility.wait(@driver,:id,"header43",@objManageTours.instance_variable_get(:@timeSettingMap)['Sleep']['Environment']['Lightening'])
       expect(@driver.find_element(:id,"header43").text.eql? "Duplicate Account Selector").to be true
-      puts "C85 checked"
+      puts "C85 : successfully checked"
       puts "\n"
 
       @testRailUtility.postResult(85,"Result for case 85 is #{"success"}",1,@runId)
@@ -236,51 +240,52 @@ describe ManageTours do
       begin
         EnziUIUtility.wait(@driver,:id,"enzi-data-table-container",@objManageTours.instance_variable_get(:@timeSettingMap)['Wait']['Environment']['Lightening'])
         @objManageTours.duplicateAccountSelector("Create Account and Don't Merge",nil)
-        puts "to check lead converted"
+        puts "Checking lead conversion"
         puts "\n"
         expect(@objManageTours.checkRecordCreated("Lead","SELECT id,isConverted FROM Lead WHERE Email = '#{@leadsTestData[0]['email']}'")[0].fetch("IsConverted").eql? 'true').to be true
-        puts "lead converted successfully"
+        puts "Lead converted successfully"
         puts "\n"
-        puts "to check contact created"
+        puts "Checking contact creation"
         puts "\n"
         expect(@objManageTours.checkRecordCreated("Contact","SELECT id,total_Scheduled_Tours__c FROM Contact WHERE Email = '#{@leadsTestData[0]['email']}'")[0].fetch("Id")).to_not eql nil
-        puts "contact created successfully"
+        puts "Contact created successfully"
         puts "\n"
-        puts "to check account created"
+        puts "Checking account creation"
         puts "\n"
         expect(@objManageTours.checkRecordCreated("Account","SELECT id,allow_merge__c FROM Account WHERE name = '#{@leadsTestData[0]['company']}'")[0].fetch("Id")).to_not eql nil
-        puts "account created successfully"
+        puts "Account created successfully"
         puts "\n"
-        puts "to check opportunity created"
+        puts "Checking opportunity creation"
         puts "\n"
         sleep(30)
         expect(@objManageTours.checkRecordCreated("Opportunity","SELECT id FROM Opportunity WHERE Account.name = '#{@leadsTestData[0]['company']}'")[0].fetch("Id")).to_not eql nil
         sleep(@objManageTours.instance_variable_get(:@timeSettingMap)['Sleep']['Environment']['Lightening'])
-        puts "opportunity created successfully"
+        puts "Opportunity created successfully"
         puts "\n"
-        puts "to check account allow merge"
+        puts "Checking allow merge on account"
         puts "\n"
         expect(ManageTours.class_variable_get(:@@recordInsertedIds)['Account'].fetch('Allow_Merge__c').eql? 'false').to be true
-        puts "allow merge status is #{ManageTours.class_variable_get(:@@recordInsertedIds)['Account'].fetch('Allow_Merge__c')}\t\n"
-        puts "to check total number of scheduled tours on contact"
+        puts "Allow merge status is #{ManageTours.class_variable_get(:@@recordInsertedIds)['Account'].fetch('Allow_Merge__c')}\t\n"
+
+        puts "Checking total number of scheduled tours on contact"
         puts "\n"
         sleep(@objManageTours.instance_variable_get(:@timeSettingMap)['Sleep']['Environment']['Lightening'])
         expect(ManageTours.class_variable_get(:@@recordInsertedIds)['Contact'].fetch('Total_Scheduled_Tours__c').to_i > 0).to be true
-        puts "total number of scheduled tours => #{ManageTours.class_variable_get(:@@recordInsertedIds)['Contact'].fetch('Total_Scheduled_Tours__c')}\t\n"
+        puts "Total number of scheduled tours are => #{ManageTours.class_variable_get(:@@recordInsertedIds)['Contact'].fetch('Total_Scheduled_Tours__c')}\t\n"
         puts "\n"
-        puts "to check tour is created"
+        puts "Checking tour is creation"
         puts "\n"
         expect(@objManageTours.checkRecordCreated("Tour_Outcome__c","SELECT id,Status__c FROM Tour_Outcome__c WHERE Primary_Member__r.email = '#{@leadsTestData[0]['email']}'")[0].fetch("Id")).to_not eql nil
-        puts "tour creataed successfully"
+        puts "Tour creataed successfully"
         puts "\n"
-        puts "to check tour status"
+        puts "Checking tour status"
         puts "\n"
         expect(ManageTours.class_variable_get(:@@recordInsertedIds)['Tour_Outcome__c'].fetch('Status__c').eql? "Scheduled").to be true
-        puts "status checked successfully"
+        puts "Status checked successfully"
         puts "\n"
-        puts "to check open activities"
+        puts "Checking created open activities"
         expect(@objManageTours.checkRecordCreated('Task',"SELECT id FROM Task WHERE whatId = '#{ManageTours.class_variable_get(:@@recordInsertedIds)['Tour_Outcome__c'].fetch('Id')}'")[0].fetch('Id')).to_not eql nil
-        puts "C86 checked"
+        puts "C86 : successfully checked"
         puts "\n"
         @testRailUtility.postResult(86,"Result for case 86 is #{"success"}",1,@runId)
       rescue Exception => excp
@@ -293,7 +298,7 @@ describe ManageTours do
       puts "\n"
       begin
         expect(@objManageTours.numberOfTourBooked == 3).to be true
-        puts "C89 checked"
+        puts "C89 : successfully checked"
         puts "\n"
         @testRailUtility.postResult(89,"Result for case 89 is #{"success"}",1,@runId)
       rescue Exception => excp
@@ -316,16 +321,17 @@ describe ManageTours do
           @objManageTours.duplicateAccountSelector("Create Account and Don't Merge",nil)
           sleep(30)
           bookedTours = @objManageTours.checkRecordCreated("Tour_Outcome__c","SELECT id,Status__c FROM Tour_Outcome__c WHERE Primary_Member__r.email = '#{@leadsTestData[0]['email']}'")
-          puts "created tours =>  #{bookedTours.inspect}\t\n"
+          puts "Created tours are =>  #{bookedTours.inspect}\t\n"
           expect(bookedTours.size > 1).to be true
           puts "\n"
           sleep(@objManageTours.instance_variable_get(:@timeSettingMap)['Sleep']['Environment']['Lightening'])
-          puts "to check open activities"
+          puts "Checking open activities"
           expect(@objManageTours.checkRecordCreated('Task',"SELECT id FROM Task WHERE whatId = '#{bookedTours[0].fetch('Id')}'")[0].fetch('Id')).to_not eql nil
-          puts "to check that user can view booked tours information"
+          puts "Open opportunity created successfully"
+          puts "Checking user can view booked tours information"
           puts "\n"
           expect(@objManageTours.numberOfTourBooked > 3).to be true
-          puts "C96 checked"
+          puts "C96 : successfully checked"
           puts "\n"
           @testRailUtility.postResult(96,"Result for case 96 is #{"success"}",1,@runId)
         rescue Exception => excp
@@ -347,53 +353,54 @@ describe ManageTours do
         @objManageTours.bookTour(0,true)
         sleep(@objManageTours.instance_variable_get(:@timeSettingMap)['Sleep']['Environment']['Lightening'])
         @objManageTours.duplicateAccountSelector("Create Account and Merge",nil)
-        puts "to check lead converted"
+        puts "Checking lead conversion"
         puts "\n"
         expect(@objManageTours.checkRecordCreated("Lead","SELECT id,isConverted FROM Lead WHERE Email = '#{@leadsTestData[0]['email']}'")[0].fetch("IsConverted").eql? 'true').to be true
-        puts "lead converted successfully"
+        puts "Lead converted successfully"
         puts "\n"
-        puts "to check contact created"
+        puts "Checking contact creation"
         puts "\n"
         expect(@objManageTours.checkRecordCreated("Contact","SELECT id,total_Scheduled_Tours__c FROM Contact WHERE Email = '#{@leadsTestData[0]['email']}'")[0].fetch("Id")).to_not eql nil
-        puts "contact created successfully"
+        puts "Contact created successfully"
         puts "\n"
-        puts "to check account created"
+        puts "Checking account creation"
         puts "\n"
         expect(@objManageTours.checkRecordCreated("Account","SELECT id,allow_merge__c FROM Account WHERE name = '#{@leadsTestData[0]['company']}'")[0].fetch("Id")).to_not eql nil
-        puts "account created successfully"
+        puts "Account created successfully"
         puts "\n"
-        puts "to check opportunity created"
+        puts "Checking opportunity creation"
         puts "\n"
         sleep(30)
         expect(@objManageTours.checkRecordCreated("Opportunity","SELECT id FROM Opportunity WHERE Account.name = '#{@leadsTestData[0]['company']}'")[0].fetch("Id")).to_not eql nil
-        puts "opportunity created successfully"
+        puts "Opportunity created successfully"
         puts "\n"
         sleep(@objManageTours.instance_variable_get(:@timeSettingMap)['Sleep']['Environment']['Lightening'])
-        puts "to check account allow merge"
+        puts "Checking allow merge on account"
         puts "\n"
         expect(ManageTours.class_variable_get(:@@recordInsertedIds)['Account'].fetch('Allow_Merge__c').eql? 'true').to be true
-        puts "allow merge status is #{ManageTours.class_variable_get(:@@recordInsertedIds)['Account'].fetch('Allow_Merge__c')}\t\n"
-        puts "to check total number of scheduled tours on contact"
+        puts "Allow merge status is #{ManageTours.class_variable_get(:@@recordInsertedIds)['Account'].fetch('Allow_Merge__c')}\t\n"
+        puts "Checking total number of scheduled tours on contact"
         puts "\n"
         expect(ManageTours.class_variable_get(:@@recordInsertedIds)['Contact'].fetch('Total_Scheduled_Tours__c').to_i > 0).to be true
-        puts "total number of scheduled tours => #{ManageTours.class_variable_get(:@@recordInsertedIds)['Contact'].fetch('Total_Scheduled_Tours__c')}\t\n"
-        puts "to check tour is created"
+        puts "Total number of scheduled tours => #{ManageTours.class_variable_get(:@@recordInsertedIds)['Contact'].fetch('Total_Scheduled_Tours__c')}\t\n"
+        puts "Checking tour creation"
         puts "\n"
         expect(@objManageTours.checkRecordCreated("Tour_Outcome__c","SELECT id,Status__c FROM Tour_Outcome__c WHERE Primary_Member__r.email = '#{@leadsTestData[0]['email']}'")[0].fetch("Id")).to_not eql nil
-        puts "tour creataed successfully"
+        puts "Tour creataed successfully"
         puts "\n"
-        puts "to check tour status"
+        puts "Checking tour status"
         puts "\n"
         expect(ManageTours.class_variable_get(:@@recordInsertedIds)['Tour_Outcome__c'].fetch('Status__c').eql? "Scheduled").to be true
-        puts "status checked successfully"
+        puts "Status checked successfully"
         puts "\n"
-        puts "to check open activities"
+        puts "Checking open activities"
         expect(@objManageTours.checkRecordCreated('Task',"SELECT id FROM Task WHERE whatId = '#{ManageTours.class_variable_get(:@@recordInsertedIds)['Tour_Outcome__c'].fetch('Id')}'")[0].fetch('Id')).to_not eql nil
-        puts "to check that user can view booked tours information"
+        puts "Open activities created successfully"
+        puts "Checking user can view booked tours information"
         puts "\n"
         sleep(@objManageTours.instance_variable_get(:@timeSettingMap)['Sleep']['Environment']['Lightening'])
         expect(@objManageTours.numberOfTourBooked == 3).to be true
-        puts "C94 checked"
+        puts "C94 : successfully checked"
         puts "\n"
         @testRailUtility.postResult(94,"Result for case 94 is #{"success"}",1,@runId)
         @testRailUtility.postResult(362,"Result for case 94 is #{"success"}",1,@runId)
@@ -437,26 +444,26 @@ describe ManageTours do
         @objManageTours.bookTour(0,true)
         @objManageTours.duplicateAccountSelector("Use Selected Account","Yes")
         sleep(@objManageTours.instance_variable_get(:@timeSettingMap)['Sleep']['Environment']['Lightening'])
-        puts "to check lead converted"
+        puts "Checking lead conversion"
         puts "\n"
         expect(@objManageTours.checkRecordCreated("Lead","SELECT id,isConverted FROM Lead WHERE Email = '#{@leadsTestData[0]['email']}'")[0].fetch("IsConverted").eql? 'true').to be true
-        puts "lead converted successfully"
+        puts "Lead converted successfully"
         puts "\n"
-        puts "to check contact created"
+        puts "Checking contact creation"
         puts "\n"
         expect(@objManageTours.checkRecordCreated("Contact","SELECT id,Account.name FROM Contact WHERE Email = '#{@leadsTestData[0]['email']}'")[0].fetch("Id")).to_not eql nil
-        puts "contact created successfully"
+        puts "Contact created successfully"
         puts "\n"
-        puts "to check tour is created"
+        puts "Checking tour creation"
         puts "\n"
         expect(@objManageTours.checkRecordCreated("Tour_Outcome__c","SELECT id,Status__c FROM Tour_Outcome__c WHERE Primary_Member__r.email = '#{@leadsTestData[0]['email']}'")[0].fetch("Id")).to_not eql nil
-        puts "tour creataed successfully"
+        puts "Tour creataed successfully"
         puts "\n"
-        puts "to check tour status"
+        puts "Checking tour status"
         puts "\n"
         expect(ManageTours.class_variable_get(:@@recordInsertedIds)['Tour_Outcome__c'].fetch('Status__c').eql? "Scheduled").to be true
         puts "Tour outcome id ::"+ManageTours.class_variable_get(:@@recordInsertedIds)['Tour_Outcome__c'].fetch('Id')
-        puts "status checked successfully"
+        puts "Tour status checked successfully"
         puts "\n"
         #sleep(@objManageTours.instance_variable_get(:@timeSettingMap)['Sleep']['Environment']['Lightening'])
         #if ManageTours.class_variable_get(:@@recordInsertedIds)['Account'].fetch('Number_Of_Open_Opportunities__c').eql? 0 then
@@ -465,12 +472,13 @@ describe ManageTours do
         #expect(@objManageTours.checkRecordCreated("Opportunity","SELECT id FROM Opportunity WHERE Account.email = '#{@objManageTours.instance_variable_get(:@records)[2]['existingAccount']['email']}'")[0]).to eql nil
         #end
         sleep(@objManageTours.instance_variable_get(:@timeSettingMap)['Sleep']['Environment']['Lightening'])
-        puts "to check open activities"
+        puts "Checking open activities"
         expect(@objManageTours.checkRecordCreated('Task',"SELECT id FROM Task WHERE whatId = '#{ManageTours.class_variable_get(:@@recordInsertedIds)['Tour_Outcome__c'].fetch('Id')}'")[0].fetch('Id')).to_not eql nil
-        puts "to check that user can view booked tours information"
+        puts "Open activities created successfully"
+        puts "Checking user can view booked tours information"
         puts "\n"
         expect(@objManageTours.numberOfTourBooked == 3).to be true
-        puts "C102 checked\n"
+        puts "C102 : checked successfully\n"
         @testRailUtility.postResult(102,"Result for case 102 is #{"success"}",1,@runId)
       rescue Exception => excp
         @testRailUtility.postResult(102,"Result for case 102 is #{excp}",5,@runId)
@@ -499,7 +507,7 @@ describe ManageTours do
         @objManageTours.rescheduleTour
         sleep(@objManageTours.instance_variable_get(:@timeSettingMap)['Sleep']['Environment']['Lightening'])
         expect(@objManageTours.tourStatusChecked?("Rescheduled" , @leadsTestData[0]['email'])).to be true
-        puts "C115 checked"
+        puts "C115 : checked successfully"
         puts "\n"
         @testRailUtility.postResult(115,"Result for case 115 is #{"success"}",1,@runId)
       rescue Exception => excp
