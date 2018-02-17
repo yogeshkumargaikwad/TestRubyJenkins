@@ -93,7 +93,9 @@ module EnziTestRailUtility
 											end
 										end
 									end
-									specLocations.last['runId'] = addRun(suit['name'],projectId,suit['id'],nil).to_s
+									if !specLocations.nil? then
+										specLocations.last['runId'] = addRun(suit['name'],projectId,suit['id'],nil).to_s
+									end
 								end
 							end
 						end
