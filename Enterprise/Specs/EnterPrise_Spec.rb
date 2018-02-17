@@ -94,10 +94,10 @@ describe "Enterprise" do
       it 'C1011: To check contact can be created from create opportunity page' do
         begin
           @objEnterPrise.createNewContact("Enzigma Enterprise 01","Test Contact1", "contacttest@demo.com")
-          @@contactId = @objEnterPrise.getContactFields("contacttest@demo.com").fetch("Id")
+          contactId = @objEnterPrise.getContactFields("contacttest@demo.com").fetch("Id")
           expect(contactName = @objEnterPrise.getContactFields("contacttest@demo.com").fetch("Name")).to eq "Test Contact1"
           puts "New Contact is successfully created"
-          Salesforce.addRecordsToDelete("Contact", "#{@@contactId}")
+          Salesforce.addRecordsToDelete("Contact", "#{contactId}")
           @testRailUtility.postResult(1011,"comment",1,@run)
           rescue Exception => e
           @testRailUtility.postResult(1011,e,5,@run)
