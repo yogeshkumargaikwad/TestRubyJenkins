@@ -54,7 +54,7 @@ describe ContractEvent do
       end
     end
     if !ENV['SUIT_ID'].nil? && (!ENV['SECTION_ID'].nil? || !ENV['CASE_ID'].nil?) then
-      @run = @testRailUtility.addRun("ContractEvent Run",4,19,arrCaseIds)['id']
+      @run = @testRailUtility.addRun("ContractEvent Run",4,19,arrCaseIds)
     else
       @run = ENV['RUN_ID']
     end
