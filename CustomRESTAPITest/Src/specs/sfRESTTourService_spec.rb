@@ -51,7 +51,7 @@ describe SfRESTService do
       expect(account[0]['Id']).to_not eql nil
       puts "Account created successfully"
       payloadHash = JSON.parse(@testRailUtility.getPayloadsFromSteps(@testRailUtility.getCase(767)['custom_steps_separated'])[0]['expected'])
-      payloadHash['body']['email'] = "test_HP#{rand(1000)}@example.com"
+      payloadHash['body']['email'] = "test_HP#{rand(900000)}@example.com"
       buildingTestData = @testData['Building']
       buildingTestData[0]['uuid__c'] = SecureRandom.uuid
       payloadHash['body']['buildings_interested_uuids'][0] = Salesforce.getRecords(@salesforceBulk,"Building__c","SELECT UUID__c FROM Building__c WHERE id = '#{Salesforce.createRecords(@salesforceBulk,"Building__c",@testData['Building'])[0]['Id']}'",nil).result.records[0].fetch('UUID__c')
@@ -65,10 +65,6 @@ describe SfRESTService do
       expect(getResponse['result']).to_not eql nil
       Salesforce.addRecordsToDelete('Tour',getResponse['result'])
       puts "Service call response is #{getResponse['success']}"
-      puts "\n"
-      puts "Checking open activities..."
-      expect(Salesforce.getRecords(@salesforceBulk,'Task',"SELECT id FROM Task WHERE WhatId = '#{getResponse['result'].delete('"')}'",nil).result.records[0].fetch('Id')).to_not eql nil
-      puts "Open activities created successfully"
       puts "\n"
       puts "Checking contact creation for given account uuid..."
       createdContact = Salesforce.getRecords(@salesforceBulk,"Contact","SELECT id,Account.Name FROM Contact WHERE Account.id = '#{account[0]['Id']}'",nil).result.records[0]
@@ -85,6 +81,10 @@ describe SfRESTService do
         puts "Opportunity created successfully"
         puts "\n"
       end
+      puts "\n"
+      puts "Checking open activities..."
+      expect(Salesforce.getRecords(@salesforceBulk,'Task',"SELECT id FROM Task WHERE WhatId = '#{getResponse['result'].delete('"')}'",nil).result.records[0].fetch('Id')).to_not eql nil
+      puts "Open activities created successfully"
       @testRailUtility.postResult(767,"Result for case 767 is #{getResponse['success']}",1,@runId)
     rescue Exception => excp
       @testRailUtility.postResult(767,"Result for case 767 is #{excp}",5,@runId)
@@ -111,7 +111,7 @@ describe SfRESTService do
     puts "C773 : To check tour is booked and account, contact, opportunity is created"
     begin
       payloadHash = JSON.parse(@testRailUtility.getPayloadsFromSteps(@testRailUtility.getCase(773)['custom_steps_separated'])[0]['expected'])
-      payloadHash['body']['email'] = "test_HP#{rand(1000)}@example.com"
+      payloadHash['body']['email'] = "test_HP#{rand(900000)}@example.com"
       buildingTestData = @testData['Building']
       buildingTestData[0]['uuid__c'] = SecureRandom.uuid
       payloadHash['body']['buildings_interested_uuids'][0] = Salesforce.getRecords(@salesforceBulk,"Building__c","SELECT UUID__c FROM Building__c WHERE id = '#{Salesforce.createRecords(@salesforceBulk,"Building__c",@testData['Building'])[0]['Id']}'",nil).result.records[0].fetch('UUID__c')
@@ -124,10 +124,6 @@ describe SfRESTService do
       expect(getResponse['result']).to_not eql nil
       Salesforce.addRecordsToDelete('Tour',getResponse['result'].delete('"'))
       puts "Service call response is #{getResponse['success']}"
-      puts "\n"
-      puts "Checking open activities..."
-      expect(Salesforce.getRecords(@salesforceBulk,'Task',"SELECT id FROM Task WHERE WhatId = '#{getResponse['result'].delete('"')}'",nil).result.records[0].fetch('Id')).to_not eql nil
-      puts "Open activities created successfully"
       puts "\n"
       puts "Checking contact creation"
       expect(Salesforce.getRecords(@salesforceBulk,"Contact","SELECT id FROM Contact WHERE Email = '#{payloadHash['body']['email']}'",nil).result.records[0].fetch('Id')).to_not eql nil
@@ -145,6 +141,9 @@ describe SfRESTService do
       Salesforce.addRecordsToDelete('Opportunity',createdOpportunity)
       puts "Opportunity created successfully"
       puts "\n"
+      puts "Checking open activities..."
+      expect(Salesforce.getRecords(@salesforceBulk,'Task',"SELECT id FROM Task WHERE WhatId = '#{getResponse['result'].delete('"')}'",nil).result.records[0].fetch('Id')).to_not eql nil
+      puts "Open activities created successfully"
       @testRailUtility.postResult(773,"Result for case 773 is #{getResponse['success']}",1,@runId)
     rescue Exception => excp
       @testRailUtility.postResult(773,"Result for case 773 is #{excp}",5,@runId)
@@ -156,7 +155,7 @@ describe SfRESTService do
     puts "C774 : To check tour is created when account_uuid and contact_uuid are provided where that contact should not be child of a account"
     begin
       payloadHash = JSON.parse(@testRailUtility.getPayloadsFromSteps(@testRailUtility.getCase(774)['custom_steps_separated'])[0]['expected'])
-      payloadHash['body']['email'] = "test_HP#{rand(1000)}@example.com"
+      payloadHash['body']['email'] = "test_HP#{rand(900000)}@example.com"
       buildingTestData = @testData['Building']
       buildingTestData[0]['uuid__c'] = SecureRandom.uuid
       payloadHash['body']['buildings_interested_uuids'][0] = Salesforce.getRecords(@salesforceBulk,"Building__c","SELECT UUID__c FROM Building__c WHERE id = '#{Salesforce.createRecords(@salesforceBulk,"Building__c",@testData['Building'])[0]['Id']}'",nil).result.records[0].fetch('UUID__c')
@@ -168,7 +167,7 @@ describe SfRESTService do
       puts "Account created successfully"
       contact = @testData['Contact']
       contact[0]['accountId'] = account[0]['Id']
-      contact[0]['email'] = "test_enzi#{rand(10000)}@example.com"
+      contact[0]['email'] = "test_enzi#{rand(900000)}@example.com"
       puts contact
       primaryMember = Salesforce.createRecords(@salesforceBulk,"Contact",contact)
       createdContact = Salesforce.getRecords(@salesforceBulk,"Contact","SELECT name,UUID__c,Email FROM Contact WHERE id = '#{primaryMember[0]['Id']}'",nil).result.records[0]
@@ -183,10 +182,6 @@ describe SfRESTService do
       expect(getResponse['result']).to_not eql nil
       Salesforce.addRecordsToDelete('Tour',getResponse['result'].delete('"'))
       puts "Service call response is #{getResponse['success']}"
-      puts "\n"
-      puts "Checking open activities..."
-      expect(Salesforce.getRecords(@salesforceBulk,'Task',"SELECT id FROM Task WHERE WhatId = '#{getResponse['result'].delete('"')}'",nil).result.records[0].fetch('Id')).to_not eql nil
-      puts "Open activities created successfully"
       puts "\n"
       createdTour = Salesforce.getRecords(@salesforceBulk,"Tour_Outcome__c","SELECT Primary_Member__r.Name,Company_Name__c,Tour_Scheduled_With_Email__c FROM Tour_Outcome__c WHERE id = '#{getResponse['result'].delete('"')}'",nil).result.records[0]
       puts "Checking primary member on tour..."
@@ -204,6 +199,10 @@ describe SfRESTService do
       puts "Tour scheduled with email is :: #{createdTour.fetch('Tour_Scheduled_With_Email__c')}"
       puts "Tour scheduled with email checked successfully"
       puts "\n"
+      puts "Checking open activities..."
+      expect(Salesforce.getRecords(@salesforceBulk,'Task',"SELECT id FROM Task WHERE WhatId = '#{getResponse['result'].delete('"')}'",nil).result.records[0].fetch('Id')).to_not eql nil
+      puts "Open activities created successfully"
+      puts "\n"
       @testRailUtility.postResult(774,"Result for case 774 is #{getResponse['success']}",1,@runId)
     rescue Exception => excp
       @testRailUtility.postResult(774,"Result for case 774 is #{excp}",5,@runId)
@@ -220,7 +219,7 @@ describe SfRESTService do
       expect(account[0]['Id']).to_not eql nil
       puts "Account created successfully"
       payloadHash = JSON.parse(@testRailUtility.getPayloadsFromSteps(@testRailUtility.getCase(772)['custom_steps_separated'])[0]['expected'])
-      payloadHash['body']['email'] = "test_HP#{rand(9000)}@example.com"
+      payloadHash['body']['email'] = "test_HP#{rand(900000)}@example.com"
       buildingTestData = @testData['Building']
       buildingTestData[0]['uuid__c'] = SecureRandom.uuid
       payloadHash['body']['buildings_interested_uuids'][0] = Salesforce.getRecords(@salesforceBulk,"Building__c","SELECT UUID__c FROM Building__c WHERE id = '#{Salesforce.createRecords(@salesforceBulk,"Building__c",@testData['Building'])[0]['Id']}'",nil).result.records[0].fetch('UUID__c')
@@ -244,10 +243,6 @@ describe SfRESTService do
       Salesforce.addRecordsToDelete('Tour',getResponse2['result'].delete('"'))
       puts "Service call response is #{getResponse['success']}"
       puts "\n"
-      puts "Checking open activities..."
-      expect(Salesforce.getRecords(@salesforceBulk,'Task',"SELECT id FROM Task WHERE WhatId = '#{getResponse['result'].delete('"')}'",nil).result.records[0].fetch('Id')).to_not eql nil
-      puts "Open activities created successfully"
-      puts "\n"
       puts "Checking contact creation for given account uuid..."
       createdContact = Salesforce.getRecords(@salesforceBulk,"Contact","SELECT id,Account.Name FROM Contact WHERE Account.id = '#{account[0]['Id']}'",nil).result.records[0]
       expect(createdContact.fetch('Id')).to_not eql nil
@@ -262,6 +257,10 @@ describe SfRESTService do
         expect(createdOpportunity.fetch('Locations_Interested__c')).to_not eql nil
         Salesforce.addRecordsToDelete('Opportunity',createdOpportunity.fetch('Id'))
         puts "Opportunity created successfully"
+        puts "\n"
+        puts "Checking open activities..."
+        expect(Salesforce.getRecords(@salesforceBulk,'Task',"SELECT id FROM Task WHERE WhatId = '#{getResponse['result'].delete('"')}'",nil).result.records[0].fetch('Id')).to_not eql nil
+        puts "Open activities created successfully"
         puts "\n"
       end
       @testRailUtility.postResult(772,"Result for case 772 is #{getResponse['success']}",1,@runId)
@@ -279,7 +278,7 @@ describe SfRESTService do
       expect(account[0]['Id']).to_not eql nil
       puts "Account created successfully"
       payloadHash = JSON.parse(@testRailUtility.getPayloadsFromSteps(@testRailUtility.getCase(775)['custom_steps_separated'])[0]['expected'])
-      payloadHash['body']['email'] = "test_HP#{rand(9000)}@example.com"
+      payloadHash['body']['email'] = "test_HP#{rand(900000)}@example.com"
       buildingTestData = @testData['Building']
       payloadHash['body']['company_name'] = @testData['Account'][0]['Name']
       buildingTestData = @testData['Building']
@@ -294,10 +293,6 @@ describe SfRESTService do
       expect(getResponse['result']).to_not eql nil
       Salesforce.addRecordsToDelete('Tour',getResponse['result'].delete('"'))
       puts "Service call response is #{getResponse['success']}"
-      puts "\n"
-      puts "Checking open activities..."
-      expect(Salesforce.getRecords(@salesforceBulk,'Task',"SELECT id FROM Task WHERE WhatId = '#{getResponse['result'].delete('"')}'",nil).result.records[0].fetch('Id')).to_not eql nil
-      puts "Open activities created successfully"
       puts "\n"
       buildingCommunityLead = Salesforce.getRecords(@salesforceBulk,"Building__c","SELECT Community_Lead__r.Name FROM Building__c WHERE UUID__c = '#{payloadHash['body']['tour_building_uuid']}'",nil).result.records[0].fetch('Community_Lead__r.Name')
       puts "Checking contact creation"
@@ -336,6 +331,10 @@ describe SfRESTService do
         puts "Owner of created opportunity is :: #{createdOpportunity.fetch('Owner.Name')}"
         puts "Opportunity owner checked successfully"
         puts "\n"
+        puts "Checking open activities..."
+        expect(Salesforce.getRecords(@salesforceBulk,'Task',"SELECT id FROM Task WHERE WhatId = '#{getResponse['result'].delete('"')}'",nil).result.records[0].fetch('Id')).to_not eql nil
+        puts "Open activities created successfully"
+        puts "\n"
       end
       @testRailUtility.postResult(775,"Result for case 775 is #{getResponse['success']}",1,@runId)
     rescue Exception => excp
@@ -352,7 +351,7 @@ describe SfRESTService do
       expect(account[0]['Id']).to_not eql nil
       puts "Account created successfully"
       payloadHash = JSON.parse(@testRailUtility.getPayloadsFromSteps(@testRailUtility.getCase(817)['custom_steps_separated'])[0]['expected'])
-      payloadHash['body']['email'] = "test_HP#{rand(1000)}@example.com"
+      payloadHash['body']['email'] = "test_HP#{rand(900000)}@example.com"
       buildingTestData = @testData['Building']
       buildingTestData[0]['uuid__c'] = SecureRandom.uuid
       payloadHash['body']['buildings_interested_uuids'][0] = Salesforce.getRecords(@salesforceBulk,"Building__c","SELECT UUID__c FROM Building__c WHERE id = '#{Salesforce.createRecords(@salesforceBulk,"Building__c",@testData['Building'])[0]['Id']}'",nil).result.records[0].fetch('UUID__c')
@@ -375,10 +374,6 @@ describe SfRESTService do
       Salesforce.addRecordsToDelete('Tour',getResponse2['result'].delete('"'))
       puts "Service call response is #{getResponse2['success']}"
       puts "\n"
-      puts "Checking open activities..."
-      expect(Salesforce.getRecords(@salesforceBulk,'Task',"SELECT id FROM Task WHERE WhatId = '#{getResponse['result'].delete('"')}'",nil).result.records[0].fetch('Id')).to_not eql nil
-      puts "Open activities created successfully"
-      puts "\n"
       puts "Checking contact creation for given account uuid..."
       createdContact = Salesforce.getRecords(@salesforceBulk,"Contact","SELECT id,Account.Name FROM Contact WHERE Account.id = '#{account[0]['Id']}'",nil).result.records[0]
       expect(createdContact.fetch('Id')).to_not eql nil
@@ -391,6 +386,10 @@ describe SfRESTService do
         expect(createdOpportunity.fetch('Id')).to_not eql nil
         Salesforce.addRecordsToDelete('Opportunity',createdOpportunity.fetch('Id'))
         puts "Opportunity created successfully"
+        puts "\n"
+        puts "Checking open activities..."
+        expect(Salesforce.getRecords(@salesforceBulk,'Task',"SELECT id FROM Task WHERE WhatId = '#{getResponse['result'].delete('"')}'",nil).result.records[0].fetch('Id')).to_not eql nil
+        puts "Open activities created successfully"
         puts "\n"
       end
       puts "\n"
@@ -409,7 +408,7 @@ describe SfRESTService do
     puts "C833: To check tour is created and it is Booked by the contact which is provided in payload"
     begin
       payloadHash = JSON.parse(@testRailUtility.getPayloadsFromSteps(@testRailUtility.getCase(833)['custom_steps_separated'])[0]['expected'])
-      payloadHash['body']['email'] = "test_HP#{rand(1000)}@example.com"
+      payloadHash['body']['email'] = "test_HP#{rand(900000)}@example.com"
       buildingTestData = @testData['Building']
       buildingTestData[0]['uuid__c'] = SecureRandom.uuid
       payloadHash['body']['buildings_interested_uuids'][0] = Salesforce.getRecords(@salesforceBulk,"Building__c","SELECT UUID__c FROM Building__c WHERE id = '#{Salesforce.createRecords(@salesforceBulk,"Building__c",@testData['Building'])[0]['Id']}'",nil).result.records[0].fetch('UUID__c')
@@ -421,7 +420,7 @@ describe SfRESTService do
       puts "Account created successfully"
       contact = @testData['Contact']
       contact[0]['accountId'] = account[0]['Id']
-      contact[0]['email'] = "test_enzi#{rand(100)}@example.com"
+      contact[0]['email'] = "test_enzi#{rand(900000)}@example.com"
       puts contact
       primaryMember = Salesforce.createRecords(@salesforceBulk,"Contact",contact)
       createdAccount = Salesforce.getRecords(@salesforceBulk,"Account","SELECT UUID__c FROM Account WHERE id = '#{account[0]['Id']}'",nil).result.records[0]
@@ -436,15 +435,15 @@ describe SfRESTService do
       Salesforce.addRecordsToDelete('Tour',getResponse['result'].delete('"'))
       puts "Service call response is #{getResponse['success']}"
       puts "\n"
-      puts "Checking open activities..."
-      expect(Salesforce.getRecords(@salesforceBulk,'Task',"SELECT id FROM Task WHERE WhatId = '#{getResponse['result'].delete('"')}'",nil).result.records[0].fetch('Id')).to_not eql nil
-      puts "Open activities created successfully"
-      puts "\n"
       puts "Checking Booked by contact id on tour..."
       puts Salesforce.getRecords(@salesforceBulk,"Tour_Outcome__c","SELECT Booked_by_contact_id__c FROM Tour_Outcome__c WHERE id = '#{getResponse['result'].delete('"')}'",nil).result.records.inspect
       puts primaryMember[0]['Id']
       expect(Salesforce.getRecords(@salesforceBulk,"Tour_Outcome__c","SELECT Booked_by_contact_id__c FROM Tour_Outcome__c WHERE id = '#{getResponse['result'].delete('"')}'",nil).result.records[0].fetch('booked_by_contact_id__c')).to eql primaryMember[0]['Id']
       puts "Booked by contact id checked successfully"
+      puts "\n"
+      puts "Checking open activities..."
+      expect(Salesforce.getRecords(@salesforceBulk,'Task',"SELECT id FROM Task WHERE WhatId = '#{getResponse['result'].delete('"')}'",nil).result.records[0].fetch('Id')).to_not eql nil
+      puts "Open activities created successfully"
       puts "\n"
       @testRailUtility.postResult(833,"Result for case 833 is #{getResponse['success']}",1,@runId)
     rescue Exception => excp
@@ -456,7 +455,7 @@ describe SfRESTService do
     puts "C842 : To check tour is created for a journey, whose UUID is passed in payload"
     begin
       payloadHash = JSON.parse(@testRailUtility.getPayloadsFromSteps(@testRailUtility.getCase(842)['custom_steps_separated'])[0]['expected'])
-      payloadHash['body']['email'] = "test_HP#{rand(1000)}@example.com"
+      payloadHash['body']['email'] = "test_HP#{rand(900000)}@example.com"
       buildingTestData = @testData['Building']
       buildingTestData[0]['uuid__c'] = SecureRandom.uuid
       payloadHash['body']['buildings_interested_uuids'][0] = Salesforce.getRecords(@salesforceBulk,"Building__c","SELECT UUID__c FROM Building__c WHERE id = '#{Salesforce.createRecords(@salesforceBulk,"Building__c",@testData['Building'])[0]['Id']}'",nil).result.records[0].fetch('UUID__c')
@@ -468,7 +467,7 @@ describe SfRESTService do
       puts "Account created successfully"
       contact = @testData['Contact']
       contact[0]['accountId'] = account[0]['Id']
-      contact[0]['email'] = "test_enzi#{rand(100)}@example.com"
+      contact[0]['email'] = "test_enzi#{rand(900000)}@example.com"
       puts contact.inspect
       contactId = Salesforce.createRecords(@salesforceBulk,"Contact",contact)
       journey = @testData['Journey']
@@ -489,10 +488,6 @@ describe SfRESTService do
       Salesforce.addRecordsToDelete('Tour',getResponse['result'].delete('"'))
       puts "Service call response is #{getResponse['success']}"
       puts "\n"
-      puts "Checking open activities..."
-      expect(Salesforce.getRecords(@salesforceBulk,'Task',"SELECT id FROM Task WHERE WhatId = '#{getResponse['result'].delete('"')}'",nil).result.records[0].fetch('Id')).to_not eql nil
-      puts "Open activities created successfully"
-      puts "\n"
       puts "Checking Journey on tour..."
       bookedTour = Salesforce.getRecords(@salesforceBulk,"Tour_Outcome__c","SELECT id,UUID__c,Status__c ,Journey__c,Journey__r.Status__c FROM Tour_Outcome__c WHERE id = '#{getResponse['result'].delete('"')}'",nil).result.records[0]
       expect(bookedTour.fetch('Journey__c')).to eql journeyId[0]['Id']
@@ -507,6 +502,10 @@ describe SfRESTService do
       expect(bookedTour.fetch('Journey__r.Status__c')).to eql "Completed"
       puts "Status of tour is :: #{bookedTour.fetch('Journey__r.Status__c')}"
       puts "Status of tour checked successfully"
+      puts "Checking open activities..."
+      expect(Salesforce.getRecords(@salesforceBulk,'Task',"SELECT id FROM Task WHERE WhatId = '#{getResponse['result'].delete('"')}'",nil).result.records[0].fetch('Id')).to_not eql nil
+      puts "Open activities created successfully"
+      puts "\n"
       @testRailUtility.postResult(842,"Result for case 842 is #{getResponse['success']}",1,@runId)
     rescue Exception => excp
       @testRailUtility.postResult(842,"Result for case 842 is #{excp}",5,@runId)
@@ -518,7 +517,7 @@ describe SfRESTService do
     puts "C847 : To check tour is created for completed journey whose UUID is passed in payload"
     begin
       payloadHash = JSON.parse(@testRailUtility.getPayloadsFromSteps(@testRailUtility.getCase(847)['custom_steps_separated'])[0]['expected'])
-      payloadHash['body']['email'] = "test_HP#{rand(1000)}@example.com"
+      payloadHash['body']['email'] = "test_HP#{rand(900000)}@example.com"
       buildingTestData = @testData['Building']
       buildingTestData[0]['uuid__c'] = SecureRandom.uuid
       payloadHash['body']['buildings_interested_uuids'][0] = Salesforce.getRecords(@salesforceBulk,"Building__c","SELECT UUID__c FROM Building__c WHERE id = '#{Salesforce.createRecords(@salesforceBulk,"Building__c",@testData['Building'])[0]['Id']}'",nil).result.records[0].fetch('UUID__c')
@@ -556,7 +555,7 @@ describe SfRESTService do
     puts "C851 : To check tour is created and it is associated with original tour whose UUID is passed in payload"
     begin
       payloadHash = JSON.parse(@testRailUtility.getPayloadsFromSteps(@testRailUtility.getCase(851)['custom_steps_separated'])[0]['expected'])
-      payloadHash['body']['email'] = "test_HP#{rand(1000)}@example.com"
+      payloadHash['body']['email'] = "test_HP#{rand(900000)}@example.com"
       buildingTestData = @testData['Building']
       buildingTestData[0]['uuid__c'] = SecureRandom.uuid
       payloadHash['body']['buildings_interested_uuids'][0] = Salesforce.getRecords(@salesforceBulk,"Building__c","SELECT UUID__c FROM Building__c WHERE id = '#{Salesforce.createRecords(@salesforceBulk,"Building__c",@testData['Building'])[0]['Id']}'",nil).result.records[0].fetch('UUID__c')

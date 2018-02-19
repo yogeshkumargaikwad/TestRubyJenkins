@@ -49,7 +49,7 @@ describe SfRESTService do
 		puts "C363: To check lead is created when only required values are provided in payload"
 		begin
 			payloadHash = JSON.parse(@testRailUtility.getPayloadsFromSteps(@testRailUtility.getCase(363)['custom_steps_separated'])[0]['expected'])
-			payloadHash['body']['email'] = "test_Bond#{rand(1000)}@example.com"
+			payloadHash['body']['email'] = "test_Bond#{rand(900000)}@example.com"
 			buildingTestData = @testData['Building']
 			buildingTestData[0]['uuid__c'] = SecureRandom.uuid
 			payloadHash['body']['buildings_interested_uuids'][0] = Salesforce.getRecords(@salesforceBulk,"Building__c","SELECT UUID__c FROM Building__c WHERE id = '#{Salesforce.createRecords(@salesforceBulk,"Building__c",@testData['Building'])[0]['Id']}'",nil).result.records[0].fetch('UUID__c')
@@ -109,7 +109,7 @@ describe SfRESTService do
 		puts "C364 : To check lead is created when only required values are provided in payload"
 		begin
 			payloadHash = JSON.parse(@testRailUtility.getPayloadsFromSteps(@testRailUtility.getCase(364)['custom_steps_separated'])[0]['expected'])
-			payloadHash['body']['email'] = "test_Bond#{rand(9000)}@example.com"
+			payloadHash['body']['email'] = "test_Bond#{rand(900000)}@example.com"
 			payloadHash['body']['buildings_interested_uuids'][0] = Salesforce.getRecords(@salesforceBulk,"Building__c","SELECT UUID__c FROM Building__c WHERE id = '#{Salesforce.class_variable_get(:@@createdRecordsIds)['Building__c'][0]['Id']}'").result.records[0].fetch('UUID__c')
 			getResponse = SfRESTService.postData(''+payloadHash.to_json,"#{@testData['ServiceUrls'][1]['inboundLead']}",true)
 			puts "\n"
@@ -156,7 +156,7 @@ describe SfRESTService do
 		puts "C365: To check lead is created without lead source and lead source detail"
 		begin
 			payloadHash = JSON.parse(@testRailUtility.getPayloadsFromSteps(@testRailUtility.getCase(365)['custom_steps_separated'])[0]['expected'])
-			payloadHash['body']['email'] = "test_Bond#{rand(1000)}@example.com"
+			payloadHash['body']['email'] = "test_Bond#{rand(900000)}@example.com"
 			payloadHash['body']['buildings_interested_uuids'][0] = Salesforce.getRecords(@salesforceBulk,"Building__c","SELECT UUID__c FROM Building__c WHERE id = '#{Salesforce.class_variable_get(:@@createdRecordsIds)['Building__c'][0]['Id']}'").result.records[0].fetch('UUID__c')
 			getResponse = SfRESTService.postData(''+payloadHash.to_json,"#{@testData['ServiceUrls'][1]['inboundLead']}",true)
 			puts "\n"
@@ -215,12 +215,12 @@ describe SfRESTService do
 			expect(account[0]['Id']).to_not eql nil
 			puts "Account created successfully"
 			contact = @testData['Contact']
-			contact[0]['email'] = "test_Enzigma#{rand(100)}@example.com"
+			contact[0]['email'] = "test_Enzigma#{rand(900000)}@example.com"
 			contact[0]['accountId'] = account[0]['Id']
 			referrer = Salesforce.createRecords(@salesforceBulk,"Contact",contact)
 			payloadHash = JSON.parse(@testRailUtility.getPayloadsFromSteps(@testRailUtility.getCase(366)['custom_steps_separated'])[0]['expected'])
 			payloadHash['body']['referrer_sfid'] = referrer[0]['Id']
-			payloadHash['body']['email'] = "test_Bond#{rand(1000)}@example.com"
+			payloadHash['body']['email'] = "test_Bond#{rand(900000)}@example.com"
 			payloadHash['body']['buildings_interested_uuids'][0] = Salesforce.getRecords(@salesforceBulk,"Building__c","SELECT UUID__c FROM Building__c WHERE id = '#{Salesforce.class_variable_get(:@@createdRecordsIds)['Building__c'][0]['Id']}'").result.records[0].fetch('UUID__c')
 			puts "\n"
 			puts "Checking contact insertion..."
@@ -274,7 +274,7 @@ describe SfRESTService do
 		begin
 			campaign = Salesforce.createRecords(@salesforceBulk,"Campaign",@testData['Campaign'])
 			payloadHash = JSON.parse(@testRailUtility.getPayloadsFromSteps(@testRailUtility.getCase(367)['custom_steps_separated'])[0]['expected'])
-			payloadHash['body']['email'] = "test_Bond#{rand(1000)}@example.com"
+			payloadHash['body']['email'] = "test_Bond#{rand(900000)}@example.com"
 			payloadHash['body']['campaign_sfid'] = campaign[0]['Id']
 			payloadHash['body']['buildings_interested_uuids'][0] =  Salesforce.getRecords(@salesforceBulk,"Building__c","SELECT UUID__c FROM Building__c WHERE id = '#{Salesforce.class_variable_get(:@@createdRecordsIds)['Building__c'][0]['Id']}'").result.records[0].fetch('UUID__c')
 			getResponse = SfRESTService.postData(''+payloadHash.to_json,"#{@testData['ServiceUrls'][1]['inboundLead']}",true)
@@ -308,7 +308,7 @@ describe SfRESTService do
 		puts "C450 : To check lead is created when contact referrer_only_field is false and referrer_sfid is provided in payload"
 		begin
 			payloadHash = JSON.parse(@testRailUtility.getPayloadsFromSteps(@testRailUtility.getCase(450)['custom_steps_separated'])[0]['expected'])
-			payloadHash['body']['email'] = "test_Bond#{rand(1000)}@example.com"
+			payloadHash['body']['email'] = "test_Bond#{rand(900000)}@example.com"
 			payloadHash['body']['referrer_sfid'] = Salesforce.class_variable_get(:@@createdRecordsIds)['Contact'][0]['Id']
 			payloadHash['body']['buildings_interested_uuids'][0] = Salesforce.getRecords(@salesforceBulk,"Building__c","SELECT UUID__c FROM Building__c WHERE id = '#{Salesforce.class_variable_get(:@@createdRecordsIds)['Building__c'][0]['Id']}'").result.records[0].fetch('UUID__c')
 			getResponse = SfRESTService.postData(''+payloadHash.to_json,"#{@testData['ServiceUrls'][1]['inboundLead']}",true)
@@ -347,7 +347,7 @@ describe SfRESTService do
 		puts "C727 : To check duplicate leads creation"
 		begin
 			payloadHash = JSON.parse(@testRailUtility.getPayloadsFromSteps(@testRailUtility.getCase(727)['custom_steps_separated'])[0]['expected'])
-			payloadHash['body']['email'] = "test_Bond#{rand(1000)}@example.com"
+			payloadHash['body']['email'] = "test_Bond#{rand(900000)}@example.com"
 			payloadHash['body']['buildings_interested_uuids'][0] = Salesforce.getRecords(@salesforceBulk,"Building__c","SELECT UUID__c FROM Building__c WHERE id = '#{Salesforce.class_variable_get(:@@createdRecordsIds)['Building__c'][0]['Id']}'").result.records[0].fetch('UUID__c')
 			getResponse = SfRESTService.postData(''+payloadHash.to_json,"#{@testData['ServiceUrls'][1]['inboundLead']}",true)
 			puts "\n"
@@ -375,7 +375,7 @@ describe SfRESTService do
 		puts "C728 : To check journey is created for already existed lead when no other journey associated with that lead"
 		begin
 			payloadHash = JSON.parse(@testRailUtility.getPayloadsFromSteps(@testRailUtility.getCase(728)['custom_steps_separated'])[0]['expected'])
-			payloadHash['body']['email'] = "test_Bond#{rand(1000)}@example.com"
+			payloadHash['body']['email'] = "test_Bond#{rand(900000)}@example.com"
 			payloadHash['body']['buildings_interested_uuids'][0] = Salesforce.getRecords(@salesforceBulk,"Building__c","SELECT UUID__c FROM Building__c WHERE id = '#{Salesforce.class_variable_get(:@@createdRecordsIds)['Building__c'][0]['Id']}'").result.records[0].fetch('UUID__c')
 			getResponse = SfRESTService.postData(''+payloadHash.to_json,"#{@testData['ServiceUrls'][1]['inboundLead']}",true)
 			puts "\n"
