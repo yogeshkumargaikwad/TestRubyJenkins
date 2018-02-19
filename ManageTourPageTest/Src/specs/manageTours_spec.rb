@@ -33,6 +33,9 @@ describe ManageTours do
     else
       @runId = ENV['RUN_ID']
     end
+    if ENV['RUN_ID'].nil? then
+      @runId = @testRailUtility.addRun("Manage Tour by lead",4,19,arrCaseIds)['id']
+    end
   }
   before(:each){
     puts "\n"

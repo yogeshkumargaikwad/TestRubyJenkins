@@ -28,7 +28,10 @@ module EnziTestRailUtility
 					 data = {"suite_id": suiteId,"name": "#{test_run_name}- #{Time.now.asctime}","include_all": true}
 			end
 			@client.send_post("add_run/#{projectId}", data)
-		end
+    end
+    def deleteRun(runId)
+      @client.send_get("delete_run/#{runId}")
+    end
 		def getSpecLocations(caseId,sectionId,suitId,planId,projectId)
 			specLocations = Array.new
 			if !caseId.nil? then
@@ -90,7 +93,7 @@ module EnziTestRailUtility
                       runId = addRun(suit['name'],projectId,suit['id'],nil)['id'].to_s
                   end
                   sections.each do |section|
-                    getCases(projectId, suit['id'], section['id']).each do |testCase|
+                        getCases(projectId, suit['id'], section['id']).each do |testCase|
 											if testCase.key?('custom_spec_location') && !testCase.fetch('custom_spec_location').nil? then
 												specLocations.push(Hash["path"=>testCase.fetch('custom_spec_location'),"isBrowserDependent"=>testCase.fetch('custom_is_browser_dependent'),"runId" => runId])
 												break;
