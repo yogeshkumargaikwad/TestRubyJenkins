@@ -49,13 +49,35 @@ if !ARGV.empty? then
     if !specMap.key?('case') &&!(specMap.key?('section')) && specMap.key?('suit') then
       if specMap.key?('project') then
         specMap.fetch('suit').each do |suitId|
-          ENV['RUN_ID'] = testRailUtility.addRun(testRailUtility.getSuite(suitId)['name'],specMap.fetch('project')[0],suitId,nil)['id'].to_s
+          arrCaseIds = Array.new
+          suitInfo = testRailUtility.getSuite(suitId)
+          testRailUtility.getSections(suitInfo['id'],suitInfo['project_id']).each do |section|
+            testRailUtility.getCases(suitInfo['project_id'],suitId,section['id']).each do |testCase|
+              if testCase.key?('custom_spec_location') && !testCase.fetch('custom_spec_location').nil? then
+                arrCaseIds.push(testCase['id'])
+              end
+            end
+          end
+          if arrCaseIds.size > 0 then
+            ENV['RUN_ID'] = testRailUtility.addRun(suitInfo['name'],specMap.fetch('project')[0],suitId,arrCaseIds)['id'].to_s
+          end
           specs.concat(testRailUtility.getSpecLocations(nil,nil,suitId,nil,specMap.fetch('project')[0]))
         end
       else
         specMap.fetch('suit').each do |suitId|
-          ENV['RUN_ID'] = testRailUtility.addRun(testRailUtility.getSuite(suitId)['name'],specMap.fetch('project')[0],suitId,nil)['id'].to_s
-          specs.concat(testRailUtility.getSpecLocations(nil,nil,suitId,nil,testRailUtility.getSuite(suitId)['project_id']))
+          arrCaseIds = Array.new
+          suitInfo = testRailUtility.getSuite(suitId)
+          testRailUtility.getSections(suitInfo['id'],suitInfo['project_id']).each do |section|
+            testRailUtility.getCases(suitInfo['project_id'],suitId,section['id']).each do |testCase|
+              if testCase.key?('custom_spec_location') && !testCase.fetch('custom_spec_location').nil? then
+                arrCaseIds.push(testCase['id'])
+              end
+            end
+          end
+          if arrCaseIds.size > 0 then
+            ENV['RUN_ID'] = testRailUtility.addRun(suitInfo['name'],specMap.fetch('project')[0],suitId,arrCaseIds)['id'].to_s
+          end
+          specs.concat(testRailUtility.getSpecLocations(nil,nil,suitId,nil,suitInfo['project_id']))
         end
       end
     end
@@ -78,21 +100,8 @@ if !ARGV.empty? then
         puts "spec to run :: #{spec}"
         if !ENV['PROJECT_ID'].nil? && ENV['SUIT_ID'].nil? && ENV['SECTION_ID'].nil? then
           ENV['RUN_ID'] = spec['runId']
+          puts "Run Id is :: #{ ENV['RUN_ID']}"
         end
-=begin
-          arrCaseIds = Array.new
-          if !ENV['SECTION_ID'].nil? then
-            testRailUtility.getCases(ENV['PROJECT_ID'], ENV['SUIT_ID'], ENV['SECTION_ID']).each do |caseId|
-              arrCaseIds.push(caseId['id'])
-            end
-          else
-            if ENV['CASE_ID'] then
-              arrCaseIds.push(ENV['CASE_ID'])
-            end
-          end
-          ENV['RUN_ID'] = testRailUtility.addRun(spec['path'].split("/specs/")[1].split("_spec")[0], ENV['PROJECT_ID'], ENV['SECTION_ID'], arrCaseIds)
-
-=end
         if spec['isBrowserDependent'] then
           arrBrowsers =Array.new
           if !specMap.key?('browser') || specMap.fetch('browser').nil? then
