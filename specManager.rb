@@ -9,7 +9,7 @@ specMap = Hash.new
 config = YAML.load_file('credentials.yaml')
 testRailUtility = EnziTestRailUtility::TestRailUtility.new(config['TestRail']['username'],config['TestRail']['password'])
 if ARGV.size == 1 &&  !ENV['PROJECT_ID'].nil? then
-  ARGV = ["project:#{ENV['PROJECT_ID']}", "suit:#{ENV['SUIT_ID']}" , "section:#{ENV['SECTION_ID']}" , "browser:#{ENV['BROWSERS']}"]
+  ARGV = ["project:#{ENV['PROJECT_ID']}", "suit:#{ENV['SUIT_ID']}" , "section:#{ENV['SECTION_ID']}" , "browser:#{ENV['BROWSERS']}" , "case:#{ENV['CASE_ID']}"]
 end
 if !ARGV.empty? then
   ARGV.each do |input|
@@ -24,11 +24,11 @@ if !ARGV.empty? then
   end
   specs = Array.new
   if !specMap.empty? && !specMap.values.empty? then
-    if specMap.key?('case') then
+    if specMap.key?('case') && specMap.fetch('case').size > 0 then
       RSpec.configuration.filter_run_including specMap.fetch('case')[0].to_sym
       if specMap.key?('case') && specMap.key?('section') && specMap.key?('suit') && specMap.key?('project') then
         specMap.fetch('case').each do |caseId|
-          specs.concat(testRailUtility.getSpecLocations(caseId,specMap.fetch('case'),specMap.fetch('suit'),nil,specMap.fetch('project')))
+          specs.concat(testRailUtility.getSpecLocations(caseId,specMap.fetch('case'),specMap.fetch(s'uit'),nil,specMap.fetch('project')))
         end
       else
         specs.concat(testRailUtility.getSpecLocations(caseId,specMap.fetch('case'),nil,nil,nil))
