@@ -28,7 +28,7 @@ if !ARGV.empty? then
       RSpec.configuration.filter_run_including specMap.fetch('case')[0].to_sym
       if specMap.key?('case') && specMap.key?('section') && specMap.key?('suit') && specMap.key?('project') then
         specMap.fetch('case').each do |caseId|
-          specs.concat(testRailUtility.getSpecLocations(caseId,specMap.fetch('case'),specMap.fetch(s'uit'),nil,specMap.fetch('project')))
+          specs.concat(testRailUtility.getSpecLocations(caseId,specMap.fetch('case'),specMap.fetch('suit'),nil,specMap.fetch('project')))
         end
       else
         specs.concat(testRailUtility.getSpecLocations(caseId,specMap.fetch('case'),nil,nil,nil))
