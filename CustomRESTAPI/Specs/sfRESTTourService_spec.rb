@@ -8,21 +8,18 @@ require 'date'
 #require_relative "helper.rb"
 require 'salesforce'
 require 'securerandom'
-require_relative "../PageObjects/sfRESTService.rb"
-require_relative "EnziTestRailUtility.rb"
-
-#require_relative File.expand_path(Dir.pwd+"/CustomRESTAPI/PageObjects/sfRESTService.rb")
-#require_relative File.expand_path("GemUtilities/EnziTestRailUtility/lib/EnziTestRailUtility.rb")
+require_relative File.expand_path(Dir.pwd+"/CustomRESTAPI/PageObjects/sfRESTService.rb")
+require_relative File.expand_path("GemUtilities/EnziTestRailUtility/lib/EnziTestRailUtility.rb")
 
 describe SfRESTService do
   before(:all){
-    testDataFile = File.open("../TestData/testData.json", "r")
+    testDataFile = File.open(Dir.pwd+"/CustomRESTAPI//TestData/testData.json", "r")
     testDataInJson = testDataFile.read()
     @testData = JSON.parse(testDataInJson)
     SfRESTService.loginRequest
     @salesforceBulk = Salesforce.login(SfRESTService.class_variable_get(:@@credentails)['QAAuto']['username'],SfRESTService.class_variable_get(:@@credentails)['QAAuto']['password'],true)
     config = YAML.load_file('credentials.yaml')
-    @timeSettingMap = YAML.load_file('timeSettings.yaml')
+    @timeSettingMap = YAML.load_file(Dir.pwd+'/timeSettings.yaml')
     @testRailUtility = EnziTestRailUtility::TestRailUtility.new(config['TestRail']['username'],config['TestRail']['password'])
     arrCaseIds = Array.new
     if !ENV['SECTION_ID'].nil? && ENV['CASE_ID'].nil? then
@@ -46,7 +43,6 @@ describe SfRESTService do
     puts "---------------------------------------------------------------------------------------------------------------------------"
   }
 
-=begin
   it "To check tour is created and contact is created in account whose uuid is passed in payload" , :"767" => true do
     puts "C767 : To check tour is created and contact is created in account whose uuid is passed in payload"
     begin
@@ -456,7 +452,6 @@ describe SfRESTService do
       raise excp
     end
   end
-=end
   it "To check tour is created for a journey, whose UUID is passed in payload" ,:"842" => true do
     puts "C842 : To check tour is created for a journey, whose UUID is passed in payload"
     begin
@@ -565,7 +560,7 @@ describe SfRESTService do
       buildingTestData[0]['uuid__c'] = SecureRandom.uuid
       payloadHash['body']['buildings_interested_uuids'][0] = Salesforce.getRecords(@salesforceBulk,"Building__c","SELECT UUID__c FROM Building__c WHERE id = '#{Salesforce.createRecords(@salesforceBulk,"Building__c",@testData['Building'])[0]['Id']}'",nil).result.records[0].fetch('UUID__c')
 
-      payloadHash['body']['original_tour_uuid'] = Salesforce.class_variable_get(:@@createdRecordsIds)['TourUUID']
+      payloadHash['body']['original_tour_uuid'] = Salesforce.class_variable_get(:@@createdRecordsIds)['TourUUID'][0]['Id']
       getResponse = SfRESTService.postData(''+payloadHash.to_json,"#{@testData['ServiceUrls'][0]['tour']}",true)
       puts "\n"
       sleep(@timeSettingMap['Sleep']['Environment']['Classic'])
