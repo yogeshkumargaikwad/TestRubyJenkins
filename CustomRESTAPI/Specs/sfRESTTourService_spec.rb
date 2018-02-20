@@ -8,11 +8,11 @@ require 'date'
 #require_relative "helper.rb"
 require 'salesforce'
 require 'securerandom'
-require_relative File.expand_path(Dir.pwd+"/CustomRESTAPITest/Src/pageObjects/sfRESTService.rb")
+require_relative File.expand_path(Dir.pwd+"/CustomRESTAPI/PageObjects/sfRESTService.rb")
 require_relative File.expand_path("GemUtilities/EnziTestRailUtility/lib/EnziTestRailUtility.rb")
 describe SfRESTService do
   before(:all){
-    testDataFile = File.open(File.expand_path(Dir.pwd+"/CustomRESTAPITest/Src/testData/testData.json"), "r")
+    testDataFile = File.open(File.expand_path(Dir.pwd+"/CustomRESTAPI/TestData/testData.json"), "r")
     testDataInJson = testDataFile.read()
     @testData = JSON.parse(testDataInJson)
     SfRESTService.loginRequest

@@ -100,17 +100,9 @@ if !ARGV.empty? then
         puts "spec to run :: #{spec}"
         if !ENV['PROJECT_ID'].nil? && ENV['SUIT_ID'].nil? && ENV['SECTION_ID'].nil? then
           ENV['RUN_ID'] = spec['runId']
-          puts "Run Id is :: #{ ENV['RUN_ID']}"
         end
         if spec['isBrowserDependent'] then
-          arrBrowsers =Array.new
-          if !specMap.key?('browser') || specMap.fetch('browser').nil? then
-            specMapping = YAML.load_file("specMapping.json")
-            arrBrowsers.push(specMapping['BrowserCapabilities']['Name'])
-          else
-            arrBrowsers = specMap.fetch('browser')[0].split(" ")
-          end
-          arrBrowsers.each do |browser|
+          specMap.fetch('browser')[0].split(" ").each do |browser|
             ENV['BROWSER'] = browser
             puts [spec['path']]
             RSpec::Core::Runner.run([spec['path']], $stderr, $stdout)
