@@ -307,9 +307,18 @@ describe SfRESTService do
 		puts "\n"
 		puts "C450 : To check lead is created when contact referrer_only_field is false and referrer_sfid is provided in payload"
 		begin
+			account = Salesforce.createRecords(@salesforceBulk,"Account",@testData['Account'])
+			puts "\n"
+			puts "Checking account insertion..."
+			expect(account[0]['Id']).to_not eql nil
+			puts "Account created successfully"
+			contact = @testData['Contact']
+			contact[0]['email'] = "test_Enzigma#{rand(900000)}@example.com"
+			contact[0]['accountId'] = account[0]['Id']
+			referrer = Salesforce.createRecords(@salesforceBulk,"Contact",contact)
 			payloadHash = JSON.parse(@testRailUtility.getPayloadsFromSteps(@testRailUtility.getCase(450)['custom_steps_separated'])[0]['expected'])
 			payloadHash['body']['email'] = "test_Bond#{rand(900000)}@example.com"
-			payloadHash['body']['referrer_sfid'] = Salesforce.class_variable_get(:@@createdRecordsIds)['Contact'][0]['Id']
+			payloadHash['body']['referrer_sfid'] = referrer[0]['Id']
 			payloadHash['body']['buildings_interested_uuids'][0] = Salesforce.getRecords(@salesforceBulk,"Building__c","SELECT UUID__c FROM Building__c WHERE id = '#{Salesforce.class_variable_get(:@@createdRecordsIds)['Building__c'][0]['Id']}'").result.records[0].fetch('UUID__c')
 			getResponse = SfRESTService.postData(''+payloadHash.to_json,"#{@testData['ServiceUrls'][1]['inboundLead']}",true)
 			puts "\n"
