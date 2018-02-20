@@ -476,7 +476,7 @@ describe SfRESTService do
       puts journey.inspect
       journeyId = Salesforce.createRecords(@salesforceBulk,"Journey__c",journey)
       createdAccount = Salesforce.getRecords(@salesforceBulk,"Account","SELECT UUID__c FROM Account WHERE id = '#{account[0]['Id']}'",nil).result.records[0]
-      Salesforce.addRecordsToDelete('CompletedJourney',Salesforce.getRecords(@salesforceBulk,"Journey__c","SELECT UUID__c FROM Journey__c WHERE id = '#{journeyId[0]['Id']}'",nil).result.records[0].fetch('UUID__c'))
+      Salesforce.addRecordsToDelete('JourneyUUID',Salesforce.getRecords(@salesforceBulk,"Journey__c","SELECT UUID__c FROM Journey__c WHERE id = '#{journeyId[0]['Id']}'",nil).result.records[0].fetch('UUID__c'))
       payloadHash['body']['sf_journey_uuid'] = Salesforce.class_variable_get(:@@createdRecordsIds)['JourneyUUID'][0]
       payloadHash['body']['account_uuid'] = createdAccount.fetch('UUID__c')
       getResponse = SfRESTService.postData(''+payloadHash.to_json,"#{@testData['ServiceUrls'][0]['tour']}",true)
