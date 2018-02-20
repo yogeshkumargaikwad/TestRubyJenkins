@@ -341,7 +341,7 @@ describe SfRESTService do
 			puts "Referral Company Name field is checked successfully"
 			puts "\n"
 			puts "Checking Referrer on lead..."
-			expect(createdLead.fetch('Referrer__c')).to eql Salesforce.class_variable_get(:@@createdRecordsIds)['Contact'][0]['Id']
+			expect(createdLead.fetch('Referrer__c')).to eql referrer[0]['Id']
 			puts "Referrer is :: #{createdLead.fetch('Referrer__c')}"
 			puts "Referrer field is checked successfully"
 			@testRailUtility.postResult(450,"Result for case 450 is #{getResponse['success']}",1,@runId)
