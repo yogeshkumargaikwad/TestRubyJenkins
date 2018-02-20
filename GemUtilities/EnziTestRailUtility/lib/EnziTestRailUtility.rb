@@ -90,7 +90,17 @@ module EnziTestRailUtility
 								getSuites(projectId).each do |suit|
                   sections = getSections(suit['id'],projectId)
                   if sections.size > 0 then
-                      runId = addRun(suit['name'],projectId,suit['id'],nil)['id'].to_s
+                    arrCaseIds = Array.new
+                    sections.each do |section|
+                      getCases(projectId,suit['id'],section['id']).each do |testCase|
+                        if testCase.key?('custom_spec_location') && !testCase.fetch('custom_spec_location').nil? then
+                          arrCaseIds.push(testCase['id'])
+                        end
+                      end
+                    end
+                    if arrCaseIds.size > 0 then
+                      runId = addRun(suit['name'],projectId,suit['id'],arrCaseIds)['id'].to_s
+                    end
                   end
                   sections.each do |section|
                         getCases(projectId, suit['id'], section['id']).each do |testCase|

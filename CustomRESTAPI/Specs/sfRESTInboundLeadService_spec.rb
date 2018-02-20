@@ -6,14 +6,14 @@ require "rspec"
 require 'salesforce'
 require 'securerandom'
 #require_relative "helper.rb"
-require_relative File.expand_path(Dir.pwd+"/CustomRESTAPITest/Src/pageObjects/sfRESTService.rb")
+require_relative File.expand_path(Dir.pwd+"/CustomRESTAPI/PageObjects/sfRESTService.rb")
 require_relative File.expand_path("GemUtilities/EnziTestRailUtility/lib/EnziTestRailUtility.rb")
 describe SfRESTService do
 
 	before(:all){
 
 		@executionResult =  RSpec::Core::Example::ExecutionResult.new
-		testDataFile = File.open(File.expand_path(Dir.pwd+"/CustomRESTAPITest/Src/testData/testData.json"), "r")
+		testDataFile = File.open(File.expand_path(Dir.pwd+"/CustomRESTAPI/TestData/testData.json"), "r")
 		testDataInJson = testDataFile.read()
 		@testData = JSON.parse(testDataInJson)
 		SfRESTService.loginRequest
@@ -32,7 +32,7 @@ describe SfRESTService do
 			end
     end
     if !ENV['SUIT_ID'].nil? && (!ENV['SECTION_ID'].nil? || !ENV['CASE_ID'].nil?) then
-      @runId = @testRailUtility.addRun("RESTAPI Tour Service",4,26,arrCaseIds)['id']
+      @runId = @testRailUtility.addRun("RESTAPI Inbound lead Service",4,26,arrCaseIds)['id']
     else
       @runId = ENV['RUN_ID']
     end
@@ -307,9 +307,18 @@ describe SfRESTService do
 		puts "\n"
 		puts "C450 : To check lead is created when contact referrer_only_field is false and referrer_sfid is provided in payload"
 		begin
+			account = Salesforce.createRecords(@salesforceBulk,"Account",@testData['Account'])
+			puts "\n"
+			puts "Checking account insertion..."
+			expect(account[0]['Id']).to_not eql nil
+			puts "Account created successfully"
+			contact = @testData['Contact']
+			contact[0]['email'] = "test_Enzigma#{rand(900000)}@example.com"
+			contact[0]['accountId'] = account[0]['Id']
+			referrer = Salesforce.createRecords(@salesforceBulk,"Contact",contact)
 			payloadHash = JSON.parse(@testRailUtility.getPayloadsFromSteps(@testRailUtility.getCase(450)['custom_steps_separated'])[0]['expected'])
 			payloadHash['body']['email'] = "test_Bond#{rand(900000)}@example.com"
-			payloadHash['body']['referrer_sfid'] = Salesforce.class_variable_get(:@@createdRecordsIds)['Contact'][0]['Id']
+			payloadHash['body']['referrer_sfid'] = referrer[0]['Id']
 			payloadHash['body']['buildings_interested_uuids'][0] = Salesforce.getRecords(@salesforceBulk,"Building__c","SELECT UUID__c FROM Building__c WHERE id = '#{Salesforce.class_variable_get(:@@createdRecordsIds)['Building__c'][0]['Id']}'").result.records[0].fetch('UUID__c')
 			getResponse = SfRESTService.postData(''+payloadHash.to_json,"#{@testData['ServiceUrls'][1]['inboundLead']}",true)
 			puts "\n"
@@ -332,7 +341,7 @@ describe SfRESTService do
 			puts "Referral Company Name field is checked successfully"
 			puts "\n"
 			puts "Checking Referrer on lead..."
-			expect(createdLead.fetch('Referrer__c')).to eql Salesforce.class_variable_get(:@@createdRecordsIds)['Contact'][0]['Id']
+			expect(createdLead.fetch('Referrer__c')).to eql referrer[0]['Id']
 			puts "Referrer is :: #{createdLead.fetch('Referrer__c')}"
 			puts "Referrer field is checked successfully"
 			@testRailUtility.postResult(450,"Result for case 450 is #{getResponse['success']}",1,@runId)

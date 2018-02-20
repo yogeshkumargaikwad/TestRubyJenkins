@@ -9,7 +9,7 @@ specMap = Hash.new
 config = YAML.load_file('credentials.yaml')
 testRailUtility = EnziTestRailUtility::TestRailUtility.new(config['TestRail']['username'],config['TestRail']['password'])
 if ARGV.size == 1 &&  !ENV['PROJECT_ID'].nil? then
-  ARGV = ["project:#{ENV['PROJECT_ID']}", "suit:#{ENV['SUIT_ID']}" , "section:#{ENV['SECTION_ID']}" , "browser:#{ENV['BROWSERS']}"]
+  ARGV = ["project:#{ENV['PROJECT_ID']}", "suit:#{ENV['SUIT_ID']}" , "section:#{ENV['SECTION_ID']}" , "browser:#{ENV['BROWSERS']}" , "case:#{ENV['CASE_ID']}"]
 end
 if !ARGV.empty? then
   ARGV.each do |input|
@@ -24,7 +24,7 @@ if !ARGV.empty? then
   end
   specs = Array.new
   if !specMap.empty? && !specMap.values.empty? then
-    if specMap.key?('case') then
+    if specMap.key?('case') && specMap.fetch('case').size > 0 then
       RSpec.configuration.filter_run_including specMap.fetch('case')[0].to_sym
       if specMap.key?('case') && specMap.key?('section') && specMap.key?('suit') && specMap.key?('project') then
         specMap.fetch('case').each do |caseId|
@@ -49,13 +49,35 @@ if !ARGV.empty? then
     if !specMap.key?('case') &&!(specMap.key?('section')) && specMap.key?('suit') then
       if specMap.key?('project') then
         specMap.fetch('suit').each do |suitId|
-          ENV['RUN_ID'] = testRailUtility.addRun(testRailUtility.getSuite(suitId)['name'],specMap.fetch('project')[0],suitId,nil)['id'].to_s
+          arrCaseIds = Array.new
+          suitInfo = testRailUtility.getSuite(suitId)
+          testRailUtility.getSections(suitInfo['id'],suitInfo['project_id']).each do |section|
+            testRailUtility.getCases(suitInfo['project_id'],suitId,section['id']).each do |testCase|
+              if testCase.key?('custom_spec_location') && !testCase.fetch('custom_spec_location').nil? then
+                arrCaseIds.push(testCase['id'])
+              end
+            end
+          end
+          if arrCaseIds.size > 0 then
+            ENV['RUN_ID'] = testRailUtility.addRun(suitInfo['name'],specMap.fetch('project')[0],suitId,arrCaseIds)['id'].to_s
+          end
           specs.concat(testRailUtility.getSpecLocations(nil,nil,suitId,nil,specMap.fetch('project')[0]))
         end
       else
         specMap.fetch('suit').each do |suitId|
-          ENV['RUN_ID'] = testRailUtility.addRun(testRailUtility.getSuite(suitId)['name'],specMap.fetch('project')[0],suitId,nil)['id'].to_s
-          specs.concat(testRailUtility.getSpecLocations(nil,nil,suitId,nil,testRailUtility.getSuite(suitId)['project_id']))
+          arrCaseIds = Array.new
+          suitInfo = testRailUtility.getSuite(suitId)
+          testRailUtility.getSections(suitInfo['id'],suitInfo['project_id']).each do |section|
+            testRailUtility.getCases(suitInfo['project_id'],suitId,section['id']).each do |testCase|
+              if testCase.key?('custom_spec_location') && !testCase.fetch('custom_spec_location').nil? then
+                arrCaseIds.push(testCase['id'])
+              end
+            end
+          end
+          if arrCaseIds.size > 0 then
+            ENV['RUN_ID'] = testRailUtility.addRun(suitInfo['name'],specMap.fetch('project')[0],suitId,arrCaseIds)['id'].to_s
+          end
+          specs.concat(testRailUtility.getSpecLocations(nil,nil,suitId,nil,suitInfo['project_id']))
         end
       end
     end
@@ -79,29 +101,8 @@ if !ARGV.empty? then
         if !ENV['PROJECT_ID'].nil? && ENV['SUIT_ID'].nil? && ENV['SECTION_ID'].nil? then
           ENV['RUN_ID'] = spec['runId']
         end
-=begin
-          arrCaseIds = Array.new
-          if !ENV['SECTION_ID'].nil? then
-            testRailUtility.getCases(ENV['PROJECT_ID'], ENV['SUIT_ID'], ENV['SECTION_ID']).each do |caseId|
-              arrCaseIds.push(caseId['id'])
-            end
-          else
-            if ENV['CASE_ID'] then
-              arrCaseIds.push(ENV['CASE_ID'])
-            end
-          end
-          ENV['RUN_ID'] = testRailUtility.addRun(spec['path'].split("/specs/")[1].split("_spec")[0], ENV['PROJECT_ID'], ENV['SECTION_ID'], arrCaseIds)
-
-=end
         if spec['isBrowserDependent'] then
-          arrBrowsers =Array.new
-          if !specMap.key?('browser') || specMap.fetch('browser').nil? then
-            specMapping = YAML.load_file("specMapping.json")
-            arrBrowsers.push(specMapping['BrowserCapabilities']['Name'])
-          else
-            arrBrowsers = specMap.fetch('browser')[0].split(" ")
-          end
-          arrBrowsers.each do |browser|
+          specMap.fetch('browser')[0].split(" ").each do |browser|
             ENV['BROWSER'] = browser
             puts [spec['path']]
             RSpec::Core::Runner.run([spec['path']], $stderr, $stdout)

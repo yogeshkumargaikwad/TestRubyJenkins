@@ -1,1 +1,0 @@
-#<RSpec::Core::Example "To check lead is created when only required values are provided in payload">

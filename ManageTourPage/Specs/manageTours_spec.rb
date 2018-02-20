@@ -1,7 +1,7 @@
 #Created By : Monika Pingale
 #Created Date : 28/12/2017
 #Modified date : 31/01/2018
-require_relative File.expand_path(Dir.pwd+"/ManageTourPageTest/Src/pageObjects/manageTours(Staging).rb")
+require_relative File.expand_path(Dir.pwd+"/ManageTourPage/PpageObjects/manageTours(Staging).rb")
 require_relative File.expand_path("GemUtilities/EnziTestRailUtility/lib/EnziTestRailUtility.rb")
 require "selenium-webdriver"
 require "rspec"
@@ -32,9 +32,6 @@ describe ManageTours do
       @runId = @testRailUtility.addRun("Manage Tour by lead",4,19,arrCaseIds)['id']
     else
       @runId = ENV['RUN_ID']
-    end
-    if ENV['RUN_ID'].nil? then
-      @runId = @testRailUtility.addRun("Manage Tour by lead",4,19,arrCaseIds)['id']
     end
   }
   before(:each){
@@ -352,7 +349,7 @@ describe ManageTours do
         @leadsTestData[0]['company'] = "Test_Enzigma#{rand(1111)}"
         puts "\n"
         @objManageTours.openPageForLead(Salesforce.createRecords(@objManageTours.instance_variable_get(:@salesforceBulk),'Lead',@leadsTestData)[0]['Id'])
-        puts @objManageTours.checkRecordCreated("Journey__c","SELECT id FROM Journey__c WHERE Primary_Email__c = '#{@leadsTestData[0]['email']}'")[0].fetch('Id')
+        @objManageTours.checkRecordCreated("Journey__c","SELECT id FROM Journey__c WHERE Primary_Email__c = '#{@leadsTestData[0]['email']}'")[0].fetch('Id')
         @objManageTours.bookTour(0,true)
         sleep(@objManageTours.instance_variable_get(:@timeSettingMap)['Sleep']['Environment']['Lightening'])
         @objManageTours.duplicateAccountSelector("Create Account and Merge",nil)
@@ -501,7 +498,7 @@ describe ManageTours do
         @leadsTestData[0]['company'] = "Test_Enzigma#{rand(1111)}"
         @objManageTours.openPageForLead(Salesforce.createRecords(@objManageTours.instance_variable_get(:@salesforceBulk),'Lead',@leadsTestData)[0]['Id'])
         #@objManageTours.openPage(Salesforce.createRecords(@objManageTours.instance_variable_get(:@salesforceBulk),'Lead',@leadsTestData)[0]['Id'],:name,"lightning_manage_tours")
-        Salesforce.addRecordsToDelete('Journey__c',@objManageTours.checkRecordCreated("Journey__c","SELECT id FROM Journey__c WHERE Primary_Email__c = '#{@leadsTestData[0]['email']}'")[0].fetch('Id'))
+        @objManageTours.checkRecordCreated("Journey__c","SELECT id FROM Journey__c WHERE Primary_Email__c = '#{@leadsTestData[0]['email']}'")
         @objManageTours.bookTour(0,true)
         sleep(@objManageTours.instance_variable_get(:@timeSettingMap)['Sleep']['Environment']['Lightening'])
         @objManageTours.duplicateAccountSelector("Create Account and Don't Merge",nil)
