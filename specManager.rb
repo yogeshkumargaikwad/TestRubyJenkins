@@ -93,7 +93,6 @@ if !ARGV.empty? then
     end
   end
   if !specs.empty? then
-    #RSpec::Core::Formatters::BaseTextFormatter "--pattern **/*_spec.rb --format ParallelTests::RSpec::FailuresLogger --out rspec.txt
     specs.uniq.each do |spec|
       #Run spec in multiple browsers
       if !spec.nil? then
