@@ -32,7 +32,7 @@ describe SfRESTService do
 			end
     end
     if !ENV['SUIT_ID'].nil? && (!ENV['SECTION_ID'].nil? || !ENV['CASE_ID'].nil?) then
-      @runId = @testRailUtility.addRun("RESTAPI Tour Service",4,26,arrCaseIds)['id']
+      @runId = @testRailUtility.addRun("RESTAPI Inbound lead Service",4,26,arrCaseIds)['id']
     else
       @runId = ENV['RUN_ID']
     end
