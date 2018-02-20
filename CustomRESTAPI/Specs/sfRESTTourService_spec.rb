@@ -43,6 +43,29 @@ describe SfRESTService do
     puts "---------------------------------------------------------------------------------------------------------------------------"
   }
 
+  it "C344 : To check tour is created from restapi" , :"344"=>true do
+    puts "C344 : To check tour is created from restapi"
+    begin
+      payloadHash = JSON.parse(@testRailUtility.getPayloadsFromSteps(@testRailUtility.getCase(344)['custom_steps_separated'])[0]['expected'])
+      payloadHash['body']['email'] = "test_HP#{rand(900000)}@example.com"
+      buildingTestData = @testData['Building']
+      buildingTestData[0]['uuid__c'] = SecureRandom.uuid
+      payloadHash['body']['tour_building_uuid'] = Salesforce.getRecords(@salesforceBulk,"Building__c","SELECT UUID__c FROM Building__c WHERE id = '#{Salesforce.createRecords(@salesforceBulk,"Building__c",@testData['Building'])[0]['Id']}'",nil).result.records[0].fetch('UUID__c')
+      getResponse = SfRESTService.postData(''+payloadHash.to_json,"#{@testData['ServiceUrls'][0]['tour']}",true)
+      puts "\n"
+      sleep(@timeSettingMap['Sleep']['Environment']['Classic'])
+      puts "Checking service call response..."
+      expect(getResponse['success']).to be true
+      expect(getResponse['result']).to_not eql nil
+      Salesforce.addRecordsToDelete('Tour',getResponse['result'])
+      puts "Service call response is #{getResponse['success']}"
+      puts "\n"
+      @testRailUtility.postResult(344,"Result for case 344 is #{getResponse['success']}",1,@runId)
+    rescue Exception => excp
+      @testRailUtility.postResult(344,"Result for case 344 is #{excp}",5,@runId)
+      raise excp
+    end
+  end
   it "To check tour is created and contact is created in account whose uuid is passed in payload" , :"767" => true do
     puts "C767 : To check tour is created and contact is created in account whose uuid is passed in payload"
     begin
