@@ -1,0 +1,24 @@
+{
+  "ServiceUrls" : [{"tour" : "/services/apexrest/Tour"} , {"inboundLead" : "/services/apexrest/InboundLead"}, {"contractEvent" : "/services/apexrest/contractEvent"}],
+
+  "InboundLead":{
+  },
+  "Tour":{
+    "Scenario1" : {"body": {"first_name":"John","last_name":"Smith","email":"john.smith11@example.com","phone":"8146185355","lead_source":"wework.com","lead_source_detail":"Book A Tour Form","utm_campaign_id":"701F0000001IZ8m","utm_campaign":"San Francisco - Modifier","utm_content":"utm contents","utm_medium":"cpc","utm_source":"ads-google","utm_term":"virtual +office +san +francisco","company_name":"John Smith","company_size":"2-5 desks","company_industry":"Education","quick_quote_location":"New York City","notes":"Our Notes for","referral_code":"JetBlue","promo_code":"JetBlue","buildings_interested_uuids":["bdf78b97-f8c9-4062-923d-ed32e251d2ad"],"product_interests":["Office Space"],"product_line":"WeWork","locale":"US","country_code":"US","tour_date":"2016-05-25","tour_time":"11:00AM","tour_building_uuid":"bdf78b97-f8c9-4062-923d-ed32e251d2ad","tour_notes":"Currently at Manhattan, Relocate","account_uuid":"31343639-3830-4383-8439-373530313134","contact_uuid":"31343639-3830-4383-8439-363839313134","original_tour":"","original_tour_uuid":"","sf_journey_uuid":"","booked_by_contact_id":"","tour_completed_by":"","opportunity_id":""}}
+ 
+  },
+  "ContractEvent":{
+    "Scenario1":{"body":{"event_name":"Contract Sent","opportunity_id":"0068A000003rNHh","company_uuid":"31343636-3831-4343-b536-343038383134","community_manager_uuid":"","primary_member_email":"test123@example.com","membership_agreement_uuid":"test","original_contract_uuid":"","currencyVal":"USD","contract_pdf":"","move_ins":[{"reservable_uuid":"f14f625c-d41c-462a-bade-9e3acb313807","building_uuid":"a5a2d700-3c58-0132-d377-2a4ce10bcd85","start_date":"2016-10-14","price":"25"},{"reservable_uuid":"15454swf-d18d-4369-83e0-693841485845","building_uuid":"a5a2d700-3c58-0132-d377-2a4ce10bcd85","start_date":"2016-10-14","price":"10"}],"move_outs":[{"reservable_uuid":"f14f625c-d41c-462a-bade-9e3acb313807","building_uuid":"a5a2d700-3c58-0132-d377-2a4ce10bcd85","move_out_date":"2016-10-14","price":"25"},{"reservable_uuid":"15454swf-d18d-4369-83e0-693841485845","building_uuid":"a5a2d700-3c58-0132-d377-2a4ce10bcd85","move_out_date":"2016-10-14","price":"10"}],"downgrade_reason":"","downgrade_notes":"","transfer_type":""}}
+
+  },
+  
+  "Contact" : [{"lastName":"test_Pingale111119999","firstName":"test_Monika111119999","email":"test_enzitest99999@examplegmail.com","accountId":""}],
+  
+  "Building" : [{"Name" : "TEERTH Technospace3","uuid__c" : ""}],
+  
+  "Account" : [{"Name":"test_HCL_Bandra"}],
+
+  "Campaign" : [{"Name" : "test_Web9W"}],
+
+  "Journey" : [{"Name" : "Test3-WeWork.com" , "Primary_Contact__c" : "" , "NMD_Next_Contact_Date__c" : "" , "Status__c" : "Started" , "Lead_Source__c" : "Event", "Lead_Source_Detail__c" : "Book A Tour Form"}]
+}

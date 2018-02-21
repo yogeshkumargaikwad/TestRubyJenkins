@@ -1,0 +1,135 @@
+{
+  "ManageTour":{
+    
+    "Lead":[
+      
+      {"firstname":"Enzi_Spec_John","lastname":"Smith01","email":"enzi_spec01@example.com","Company":"Enzigma Software pvt. ltd.","LeadSource":"Broker","Lead_Source_Detail__c":"Book A Tour"},
+      {"firstname":"Enzi_Spec_John","lastname":"Smith02","email":"enzi_spec02@example.com","Company":"Enzigma Software pvt. ltd.","LeadSource":"Broker","Lead_Source_Detail__c":"Book A Tour"}
+    ]
+  },
+  "LeadDetailsPage":{
+    "Lead":[
+      {"firstname":"Enzi_Spec_John","lastname":"Smith03","email":"enzi_spec03@example.com","Company":"Enzigma Software pvt. ltd.","LeadSource":"WeWork.com","Lead_Source_Detail__c":"Book A Tour Form"}
+    ]
+  },
+  "Availability":{
+    "Account":[
+      {"name":"Enzi_Spec_Account"}
+    ],
+    "Contact":[
+      {"firstname":"Enzi_Spec_John","lastname":"Smith01","email":"enzi_Contact_spec01@example.com"}
+    ]
+  },
+  "FieldNewValues":{
+    "Locations Interested":["AMS-Labs","AMS-Metropool"],"Markets Interested":["Atlanta","We Membership & Hot Desk Locations"],
+    "Market":"Arlington"
+  },
+  "SalesConsole":{
+    "Lead":[
+      {"firstname":"Enzi_Spec_John","lastname":"Smith01","email":"enzi_spec_console03@example.com","Company":"Enzigma Software pvt. ltd.","LeadSource":"WeWork.com","Lead_Source_Detail__c":"Book A Tour Form","phone":"7777789888","Building_Interested_In__c":"a00F000000Mknzd"},
+      {"firstname":"Enzi_Spec_John","lastname":"Smith02","email":"enzi_spec_console0@example.com","Company":"Enzigma Software pvt. ltd.","LeadSource":"WeWork.com","Lead_Source_Detail__c":"Book A Tour Form","phone":"7777722222","Building_Interested_In__c":"a00F000000Mknzd"},
+      {"firstname":"Enzi_Spec_John","lastname":"Smith03","email":"enzi_spec_console03@example.com","Company":"Enzigma Software pvt. ltd.","LeadSource":"WeWork.com","Lead_Source_Detail__c":"Book A Tour Form","phone":"7777765686","Building_Interested_In__c":"a00F000000Mknzd"},
+      {"lastName":"test_shinde2","firstName":"test_kishor1","Website":"http://www.Testgmail.com","email":"test_enzigma2OPM@examplegmail.com","phone":"8146185357","leadSource":"Inbound call","company":"Test_Enzigma2","company_Size__c":"21-50","lead_Source_Detail__c":"Book A Tour Form","utm_campaign__c":"San Francisco - Modifier","utm_content__c":"utm contents","utm_medium__c":"cpc","utm_source__c":"ads-google","utm_term__c":"virtual +office +san +francisco","locale__c":"US","country_Code__c":"US","number_of_Desks__c":"12"},
+     {"lastName":"test_shinde3","firstName":"test_kishor1","Website":"http://www.Testgmail.com","email":"test_enzigma3OPM@examplegmail.com","phone":"8146185358","leadSource":"Inbound call","company":"Test_Enzigma3","company_Size__c":"21-50","lead_Source_Detail__c":"Book A Tour Form","utm_campaign__c":"San Francisco - Modifier","utm_content__c":"utm contents","utm_medium__c":"cpc","utm_source__c":"ads-google","utm_term__c":"virtual +office +san +francisco","locale__c":"US","country_Code__c":"US","number_of_Desks__c":"12"},
+     {"lastName":"test_shinde2","firstName":"test_kishor1","Website":"http://www.Testgmail.com","email":"test_enzigma11OPPMerge@examplegmail.com","phone":"8146185356","leadSource":"Inbound call","company":"Test_Enzigma1","company_Size__c":"21-50","lead_Source_Detail__c":"Book A Tour Form","utm_campaign__c":"San Francisco - Modifier","utm_content__c":"utm contents","utm_medium__c":"cpc","utm_source__c":"ads-google","utm_term__c":"virtual +office +san +francisco","locale__c":"US","country_Code__c":"US","number_of_Desks__c":"12"},
+     {"lastName":"test_shinde2","firstName":"test_kishor1","Website":"http://www.Testgmail.com","email":"test_enzigma21OPPMerge@examplegmail.com","phone":"8146185356","leadSource":"Inbound call","company":"Test_Enzigma1","company_Size__c":"21-50","lead_Source_Detail__c":"Book A Tour Form","utm_campaign__c":"San Francisco - Modifier","utm_content__c":"utm contents","utm_medium__c":"cpc","utm_source__c":"ads-google","utm_term__c":"virtual +office +san +francisco","locale__c":"US","country_Code__c":"US","number_of_Desks__c":"12"},
+     {"lastName":"test_shinde2","firstName":"test_kishor1","Website":"http://www.Testgmail.com","email":"test_enzigma31OPPMerge@examplegmail.com","phone":"8146185356","leadSource":"Inbound call","company":"Test_Enzigma1","company_Size__c":"21-50","lead_Source_Detail__c":"Book A Tour Form","utm_campaign__c":"San Francisco - Modifier","utm_content__c":"utm contents","utm_medium__c":"cpc","utm_source__c":"ads-google","utm_term__c":"virtual +office +san +francisco","locale__c":"US","country_Code__c":"US","number_of_Desks__c":"12"},
+     {"productLine":"WeWork","bookedBySalesLead":"Yes","phone":"+91-9975839755","email":"test_enzigma2OPPMerge@examplegmail.com","company":"test2_enzi_opportunityMerge","name":"test2_name","companySize":"2" , "numberOfDesks":"2" , "building":"BL-Potsdamer Platz"},
+      {"productLine":"WeWork","bookedBySalesLead":"Yes","phone":"+91-9975839755","email":"test_enzigma3OPPMerge@examplegmail.com","company":"test3_enzi_opportunityMerge","name":"test3_name","companySize":"2" , "numberOfDesks":"2" , "building":"BL-Potsdamer Platz"}
+    
+    ]
+  },
+  "MergeOpportunitiesPage":{
+    "Account":[
+      {"name":"test_Account_OppMerge1"},
+      {"name":"test_Account_OppMerge2"},
+      {"name":"test_Account_OppMerge3"},
+      {"name":"test_Account_OppMerge4"}
+      ],
+    "Contact":[
+      {"firstname":"test_Contact1","lastname":"OpportunityMerged1","email":"enzi_Contact_mergeOpportunity1@example.com","AccountId":""},
+      {"firstname":"test_Contact2","lastname":"OpportunityMerged2","email":"enzi_Contact_mergeOpportunity2@example.com","AccountId":""},
+      {"firstname":"test_Contact3","lastname":"OpportunityMerged3","email":"enzi_Contact_mergeOpportunity3@example.com","AccountId":""},
+      {"firstname":"test_Contact4","lastname":"OpportunityMerged4","email":"enzi_Contact_mergeOpportunity4@example.com","AccountId":""}
+    ],
+    "Building__c":[
+      {"Name":"B1", "uuid__c":"abcabd"},
+      {"Name":"B2", "uuid__c":"defded"},
+      {"Name":"B1", "uuid__c":"abcabe"},
+      {"Name":"B2", "uuid__c":"defdef"},
+      {"Name":"B1", "uuid__c":"abcabg"},
+      {"Name":"B2", "uuid__c":"defdeh"}
+    ],
+    "Opportunity":[
+      {"Name":"test_OppMerge1","StageName":"Selling","Probability": "10","CloseDate":"2018-06-03T10:34:24.000Z","AccountId":"","Primary_Member__c":"","Building__c":"","Locations_Interested__c":"AMS-Metropool;AUS-Domain;"},
+      {"Name":"test_OppMerge2","StageName":"Selling","Probability": "10","CloseDate":"2018-06-03T10:34:24.000Z","AccountId":"","Primary_Member__c":"","Building__c":"","Locations_Interested__c":"AMS-Metropool;ATX-Congress;"},
+      {"Name":"test_OppMerge3","StageName":"Selling","Probability": "10","CloseDate":"2018-06-03T10:34:24.000Z","AccountId":"","Primary_Member__c":"","Building__c":"","Locations_Interested__c":"AMS-Metropool;AUS-Domain;"},
+      {"Name":"test_OppMerge4","StageName":"Selling","Probability": "10","CloseDate":"2018-06-03T10:34:24.000Z","AccountId":"","Primary_Member__c":"","Building__c":"","Locations_Interested__c":"AMS-Metropool;ATX-Congress;"},
+      {"Name":"test_OppMerge5","StageName":"Selling","Probability": "10","CloseDate":"2018-06-03T10:34:24.000Z","AccountId":"","Primary_Member__c":"","Building__c":"","Locations_Interested__c":"AMS-Metropool;AUS-Domain;"},
+      {"Name":"test_OppMerge6","StageName":"Selling","Probability": "10","CloseDate":"2018-06-03T10:34:24.000Z","AccountId":"","Primary_Member__c":"","Building__c":"","Locations_Interested__c":"AMS-Metropool;ATX-Congress;"}
+      
+    ],
+    "Journey":[
+      {"Name":"TestJourney1","Status__c":"Scheduled","Primary_Contact__c":"","Count_of_Desk__c":"20","NMD_Next_Contact_Date__c":"2018-06-03T10:34:24.000Z"},
+      {"Name":"TestJourney2","Status__c":"Scheduled","Primary_Contact__c":"","Count_of_Desk__c":"20","NMD_Next_Contact_Date__c":"2018-06-03T10:34:24.000Z"},
+      {"Name":"TestJourney3","Status__c":"Scheduled","Primary_Contact__c":"","Count_of_Desk__c":"20","NMD_Next_Contact_Date__c":"2018-06-03T10:34:24.000Z"},
+      {"Name":"TestJourney4","Status__c":"Scheduled","Primary_Contact__c":"","Count_of_Desk__c":"20","NMD_Next_Contact_Date__c":"2018-06-03T10:34:24.000Z"},
+      {"Name":"TestJourney5","Status__c":"Scheduled","Primary_Contact__c":"","Count_of_Desk__c":"20","NMD_Next_Contact_Date__c":"2018-06-03T10:34:24.000Z"},
+      {"Name":"TestJourney6","Status__c":"Scheduled","Primary_Contact__c":"","Count_of_Desk__c":"20","NMD_Next_Contact_Date__c":"2018-06-03T10:34:24.000Z"}
+   
+    ],
+    "Tour":[
+      {"Opportunity__c":"","Journey__c":"","Status__c":"Scheduled","Tour_Date__c":"2018-06-03","Start_Time__c":"9:00AM","Location__c":""},
+      {"Opportunity__c":"","Journey__c":"","Status__c":"Scheduled","Tour_Date__c":"2018-06-03","Start_Time__c":"9:00AM","Location__c":""},
+      {"Opportunity__c":"","Journey__c":"","Status__c":"Scheduled","Tour_Date__c":"2018-06-03","Start_Time__c":"9:00AM","Location__c":""},
+      {"Opportunity__c":"","Journey__c":"","Status__c":"Scheduled","Tour_Date__c":"2018-06-03","Start_Time__c":"9:00AM","Location__c":""},
+      {"Opportunity__c":"","Journey__c":"","Status__c":"Scheduled","Tour_Date__c":"2018-06-03","Start_Time__c":"9:00AM","Location__c":""},
+      {"Opportunity__c":"","Journey__c":"","Status__c":"Scheduled","Tour_Date__c":"2018-06-03","Start_Time__c":"9:00AM","Location__c":""}
+    ]
+  },
+  "ContractEvent":{
+    "ServiceUrls":[
+      {"contractEvent":"/services/apexrest/contractEvent"}
+    ],
+    "Account":[
+      {"name":"test_Account_ContractEvent1","UUID__c":"account-1111-1111-acc1","RecordTypeId":""},
+      {"name":"test_Account_ContractEvent4","UUID__c":"account-4444-4444-acc4","RecordTypeId":""},
+      {"name":"test_Account_ContractEvent2","UUID__c":"account-2222-2222-acc2","RecordTypeId":""},
+      {"name":"test_Account_ContractEvent3","UUID__c":"account-3333-3333-acc3","RecordTypeId":""}
+    ],
+    "Contact":[
+      {"firstname":"test_Contact1","lastname":"ContractEvent1","email":"enzi_Contact_ContractEvent1@example.com","UUID__c":"contact-1111-1111-contact1","AccountId":""},
+      {"firstname":"test_Contact2","lastname":"ContractEvent2","email":"enzi_Contact_ContractEvent2@example.com","UUID__c":"contact-2222-2222-contact2","AccountId":""},
+      {"firstname":"test_Contact3","lastname":"ContractEvent3","email":"enzi_Contact_ContractEvent3@example.com","UUID__c":"contact-3333-3333-contact3","AccountId":""},
+      {"firstname":"test_Contact4","lastname":"ContractEvent4","email":"enzi_Contact_ContractEvent4@example.com","UUID__c":"contact-4444-4444-contact4","AccountId":""}
+    ],
+    "Building__c":[
+      {"Name":"B1","City__c":"test1", "uuid__c":"building-1111-1111-b1"},
+      {"Name":"B2","City__c":"test2", "uuid__c":"building-2222-2222-b2"},
+      {"Name":"B3","City__c":"test3", "uuid__c":"building-3333-3333-b3"}
+    ],
+    "Reservable__c":[
+      {"Building__c":"","Name":"Residential Unit1-1015166","Monthly_Price__c":"50","UUID__c":"reservable-1111-1111-reservable1","Office_Work_Station_Type__c":"Office","Office_Capacity__c":"10"},
+      {"Building__c":"","Name":"Residential Unit2-1015164","Monthly_Price__c":"50","UUID__c":"reservable-2222-2222-reservable2","Office_Work_Station_Type__c":"Office","Office_Capacity__c":"5"} ,
+      {"Building__c":"","Name":"Residential Unit3-1015165","Monthly_Price__c":"50","UUID__c":"reservable-3333-3333-reservable3","Office_Work_Station_Type__c":"Office","Office_Capacity__c":"10"}
+    ],
+    "Product":[
+      {"Name":"Deal","ProductCode":"PRDL-000001","IsActive":"true"},
+      {"Name":"Hot Desk","ProductCode":"PRHD-000400","IsActive":"true"},
+      {"Name":"Desk","ProductCode":"PRDE-000200","IsActive":"true"},
+      {"Name":"DedicatedDesk","ProductCode":"NotConsidered","IsActive":"true"}
+    ],
+    "Opportunity":[
+      {"Name":"test_ContractEvent2","StageName":"Selling","CloseDate":"2018-06-03T10:34:24.000Z","AccountId":"0013D00000PnWz8","Primary_Member__c":"","Building__c":"a003D00000116QE","Contract_UUID__c":"","Locations_Interested__c":"AMS-Metropool;AUS-Domain;","Contract_Stage__c":""}
+    ],
+    "Scenarios":[
+   {"body":{"event_name": "","opportunity_id": "","company_uuid": "","community_manager_uuid": "contact-2222-2222-contact2","primary_member_email": "john.smith1901201802@example.com","membership_agreement_uuid": "","original_contract_uuid": "","currencyVal": "USD","contract_pdf": "", "contract_date":"2016-09-12","products":[{"product_code":"PRDE-000200","quantity":"15","unit_price":"300.0","building_uuid":"building-1111-1111-b1","start_date": "2016-10-14"}],"move_ins": [{"reservable_uuid": "","building_uuid": "building-1111-1111-b1","start_date": "2016-10-14","price": "4500.0","quantity":"15","commitment_end_date":"2018-04-04"}],"move_outs":[{"reservable_uuid":"","building_uuid":"building-1111-1111-b1","move_out_date":"2016-10-14","price":"3000.0","quantity":"10"}],"downgrade_reason": "","downgrade_notes": "","transfer_type": ""}}
+   ]
+   },
+  "test":{
+    "Account":[
+      {"name":"test_Account_OppMerge1"}
+    ]
+  }
+
+ }
