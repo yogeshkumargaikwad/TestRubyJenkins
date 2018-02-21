@@ -51,7 +51,7 @@ describe "Enterprise" do
 
         @testRailUtility.postResult(1012,"comment",1,@run)
       rescue Exception => e
-        @testRailUtility.postResult(1012,"comment",5,@run)
+        @testRailUtility.postResult(1012,e,5,@run)
         puts e
         raise e
         end
@@ -64,6 +64,7 @@ describe "Enterprise" do
         expect(accountId = @objEnterPrise.getAccountFields(@testRecords['account'][0]).fetch("Id")).should_not nil
         puts "New Organization is successfully created"
         Salesforce.addRecordsToDelete("Account", "#{accountId}")
+
         @testRailUtility.postResult(868,"comment",1,@run)
         rescue Exception => e
           @testRailUtility.postResult(868,e,5,@run)

@@ -32,11 +32,13 @@ describe "Reservable Availability Tester" do
     end
   end
 
+=begin
   context "context tagname demo" do
     it "demo it" do
       @objReservableAvailability.selectElement("No", :option)
     end
   end
+=end
 
 =begin
 	it "should create a Account" do
@@ -102,20 +104,36 @@ describe "Reservable Availability Tester" do
 
     #Use: This it passes the Preset View name to setPresetView function
     it "C56:To check when after selecting any preset view, save as preset view, Save & Submit button  will be enabled", :sanity => true do
+      begin
       @objReservableAvailability.setPresetView(@testRecords['scenario:4']['SetPresetView'][0]) #Available 1ps in NYC
       expect(@objReservableAvailability.buttonEnabled?("btnSaveAsPresetView")).to eq true
       expect(@objReservableAvailability.buttonEnabled?("btnSave")).to eq true
       expect(@objReservableAvailability.buttonEnabled?("btnSubmit")).to eq true
+
+      @testRailUtility.postResult(56,"comment",1,@run)
+      rescue Exception => e
+        @testRailUtility.postResult(56,e,5,@run)
+        puts e
+        raise e
+      end
     end
 
     #Use: This it passes the City name to setCity function and Date to setAvailableFrom function
     it "C113:To check when after selecting date and particular city, Save as preset view and Submit button should be visible.", :sanity => true do
+      begin
       @objReservableAvailability.resetForm("Select Preset Views", "Select City", "Minimum_Capacity__c", "Maximum_Capacity__c", "Minimum_Price_Range__c", "Maximum_Price_Range__c")
       @objReservableAvailability.setCity(@testRecords['scenario:2']['SetCity']) #Paris
       @objReservableAvailability.setAvailableFrom(@testRecords['scenario:3']['SetAvailableForm'][0]) #2019-02-23
       expect(@objReservableAvailability.buttonEnabled?("btnSaveAsPresetView")).to eq true
       expect(@objReservableAvailability.buttonEnabled?("btnSave")).to eq false
       expect(@objReservableAvailability.buttonEnabled?("btnSubmit")).to eq true
+
+      @testRailUtility.postResult(113,"comment",1,@run)
+      rescue Exception => e
+        @testRailUtility.postResult(113,e,5,@run)
+        puts e
+        raise e
+      end
     end
   end
 
@@ -132,6 +150,7 @@ describe "Reservable Availability Tester" do
 =end
 
     it 'C170:To check after saving as preset view it should be displayed in preset view list', :sanity => false do
+      begin
       EnziUIUtility.wait(@driver, :id, "Minimum_Capacity__c", 30)
       #EnziUIUtility.wait(@driver,nil,nil,20)
       @objReservableAvailability.resetForm("Select Preset Views", "Select City", "Minimum_Capacity__c", "Maximum_Capacity__c", "Minimum_Price_Range__c", "Maximum_Price_Range__c")
@@ -141,6 +160,13 @@ describe "Reservable Availability Tester" do
       @objReservableAvailability.showRecords('Available')
       @objReservableAvailability.selectbuildings(@testRecords['scenario:9']["buildings"])
       expect(@objReservableAvailability.createPresetView(@testRecords['scenario:10']['CreatePresetView'][4])).to eq @testRecords['scenario:10']['CreatePresetView'][4]
+
+      @testRailUtility.postResult(170,"comment",1,@run)
+      rescue Exception => e
+        @testRailUtility.postResult(170,e,5,@run)
+        puts e
+        raise e
+      end
     end
   end
 
@@ -153,11 +179,27 @@ describe "Reservable Availability Tester" do
 =end
 
     it 'C105:To check when after clicking on "today" in "available from", todays date should be selected.', :sanity => true do
+      begin
       expect(@objReservableAvailability.clickToday()).to eq true
+
+      @testRailUtility.postResult(105,"comment",1,@run)
+      rescue Exception => e
+        @testRailUtility.postResult(105,e,5,@run)
+        puts e
+        raise e
+      end
     end
 
     it 'C106:To check when after clicking on "clear" in "available from", selected date should be removed.', :sanity => true do
+      begin
       expect(@objReservableAvailability.clickClear()).to eq true
+
+      @testRailUtility.postResult(106,"comment",1,@run)
+      rescue Exception => e
+        @testRailUtility.postResult(106,e,5,@run)
+        puts e
+        raise e
+      end
     end
 
 =begin
@@ -173,10 +215,18 @@ describe "Reservable Availability Tester" do
       @objReservableAvailability.resetForm(nil, nil, "Minimum_Capacity__c", "Maximum_Capacity__c", "Minimum_Price_Range__c", "Maximum_Price_Range__c")
     }
     it 'C107:To check when after entering minimum capacity less than maximum capacity, error message should not be displayed.', :sanity => true do
+      begin
       @objReservableAvailability.setTextBoxValue("Minimum_Capacity__c", @testRecords['scenario:5']['SetMinCapacity'][0]) #10
       @objReservableAvailability.setTextBoxValue("Maximum_Capacity__c", @testRecords['scenario:6']['SetMaxCapacity'][1]) #20
       expect(@objReservableAvailability.checkError("Minimum_Capacity__c")).to eq false
       expect(@objReservableAvailability.checkError("Maximum_Capacity__c")).to eq false
+
+      @testRailUtility.postResult(107,"comment",1,@run)
+      rescue Exception => e
+        @testRailUtility.postResult(107,e,5,@run)
+        puts e
+        raise e
+      end
     end
 
 =begin
@@ -189,19 +239,35 @@ describe "Reservable Availability Tester" do
 =end
 
     it 'C108:To check when after entering minimum capacity less than or equal to maximum capacity, error message should not be displayed.', :sanity => true do
+      begin
       @objReservableAvailability.setTextBoxValue("Minimum_Capacity__c", @testRecords['scenario:5']['SetMinCapacity'][0]) #10
       @objReservableAvailability.setTextBoxValue("Maximum_Capacity__c", @testRecords['scenario:6']['SetMaxCapacity'][0]) #10
       expect(@objReservableAvailability.checkError("Minimum_Capacity__c")).to eq false
       expect(@objReservableAvailability.checkError("Maximum_Capacity__c")).to eq false
+
+      @testRailUtility.postResult(108,"comment",1,@run)
+      rescue Exception => e
+        @testRailUtility.postResult(108,e,5,@run)
+        puts e
+        raise e
+      end
     end
 
     it 'C40:To check when after entering minimum capacity more then maximum capacity and again minimum capacity changed less than maximum capacity, error message should not be displayed.', :sanity => true do
+      begin
       @objReservableAvailability.setTextBoxValue("Minimum_Capacity__c", @testRecords['scenario:5']['SetMinCapacity'][0]) #10
       @objReservableAvailability.setTextBoxValue("Maximum_Capacity__c", @testRecords['scenario:6']['SetMaxCapacity'][2]) #5
       @objReservableAvailability.setTextBoxValue("Minimum_Capacity__c", @testRecords['scenario:5']['SetMinCapacity'][7]) #4
       expect(@objReservableAvailability.checkError("Minimum_Capacity__c")).to eq false
       expect(@objReservableAvailability.checkError("Maximum_Capacity__c")).to eq false
       #@objReservableAvailability.checkError()
+
+      @testRailUtility.postResult(40,"comment",1,@run)
+      rescue Exception => e
+        @testRailUtility.postResult(40,e,5,@run)
+        puts e
+        raise e
+      end
     end
   end
 
@@ -210,10 +276,18 @@ describe "Reservable Availability Tester" do
       @objReservableAvailability.resetForm(nil, nil, "Minimum_Capacity__c", "Maximum_Capacity__c", "Minimum_Price_Range__c", "Maximum_Price_Range__c")
     }
     it 'C110:To check when after entering minimum price range less than maximum price range, error message should not be displayed.', :sanity => true do
+      begin
       @objReservableAvailability.setTextBoxValue("Minimum_Price_Range__c", @testRecords['scenario:7']['setMinPriceRange'][0]) #1000
       @objReservableAvailability.setTextBoxValue("Maximum_Price_Range__c", @testRecords['scenario:8']['setMaxPriceRange'][1]) #2000
       expect(@objReservableAvailability.checkError("Minimum_Price_Range__c")).to eq false
       expect(@objReservableAvailability.checkError("Maximum_Price_Range__c")).to eq false
+
+      @testRailUtility.postResult(110,"comment",1,@run)
+      rescue Exception => e
+        @testRailUtility.postResult(110,e,5,@run)
+        puts e
+        raise e
+      end
     end
 
 =begin
@@ -226,18 +300,34 @@ describe "Reservable Availability Tester" do
 =end
 
     it 'C111:To check when after entering minimum price range less than or equal to maximum price range, error message should not be displayed.', :sanity => true do
+      begin
       @objReservableAvailability.setTextBoxValue("Minimum_Price_Range__c", @testRecords['scenario:7']['setMinPriceRange'][1]) #2000
       @objReservableAvailability.setTextBoxValue("Maximum_Price_Range__c", @testRecords['scenario:8']['setMaxPriceRange'][2]) #2000
       expect(@objReservableAvailability.checkError("Minimum_Price_Range__c")).to eq false
       expect(@objReservableAvailability.checkError("Maximum_Price_Range__c")).to eq false
+
+      @testRailUtility.postResult(111,"comment",1,@run)
+      rescue Exception => e
+        @testRailUtility.postResult(111,e,5,@run)
+        puts e
+        raise e
+      end
     end
 
     it 'C112:To check when after entering minimum price range more than maximum price range and again minimum price range changed less than maximum price range, error message should not be displayed.', :sanity => true do
+      begin
       @objReservableAvailability.setTextBoxValue("Minimum_Price_Range__c", @testRecords['scenario:7']['setMinPriceRange'][1]) #2000
       @objReservableAvailability.setTextBoxValue("Maximum_Price_Range__c", @testRecords['scenario:8']['setMaxPriceRange'][2]) #1500
       @objReservableAvailability.setTextBoxValue("Minimum_Price_Range__c", @testRecords['scenario:7']['setMinPriceRange'][0]) #1000
       expect(@objReservableAvailability.checkError("Minimum_Price_Range__c")).to eq false
       expect(@objReservableAvailability.checkError("Maximum_Price_Range__c")).to eq false
+
+      @testRailUtility.postResult(112,"comment",1,@run)
+      rescue Exception => e
+        @testRailUtility.postResult(112,e,5,@run)
+        puts e
+        raise e
+      end
     end
 
 =begin
@@ -262,18 +352,42 @@ describe "Reservable Availability Tester" do
 		end
 =end
     it 'C117:To check while searching unit type other than the predefined unit type, "No records found!" message should be displayed.' do
+      begin
       expect(@objReservableAvailability.unitTypeError("z")).to eq true
+
+      @testRailUtility.postResult(117,"comment",1,@run)
+      rescue Exception => e
+        @testRailUtility.postResult(117,e,5,@run)
+        puts e
+        raise e
+      end
     end
   end
 
   context "Testing Building Elements" do
     it 'C116:To check while searching building without selecting city, "No records found!" message should be displayed.', :sanity => true do
+      begin
       expect(@objReservableAvailability.isErrorInBuilding()).to eq true #Select City
+
+      @testRailUtility.postResult(116,"comment",1,@run)
+      rescue Exception => e
+        @testRailUtility.postResult(116,e,5,@run)
+        puts e
+        raise e
+      end
     end
 
     #Use: This it passes the City Name to checkBuilding function
     it 'C114:To check Building is displayed as per the selected city', :sanity => true do
+      begin
       expect(@objReservableAvailability.checkBuilding("Beijing")).to eq true
+
+      @testRailUtility.postResult(114,"comment",1,@run)
+      rescue Exception => e
+        @testRailUtility.postResult(114,e,5,@run)
+        puts e
+        raise e
+      end
     end
 
 =begin
@@ -291,9 +405,17 @@ describe "Reservable Availability Tester" do
 
     #Use: This it passes the buttonId to clickButton function
     it 'C103:To check user able to see the availability of building reservables.', :sanity => true do
+      begin
       @objReservableAvailability.clickButton("btnSubmit")
       #sleep(15)
       #EnziUIUtility.clickElement(@driver,:id,"btnNext")
+
+      @testRailUtility.postResult(103,"comment",1,@run)
+      rescue Exception => e
+        @testRailUtility.postResult(103,e,5,@run)
+        puts e
+        raise e
+      end
     end
   end
 
@@ -343,15 +465,31 @@ describe "Reservable Availability Tester" do
 =end
 
     it 'C118:To check when after selecting show records as "Available", only unoccupied buildings will be displayed.', :sanity => true do
+      begin
       expect(@objReservableAvailability.checkShowRecord()).to eq true
+
+      @testRailUtility.postResult(118,"comment",1,@run)
+      rescue Exception => e
+        @testRailUtility.postResult(118,e,5,@run)
+        puts e
+        raise e
+      end
     end
 
     it 'C53:To check when after selecting show records as "All", all occupied and unoccupied buildings will be displayed.', :sanity => true do
+      begin
       @objReservableAvailability.setAvailableFrom('2018-11-22')
       @objReservableAvailability.setCity('Austin')
       @objReservableAvailability.showRecords('All')
       @objReservableAvailability.clickButton("btnSubmit")
       expect(@objReservableAvailability.checkShowRecord()).to eq false
+
+      @testRailUtility.postResult(53,"comment",1,@run)
+      rescue Exception => e
+        @testRailUtility.postResult(53,e,5,@run)
+        puts e
+        raise e
+      end
     end
 
 =begin
@@ -379,9 +517,17 @@ describe "Reservable Availability Tester" do
     end
 
     it 'C104:To check user able to get the proposal form for a particular building in reservable availability page.', :sanity => true do
+      begin
       unitsFlag = @objReservableAvailability.getDriver
       @objReservableAvailability.checkSendProposalTableUnits()
       expect(nil).not_to  eq(unitsFlag)
+
+      @testRailUtility.postResult(104,"comment",1,@run)
+      rescue Exception => e
+        @testRailUtility.postResult(104,e,5,@run)
+        puts e
+        raise e
+      end
     end
   end
 
