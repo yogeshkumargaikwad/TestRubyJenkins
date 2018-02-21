@@ -36,6 +36,9 @@ describe SfRESTService do
     else
       @runId = ENV['RUN_ID']
     end
+    if ENV['RUN_ID'].nil? then
+      @runId = @testRailUtility.addRun("RESTAPI Tour Service",4,26,arrCaseIds)['id']
+    end
   }
 
   before(:each){

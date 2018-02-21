@@ -13,8 +13,8 @@ describe ManageTours do
   before(:all){
     include SauceLabs
     #SauceLab will read env variable and accordingly set browser
-    @driver = SauceLabs.selenium_driver()
-    #@driver = Selenium::WebDriver.for :chrome
+    #@driver = SauceLabs.selenium_driver()
+    @driver = Selenium::WebDriver.for ENV['BROWSER'].to_sym
     @objManageTours = ManageTours.new(@driver,"Staging")
     @leadsTestData = @objManageTours.instance_variable_get(:@records)[0]['lead']
     @testRailUtility = EnziTestRailUtility::TestRailUtility.new(@objManageTours.instance_variable_get(:@mapCredentials)['TestRail']['username'],@objManageTours.instance_variable_get(:@mapCredentials)['TestRail']['password'])
@@ -32,6 +32,9 @@ describe ManageTours do
       @runId = @testRailUtility.addRun("Manage Tour by lead",4,19,arrCaseIds)['id']
     else
       @runId = ENV['RUN_ID']
+    end
+    if ENV['RUN_ID'].nil? then
+      @runId = @testRailUtility.addRun("Manage Tour by lead",4,19,arrCaseIds)['id']
     end
   }
   before(:each){
@@ -327,7 +330,7 @@ describe ManageTours do
           sleep(@objManageTours.instance_variable_get(:@timeSettingMap)['Sleep']['Environment']['Lightening'])
           puts "Checking open activities"
           expect(@objManageTours.checkRecordCreated('Task',"SELECT id FROM Task WHERE whatId = '#{bookedTours[0].fetch('Id')}'")[0].fetch('Id')).to_not eql nil
-          puts "Open opportunity created successfully"
+          puts "Open activity created successfully"
           puts "Checking user can view booked tours information"
           puts "\n"
           expect(@objManageTours.numberOfTourBooked > 3).to be true
