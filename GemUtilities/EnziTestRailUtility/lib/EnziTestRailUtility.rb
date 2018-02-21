@@ -28,7 +28,10 @@ module EnziTestRailUtility
 					 data = {"suite_id": suiteId,"name": "#{test_run_name}- #{Time.now.asctime}","include_all": true}
 			end
 			@client.send_post("add_run/#{projectId}", data)
-		end
+    end
+    def deleteRun(runId)
+      @client.send_get("delete_run/#{runId}")
+    end
 		def getSpecLocations(caseId,sectionId,suitId,planId,projectId)
 			specLocations = Array.new
 			if !caseId.nil? then
@@ -39,7 +42,7 @@ module EnziTestRailUtility
 				if !sectionId.nil? && getSuites(projectId).size == 1  then
 					puts "getting specs from section #{sectionId}"
 					getCases(projectId, nil, sectionId).each do |testCase|
-						if testCase.key?('custom_spec_location') && !testCase.key?('custom_spec_location').nil? then
+						if testCase.key?('custom_spec_location') && !testCase.fetch('custom_spec_location').nil? then
 							specLocations.push(Hash["path"=>testCase.fetch('custom_spec_location'),"isBrowserDependent"=>testCase.fetch('custom_is_browser_dependent')])
 							break;
 						end
@@ -50,7 +53,7 @@ module EnziTestRailUtility
 						if !sectionId.nil? then
 							puts "getting specs from section #{sectionId}"
 							getCases(projectId, suitId, sectionId).each do |testCase|
-								if testCase.key?('custom_spec_location') && !testCase.key?('custom_spec_location').nil? then
+								if testCase.key?('custom_spec_location') && !testCase.fetch('custom_spec_location').nil? then
 									specLocations.push(Hash["path"=>testCase.fetch('custom_spec_location'),"isBrowserDependent"=>testCase.fetch('custom_is_browser_dependent')])
 									break;
 								end
@@ -59,7 +62,7 @@ module EnziTestRailUtility
 							puts "getting specs from suit #{suitId}"
 							getSections(suitId,projectId).each do |section|
 								getCases(projectId, suitId, section['id']).each do |testCase|
-									if testCase.key?('custom_spec_location') && !testCase.key?('custom_spec_location').nil? then
+									if testCase.key?('custom_spec_location') && !testCase.fetch('custom_spec_location').nil? then
 										specLocations.push(Hash["path"=>testCase.fetch('custom_spec_location'),"isBrowserDependent"=>testCase.fetch('custom_is_browser_dependent')])
 										break;
 									end
@@ -73,35 +76,45 @@ module EnziTestRailUtility
 								suit = entry['suite_id']
 								getSections(suit,projectId).each do |section|
 									getCases(projectId, suit, section['id']).each do |testCase|
-										if testCase.key?('custom_spec_location') && !testCase.key?('custom_spec_location').nil? then
+										if testCase.key?('custom_spec_location') && !testCase.fetch('custom_spec_location').nil? then
 											specLocations.push(Hash["path"=>testCase.fetch('custom_spec_location'),"isBrowserDependent"=>testCase.fetch('custom_is_browser_dependent')])
 											break;
 										end
 									end
 								end
 							end
-						else
-							if !projectId.nil? then
+            else
+              if !projectId.nil? then
 								puts "getting specs from project id"
 								specLocation = nil
 								getSuites(projectId).each do |suit|
-									getSections(suit['id'],projectId).each do |section|
-										getCases(projectId, suit['id'], section['id']).each do |testCase|
-											if testCase.key?('custom_spec_location') && !testCase.key?('custom_spec_location').nil? then
-												specLocations.push(Hash["path"=>testCase.fetch('custom_spec_location'),"isBrowserDependent"=>testCase.fetch('custom_is_browser_dependent')])
+                  sections = getSections(suit['id'],projectId)
+                  if sections.size > 0 then
+                    arrCaseIds = Array.new
+                    sections.each do |section|
+                      getCases(projectId,suit['id'],section['id']).each do |testCase|
+                        if testCase.key?('custom_spec_location') && !testCase.fetch('custom_spec_location').nil? then
+                          arrCaseIds.push(testCase['id'])
+                        end
+                      end
+                    end
+                    if arrCaseIds.size > 0 then
+                      runId = addRun(suit['name'],projectId,suit['id'],arrCaseIds)['id'].to_s
+                    end
+                  end
+                  sections.each do |section|
+                        getCases(projectId, suit['id'], section['id']).each do |testCase|
+											if testCase.key?('custom_spec_location') && !testCase.fetch('custom_spec_location').nil? then
+												specLocations.push(Hash["path"=>testCase.fetch('custom_spec_location'),"isBrowserDependent"=>testCase.fetch('custom_is_browser_dependent'),"runId" => runId])
 												break;
 											end
 										end
-									end
-									if !specLocations.nil? then
-										specLocations.last['runId'] = addRun(suit['name'],projectId,suit['id'],nil).to_s
-									end
+                  end
 								end
 							end
 						end
 					end
 				end
-				puts "spec to be run are :: #{specLocations}"
 				return specLocations.uniq
 			end
 		end
