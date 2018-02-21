@@ -459,7 +459,7 @@ class ReservableAvailability
         #puts "col data-label: #{col.attribute('data-label')}"
         if (col.attribute('data-label') == 'Unit')
           #puts "Column data lable: #{col.attribute('data-label')}"
-          arrBuildingUnit.push(col.find_element(:class, 'uiOutputText').text)
+          arrBuildingUnit.push(col.find_element(:class, 'slds-truncate').text)  #modified on 21 feb
         end
       end
     end
@@ -533,7 +533,7 @@ class ReservableAvailability
         #puts "Column data lable: #{col.attribute('data-label')}"
         if (col.attribute('data-label') == 'Unit')
           index = index + 1
-          if (col.find_element(:class, 'uiOutputText').text == val)
+          if (col.find_element(:class, 'slds-truncate').text == val)
             #puts "Clicking on Checkbox, Index is: #{index}"
             row.find_element(:id, "checkbox-span:#{index}").click
             @@selected_buildings.push(val)
@@ -768,7 +768,6 @@ class ReservableAvailability
     end
     puts "mapOfAllData: #{mapOfAllData}"
     return mapOfAllData
-
   end
 
   def getData(onlySelected)
@@ -871,55 +870,4 @@ class ReservableAvailability
     end
     return totalRowCount
   end
-
-
 end
-
-=begin
-	#Use: This fuction is used to Check Save As Preset View Button is Enabled or not
-  	def saveAsPresetViewButtonEnabled?()
-  		EnziUIUtility.wait(@driver,:id,"btnSaveAsPresetView",30)
-  		saveAsPresetViewButtonEnability = @driver.find_element(:id, "btnSaveAsPresetView").enabled?	
-  		puts "Button Enability? : #{saveAsPresetViewButtonEnability}"
-  		return saveAsPresetViewButtonEnability
-  	end
-
-  	#Use: This fuction is used to Check Save Button is Enabled or not
-  	def saveButtonEnabled?()
-  		saveButtonEnability = @driver.find_element(:id, "btnSave").enabled?	
-  		puts "Button Enability? : #{saveButtonEnability}"
-  		return saveButtonEnability
-  	end
-
-  	#Use: This fuction is used to Check Submit Button is Enabled or not
-  	def submitButtonEnabled?()
-  		submitButtonEnability = @driver.find_element(:id, "btnSubmit").enabled?	
-  		puts "Button Enability? : #{submitButtonEnability}"
-  		return submitButtonEnability
-  	end
-
-  	#Use:This function is use to set value of Min Capacity
-	def setMinCapacity(min_capacity)
-	   	@driver.find_element(:id,'Minimum_Capacity__c').clear()
-	    EnziUIUtility.setValue(@driver,:id,'Minimum_Capacity__c',min_capacity)
-	end
-
-	#Use:This function is use to set value Max Capacity
-	def setMaxCapacity(max_capacity)
-	    @driver.find_element(:id,'Maximum_Capacity__c').clear()
-	    EnziUIUtility.setValue(@driver,:id,'Maximum_Capacity__c',max_capacity)
-	end
-
-	#Use:This function is use to set value Max Price
-	def setMinPriceRange(min_price)
-		@driver.find_element(:id,'Minimum_Price_Range__c').clear()
-		EnziUIUtility.setValue(@driver,:id,'Minimum_Price_Range__c',min_price)
-	end
-
-	#Use:This function is use to set value Max Price
-	def setMaxPriceRange(max_price)
-		@driver.find_element(:id,'Maximum_Price_Range__c').clear()
-		EnziUIUtility.setValue(@driver,:id,'Maximum_Price_Range__c',max_price)
-	end
-	https://test.salesforce.com/login.jsp?pw=#{mapCredentials['password']}&un=#{mapCredentials['username']}
-=end
