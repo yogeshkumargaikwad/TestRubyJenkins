@@ -501,10 +501,10 @@ describe "Enterprise" do
   end
 
   before(:all) {
-    include SauceLabs
+    #include SauceLabs
     #SauceLab will read env variable and accordingly set browser
-    @driver = SauceLabs.selenium_driver()
-    #@driver = Selenium::WebDriver.for :chrome
+    #@driver = SauceLabs.selenium_driver()
+    @driver = Selenium::WebDriver.for ENV['BROWSER'].to_sym
     @objEnterPrise = EnterPrise.new(@driver)
     testRecordFile = File.open(File.expand_path(Dir.pwd + '/Enterprise/TestData/UserSettings.json', "r"))
     #testRecordFile = File.open("E:/Projects/WeWork/SF-QA-Automation/Enterprise/TestData/UserSettings.json", "r" )
