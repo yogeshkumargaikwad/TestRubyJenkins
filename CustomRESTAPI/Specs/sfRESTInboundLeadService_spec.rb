@@ -428,11 +428,11 @@ describe SfRESTService do
 	after(:all){
 		allRecordIds = Salesforce.class_variable_get(:@@createdRecordsIds)
 		puts "Created data to be deleted :: #{@createdLeadIds}....#{allRecordIds}...#{@createdJourneyIds}"
-		Salesforce.deleteRecords(@salesforceBulk,"Journey__c",allRecordIds['Journey__c'].uniq)
-    Salesforce.deleteRecords(@salesforceBulk,"Opportunity",allRecordIds['Opportunity'].uniq)
-		Salesforce.deleteRecords(@salesforceBulk,"Lead",allRecordIds['Lead'].uniq)
-		Salesforce.deleteRecords(@salesforceBulk,"Account",allRecordIds['Account'].uniq)
-		Salesforce.deleteRecords(@salesforceBulk,"Campaign",allRecordIds['Campaign'].uniq)
-		Salesforce.deleteRecords(@salesforceBulk,"Building__c",allRecordIds['Building__c'].uniq)
+		Salesforce.deleteRecords(@salesforceBulk,"Journey__c",allRecordIds['Journey__c'])
+    Salesforce.deleteRecords(@salesforceBulk,"Opportunity",allRecordIds['Opportunity'])
+		Salesforce.deleteRecords(@salesforceBulk,"Lead",allRecordIds['Lead'])
+		Salesforce.deleteRecords(@salesforceBulk,"Account",allRecordIds['Account'])
+		Salesforce.deleteRecords(@salesforceBulk,"Campaign",allRecordIds['Campaign'])
+		Salesforce.deleteRecords(@salesforceBulk,"Building__c",allRecordIds['Building__c'])
 	}
 end

@@ -534,6 +534,9 @@ describe "Enterprise" do
     else
       @run = ENV['RUN_ID']
     end
+    if ENV['RUN_ID'].nil? then
+      @runId = @testRailUtility.addRun("EnterPrise Run",4,30,arrCaseIds)['id']
+    end
   }
 
   context 'Navigaton to Manage Users' do
