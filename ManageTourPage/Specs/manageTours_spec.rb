@@ -8,10 +8,8 @@ require "rspec"
 require 'enziUIUtility'
 require 'date'
 #require_relative "helper.rb"
-require 'saucelabs'
 describe ManageTours do
   before(:all){
-    include SauceLabs
     #SauceLab will read env variable and accordingly set browser
     #@driver = SauceLabs.selenium_driver()
     @driver = Selenium::WebDriver.for ENV['BROWSER'].to_sym
