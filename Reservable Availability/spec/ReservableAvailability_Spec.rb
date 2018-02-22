@@ -159,7 +159,7 @@ describe "Reservable Availability Tester" do
       @objReservableAvailability.setUnitType(["Bed", "HotDesk", "DedicatedDesk"])
       @objReservableAvailability.showRecords('Available')
       @objReservableAvailability.selectbuildings(@testRecords['scenario:9']["buildings"])
-      expect(@objReservableAvailability.createPresetView(@testRecords['scenario:10']['CreatePresetView'][4])).to eq @testRecords['scenario:10']['CreatePresetView'][4]
+      expect(@objReservableAvailability.createPresetView(@testRecords['scenario:10']['CreatePresetView'][2])).to eq @testRecords['scenario:10']['CreatePresetView'][2]
 
       @testRailUtility.postResult(170,"comment",1,@run)
       rescue Exception => e
