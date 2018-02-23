@@ -49,6 +49,9 @@ end
     else
       @run = ENV['RUN_ID']                                      
     end
+    if ENV['RUN_ID'].nil? then
+      @runId = @testRailUtility.addRun("ContractEvent Run",4,26,arrCaseIds)['id']
+    end
     testDataFile = File.open(File.expand_path('', Dir.pwd) + "/ContractEvent/TestData/testRecords.json", "r")
     testDataInJson = testDataFile.read()
     @testData = JSON.parse(testDataInJson)
