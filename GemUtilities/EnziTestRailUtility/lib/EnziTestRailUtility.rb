@@ -115,7 +115,6 @@ module EnziTestRailUtility
 						end
 					end
 				end
-				puts "spec to be run are :: #{specLocations}"
 				return specLocations.uniq
 			end
 		end

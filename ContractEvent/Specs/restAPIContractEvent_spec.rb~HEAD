@@ -1,28 +1,55 @@
 #Created By : Kishor Shinde
 #Created Date : 19/1/2018
 #Modified date :
-require_relative File.expand_path('', Dir.pwd) + '/ContractEvent/Src/pageObjects/restAPITestContractEvent.rb'
-require_relative File.expand_path('', Dir.pwd) + '/utilities/EnziTestRailUtility/lib/EnziTestRailUtility.rb'
-require "selenium-webdriver"
-require "rspec"
+require_relative File.expand_path('', Dir.pwd) + '/ContractEvent/PageObjects/restAPITestContractEvent.rb'
+require_relative File.expand_path('', Dir.pwd) + '/ContractEvent/Utilities/sfRESTService.rb'
+require 'selenium-webdriver'
+require 'rspec'
 require 'date'
 require 'securerandom'
 
-#createOpportunity(stageName = nil, buildingNumber = nil ,contractUUID = nil,contractStage = nil)
-#@contractEvent.setUpPayload(eventName,opportunity_id = nil,company_uuid = nil,membership_agreement_uuid = nil)
-
-RSpec.configure do |c|
-  c.treat_symbols_as_metadata_keys_with_true_values = true
-  c.filter_run :'451'
+=begin
+RSpec.configure do |conf|
+  #conf.filter_run_including [[:'C451' => true],[:"452"=> true]]
+  #conf.before(:all, type: :model) do |group|
+  # group.include_examples "451"
+  conf.filter_run_including  :'452'
 end
-describe ContractEvent do
+=end
+=begin
+RSpec.configure do |conf|
+  #c.treat_symbols_as_metadata_keys_with_true_values = true
+  puts "**********"
+  conf.filter_run_including [[:'C451' => true],[:"452"=> true]]
+  #conf.before(:all, type: :model) do |group|
+   # group.include_examples "451"
+  #end
+  #"#{string}"
+  #c.include_examples :'452'
+  #c.filter_run :'452'
+end
+=end
+ describe ContractEvent do
   before(:all) {
     puts "--------------------------------------------------------------------------------"
-    #puts "ContractEvent in spec"
-    #puts File.expand_path('',Dir.pwd)
-    #puts File.expand_path(Dir.pwd+"************")
-    #@driver = Selenium::WebDriver.for :chrome
-    testDataFile = File.open(File.expand_path('', Dir.pwd) + "/ContractEvent/src/testData/testRecords.json", "r")
+    @config = YAML.load_file(File.expand_path('', Dir.pwd) + '/credentials.yaml')
+    @testRailUtility = EnziTestRailUtility::TestRailUtility.new(@config['TestRail']['username'], @config['TestRail']['password'])
+    arrCaseIds = Array.new
+    if !ENV['SECTION_ID'].nil? && ENV['CASE_ID'].nil? then
+      @testRailUtility.getCases(ENV['PROJECT_ID'], ENV['SUIT_ID'], ENV['SECTION_ID']).each do |caseId|
+        arrCaseIds.push(caseId['id'])
+      end
+    else
+      if !ENV['CASE_ID'].nil? then
+        arrCaseIds.push(ENV['CASE_ID'])
+      end
+    end
+    if !ENV['SUIT_ID'].nil? && (!ENV['SECTION_ID'].nil? || !ENV['CASE_ID'].nil?) then
+      @run = @testRailUtility.addRun("ContractEvent Run",4,26,arrCaseIds)
+    else
+      @run = ENV['RUN_ID']                                      
+    end
+    testDataFile = File.open(File.expand_path('', Dir.pwd) + "/ContractEvent/TestData/testRecords.json", "r")
     testDataInJson = testDataFile.read()
     @testData = JSON.parse(testDataInJson)
     @sfRESTService = SfRESTService.new()
@@ -30,38 +57,14 @@ describe ContractEvent do
     puts "Creating common test data..."
     @recordCreated = @contractEvent.createCommonTestData()
     puts @recordCreated
-    @config = YAML.load_file(File.expand_path('', Dir.pwd) + '/credentials.yaml')
-    @testRailUtility = EnziTestRailUtility::TestRailUtility.new(@config['TestRail']['username'], @config['TestRail']['password'])
-    arrCaseIds = Array.new
-    projectId = ENV['PROJECT_ID'].delete(" ")
-    puts projectId
-    suitId = ENV['SUIT_ID'].delete(" ")
-    puts suitId
-    sectionId =  ENV['SECTION_ID'].delete(" ")
-    puts sectionId
-    if !ENV['PROJECT_ID'].nil? && !ENV['SUIT_ID'].nil? && !ENV['SECTION_ID'].nil? then
-      @testRailUtility.getCases(ENV['PROJECT_ID'], ENV['SUIT_ID'], ENV['SECTION_ID']).each do |caseId|
-        arrCaseIds.push(caseId['id'])
-      end
-    end
-    puts "casecids :: #{arrCaseIds}"
-
-    @run = @testRailUtility.addRun("Rest API Test ContractEvent", ENV['PROJECT_ID'], ENV['SUIT_ID'], arrCaseIds)
   }
-  
   before(:each) {
     puts ""
     puts "--------------------------------------------------------------------------------"
   }
-
-  context 'ContractEvent-->sent', :contractSent => true do
-    before(:all) {
-    }
-    before(:each) {
-    }
-
-    #********************************upgrade****************************************
-    it 'C:451 In Upgrade event, To check if the membership_agreement_uuid matched with the existing membership_agreement_uuid while hitting payload then existing opportunity should be updated.', :'451' do
+  context 'ContractEvent-->sent', :'72' => true do
+    #******************************** upgrade ****************************************
+    it 'C:451 In Upgrade event, To check if the membership_agreement_uuid matched with the existing membership_agreement_uuid while hitting payload then existing opportunity should be updated.', :C451 => true do
       begin
         puts 'C:451 In Upgrade event, To check if the membership_agreement_uuid matched with the existing membership_agreement_uuid while hitting payload then existing opportunity should be updated.'
         contractUUID = SecureRandom.uuid
@@ -71,17 +74,12 @@ describe ContractEvent do
         puts 'Created Opportunity'
 
         @opportunity = @contractEvent.createOpportunity(1, 'Closing', 0, contractUUID, nil)
-        #puts @opportunity
-        #puts (@opportunity == nil)
         @mapOpportunityId["opportunity"] = @opportunity
-        #puts "Opportunity in HashMap"
-        #puts @mapOpportunityId
         @getResponse = SfRESTService.postData('' + @contractEvent.setUpPayload("Contract Sent", nil, companyUUID, membershipAgreementUUID, nil, 0, 1, "Upgrade").to_json, "#{@testData['ContractEvent']['ServiceUrls'][0]['contractEvent']}", false)
         puts "Response-->"
         puts "#{@getResponse}"
         puts "Checking Responce after hitting payload..."
         expect(@getResponse['success']).to be true
-        #puts "Checking Result..."
         expect(@getResponse['result']).to_not eql nil
 
         #puts "get only id from responce"
@@ -182,8 +180,7 @@ describe ContractEvent do
       end
     end
 
-
-    it 'C:452 In Upgrade event, To check if opportunity id in the payload is matched with the opportunity_id in the system after hitting payload then existing opportunity in the system will be updated.', :'452' => true do
+    it 'C:452 In Upgrade event, To check if opportunity id in the payload is matched with the opportunity_id in the system after hitting payload then existing opportunity in the system will be updated.', :'452'=> 'true' do
       begin
         puts 'C:452 In Upgrade event, To check if opportunity id in the payload is matched with the opportunity_id in the system after hitting payload then existing opportunity in the system will be updated.'
         contractUUID = SecureRandom.uuid
@@ -303,7 +300,6 @@ describe ContractEvent do
         raise e
       end
     end
-
 
     it 'C:453 In Upgrade event, To check if company_uuid in the payload matched with the existing account in the system, there are having open opportunities after hitting payload if building matched with the existing open opportunity then existing opportunity should be updated.', :'453' => true do
       begin
@@ -428,7 +424,6 @@ describe ContractEvent do
       end
     end
 
-
     it 'C:726 In Upgrade event, To check if company_uuid in the payload matched with the existing account in the system, there are having open opportunities after hitting payload if building does not matched with the existing open opportunity then latest opportunity will be updated.', :'726' => true do
       begin
         puts 'C:726 In Upgrade event, To check if company_uuid in the payload matched with the existing account in the system, there are having open opportunities after hitting payload if building does not matched with the existing open opportunity then latest opportunity will be updated.'
@@ -550,7 +545,6 @@ describe ContractEvent do
         raise e
       end
     end
-
 
     it 'C:857 In Upgrade event, To check if company_uuid matched with the existing opportunity and for that account there is having opportunity with the stages closed won or closed lost, while hitting payload for a particular building then new opportunity should be created.', :'857' => true do
       begin
@@ -1064,7 +1058,6 @@ describe ContractEvent do
       end
     end
 
-
     it 'C:903 In Downgrade event, To check if opportunity id in the payload is matched with the opportunity_id in the system after hitting payload then existing opportunity in the system will be updated.', :'903' => true do
       begin
         puts 'C:903 In Downgrade event, To check if opportunity id in the payload is matched with the opportunity_id in the system after hitting payload then existing opportunity in the system will be updated.'
@@ -1187,7 +1180,6 @@ describe ContractEvent do
         raise e
       end
     end
-
 
     it 'C:907 In Downgrade event, To check if company_uuid in the payload matched with the existing account in the system, there are having open opportunities after hitting payload if building matched with the existing open opportunity then existing opportunity should be updated.', :'907' => true do
       begin
@@ -1312,7 +1304,6 @@ describe ContractEvent do
       end
     end
 
-
     it 'C:908 In Downgrade event, To check if company_uuid in the payload matched with the existing account in the system, there are having open opportunities after hitting payload if building does not matched with the existing open opportunity then latest opportunity will be updated.', :'908' => true do
       begin
         puts 'C:908 In Downgrade event, To check if company_uuid in the payload matched with the existing account in the system, there are having open opportunities after hitting payload if building does not matched with the existing open opportunity then latest opportunity will be updated.'
@@ -1434,7 +1425,6 @@ describe ContractEvent do
         raise e
       end
     end
-
 
     it 'C:909 In Downgrade event, To check if company_uuid matched with the existing opportunity and for that account there is having opportunity with the stages closed won or closed lost, while hitting payload for a particular building then new opportunity should be created.', :'909' => true do
       begin
@@ -1945,7 +1935,6 @@ describe ContractEvent do
       end
     end
 
-
     it 'C:913 In Transfer event, To check if opportunity id in the payload is matched with the opportunity_id in the system after hitting payload then existing opportunity in the system will be updated.', :'913' => true do
       begin
         puts 'C:913 In Transfer event, To check if opportunity id in the payload is matched with the opportunity_id in the system after hitting payload then existing opportunity in the system will be updated.'
@@ -2067,7 +2056,6 @@ describe ContractEvent do
         raise e
       end
     end
-
 
     it 'C:915 In Transfer event, To check if company_uuid in the payload matched with the existing account in the system, there are having open opportunities after hitting payload if building matched with the existing open opportunity then existing opportunity should be updated.', :'915' => true do
       begin
@@ -2191,7 +2179,6 @@ describe ContractEvent do
       end
     end
 
-
     it 'C:916 In Transfer event, To check if company_uuid in the payload matched with the existing account in the system, there are having open opportunities after hitting payload if building does not matched with the existing open opportunity then latest opportunity will be updated.', :'916' => true do
       begin
         puts 'C:916 In Transfer event, To check if company_uuid in the payload matched with the existing account in the system, there are having open opportunities after hitting payload if building does not matched with the existing open opportunity then latest opportunity will be updated.'
@@ -2313,7 +2300,6 @@ describe ContractEvent do
         raise e
       end
     end
-
 
     it 'C:917 In Transfer event, To check if company_uuid matched with the existing opportunity and for that account there is having opportunity with the stages closed won or closed lost, while hitting payload for a particular building then new opportunity should be created.', :'917' => true do
       begin
@@ -2702,7 +2688,6 @@ describe ContractEvent do
 
     #********************************transfer****************************************
     #********************************drop****************************************
-
     it 'C:924 In Drop event, To check if the membership_agreement_uuid matched with the existing membership_agreement_uuid while hitting payload then existing opportunity should be updated.', :'924' => true do
       begin
         puts 'C:924 In Drop event, To check if the membership_agreement_uuid matched with the existing membership_agreement_uuid while hitting payload then existing opportunity should be updated.'
@@ -2815,7 +2800,6 @@ describe ContractEvent do
         raise e
       end
     end
-
 
     it 'C:921 In Drop event, To check if opportunity id in the payload is matched with the opportunity_id in the system after hitting payload then existing opportunity in the system will be updated.', :'921' => true do
       begin
@@ -2930,7 +2914,6 @@ describe ContractEvent do
       end
     end
 
-
     it 'C:927 In Drop event, To check if company_uuid in the payload matched with the existing account in the system, there are having open opportunities after hitting payload if building matched with the existing open opportunity then existing opportunity should be updated.', :'927' => true do
       begin
         puts 'C:927 In Drop event, To check if company_uuid in the payload matched with the existing account in the system, there are having open opportunities after hitting payload if building matched with the existing open opportunity then existing opportunity should be updated.'
@@ -3044,7 +3027,6 @@ describe ContractEvent do
       end
     end
 
-
     it 'C:930 In Drop event, To check if company_uuid in the payload matched with the existing account in the system, there are having open opportunities after hitting payload if building does not matched with the existing open opportunity then latest opportunity will be updated.', :'930' => true do
       begin
         puts 'C:930 In Drop event, To check if company_uuid in the payload matched with the existing account in the system, there are having open opportunities after hitting payload if building does not matched with the existing open opportunity then latest opportunity will be updated.'
@@ -3157,7 +3139,6 @@ describe ContractEvent do
         raise e
       end
     end
-
 
     it 'C:932 In Drop event, To check if company_uuid matched with the existing opportunity and for that account there is having opportunity with the stages closed won or closed lost, while hitting payload for a particular building then new opportunity should be created.', :'932' => true do
       begin
@@ -3637,7 +3618,6 @@ describe ContractEvent do
       end
     end
 
-
     it 'C:939 In New Business event, To check if opportunity id in the payload is matched with the opportunity_id in the system after hitting payload then existing opportunity in the system will be updated.', :'939' => true do
       begin
         puts 'C:939 In New Business event, To check if opportunity id in the payload is matched with the opportunity_id in the system after hitting payload then existing opportunity in the system will be updated.'
@@ -3753,7 +3733,6 @@ describe ContractEvent do
         raise e
       end
     end
-
 
     it 'C:945 In New Business event, To check if company_uuid in the payload matched with the existing account in the system, there are having open opportunities after hitting payload if building matched with the existing open opportunity then existing opportunity should be updated.', :'945' => true do
       begin
@@ -3872,7 +3851,6 @@ describe ContractEvent do
       end
     end
 
-
     it 'C:949 In New Business event, To check if company_uuid in the payload matched with the existing account in the system, there are having open opportunities after hitting payload if building does not matched with the existing open opportunity then latest opportunity will be updated.', :'949' => true do
       begin
         puts 'C:949 In New Business event, To check if company_uuid in the payload matched with the existing account in the system, there are having open opportunities after hitting payload if building does not matched with the existing open opportunity then latest opportunity will be updated.'
@@ -3989,7 +3967,6 @@ describe ContractEvent do
         raise e
       end
     end
-
 
     it 'C:950 In New Business event, To check if company_uuid matched with the existing opportunity and for that account there is having opportunity with the stages closed won or closed lost, while hitting payload for a particular building then new opportunity should be created.', :'950' => true do
       begin
@@ -4368,7 +4345,6 @@ describe ContractEvent do
       puts result
     end
 
-
     it 'C:841 To check if the opportunity stage is updated or not when the record type is mid market.', :'841' => true do
       begin
         puts 'C:841 To check if the opportunity stage is updated or not when the record type is mid market.'
@@ -4649,7 +4625,6 @@ describe ContractEvent do
     }
   end
 
-
   after(:all) {
     puts ""
     puts "--------------------------------------------------------------------------------"
@@ -4657,10 +4632,8 @@ describe ContractEvent do
     puts "Common Test Data Deleted..."
     puts "--------------------------------------------------------------------------------"
   }
-
   after(:each) {
     puts ""
     puts "--------------------------------------------------------------------------------"
   }
-
 end
