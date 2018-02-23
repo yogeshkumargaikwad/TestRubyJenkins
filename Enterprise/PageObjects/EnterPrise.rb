@@ -13,7 +13,7 @@ class EnterPrise
 
 	def initialize(driver)
 		@driver = driver
-		file = File.open("Credentials.yaml", "r")
+		file = File.open("credentials.yaml", "r")
 		mapCredentials = YAML.load(file.read())
 		@driver.get "https://test.salesforce.com/login.jsp?pw=#{mapCredentials['ENTQA']['password']}&un=#{mapCredentials['ENTQA']['username']}"
 		@salesforceBulk = Salesforce.login(mapCredentials['ENTQA']['username'],mapCredentials['ENTQA']['password'],true)
@@ -112,7 +112,7 @@ class EnterPrise
 				#submitButtonEnability = @driver.find_element(:id, "btnSubmit").enabled?
 				#puts "day.Id is: #{day.attribute('id')}"
 				if day.attribute('id').empty? != true then
-					puts "Day id empty?: #{day.attribute('id').empty?}"
+					#puts "Day id empty?: #{day.attribute('id').empty?}"
 					day.click
 					return true
 				else
@@ -168,7 +168,7 @@ class EnterPrise
 		sleep(10)
 		@driver.find_element(:id,'AccountReclist').find_elements(:tag_name,"li").each do |list|
 			if list.attribute('title') == "#{accountName}"
-				puts "list title: #{list.attribute('title')}"
+				#puts "list title: #{list.attribute('title')}"
 				wait = Selenium::WebDriver::Wait.new(:timeout => 30);
 				#sleep(20)
 				wait.until {list.displayed?}
@@ -188,7 +188,7 @@ class EnterPrise
 	def buttonEnabled?(buttonId)
 		EnziUIUtility.wait(@driver,:id,"#{buttonId}",@timeSetting['Wait']['Environment']['Lightening'])
 		buttonEnability = @driver.find_element(:id, "#{buttonId}").enabled?
-		puts "button Enability?: #{buttonEnability}"
+		#puts "button Enability?: #{buttonEnability}"
 		return buttonEnability
 	end
 
@@ -469,13 +469,9 @@ class EnterPrise
 	def logOut()
 		userNameWords = @@userName.split(/\W+/)
 		arrSize = userNameWords.size
-		puts "userNameWords size: #{arrSize}"
 
-		puts userNameWords[arrSize-1]
-		puts "user Name Words: #{userNameWords}"
-		puts userNameWords[0]
-		puts userNameWords[1]
-		puts userNameWords[2]
+		#puts userNameWords[arrSize-1]
+		#puts "user Name Words: #{userNameWords}"
 		if arrSize == 3
 			selectElement(@driver,"Log out as #{userNameWords[arrSize-1]} #{userNameWords[0]} #{userNameWords[1]}","a")
 		elsif arrSize == 4

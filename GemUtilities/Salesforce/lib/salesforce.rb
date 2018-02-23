@@ -30,23 +30,6 @@ class Salesforce
     puts sObjectRecordMap
     end
   end
-
- def self.createRecords(sfBulk,objectType,records_to_insert)
-    recordIdsArray = Array.new
-    result = sfBulk.create(objectType, records_to_insert,true)
-    (result.result.records).each_with_index do |object, index|
-      recordIdsArray.push(Hash["Id" => (result.result.records)[index]['Id']])
-    end
-    if @@createdRecordsIds.key?("#{objectType}") then
-        @@createdRecordsIds["#{objectType}"] << recordIdsArray
-      else
-        @@createdRecordsIds["#{objectType}"] = recordIdsArray
-      end
-    puts "Record Ids :: #{@@createdRecordsIds}" 
-    puts "Created Records :: #{recordIdsArray}"
-    return recordIdsArray
- end
-
   def self.addRecordsToDelete(key,value)
     if @@createdRecordsIds.key?("#{key}") then
       @@createdRecordsIds["#{key}"] << Hash["Id" => value]
@@ -54,6 +37,21 @@ class Salesforce
       @@createdRecordsIds["#{key}"] = [Hash["Id" => value]]
     end
   end
+ def self.createRecords(sfBulk,objectType,records_to_insert)
+    recordIdsArray = Array.new
+    result = sfBulk.create(objectType, records_to_insert,true)
+    (result.result.records).each_with_index do |object, index|
+      recordIdsArray.push(Hash["Id" => (result.result.records)[index].fetch('Id')])
+      if @@createdRecordsIds.key?("#{objectType}") then
+        @@createdRecordsIds["#{objectType}"] << Hash["Id" => (result.result.records)[index].fetch('Id')]
+      else
+        @@createdRecordsIds["#{objectType}"] = [Hash["Id" => (result.result.records)[index].fetch('Id')]]
+      end
+    end
+    puts "Record Ids :: #{@@createdRecordsIds}" 
+    puts "Created Records :: #{recordIdsArray}"
+    return recordIdsArray
+ end
 
  def self.getCreatedRecords(sfBulk,objectType,query,recordIds)
     setIds = nil
@@ -77,7 +75,7 @@ class Salesforce
   if(recordsToDelete!= nil && recordsToDelete.count > 0 && recordsToDelete.count < 10) 
      deletedRecords = sfBulk.delete(sObjectType, recordsToDelete,true)
      puts 'deletedRecords==>'
-     puts deletedRecords
+     puts deletedRecords.inspect
      return deletedRecords.result.records
   else
     return nil

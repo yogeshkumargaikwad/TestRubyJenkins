@@ -36,6 +36,9 @@ describe SfRESTService do
     else
       @runId = ENV['RUN_ID']
     end
+    if ENV['RUN_ID'].nil? then
+      @runId = @testRailUtility.addRun("RESTAPI Tour Service",4,26,arrCaseIds)['id']
+    end
   }
 
   before(:each){
@@ -613,12 +616,12 @@ describe SfRESTService do
 
     allRecordIds = Salesforce.class_variable_get(:@@createdRecordsIds)
     puts "Created data to be deleted :: #{allRecordIds}"
-    Salesforce.deleteRecords(@salesforceBulk,"Journey__c",allRecordIds['Journey__c'].uniq)
-    Salesforce.deleteRecords(@salesforceBulk,"Tour_Outcome__c",allRecordIds['Tour_Outcome__c'].uniq)
-    Salesforce.deleteRecords(@salesforceBulk,"Tour_Outcome__c",allRecordIds['Tour'].uniq)
-    Salesforce.deleteRecords(@salesforceBulk,"Opportunity",allRecordIds['Opportunity'].uniq)
-    Salesforce.deleteRecords(@salesforceBulk,"Account",allRecordIds['Account'].uniq)
-    Salesforce.deleteRecords(@salesforceBulk,"Contact",allRecordIds['Contact'].uniq)
+    Salesforce.deleteRecords(@salesforceBulk,"Journey__c",allRecordIds['Journey__c'])
+    Salesforce.deleteRecords(@salesforceBulk,"Tour_Outcome__c",allRecordIds['Tour_Outcome__c'])
+    Salesforce.deleteRecords(@salesforceBulk,"Tour_Outcome__c",allRecordIds['Tour'])
+    Salesforce.deleteRecords(@salesforceBulk,"Opportunity",allRecordIds['Opportunity'])
+    Salesforce.deleteRecords(@salesforceBulk,"Account",allRecordIds['Account'])
+    Salesforce.deleteRecords(@salesforceBulk,"Contact",allRecordIds['Contact'])
 
 
   }

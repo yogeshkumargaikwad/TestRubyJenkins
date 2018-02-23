@@ -52,9 +52,7 @@ class EnziUIUtility
     all_Elements.each do |element|
       #select element by provided text 
       if textToselect != nil then
-        puts element.text
         if element.text == textToselect then
-          puts "matched"
           element.click
         break
         end
@@ -63,18 +61,15 @@ class EnziUIUtility
   end
   def self.selectChild(driver,findBy,parentElementId,textToselect,childTagName)
     #Get the parent element
-    puts "In select child by text"
     childs = Array.new
     parent = driver.find_element(findBy,parentElementId)
     #Get all the childs for this element
     all_child = parent.find_elements(:tag_name, "#{childTagName}")
     #get the specified child element
     all_child.each do |child|
-      puts child.text
       #select child by privided text 
       if textToselect != nil then
         if child.text == textToselect then
-          puts "text found"
           child.click
         break
        end
@@ -163,6 +158,18 @@ class EnziUIUtility
     ele = driver.find_element(findBy ,elementIdentification)
     driver.execute_script("arguments[0].scrollIntoView();" , driver.find_element(findBy ,elementIdentification))
     return driver.find_element(findBy ,elementIdentification)
+  end
+
+  def self.checkErrorMessage(driver,elementTosearch,textToCheck)
+    all_Elements = driver.find_elements(:tag_name,"#{elementTosearch}")
+    all_Elements.each do |element|
+      if textToCheck != nil then
+        if element.text == textToCheck then
+          return true
+        end
+      end
+    end
+    return false
   end
 
  end

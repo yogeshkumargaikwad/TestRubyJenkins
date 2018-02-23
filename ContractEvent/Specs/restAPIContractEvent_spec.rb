@@ -31,6 +31,7 @@ end
 =end
  describe ContractEvent do
   before(:all) {
+    
     puts "--------------------------------------------------------------------------------"
     @config = YAML.load_file(File.expand_path('', Dir.pwd) + '/credentials.yaml')
     @testRailUtility = EnziTestRailUtility::TestRailUtility.new(@config['TestRail']['username'], @config['TestRail']['password'])
@@ -45,7 +46,7 @@ end
       end
     end
     if !ENV['SUIT_ID'].nil? && (!ENV['SECTION_ID'].nil? || !ENV['CASE_ID'].nil?) then
-      @run = @testRailUtility.addRun("ContractEvent Run",4,26,arrCaseIds)
+      @run = @testRailUtility.addRun("ContractEvent Run",4,26,arrCaseIds)['id']
     else
       @run = ENV['RUN_ID']                                      
     end
@@ -176,9 +177,9 @@ end
         expect(updatedOppMoveOuts.fetch("Move_Out_Date__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['move_out_date'].to_s
 
         puts "**************************************************************************"
-        @testRailUtility.postResult(451, "pass", 1, @run["id"])
+        @testRailUtility.postResult(451, "pass", 1, @run)
       rescue Exception => e
-        @testRailUtility.postResult(451, e, 5, @run["id"])
+        @testRailUtility.postResult(451, e, 5, @run)
         raise e
       end
     end
@@ -297,9 +298,9 @@ end
 
         puts "**************************************************************************"
 
-        @testRailUtility.postResult(452, "pass", 1, @run["id"])
+        @testRailUtility.postResult(452, "pass", 1, @run)
       rescue Exception => e
-        @testRailUtility.postResult(452, e, 5, @run["id"])
+        @testRailUtility.postResult(452, e, 5, @run)
         raise e
       end
     end
@@ -420,9 +421,9 @@ end
 
         puts "**************************************************************************"
 
-        @testRailUtility.postResult(453, "pass", 1, @run["id"])
+        @testRailUtility.postResult(453, "pass", 1, @run)
       rescue Exception => e
-        @testRailUtility.postResult(453, e, 5, @run["id"])
+        @testRailUtility.postResult(453, e, 5, @run)
         raise e
       end
     end
@@ -542,9 +543,9 @@ end
 
         puts "**************************************************************************"
 
-        @testRailUtility.postResult(726, "pass", 1, @run["id"])
+        @testRailUtility.postResult(726, "pass", 1, @run)
       rescue Exception => e
-        @testRailUtility.postResult(726, e, 5, @run["id"])
+        @testRailUtility.postResult(726, e, 5, @run)
         raise e
       end
     end
@@ -676,9 +677,9 @@ end
 
         puts "**************************************************************************"
 
-        @testRailUtility.postResult(857, "pass", 1, @run["id"])
+        @testRailUtility.postResult(857, "pass", 1, @run)
       rescue Exception => e
-        @testRailUtility.postResult(857, e, 5, @run["id"])
+        @testRailUtility.postResult(857, e, 5, @run)
         raise e
       end
     end
@@ -805,9 +806,9 @@ end
 
         puts "**************************************************************************"
 
-        @testRailUtility.postResult(858, "pass", 1, @run["id"])
+        @testRailUtility.postResult(858, "pass", 1, @run)
       rescue Exception => e
-        @testRailUtility.postResult(858, e, 5, @run["id"])
+        @testRailUtility.postResult(858, e, 5, @run)
         raise e
       end
 
@@ -929,9 +930,9 @@ end
 
         puts "**************************************************************************"
 
-        @testRailUtility.postResult(862, "pass", 1, @run["id"])
+        @testRailUtility.postResult(862, "pass", 1, @run)
       rescue Exception => e
-        @testRailUtility.postResult(862, e, 5, @run["id"])
+        @testRailUtility.postResult(862, e, 5, @run)
         raise e
       end
     end
@@ -1054,9 +1055,9 @@ end
 
         puts "**************************************************************************"
 
-        @testRailUtility.postResult(905, "pass", 1, @run["id"])
+        @testRailUtility.postResult(905, "pass", 1, @run)
       rescue Exception => e
-        @testRailUtility.postResult(905, e, 5, @run["id"])
+        @testRailUtility.postResult(905, e, 5, @run)
         raise e
       end
     end
@@ -1177,9 +1178,9 @@ end
 
         puts "**************************************************************************"
 
-        @testRailUtility.postResult(903, "pass", 1, @run["id"])
+        @testRailUtility.postResult(903, "pass", 1, @run)
       rescue Exception => e
-        @testRailUtility.postResult(903, e, 5, @run["id"])
+        @testRailUtility.postResult(903, e, 5, @run)
         raise e
       end
     end
@@ -1300,9 +1301,9 @@ end
 
         puts "**************************************************************************"
 
-        @testRailUtility.postResult(907, "pass", 1, @run["id"])
+        @testRailUtility.postResult(907, "pass", 1, @run)
       rescue Exception => e
-        @testRailUtility.postResult(907, e, 5, @run["id"])
+        @testRailUtility.postResult(907, e, 5, @run)
         raise e
       end
     end
@@ -1422,9 +1423,9 @@ end
 
         puts "**************************************************************************"
 
-        @testRailUtility.postResult(908, "pass", 1, @run["id"])
+        @testRailUtility.postResult(908, "pass", 1, @run)
       rescue Exception => e
-        @testRailUtility.postResult(908, e, 5, @run["id"])
+        @testRailUtility.postResult(908, e, 5, @run)
         raise e
       end
     end
@@ -1555,9 +1556,9 @@ end
 
         puts "**************************************************************************"
 
-        @testRailUtility.postResult(909, "pass", 1, @run["id"])
+        @testRailUtility.postResult(909, "pass", 1, @run)
       rescue Exception => e
-        @testRailUtility.postResult(909, e, 5, @run["id"])
+        @testRailUtility.postResult(909, e, 5, @run)
         raise e
       end
     end
@@ -1685,9 +1686,9 @@ end
         puts "**************************************************************************"
 
 
-        @testRailUtility.postResult(911, "pass", 1, @run["id"])
+        @testRailUtility.postResult(911, "pass", 1, @run)
       rescue Exception => e
-        @testRailUtility.postResult(911, e, 5, @run["id"])
+        @testRailUtility.postResult(911, e, 5, @run)
         raise e
       end
     end
@@ -1807,9 +1808,9 @@ end
 
         puts "**************************************************************************"
 
-        @testRailUtility.postResult(912, "pass", 1, @run["id"])
+        @testRailUtility.postResult(912, "pass", 1, @run)
       rescue Exception => e
-        @testRailUtility.postResult(912, e, 5, @run["id"])
+        @testRailUtility.postResult(912, e, 5, @run)
         raise e
       end
     end
@@ -1931,9 +1932,9 @@ end
 
         puts "**************************************************************************"
 
-        @testRailUtility.postResult(914, "pass", 1, @run["id"])
+        @testRailUtility.postResult(914, "pass", 1, @run)
       rescue Exception => e
-        @testRailUtility.postResult(914, e, 5, @run["id"])
+        @testRailUtility.postResult(914, e, 5, @run)
         raise e
       end
     end
@@ -2053,9 +2054,9 @@ end
 
         puts "**************************************************************************"
 
-        @testRailUtility.postResult(913, "pass", 1, @run["id"])
+        @testRailUtility.postResult(913, "pass", 1, @run)
       rescue Exception => e
-        @testRailUtility.postResult(913, e, 5, @run["id"])
+        @testRailUtility.postResult(913, e, 5, @run)
         raise e
       end
     end
@@ -2175,9 +2176,9 @@ end
 
         puts "**************************************************************************"
 
-        @testRailUtility.postResult(915, "pass", 1, @run["id"])
+        @testRailUtility.postResult(915, "pass", 1, @run)
       rescue Exception => e
-        @testRailUtility.postResult(915, e, 5, @run["id"])
+        @testRailUtility.postResult(915, e, 5, @run)
         raise e
       end
     end
@@ -2297,9 +2298,9 @@ end
 
         puts "**************************************************************************"
 
-        @testRailUtility.postResult(916, "pass", 1, @run["id"])
+        @testRailUtility.postResult(916, "pass", 1, @run)
       rescue Exception => e
-        @testRailUtility.postResult(916, e, 5, @run["id"])
+        @testRailUtility.postResult(916, e, 5, @run)
         raise e
       end
     end
@@ -2430,9 +2431,9 @@ end
 
         puts "**************************************************************************"
 
-        @testRailUtility.postResult(917, "pass", 1, @run["id"])
+        @testRailUtility.postResult(917, "pass", 1, @run)
       rescue Exception => e
-        @testRailUtility.postResult(917, e, 5, @run["id"])
+        @testRailUtility.postResult(917, e, 5, @run)
         raise e
       end
     end
@@ -2559,9 +2560,9 @@ end
 
         puts "**************************************************************************"
 
-        @testRailUtility.postResult(918, "pass", 1, @run["id"])
+        @testRailUtility.postResult(918, "pass", 1, @run)
       rescue Exception => e
-        @testRailUtility.postResult(918, e, 5, @run["id"])
+        @testRailUtility.postResult(918, e, 5, @run)
         raise e
       end
 
@@ -2682,9 +2683,9 @@ end
 
         puts "**************************************************************************"
 
-        @testRailUtility.postResult(919, "pass", 1, @run["id"])
+        @testRailUtility.postResult(919, "pass", 1, @run)
       rescue Exception => e
-        @testRailUtility.postResult(919, e, 5, @run["id"])
+        @testRailUtility.postResult(919, e, 5, @run)
         raise e
       end
     end
@@ -2797,9 +2798,9 @@ end
 
         puts "**************************************************************************"
 
-        @testRailUtility.postResult(924, "pass", 1, @run["id"])
+        @testRailUtility.postResult(924, "pass", 1, @run)
       rescue Exception => e
-        @testRailUtility.postResult(924, e, 5, @run["id"])
+        @testRailUtility.postResult(924, e, 5, @run)
         raise e
       end
     end
@@ -2910,9 +2911,9 @@ end
 
         puts "**************************************************************************"
 
-        @testRailUtility.postResult(921, "pass", 1, @run["id"])
+        @testRailUtility.postResult(921, "pass", 1, @run)
       rescue Exception => e
-        @testRailUtility.postResult(921, e, 5, @run["id"])
+        @testRailUtility.postResult(921, e, 5, @run)
         raise e
       end
     end
@@ -3023,9 +3024,9 @@ end
 
         puts "**************************************************************************"
 
-        @testRailUtility.postResult(927, "pass", 1, @run["id"])
+        @testRailUtility.postResult(927, "pass", 1, @run)
       rescue Exception => e
-        @testRailUtility.postResult(927, e, 5, @run["id"])
+        @testRailUtility.postResult(927, e, 5, @run)
         raise e
       end
     end
@@ -3136,9 +3137,9 @@ end
 
         puts "**************************************************************************"
 
-        @testRailUtility.postResult(930, "pass", 1, @run["id"])
+        @testRailUtility.postResult(930, "pass", 1, @run)
       rescue Exception => e
-        @testRailUtility.postResult(930, e, 5, @run["id"])
+        @testRailUtility.postResult(930, e, 5, @run)
         raise e
       end
     end
@@ -3261,9 +3262,9 @@ end
         puts "**************************************************************************"
 
 
-        @testRailUtility.postResult(932, "pass", 1, @run["id"])
+        @testRailUtility.postResult(932, "pass", 1, @run)
       rescue Exception => e
-        @testRailUtility.postResult(932, e, 5, @run["id"])
+        @testRailUtility.postResult(932, e, 5, @run)
         raise e
       end
     end
@@ -3382,9 +3383,9 @@ end
 
         puts "**************************************************************************"
 
-        @testRailUtility.postResult(935, "pass", 1, @run["id"])
+        @testRailUtility.postResult(935, "pass", 1, @run)
       rescue Exception => e
-        @testRailUtility.postResult(935, e, 5, @run["id"])
+        @testRailUtility.postResult(935, e, 5, @run)
         raise e
       end
 
@@ -3496,9 +3497,9 @@ end
 
         puts "**************************************************************************"
 
-        @testRailUtility.postResult(938, "pass", 1, @run["id"])
+        @testRailUtility.postResult(938, "pass", 1, @run)
       rescue Exception => e
-        @testRailUtility.postResult(938, e, 5, @run["id"])
+        @testRailUtility.postResult(938, e, 5, @run)
         raise e
       end
     end
@@ -3614,9 +3615,9 @@ end
 
 
         puts "**************************************************************************"
-        @testRailUtility.postResult(943, "pass", 1, @run["id"])
+        @testRailUtility.postResult(943, "pass", 1, @run)
       rescue Exception => e
-        @testRailUtility.postResult(943, e, 5, @run["id"])
+        @testRailUtility.postResult(943, e, 5, @run)
         raise e
       end
     end
@@ -3730,9 +3731,9 @@ end
 
         puts "**************************************************************************"
 
-        @testRailUtility.postResult(939, "pass", 1, @run["id"])
+        @testRailUtility.postResult(939, "pass", 1, @run)
       rescue Exception => e
-        @testRailUtility.postResult(939, e, 5, @run["id"])
+        @testRailUtility.postResult(939, e, 5, @run)
         raise e
       end
     end
@@ -3847,9 +3848,9 @@ end
 
         puts "**************************************************************************"
 
-        @testRailUtility.postResult(945, "pass", 1, @run["id"])
+        @testRailUtility.postResult(945, "pass", 1, @run)
       rescue Exception => e
-        @testRailUtility.postResult(945, e, 5, @run["id"])
+        @testRailUtility.postResult(945, e, 5, @run)
         raise e
       end
     end
@@ -3964,9 +3965,9 @@ end
 
         puts "**************************************************************************"
 
-        @testRailUtility.postResult(949, "pass", 1, @run["id"])
+        @testRailUtility.postResult(949, "pass", 1, @run)
       rescue Exception => e
-        @testRailUtility.postResult(949, e, 5, @run["id"])
+        @testRailUtility.postResult(949, e, 5, @run)
         raise e
       end
     end
@@ -4089,9 +4090,9 @@ end
 
         puts "**************************************************************************"
 
-        @testRailUtility.postResult(950, "pass", 1, @run["id"])
+        @testRailUtility.postResult(950, "pass", 1, @run)
       rescue Exception => e
-        @testRailUtility.postResult(950, e, 5, @run["id"])
+        @testRailUtility.postResult(950, e, 5, @run)
         raise e
       end
     end
@@ -4210,9 +4211,9 @@ end
         puts "Checking Opportunity Move Outs should null..."
         puts "**************************************************************************"
 
-        @testRailUtility.postResult(951, "pass", 1, @run["id"])
+        @testRailUtility.postResult(951, "pass", 1, @run)
       rescue Exception => e
-        @testRailUtility.postResult(951, e, 5, @run["id"])
+        @testRailUtility.postResult(951, e, 5, @run)
         raise e
       end
 
@@ -4326,9 +4327,9 @@ end
 
         puts "**************************************************************************"
 
-        @testRailUtility.postResult(952, "pass", 1, @run["id"])
+        @testRailUtility.postResult(952, "pass", 1, @run)
       rescue Exception => e
-        @testRailUtility.postResult(952, e, 5, @run["id"])
+        @testRailUtility.postResult(952, e, 5, @run)
         raise e
       end
     end
@@ -4462,9 +4463,9 @@ end
 
         puts "**************************************************************************"
 
-        @testRailUtility.postResult(841, "pass", 1, @run["id"])
+        @testRailUtility.postResult(841, "pass", 1, @run)
       rescue Exception => e
-        @testRailUtility.postResult(841, e, 5, @run["id"])
+        @testRailUtility.postResult(841, e, 5, @run)
         raise e
       end
     end
@@ -4583,9 +4584,9 @@ end
 
         puts "**************************************************************************"
 
-        @testRailUtility.postResult(843, "pass", 1, @run["id"])
+        @testRailUtility.postResult(843, "pass", 1, @run)
       rescue Exception => e
-        @testRailUtility.postResult(843, e, 5, @run["id"])
+        @testRailUtility.postResult(843, e, 5, @run)
         raise e
       end
     end
@@ -4613,9 +4614,9 @@ end
 
         expect(@getResponse['result']).to_not eql "Product not found. Contact to your administrator."
 
-        @testRailUtility.postResult(865, "pass", 1, @run["id"])
+        @testRailUtility.postResult(865, "pass", 1, @run)
       rescue Exception => e
-        @testRailUtility.postResult(865, e, 5, @run["id"])
+        @testRailUtility.postResult(865, e, 5, @run)
         raise e
       end
     end
