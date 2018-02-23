@@ -7,7 +7,7 @@ require 'selenium-webdriver'
 require 'yaml'
 require 'json'
 require "rspec"
-require 'saucelabs'
+#require 'saucelabs'
 
 #require_relative '../Utility/EnziUIUtility/lib/enziUIUtility.rb'
 #require_relative '/Enterprise/Utilities/httparty/SfRESTService'

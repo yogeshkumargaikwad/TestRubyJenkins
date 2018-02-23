@@ -16,7 +16,6 @@ describe "Reservable Availability Tester" do
     testRecordFile = File.open(Dir.pwd + "/Reservable Availability/TestData/Test_ContactRecord.json", "r")
     testRecordsInJson = testRecordFile.read()
     @testRecords = JSON.parse(testRecordsInJson)
-<<<<<<< HEAD
 
     file = File.open("timeSettings.yaml", "r")
     @timeSetting = YAML.load(file.read())
@@ -44,11 +43,13 @@ describe "Reservable Availability Tester" do
     if ENV['RUN_ID'].nil? then
       @runId = @testRailUtility.addRun("Reservable Availability Run",4,22,arrCaseIds)['id']
     end
-=======
->>>>>>> 9fac3dd2691c1a5aca5db6a6bc6b39974e5719a9
   }
 
   context "Navigation to Reservable Availability Page" do
+    before(:example){
+      puts ""
+      puts "-----------------------------------------------------------------------------------------------"
+    }
     it "should go to Home page", :sanity => true do
       if expect(@objReservableAvailability.getDriver.title).to eq "Salesforce - Unlimited Edition"
         puts "Successfully redirected to Home Page"
@@ -99,6 +100,10 @@ describe "Reservable Availability Tester" do
 =end
 
   context "Validate Preset View, Submit and Save Buttons" do
+    before(:example){
+      puts ""
+      puts "-----------------------------------------------------------------------------------------------"
+    }
     #before(:example){
     #sleep(10)
     #@objReservableAvailability.resetForm("Select Preset Views", "Select City", "Minimum_Capacity__c", "Maximum_Capacity__c", "Minimum_Price_Range__c", "Maximum_Price_Range__c")
@@ -170,6 +175,11 @@ describe "Reservable Availability Tester" do
   end
 
   context 'Testing related to Creating Preset View' do
+    before(:example){
+      puts ""
+      puts "-----------------------------------------------------------------------------------------------"
+    }
+
 =begin
     it 'should Open and close Create Preset View Dialog', :regression => true do
       @objReservableAvailability.closePresetViewDialog()
@@ -205,6 +215,10 @@ describe "Reservable Availability Tester" do
 
 
   context "Testing Available form Elements" do
+    before(:example){
+      puts ""
+      puts "-----------------------------------------------------------------------------------------------"
+    }
 =begin
 		it 'C31:To check when While selecting "available from" in reservable availability page, previous date should not be selected.', :regression => true do
 			expect(@objReservableAvailability.setAvailableFrom(@testRecords['scenario:3']['SetAvailableForm'][1])).to eq false	#2017-01-25
@@ -246,7 +260,8 @@ describe "Reservable Availability Tester" do
 
   context "Testing Min Max Capacity Elements" do
     before(:example) {
-      #sleep(5)	setTextBoxValue(element_id, val)
+      puts ""
+      puts "-----------------------------------------------------------------------------------------------"
       @objReservableAvailability.resetForm(nil, nil, "Minimum_Capacity__c", "Maximum_Capacity__c", "Minimum_Price_Range__c", "Maximum_Price_Range__c")
     }
     it 'C107:To check when after entering minimum capacity less than maximum capacity, error message should not be displayed.', :sanity => true do
@@ -311,6 +326,8 @@ describe "Reservable Availability Tester" do
 
   context "Testing Min Max Price Range Elements" do
     before(:example) {
+      puts ""
+      puts "-----------------------------------------------------------------------------------------------"
       @objReservableAvailability.resetForm(nil, nil, "Minimum_Capacity__c", "Maximum_Capacity__c", "Minimum_Price_Range__c", "Maximum_Price_Range__c")
     }
     it 'C110:To check when after entering minimum price range less than maximum price range, error message should not be displayed.', :sanity => true do
@@ -383,6 +400,10 @@ describe "Reservable Availability Tester" do
   end
 
   context "Testing Unit Type Elements" do
+    before(:example){
+      puts ""
+      puts "-----------------------------------------------------------------------------------------------"
+    }
 =begin
 		it "Should show correct Unit types on availability page" do
 			@objReservableAvailability.checkUnitType()
@@ -407,6 +428,11 @@ describe "Reservable Availability Tester" do
   end
 
   context "Testing Building Elements" do
+    before(:example){
+      puts ""
+      puts "-----------------------------------------------------------------------------------------------"
+    }
+
     it 'C116:To check while searching building without selecting city, "No records found!" message should be displayed.', :sanity => true do
       begin
       expect(@objReservableAvailability.isErrorInBuilding()).to eq true #Select City
@@ -442,6 +468,11 @@ describe "Reservable Availability Tester" do
   end
 
   context "Testing setPresetview Elements" do
+    before(:example){
+      puts ""
+      puts "-----------------------------------------------------------------------------------------------"
+    }
+
     #Use: This it passes the Preset View name to setPresetView function
     it 'should set preset view on availability page', :sanity => true do
       expect(@objReservableAvailability.setPresetView(@testRecords['scenario:4']['SetPresetView'][1])).to eq true
@@ -465,6 +496,10 @@ describe "Reservable Availability Tester" do
   end
 
   context 'Testing related to Reservable Table' do
+    before(:example){
+      puts ""
+      puts "-----------------------------------------------------------------------------------------------"
+    }
 =begin
 		it 'should select reservable by clicking checkbox', :sanity => true do      		#In Development
 			arrBuildingUnit = @objReservableAvailability.getBuildingUnits
