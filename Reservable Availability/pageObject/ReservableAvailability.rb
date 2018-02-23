@@ -24,7 +24,7 @@ class ReservableAvailability
     mapCredentials = YAML.load(file.read())
     @driver.get "https://test.salesforce.com/login.jsp?pw=#{mapCredentials['Staging']['password']}&un=#{mapCredentials['Staging']['username']}"
 
-    @salesforceBulk = Salesforce.login(mapCredentials['username'], mapCredentials['password'], true)
+    @salesforceBulk = Salesforce.login(mapCredentials['Staging']['username'], mapCredentials['Staging']['password'], true)
 
     EnziUIUtility.wait(@driver, :id, "phSearchInput", 100)
     #@driver.find_element(id: 'Contact_Tab').click
