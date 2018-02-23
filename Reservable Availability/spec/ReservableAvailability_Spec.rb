@@ -16,6 +16,33 @@ describe "Reservable Availability Tester" do
     testRecordFile = File.open(Dir.pwd + "/Reservable Availability/TestData/Test_ContactRecord.json", "r")
     testRecordsInJson = testRecordFile.read()
     @testRecords = JSON.parse(testRecordsInJson)
+
+    file = File.open("timeSettings.yaml", "r")
+    @timeSetting = YAML.load(file.read())
+
+    config = YAML.load_file('credentials.yaml')
+
+    @testRailUtility = EnziTestRailUtility::TestRailUtility.new(config['TestRail']['username'], config['TestRail']['password'])
+    #@run = @testRailUtility.addRun("EnterPriseRun", 4, @testRailUtility.getSuitByName(4, "Enterprise"))
+    arrCaseIds = Array.new
+
+    if !ENV['SECTION_ID'].nil? && ENV['CASE_ID'].nil? then
+      @testRailUtility.getCases(ENV['PROJECT_ID'], ENV['SUIT_ID'], ENV['SECTION_ID']).each do |caseId|
+        arrCaseIds.push(caseId['id'])
+      end
+    else
+      if !ENV['CASE_ID'].nil? then
+        arrCaseIds.push(ENV['CASE_ID'])
+      end
+    end
+    if !ENV['SUIT_ID'].nil? && (!ENV['SECTION_ID'].nil? || !ENV['CASE_ID'].nil?) then
+      @run = @testRailUtility.addRun("EnterPrise Run",4,30,arrCaseIds)['id']
+    else
+      @run = ENV['RUN_ID']
+    end
+    if ENV['RUN_ID'].nil? then
+      @runId = @testRailUtility.addRun("EnterPrise Run",4,30,arrCaseIds)['id']
+    end
   }
 
   context "Navigation to Reservable Availability Page" do

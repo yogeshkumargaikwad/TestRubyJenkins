@@ -19,9 +19,10 @@ class ReservableAvailability
   def initialize(driver)
     @driver = driver
     #file = File.open("credentials.yaml", "r")
-    file = File.open("E:/Projects/WeWork/SF-QA-Automation/Reservable Availability/TestData/Credentials.yaml", "r")
+    #file = File.open("E:/Projects/WeWork/SF-QA-Automation/Reservable Availability/TestData/Credentials.yaml", "r")
+    file = File.open("credentials.yaml", "r")
     mapCredentials = YAML.load(file.read())
-    @driver.get "https://test.salesforce.com/login.jsp?pw=#{mapCredentials['password']}&un=#{mapCredentials['username']}"
+    @driver.get "https://test.salesforce.com/login.jsp?pw=#{mapCredentials['Staging']['password']}&un=#{mapCredentials['Staging']['username']}"
 
     @salesforceBulk = Salesforce.login(mapCredentials['username'], mapCredentials['password'], true)
 
