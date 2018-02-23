@@ -122,6 +122,7 @@ if !ARGV.empty? then
         else
           puts [spec['path']]
           RSpec::Core::Runner.run([spec['path']], $stderr, $stdout)
+          puts "Errors are :: #{RSpec.configuration.formatters[0].inspect}"
           #puts "Failed examples are :: #{RSpec.configuration.reporter.failed_examples}"
 =begin
             if !RSpec.configuration.reporter.failed_examples.empty? then

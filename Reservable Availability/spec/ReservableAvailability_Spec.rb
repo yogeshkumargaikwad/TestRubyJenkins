@@ -16,6 +16,7 @@ describe "Reservable Availability Tester" do
     testRecordFile = File.open(Dir.pwd + "/Reservable Availability/TestData/Test_ContactRecord.json", "r")
     testRecordsInJson = testRecordFile.read()
     @testRecords = JSON.parse(testRecordsInJson)
+<<<<<<< HEAD
 
     file = File.open("timeSettings.yaml", "r")
     @timeSetting = YAML.load(file.read())
@@ -43,6 +44,8 @@ describe "Reservable Availability Tester" do
     if ENV['RUN_ID'].nil? then
       @runId = @testRailUtility.addRun("Reservable Availability Run",4,22,arrCaseIds)['id']
     end
+=======
+>>>>>>> 9fac3dd2691c1a5aca5db6a6bc6b39974e5719a9
   }
 
   context "Navigation to Reservable Availability Page" do
