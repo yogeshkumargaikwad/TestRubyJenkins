@@ -93,21 +93,23 @@ if !ARGV.empty? then
     end
     if  !(specMap.key?('suit') || specMap.key?('section')) && specMap.key?('project') then
       specMap.fetch('project').each do |projectId|
-        #specs.concat(testRailUtility.getSpecLocations(nil,nil,nil,nil,projectId))
+        specs.concat(testRailUtility.getSpecLocations(nil,nil,nil,nil,projectId))
+=begin
         ENV['RUN_ID'].split(",").each do |runId|
           puts "Run Id :: #{runId}"
           mapSuitRunId[testRailUtility.getSpecLocations(nil,nil,testRailUtility.getRun(runId)['suite_id'],nil,ENV['PROJECT_ID'])[0]['path']] = runId
         end
+=end
       end
     end
   end
   
-  #if !ENV['PROJECT_ID'].nil? && ENV['SUIT_ID'].nil? && ENV['SECTION_ID'].nil? then
-    #puts "Run Id :: #{ENV['RUN_ID'].split(",")}"
-    #ENV['RUN_ID'].split(",").each do |runId|
-      #puts "Run Id :: #{runId}"
-      #mapSuitRunId[testRailUtility.getSpecLocations(nil,nil,testRailUtility.getRun(runId)['suite_id'],nil,ENV['PROJECT_ID'])[0]['path']] = runId
-    #end
+  if !ENV['PROJECT_ID'].nil? && ENV['SUIT_ID'].nil? && ENV['SECTION_ID'].nil? then
+    puts "Run Id :: #{ENV['RUN_ID'].split(",")}"
+    ENV['RUN_ID'].split(",").each do |runId|
+      puts "Run Id :: #{runId}"
+      mapSuitRunId[testRailUtility.getSpecLocations(nil,nil,testRailUtility.getRun(runId)['suite_id'],nil,ENV['PROJECT_ID'])[0]['path']] = runId
+    end
     puts "Map :: #{mapSuitRunId}"
     puts "Map :: #{mapSuitRunId}"
   end
@@ -121,16 +123,15 @@ if !ARGV.empty? then
           ENV['RUN_ID'] = spec['runId']
         end
 =end
+        if !ENV['PROJECT_ID'].nil? && ENV['SUIT_ID'].nil? && ENV['SECTION_ID'].nil? then
+          ENV['RUN_ID'] = mapSuitRunId[spec['path']]
+        end
         if spec['isBrowserDependent'] then
           specMap.fetch('browser')[0].split(" ").each do |browser|
             ENV['BROWSER'] = browser
             puts [spec['path']]
-            if !ENV['PROJECT_ID'].nil? && ENV['SUIT_ID'].nil? && ENV['SECTION_ID'].nil? then
-              ENV['RUN_ID'] = mapSuitRunId[spec['path']]
-              RSpec::Core::Runner.run([spec['path']], $stderr, $stdout)
-            else
-              RSpec::Core::Runner.run([spec['path']], $stderr, $stdout)
-            end
+            RSpec::Core::Runner.run([spec['path']], $stderr, $stdout)
+
             
 =begin
             if !RSpec.configuration.reporter.failed_examples.empty? then
