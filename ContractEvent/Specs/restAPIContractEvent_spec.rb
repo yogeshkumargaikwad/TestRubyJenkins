@@ -35,24 +35,25 @@ end
     puts "--------------------------------------------------------------------------------"
     @config = YAML.load_file(File.expand_path('', Dir.pwd) + '/credentials.yaml')
     @testRailUtility = EnziTestRailUtility::TestRailUtility.new(@config['TestRail']['username'], @config['TestRail']['password'])
-    arrCaseIds = Array.new
-    if !ENV['SECTION_ID'].nil? && ENV['CASE_ID'].nil? then
-      @testRailUtility.getCases(ENV['PROJECT_ID'], ENV['SUIT_ID'], ENV['SECTION_ID']).each do |caseId|
-        arrCaseIds.push(caseId['id'])
-      end
-    else
-      if !ENV['CASE_ID'].nil? then
-        arrCaseIds.push(ENV['CASE_ID'])
-      end
-    end
-    if !ENV['SUIT_ID'].nil? && (!ENV['SECTION_ID'].nil? || !ENV['CASE_ID'].nil?) then
-      @run = @testRailUtility.addRun("ContractEvent Run",4,26,arrCaseIds)['id']
-    else
-      @run = ENV['RUN_ID']                                      
-    end
-    if ENV['RUN_ID'].nil? then
-      @runId = @testRailUtility.addRun("ContractEvent Run",4,26,arrCaseIds)['id']
-    end
+    #arrCaseIds = Array.new
+    #if !ENV['SECTION_ID'].nil? && ENV['CASE_ID'].nil? then
+      #@testRailUtility.getCases(ENV['PROJECT_ID'], ENV['SUIT_ID'], ENV['SECTION_ID']).each do |caseId|
+        #arrCaseIds.push(caseId['id'])
+      #end
+    #else
+      #if !ENV['CASE_ID'].nil? then
+        #arrCaseIds.push(ENV['CASE_ID'])
+      #end
+    #end
+    #if !ENV['SUIT_ID'].nil? && (!ENV['SECTION_ID'].nil? || !ENV['CASE_ID'].nil?) then
+      #@run = @testRailUtility.addRun("ContractEvent Run",4,26,arrCaseIds)['id']
+    #else
+      #@run = ENV['RUN_ID']                                      
+    #end
+    #if ENV['RUN_ID'].nil? then
+      #@runId = @testRailUtility.addRun("ContractEvent Run",4,26,arrCaseIds)['id']
+    #end
+    @run = ENV['RUN_ID'] 
     testDataFile = File.open(File.expand_path('', Dir.pwd) + "/ContractEvent/TestData/testRecords.json", "r")
     testDataInJson = testDataFile.read()
     @testData = JSON.parse(testDataInJson)
