@@ -19,6 +19,7 @@ require_relative File.expand_path(Dir.pwd + '/Enterprise/Utilities/EnziUIUtility
 require_relative File.expand_path(Dir.pwd + '/Enterprise/PageObjects/EnterPrise.rb')
 require_relative File.expand_path(Dir.pwd + '/Enterprise/Utilities/EnziTestRailUtility/lib/EnziTestRailUtility.rb')
 require_relative File.expand_path(Dir.pwd + '/Enterprise/Utilities/httparty/SfRESTService.rb')
+require_relative File.expand_path(Dir.pwd + '/GemUtilities/RollbarUtility/rollbarUtility.rb')
 #require_relative File.expand_path("..", Dir.pwd) + '/Enterprise/Utilities/EnziTestRailUtility/lib/EnziTestRailUtility.rb'
 #require_relative '../PageObject/EnterPrise'
 #require_relative '../Utility/EnziTestRailUtility/lib/EnziTestRailUtility'
@@ -51,6 +52,7 @@ describe "Enterprise" do
 
           @testRailUtility.postResult(1012, "comment", 1, @run)
         rescue Exception => e
+          Rollbar.error(e)
           @testRailUtility.postResult(1012, e, 5, @run)
           puts e
           raise e
@@ -67,6 +69,7 @@ describe "Enterprise" do
 
           @testRailUtility.postResult(868, "comment", 1, @run)
         rescue Exception => e
+          Rollbar.error(e)
           @testRailUtility.postResult(868, e, 5, @run)
           puts e
           raise e
@@ -86,6 +89,7 @@ describe "Enterprise" do
 
           @testRailUtility.postResult(869, "comment", 1, @run)
         rescue Exception => e
+          Rollbar.error(e)
           @testRailUtility.postResult(869, e, 5, @run)
           puts e
           raise e
@@ -101,6 +105,7 @@ describe "Enterprise" do
           Salesforce.addRecordsToDelete("Contact", "#{contactId}")
           @testRailUtility.postResult(1011, "comment", 1, @run)
         rescue Exception => e
+          Rollbar.error(e)
           @testRailUtility.postResult(1011, e, 5, @run)
           puts e
           raise e
@@ -122,6 +127,7 @@ describe "Enterprise" do
           Salesforce.addRecordsToDelete("Opportunity", "#{recordId}")
           @testRailUtility.postResult(870, "comment", 1, @run)
         rescue Exception => e
+          Rollbar.error(e)
           @testRailUtility.postResult(870, e, 5, @run)
           puts e
           raise e
@@ -142,6 +148,7 @@ describe "Enterprise" do
 
           @testRailUtility.postResult(873, "comment", 1, @run)
         rescue Exception => e
+          Rollbar.error(e)
           @testRailUtility.postResult(873, e, 5, @run)
           puts e
           raise e
@@ -207,6 +214,7 @@ describe "Enterprise" do
 
           @testRailUtility.postResult(953, "comment", 1, @run)
         rescue Exception => e
+          Rollbar.error(e)
           @testRailUtility.postResult(953, e, 5, @run)
           puts e
           raise e
@@ -278,6 +286,7 @@ describe "Enterprise" do
 
           @testRailUtility.postResult(867, "comment", 1, @run)
         rescue Exception => e
+          Rollbar.error(e)
           @testRailUtility.postResult(867, e, 5, @run)
           puts e
           raise e
@@ -343,6 +352,7 @@ describe "Enterprise" do
 
           @testRailUtility.postResult(954, "comment", 1, @run)
         rescue Exception => e
+          Rollbar.error(e)
           @testRailUtility.postResult(954, e, 5, @run)
           puts e
           raise e
@@ -408,6 +418,7 @@ describe "Enterprise" do
 
           @testRailUtility.postResult(955, "comment", 1, @run)
         rescue Exception => e
+          Rollbar.error(e)
           @testRailUtility.postResult(955, e, 5, @run)
           puts e
           raise e
@@ -473,6 +484,7 @@ describe "Enterprise" do
 
           @testRailUtility.postResult(957, "comment", 1, @run)
         rescue Exception => e
+          Rollbar.error(e)
           @testRailUtility.postResult(957, "comment", 5, @run)
           puts e
           raise e
@@ -513,6 +525,7 @@ describe "Enterprise" do
 
     @testRailUtility = EnziTestRailUtility::TestRailUtility.new(config['TestRail']['username'], config['TestRail']['password'])
     #@run = @testRailUtility.addRun("EnterPriseRun", 4, @testRailUtility.getSuitByName(4, "Enterprise"))
+=begin
     arrCaseIds = Array.new
 
     if !ENV['SECTION_ID'].nil? && ENV['CASE_ID'].nil? then
@@ -532,6 +545,9 @@ describe "Enterprise" do
     if ENV['RUN_ID'].nil? then
       @runId = @testRailUtility.addRun("EnterPrise Run", 4, 30, arrCaseIds)['id']
     end
+=end
+
+    @run = ENV['RUN_ID']
   }
 
   context 'Navigaton to Manage Users' do
