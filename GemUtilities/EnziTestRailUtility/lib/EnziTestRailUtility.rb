@@ -88,7 +88,7 @@ module EnziTestRailUtility
 								puts "getting specs from project id"
 								specLocation = nil
 								getSuites(projectId).each do |suit|
-                  sections = getSections(suit['id'],projectId)
+=begin
                   if sections.size > 0 then
                     arrCaseIds = Array.new
                     sections.each do |section|
@@ -101,11 +101,13 @@ module EnziTestRailUtility
                     if arrCaseIds.size > 0 then
                       runId = addRun(suit['name'],projectId,suit['id'],arrCaseIds)['id'].to_s
                     end
-                  end
-                  sections.each do |section|
+end
+=end
+
+								getSections(suit['id'],projectId).each do |section|
                         getCases(projectId, suit['id'], section['id']).each do |testCase|
 											if testCase.key?('custom_spec_location') && !testCase.fetch('custom_spec_location').nil? then
-												specLocations.push(Hash["path"=>testCase.fetch('custom_spec_location'),"isBrowserDependent"=>testCase.fetch('custom_is_browser_dependent'),"runId" => runId])
+												specLocations.push(Hash["path"=>testCase.fetch('custom_spec_location'),"isBrowserDependent"=>testCase.fetch('custom_is_browser_dependent')])
 												break;
 											end
 										end
@@ -192,6 +194,10 @@ module EnziTestRailUtility
 			return id
 		end
 
+		def getRun(runId)
+			@client.send_get("get_run/#{runId}")
+		end
+
 		def getRuns(suitId,sectionId,projectId)
 			@client.send_get("get_runs/#{projectId}&suite_id=#{suitId}&section_id=#{sectionId}")
 		end
@@ -234,7 +240,7 @@ end
 
 #testRailUtility = EnziTestRailUtility::TestRailUtility.new("team-qa@enzigma.com","7O^dv0mi$IZHf4Cn")
 #ENV['RUN_ID'] =  testRailUtility.addRun(testRailUtility.getSuite(26)['name'],4,26,nil)['id'].to_s
-#puts testRailUtility.getSection(22)['suite_id']
+#puts testRailUtility.getRun(625)['suite_id']
 #puts testRailUtility.getSpecLoaction(nil,69,nil,nil,4)
 #testRailUtility = EnziTestRailUtility::TestRailUtility.new project_id suite_id
 #puts testRailUtility.addRun("testing",4,26)['id']

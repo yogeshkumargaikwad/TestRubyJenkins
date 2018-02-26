@@ -21,6 +21,7 @@ describe SfRESTService do
 		config = YAML.load_file('credentials.yaml')
 		@testRailUtility = EnziTestRailUtility::TestRailUtility.new(config['TestRail']['username'],config['TestRail']['password'])
 		@timeSettingMap = YAML.load_file(Dir.pwd+'/timeSettings.yaml')
+=begin
 		arrCaseIds = Array.new
 		if !ENV['SECTION_ID'].nil? && ENV['CASE_ID'].nil? then
 			@testRailUtility.getCases(ENV['PROJECT_ID'], ENV['SUIT_ID'], ENV['SECTION_ID']).each do |caseId|
@@ -39,7 +40,8 @@ describe SfRESTService do
     if ENV['RUN_ID'].nil? then
       @runId = @testRailUtility.addRun("RESTAPI Inbound lead Service",4,26,arrCaseIds)['id']
     end
-
+=end
+    @runId = ENV['RUN_ID']
 	}
 
 	before(:each){

@@ -6,6 +6,7 @@ require 'rspec'
 require 'json'
 require_relative File.expand_path("GemUtilities/EnziTestRailUtility/lib/EnziTestRailUtility.rb")
 specMap = Hash.new
+mapSuitRunId = Hash.new
 config = YAML.load_file('credentials.yaml')
 testRailUtility = EnziTestRailUtility::TestRailUtility.new(config['TestRail']['username'],config['TestRail']['password'])
 if ARGV.size == 1 &&  !ENV['PROJECT_ID'].nil? then
@@ -49,6 +50,7 @@ if !ARGV.empty? then
     if !specMap.key?('case') &&!(specMap.key?('section')) && specMap.key?('suit') then
       if specMap.key?('project') then
         specMap.fetch('suit').each do |suitId|
+=begin
           arrCaseIds = Array.new
           suitInfo = testRailUtility.getSuite(suitId)
           testRailUtility.getSections(suitInfo['id'],suitInfo['project_id']).each do |section|
@@ -61,10 +63,12 @@ if !ARGV.empty? then
           if arrCaseIds.size > 0 then
             ENV['RUN_ID'] = testRailUtility.addRun(suitInfo['name'],specMap.fetch('project')[0],suitId,arrCaseIds)['id'].to_s
           end
+=end
           specs.concat(testRailUtility.getSpecLocations(nil,nil,suitId,nil,specMap.fetch('project')[0]))
         end
       else
         specMap.fetch('suit').each do |suitId|
+=begin
           arrCaseIds = Array.new
           suitInfo = testRailUtility.getSuite(suitId)
           testRailUtility.getSections(suitInfo['id'],suitInfo['project_id']).each do |section|
@@ -77,6 +81,7 @@ if !ARGV.empty? then
           if arrCaseIds.size > 0 then
             ENV['RUN_ID'] = testRailUtility.addRun(suitInfo['name'],specMap.fetch('project')[0],suitId,arrCaseIds)['id'].to_s
           end
+=end
           specs.concat(testRailUtility.getSpecLocations(nil,nil,suitId,nil,suitInfo['project_id']))
         end
       end
@@ -88,23 +93,45 @@ if !ARGV.empty? then
     end
     if  !(specMap.key?('suit') || specMap.key?('section')) && specMap.key?('project') then
       specMap.fetch('project').each do |projectId|
-        specs.concat(testRailUtility.getSpecLocations(nil,nil,nil,nil,projectId))
+        #specs.concat(testRailUtility.getSpecLocations(nil,nil,nil,nil,projectId))
+        ENV['RUN_ID'].split(",").each do |runId|
+          puts "Run Id :: #{runId}"
+          mapSuitRunId[testRailUtility.getSpecLocations(nil,nil,testRailUtility.getRun(runId)['suite_id'],nil,ENV['PROJECT_ID'])[0]['path']] = runId
+        end
       end
     end
+  end
+  
+  #if !ENV['PROJECT_ID'].nil? && ENV['SUIT_ID'].nil? && ENV['SECTION_ID'].nil? then
+    #puts "Run Id :: #{ENV['RUN_ID'].split(",")}"
+    #ENV['RUN_ID'].split(",").each do |runId|
+      #puts "Run Id :: #{runId}"
+      #mapSuitRunId[testRailUtility.getSpecLocations(nil,nil,testRailUtility.getRun(runId)['suite_id'],nil,ENV['PROJECT_ID'])[0]['path']] = runId
+    #end
+    puts "Map :: #{mapSuitRunId}"
+    puts "Map :: #{mapSuitRunId}"
   end
   if !specs.empty? then
     specs.uniq.each do |spec|
       #Run spec in multiple browsers
       if !spec.nil? then
         puts "spec to run :: #{spec}"
+=begin
         if !ENV['PROJECT_ID'].nil? && ENV['SUIT_ID'].nil? && ENV['SECTION_ID'].nil? then
           ENV['RUN_ID'] = spec['runId']
         end
+=end
         if spec['isBrowserDependent'] then
           specMap.fetch('browser')[0].split(" ").each do |browser|
             ENV['BROWSER'] = browser
             puts [spec['path']]
-            RSpec::Core::Runner.run([spec['path']], $stderr, $stdout)
+            if !ENV['PROJECT_ID'].nil? && ENV['SUIT_ID'].nil? && ENV['SECTION_ID'].nil? then
+              ENV['RUN_ID'] = mapSuitRunId[spec['path']]
+              RSpec::Core::Runner.run([spec['path']], $stderr, $stdout)
+            else
+              RSpec::Core::Runner.run([spec['path']], $stderr, $stdout)
+            end
+            
 =begin
             if !RSpec.configuration.reporter.failed_examples.empty? then
               out_file = File.new("exceptions.txt", "w")
@@ -122,6 +149,7 @@ if !ARGV.empty? then
         else
           puts [spec['path']]
           RSpec::Core::Runner.run([spec['path']], $stderr, $stdout)
+          puts "Errors are :: #{RSpec.configuration.formatters[0].inspect}"
           #puts "Failed examples are :: #{RSpec.configuration.reporter.failed_examples}"
 =begin
             if !RSpec.configuration.reporter.failed_examples.empty? then

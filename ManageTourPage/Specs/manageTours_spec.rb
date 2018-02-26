@@ -16,6 +16,7 @@ describe ManageTours do
     @objManageTours = ManageTours.new(@driver,"Staging")
     @leadsTestData = @objManageTours.instance_variable_get(:@records)[0]['lead']
     @testRailUtility = EnziTestRailUtility::TestRailUtility.new(@objManageTours.instance_variable_get(:@mapCredentials)['TestRail']['username'],@objManageTours.instance_variable_get(:@mapCredentials)['TestRail']['password'])
+=begin
     arrCaseIds = Array.new
     if !ENV['SECTION_ID'].nil? && ENV['CASE_ID'].nil? then
       @testRailUtility.getCases(ENV['PROJECT_ID'], ENV['SUIT_ID'], ENV['SECTION_ID']).each do |caseId|
@@ -34,6 +35,8 @@ describe ManageTours do
     if ENV['RUN_ID'].nil? then
       @runId = @testRailUtility.addRun("Manage Tour by lead",4,19,arrCaseIds)['id']
     end
+=end
+    @runId = ENV['RUN_ID']
   }
   before(:each){
     puts "\n"
