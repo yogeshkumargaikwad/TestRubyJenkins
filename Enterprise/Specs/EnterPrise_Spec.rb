@@ -19,6 +19,8 @@ require_relative File.expand_path(Dir.pwd + '/Enterprise/Utilities/EnziUIUtility
 require_relative File.expand_path(Dir.pwd + '/Enterprise/PageObjects/EnterPrise.rb')
 require_relative File.expand_path(Dir.pwd + '/Enterprise/Utilities/EnziTestRailUtility/lib/EnziTestRailUtility.rb')
 require_relative File.expand_path(Dir.pwd + '/Enterprise/Utilities/httparty/SfRESTService.rb')
+require_relative File.expand_path(Dir.pwd + '/rollbarUtility.rb')
+
 #require_relative File.expand_path("..", Dir.pwd) + '/Enterprise/Utilities/EnziTestRailUtility/lib/EnziTestRailUtility.rb'
 #require_relative '../PageObject/EnterPrise'
 #require_relative '../Utility/EnziTestRailUtility/lib/EnziTestRailUtility'
@@ -28,7 +30,7 @@ describe "Enterprise" do
   RSpec.shared_examples "test" do |index|
 
     context "Create Opportunity with global Action" do
-      before(:example) {
+      before(:example){
         puts ""
         puts "-----------------------------------------------------------------------------------------------"
       }
@@ -41,33 +43,34 @@ describe "Enterprise" do
       end
 
       it 'C1012: To check "New Organization" button is enable on create opportunity page' do
-        begin
-          @objEnterPrise.navigateToCreateOpportunity()
-          EnziUIUtility.wait(@driver, :id, 'Budget_Monthly__c', @timeSetting['Wait']['Environment']['Lightening'])
-          @objEnterPrise.selectElement(@driver, "Maximize", "button")
-          expect(@objEnterPrise.buttonEnabled?("GlobalActionManager:New_Organization")).to eq true
-          puts "New Organization button is enabled in create Opportunity with Global Action"
-          #@objEnterPrise.selectElement(@driver,"Close","button")
+      begin
+        @objEnterPrise.navigateToCreateOpportunity()
+        EnziUIUtility.wait(@driver, :id, 'Budget_Monthly__c', @timeSetting['Wait']['Environment']['Lightening'])
+        @objEnterPrise.selectElement(@driver, "Maximize", "button")
+        expect(@objEnterPrise.buttonEnabled?("GlobalActionManager:New_Organization")).to eq true
+        puts "New Organization button is enabled in create Opportunity with Global Action"
+        #@objEnterPrise.selectElement(@driver,"Close","button")
 
-          @testRailUtility.postResult(1012, "comment", 1, @run)
-        rescue Exception => e
-          @testRailUtility.postResult(1012, e, 5, @run)
-          puts e
-          raise e
+        @testRailUtility.postResult(1012,"comment",1,@run)
+      rescue Exception => e
+        @testRailUtility.postResult(1012,e,5,@run)
+        puts e
+        raise e
         end
       end
 
       it 'C868: To check new account is created through "New Organization".' do
         begin
-          @objEnterPrise.createNewOrganization(@testRecords['account'][0], "5")
-          #@objEnterPrise.selectElement(@driver,"Close","button")
-          expect(accountId = @objEnterPrise.getAccountFields(@testRecords['account'][0]).fetch("Id")).should_not nil
-          puts "New Organization is successfully created"
-          Salesforce.addRecordsToDelete("Account", "#{accountId}")
+        @objEnterPrise.createNewOrganization(@testRecords['account'][0], "5")
+        #@objEnterPrise.selectElement(@driver,"Close","button")
+        expect(accountId = @objEnterPrise.getAccountFields(@testRecords['account'][0]).fetch("Id")).should_not nil
+        puts "New Organization is successfully created"
+        Salesforce.addRecordsToDelete("Account", "#{accountId}")
 
-          @testRailUtility.postResult(868, "comment", 1, @run)
+        @testRailUtility.postResult(868,"comment",1,@run)
         rescue Exception => e
-          @testRailUtility.postResult(868, e, 5, @run)
+          Rollbar.error(e)
+          @testRailUtility.postResult(868,e,5,@run)
           puts e
           raise e
         end
@@ -75,18 +78,19 @@ describe "Enterprise" do
 
       it 'C869: To check duplicate account creation.' do
         begin
-          #@objEnterPrise.selectElement(@driver,"Close","button")
-          @driver.navigate.refresh
-          @objEnterPrise.navigateToCreateOpportunity()
-          EnziUIUtility.wait(@driver, :id, 'Budget_Monthly__c', @timeSetting['Wait']['Environment']['Lightening'])
-          @objEnterPrise.selectElement(@driver, "Maximize", "button")
-          @objEnterPrise.createNewOrganization(@testRecords['account'][0], "5")
-          expect(@objEnterPrise.checkError("div", "You can't create duplicate Organization.")).to eq true
-          puts "Duplicate Organization cannot be created"
+        #@objEnterPrise.selectElement(@driver,"Close","button")
+        @driver.navigate.refresh
+        @objEnterPrise.navigateToCreateOpportunity()
+        EnziUIUtility.wait(@driver,:id,'Budget_Monthly__c',@timeSetting['Wait']['Environment']['Lightening'])
+        @objEnterPrise.selectElement(@driver,"Maximize","button")
+        @objEnterPrise.createNewOrganization(@testRecords['account'][0], "5")
+        expect(@objEnterPrise.checkError("div","You can't create duplicate Organization.")).to eq true
+        puts "Duplicate Organization cannot be created"
 
-          @testRailUtility.postResult(869, "comment", 1, @run)
+        @testRailUtility.postResult(869,"comment",1,@run)
         rescue Exception => e
-          @testRailUtility.postResult(869, e, 5, @run)
+          Rollbar.error(e)  
+          @testRailUtility.postResult(869,e,5,@run)
           puts e
           raise e
         end
@@ -94,21 +98,22 @@ describe "Enterprise" do
 
       it 'C1011: To check contact can be created from create opportunity page' do
         begin
-          @objEnterPrise.createNewContact("Enzigma Enterprise 01", "Test Contact1", "contacttest@demo.com")
+          @objEnterPrise.createNewContact("Enzigma Enterprise 01","Test Contact1", "contacttest@demo.com")
           contactId = @objEnterPrise.getContactFields("contacttest@demo.com").fetch("Id")
           expect(contactName = @objEnterPrise.getContactFields("contacttest@demo.com").fetch("Name")).to eq "Test Contact1"
           puts "New Contact is successfully created"
           Salesforce.addRecordsToDelete("Contact", "#{contactId}")
-          @testRailUtility.postResult(1011, "comment", 1, @run)
-        rescue Exception => e
-          @testRailUtility.postResult(1011, e, 5, @run)
+          @testRailUtility.postResult(1011,"comment",1,@run)
+          rescue Exception => e
+          Rollbar.error(e)  
+          @testRailUtility.postResult(1011,e,5,@run)
           puts e
           raise e
         end
       end
 
       it 'C870: To check opportunity is created with stage "Qualifying"' do
-        begin
+          begin
           recordId = @objEnterPrise.createOpportunity("Primary Member", "Amit Kasar NMD", "CHI-National Building", "Enzigma Enterprise 01", nil, "2", "100")
           #puts "recordId: #{recordId}"
           #puts SfRESTService.getDataByQuery("SELECT+name+from+OpportunityTeamMember+WHERE+opportunityId+=+'#{recordId}'", "/services/data/v41.0/query/?q=", false)
@@ -120,29 +125,31 @@ describe "Enterprise" do
           expect(oppDetails.fetch("Stage_Details__c")).to eq "Qualify Opportunity"
           puts "Opportunity is successfully created with stage detail as Qualify Opportunity"
           Salesforce.addRecordsToDelete("Opportunity", "#{recordId}")
-          @testRailUtility.postResult(870, "comment", 1, @run)
-        rescue Exception => e
-          @testRailUtility.postResult(870, e, 5, @run)
-          puts e
-          raise e
-        end
+          @testRailUtility.postResult(870,"comment",1,@run)
+          rescue Exception => e
+            Rollbar.error(e)
+            @testRailUtility.postResult(870,e,5,@run)
+            puts e
+            raise e
+          end
       end
 
       it 'C873: To check opportunity is created with stage "Selling".' do
         begin
-          recordId = @objEnterPrise.createOpportunity("Decision Maker", "Amit Kasar NMD", "CHI-National Building", "Enzigma Enterprise 01", nil, "2", "100", nil, nil, "2018-2-23", nil, "2", nil)
-          #puts "recordId: #{recordId}"
-          oppDetails = @objEnterPrise.getOpportunityFields(recordId)
-          expect(oppDetails.fetch("StageName")).to eq "Selling"
-          puts "Opportunity is successfully created with Stage as Selling"
-          expect(oppDetails.fetch("Stage_Details__c")).to eq "Sales Rep Searching Space"
-          puts "Opportunity is successfully created with Stage Details as Sales Rep Searching Space"
-          Salesforce.addRecordsToDelete("Opportunity", "#{recordId}")
-          #sleep(120)
+        recordId = @objEnterPrise.createOpportunity("Decision Maker", "Amit Kasar NMD", "CHI-National Building", "Enzigma Enterprise 01", nil, "2", "100", nil, nil, "2018-2-23", nil, "2", nil)
+        #puts "recordId: #{recordId}"
+        oppDetails = @objEnterPrise.getOpportunityFields(recordId)
+        expect(oppDetails.fetch("StageName")).to eq "Selling"
+        puts "Opportunity is successfully created with Stage as Selling"
+        expect(oppDetails.fetch("Stage_Details__c")).to eq "Sales Rep Searching Space"
+        puts "Opportunity is successfully created with Stage Details as Sales Rep Searching Space"
+        Salesforce.addRecordsToDelete("Opportunity", "#{recordId}")
+        #sleep(120)
 
-          @testRailUtility.postResult(873, "comment", 1, @run)
+        @testRailUtility.postResult(873,"comment",1,@run)
         rescue Exception => e
-          @testRailUtility.postResult(873, e, 5, @run)
+          Rollbar.error(e)
+          @testRailUtility.postResult(873,e,5,@run)
           puts e
           raise e
         end
@@ -171,6 +178,11 @@ describe "Enterprise" do
 
           expect(createdOpp.fetch("Owner_Auto_Assign__c")).to eq "true"
           puts "Opportunity Owner Auto Assign field is successfully checked."
+
+          #contactId = @objEnterPrise.getOpportunityFields(recordId).fetch("Decision_Maker__c")
+          #contactId = createdOpp.fetch("Decision_Maker__c")
+          #contactDetails = @objEnterPrise.getContactFieldsById(contactId)
+          #expect(contactDetails.fetch("Name")).to eq "Amit Kasar NMD"
 
           expect(createdOpp.fetch("Decision_Maker__r.Name")).to eq "Amit Kasar NMD"
           puts "Opportunity Decision Maker is successfully Assigned."
@@ -489,7 +501,7 @@ describe "Enterprise" do
         @objEnterPrise.logOut()
       end
 
-      after(:example) {
+      after(:example){
         puts "-----------------------------------------------------------------------------------------------"
       }
     end
@@ -510,28 +522,29 @@ describe "Enterprise" do
     @timeSetting = YAML.load(file.read())
 
     config = YAML.load_file('credentials.yaml')
-
+    
     @testRailUtility = EnziTestRailUtility::TestRailUtility.new(config['TestRail']['username'], config['TestRail']['password'])
     #@run = @testRailUtility.addRun("EnterPriseRun", 4, @testRailUtility.getSuitByName(4, "Enterprise"))
-    arrCaseIds = Array.new
+    #arrCaseIds = Array.new
 
-    if !ENV['SECTION_ID'].nil? && ENV['CASE_ID'].nil? then
-      @testRailUtility.getCases(ENV['PROJECT_ID'], ENV['SUIT_ID'], ENV['SECTION_ID']).each do |caseId|
-        arrCaseIds.push(caseId['id'])
-      end
-    else
-      if !ENV['CASE_ID'].nil? then
-        arrCaseIds.push(ENV['CASE_ID'])
-      end
-    end
-    if !ENV['SUIT_ID'].nil? && (!ENV['SECTION_ID'].nil? || !ENV['CASE_ID'].nil?) then
-      @run = @testRailUtility.addRun("EnterPrise Run", 4, 30, arrCaseIds)['id']
-    else
-      @run = ENV['RUN_ID']
-    end
-    if ENV['RUN_ID'].nil? then
-      @runId = @testRailUtility.addRun("EnterPrise Run", 4, 30, arrCaseIds)['id']
-    end
+    #if !ENV['SECTION_ID'].nil? && ENV['CASE_ID'].nil? then
+      #@testRailUtility.getCases(ENV['PROJECT_ID'], ENV['SUIT_ID'], ENV['SECTION_ID']).each do |caseId|
+        #arrCaseIds.push(caseId['id'])
+      #end
+    #else
+      #if !ENV['CASE_ID'].nil? then
+        #arrCaseIds.push(ENV['CASE_ID'])
+      #end
+    #end
+    #if !ENV['SUIT_ID'].nil? && (!ENV['SECTION_ID'].nil? || !ENV['CASE_ID'].nil?) then
+      #@run = @testRailUtility.addRun("EnterPrise Run",4,30,arrCaseIds)['id']
+    #else
+      #@run = ENV['RUN_ID']
+    #end
+    #if ENV['RUN_ID'].nil? then
+      #@runId = @testRailUtility.addRun("EnterPrise Run",4,30,arrCaseIds)['id']
+    #end
+    @run = ENV['RUN_ID']
   }
 
   context 'Navigaton to Manage Users' do
@@ -560,7 +573,7 @@ describe "Enterprise" do
     end
   end
 
-  after (:all) {
+  after (:all){
     @driver.quit
   }
 end
