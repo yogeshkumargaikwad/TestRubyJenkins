@@ -1,0 +1,49 @@
+{
+  "SalesConsole":{
+    "Lead":[
+      {"firstname":"Enzi_Spec_John","lastname":"Smith01","email":"enzi_spec_console03@example.com","Company":"Enzigma Software pvt. ltd.","LeadSource":"WeWork.com","Lead_Source_Detail__c":"Book A Tour Form","phone":"7777789888","Building_Interested_In__c":"a00F000000Mknzd"},
+      {"firstname":"Enzi_Spec_John","lastname":"Smith02","email":"enzi_spec_console0@example.com","Company":"Enzigma Software pvt. ltd.","LeadSource":"WeWork.com","Lead_Source_Detail__c":"Book A Tour Form","phone":"7777722222","Building_Interested_In__c":"a00F000000Mknzd"},
+      {"firstname":"Enzi_Spec_John","lastname":"Smith03","email":"enzi_spec_console03@example.com","Company":"Enzigma Software pvt. ltd.","LeadSource":"WeWork.com","Lead_Source_Detail__c":"Book A Tour Form","phone":"7777765686","Building_Interested_In__c":"a00F000000Mknzd"},
+      {"lastName":"test_shinde2","firstName":"test_kishor1","Website":"http://www.Testgmail.com","email":"test_enzigma2OPM@examplegmail.com","phone":"8146185357","leadSource":"Inbound call","company":"Test_Enzigma2","company_Size__c":"21-50","lead_Source_Detail__c":"Book A Tour Form","utm_campaign__c":"San Francisco - Modifier","utm_content__c":"utm contents","utm_medium__c":"cpc","utm_source__c":"ads-google","utm_term__c":"virtual +office +san +francisco","locale__c":"US","country_Code__c":"US","number_of_Desks__c":"12"},
+     {"lastName":"test_shinde3","firstName":"test_kishor1","Website":"http://www.Testgmail.com","email":"test_enzigma3OPM@examplegmail.com","phone":"8146185358","leadSource":"Inbound call","company":"Test_Enzigma3","company_Size__c":"21-50","lead_Source_Detail__c":"Book A Tour Form","utm_campaign__c":"San Francisco - Modifier","utm_content__c":"utm contents","utm_medium__c":"cpc","utm_source__c":"ads-google","utm_term__c":"virtual +office +san +francisco","locale__c":"US","country_Code__c":"US","number_of_Desks__c":"12"},
+     {"lastName":"test_shinde2","firstName":"test_kishor1","Website":"http://www.Testgmail.com","email":"test_enzigma11OPPMerge@examplegmail.com","phone":"8146185356","leadSource":"Inbound call","company":"Test_Enzigma1","company_Size__c":"21-50","lead_Source_Detail__c":"Book A Tour Form","utm_campaign__c":"San Francisco - Modifier","utm_content__c":"utm contents","utm_medium__c":"cpc","utm_source__c":"ads-google","utm_term__c":"virtual +office +san +francisco","locale__c":"US","country_Code__c":"US","number_of_Desks__c":"12"},
+     {"lastName":"test_shinde2","firstName":"test_kishor1","Website":"http://www.Testgmail.com","email":"test_enzigma21OPPMerge@examplegmail.com","phone":"8146185356","leadSource":"Inbound call","company":"Test_Enzigma1","company_Size__c":"21-50","lead_Source_Detail__c":"Book A Tour Form","utm_campaign__c":"San Francisco - Modifier","utm_content__c":"utm contents","utm_medium__c":"cpc","utm_source__c":"ads-google","utm_term__c":"virtual +office +san +francisco","locale__c":"US","country_Code__c":"US","number_of_Desks__c":"12"},
+     {"lastName":"test_shinde2","firstName":"test_kishor1","Website":"http://www.Testgmail.com","email":"test_enzigma31OPPMerge@examplegmail.com","phone":"8146185356","leadSource":"Inbound call","company":"Test_Enzigma1","company_Size__c":"21-50","lead_Source_Detail__c":"Book A Tour Form","utm_campaign__c":"San Francisco - Modifier","utm_content__c":"utm contents","utm_medium__c":"cpc","utm_source__c":"ads-google","utm_term__c":"virtual +office +san +francisco","locale__c":"US","country_Code__c":"US","number_of_Desks__c":"12"},
+     {"productLine":"WeWork","bookedBySalesLead":"Yes","phone":"+91-9975839755","email":"test_enzigma2OPPMerge@examplegmail.com","company":"test2_enzi_opportunityMerge","name":"test2_name","companySize":"2" , "numberOfDesks":"2" , "building":"BL-Potsdamer Platz"},
+      {"productLine":"WeWork","bookedBySalesLead":"Yes","phone":"+91-9975839755","email":"test_enzigma3OPPMerge@examplegmail.com","company":"test3_enzi_opportunityMerge","name":"test3_name","companySize":"2" , "numberOfDesks":"2" , "building":"BL-Potsdamer Platz"}
+    
+    ]
+  },
+  "MergeOpportunitiesPage":{
+    "Account":[
+      {"name":"test_Account_OppMerge1"},
+      {"name":"test_Account_OppMerge1"},
+      {"name":"test_Account_OppMerge1"}
+      ],
+    "Contact":[
+      {"firstname":"test_Contact1","lastname":"OpportunityMerged1","email":"enzi_Contact_mergeOpportunity1@example.com","AccountId":""},
+      {"firstname":"test_Contact1","lastname":"OpportunityMerged1","email":"enzi_Contact_mergeOpportunity1@example.com","AccountId":""},
+      {"firstname":"test_Contact1","lastname":"OpportunityMerged1","email":"enzi_Contact_mergeOpportunity1@example.com","AccountId":""}
+    ],
+    "Building__c":[
+      {"Name":"B1", "uuid__c":"abcabd11"},
+      {"Name":"B1", "uuid__c":"abcabd22"},
+      {"Name":"B1", "uuid__c":"abcabd33"}
+    ],
+    "Opportunity":[
+      {"Name":"test_OppMerge1","StageName":"Selling","Probability": "10","CloseDate":"2018-06-03T10:34:24.000Z","AccountId":"","Primary_Member__c":"","Building__c":"","Locations_Interested__c":"AMS-Metropool;AUS-Domain;"},
+      {"Name":"test_OppMerge2","StageName":"Selling","Probability": "10","CloseDate":"2018-06-03T10:34:24.000Z","AccountId":"","Primary_Member__c":"","Building__c":"","Locations_Interested__c":"AMS-Metropool;ATX-Congress;"},
+      {"Name":"test_OppMerge3","StageName":"Selling","Probability": "10","CloseDate":"2018-06-03T10:34:24.000Z","AccountId":"","Primary_Member__c":"","Building__c":"","Locations_Interested__c":"AMS-Metropool;AUS-Domain;"}
+    ],
+    "Journey":[
+      {"Name":"TestJourney1","Status__c":"Scheduled","Primary_Contact__c":"","Count_of_Desk__c":"20","NMD_Next_Contact_Date__c":"2018-06-03T10:34:24.000Z"},
+      {"Name":"TestJourney2","Status__c":"Scheduled","Primary_Contact__c":"","Count_of_Desk__c":"20","NMD_Next_Contact_Date__c":"2018-06-03T10:34:24.000Z"},
+      {"Name":"TestJourney3","Status__c":"Scheduled","Primary_Contact__c":"","Count_of_Desk__c":"20","NMD_Next_Contact_Date__c":"2018-06-03T10:34:24.000Z"}
+    ],
+    "Tour":[
+      {"Opportunity__c":"","Journey__c":"","Status__c":"Scheduled","Tour_Date__c":"2018-06-03","Start_Time__c":"9:00AM","Location__c":""},
+      {"Opportunity__c":"","Journey__c":"","Status__c":"Scheduled","Tour_Date__c":"2018-06-03","Start_Time__c":"9:00AM","Location__c":""},
+      {"Opportunity__c":"","Journey__c":"","Status__c":"Scheduled","Tour_Date__c":"2018-06-03","Start_Time__c":"9:00AM","Location__c":""}
+    ]
+  }
+ }
