@@ -35,12 +35,10 @@ module EnziTestRailUtility
 		def getSpecLocations(caseId,sectionId,suitId,planId,projectId)
 			specLocations = Array.new
 			if !caseId.nil? then
-				puts "getting spec loaction from case #{caseId}"
 				testCase = getCase(caseId)
 				specLocations.push(Hash["path"=>testCase.fetch('custom_spec_location'),"isBrowserDependent"=>testCase.fetch('custom_is_browser_dependent')])
 			else
 				if !sectionId.nil? && getSuites(projectId).size == 1  then
-					puts "getting specs from section #{sectionId}"
 					getCases(projectId, nil, sectionId).each do |testCase|
 						if testCase.key?('custom_spec_location') && !testCase.fetch('custom_spec_location').nil? then
 							specLocations.push(Hash["path"=>testCase.fetch('custom_spec_location'),"isBrowserDependent"=>testCase.fetch('custom_is_browser_dependent')])
@@ -51,7 +49,6 @@ module EnziTestRailUtility
 					#Getting cases from suit id only if project is operating in single suit mode otherwise required
 					if !suitId.nil? then
 						if !sectionId.nil? then
-							puts "getting specs from section #{sectionId}"
 							getCases(projectId, suitId, sectionId).each do |testCase|
 								if testCase.key?('custom_spec_location') && !testCase.fetch('custom_spec_location').nil? then
 									specLocations.push(Hash["path"=>testCase.fetch('custom_spec_location'),"isBrowserDependent"=>testCase.fetch('custom_is_browser_dependent')])
@@ -59,7 +56,6 @@ module EnziTestRailUtility
 								end
 							end
 						else
-							puts "getting specs from suit #{suitId}"
 							getSections(suitId,projectId).each do |section|
 								getCases(projectId, suitId, section['id']).each do |testCase|
 									if testCase.key?('custom_spec_location') && !testCase.fetch('custom_spec_location').nil? then
@@ -85,7 +81,6 @@ module EnziTestRailUtility
 							end
             else
               if !projectId.nil? then
-								puts "getting specs from project id"
 								specLocation = nil
 								getSuites(projectId).each do |suit|
 =begin
@@ -128,8 +123,8 @@ end
 		#5  Failed
 		def postResult(caseId,comment,statusId,testRunId)
 			url = "add_result_for_case/#{testRunId}/#{caseId}"
-			puts url
 			@client.send_post(url, { :status_id => statusId, :comment => "#{comment}" })
+			puts "Result added successfully"
 		end
 
 		def getCase(caseId)
@@ -246,7 +241,7 @@ end
 #puts testRailUtility.addRun("testing",4,26)['id']
 #puts testRailUtility.getPayloadsFromSteps(testRailUtility.getCase(363)['custom_steps_separated'])
 #payload = testRailUtility.getCase(366)['custom_steps_separated'][0]['expected']
-#puts testRailUtility.getCase(320)
+#puts testRailUtility.getCase(1012).inspect
 #puts testRailUtility.getRuns("26","69","4")
 #puts JSON.parse(payload)
 #response = testRailUtility.getRuns("26","68","4")
