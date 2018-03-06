@@ -9,7 +9,7 @@ class SfRESTService
   @@credentails = nil
   def self.loginRequest
     @@credentails = YAML.load_file('credentials.yaml')
-    data = {"grant_type"=>@@credentails['Ent']['grant_type'],"client_id"=>@@credentails['Ent']['client_id'],"client_secret"=>@@credentails['Ent']['client_secret'], "username"=>@@credentails['ENTQA']['username'],"password"=>"#{@@credentails['ENTQA']['password']}"}
+    data = {"grant_type"=>@@credentails['ENTQA']['grant_type'],"client_id"=>@@credentails['ENTQA']['client_id'],"client_secret"=>@@credentails['ENTQA']['client_secret'], "username"=>@@credentails['ENTQA']['username'],"password"=>"#{@@credentails['ENTQA']['password']}"}
     @@response = HTTParty.post("https://test.salesforce.com/services/oauth2/token",
                                :body => data,
                                :headers => {"Content-Type":'application/x-www-form-urlencoded'} , verify: false)

@@ -24,6 +24,8 @@ describe "Reservable Availability Tester" do
 
     @testRailUtility = EnziTestRailUtility::TestRailUtility.new(config['TestRail']['username'], config['TestRail']['password'])
     #@run = @testRailUtility.addRun("EnterPriseRun", 4, @testRailUtility.getSuitByName(4, "Enterprise"))
+
+=begin
     arrCaseIds = Array.new
 
     if !ENV['SECTION_ID'].nil? && ENV['CASE_ID'].nil? then
@@ -43,6 +45,9 @@ describe "Reservable Availability Tester" do
     if ENV['RUN_ID'].nil? then
       @runId = @testRailUtility.addRun("Reservable Availability Run",4,22,arrCaseIds)['id']
     end
+=end
+
+	@run = ENV['RUN_ID']
   }
 
   context "Navigation to Reservable Availability Page" do
