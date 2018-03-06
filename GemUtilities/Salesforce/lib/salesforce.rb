@@ -8,8 +8,8 @@ class Salesforce
   end
 	def self.login(username,password,isSandbox)
 		sfBulk =  SalesforceBulk::Api.new(username, password, isSandbox)
-		puts 'sfBulk==>'
-		puts sfBulk
+		#puts 'sfBulk==>'
+		#puts sfBulk
 		return sfBulk
 	end
   
@@ -19,7 +19,7 @@ class Salesforce
     result = sfBulk.query(sObjectType,query)
     
     if key == nil then
-      puts "#{sObjectType} records :: #{result}"
+      #puts "#{sObjectType} records :: #{result}"
       return result
     else
       sObjectRecordMap = Hash.new
@@ -48,8 +48,8 @@ class Salesforce
         @@createdRecordsIds["#{objectType}"] = [Hash["Id" => (result.result.records)[index].fetch('Id')]]
       end
     end
-    puts "Record Ids :: #{@@createdRecordsIds}" 
-    puts "Created Records :: #{recordIdsArray}"
+    #puts "Record Ids :: #{@@createdRecordsIds}" 
+    #puts "Created Records :: #{recordIdsArray}"
     return recordIdsArray
  end
 
@@ -64,18 +64,18 @@ class Salesforce
     setIds = setIds.chomp(',')
     setIds+=')'
 
-    puts 'query in createdrRecords==>'
-    puts query+" Id IN "+setIds+""
+    #puts 'query in createdrRecords==>'
+    #puts query+" Id IN "+setIds+""
     result = sfBulk.query(objectType, query+" WHERE Id IN "+setIds+"")
-    puts 'result.result.records==>'
+    #puts 'result.result.records==>'
     puts result.result.records
  end
 
  def self.deleteRecords(sfBulk,sObjectType,recordsToDelete)
   if(recordsToDelete!= nil && recordsToDelete.count > 0 && recordsToDelete.count < 10) 
      deletedRecords = sfBulk.delete(sObjectType, recordsToDelete,true)
-     puts 'deletedRecords==>'
-     puts deletedRecords.inspect
+     #puts 'deletedRecords==>'
+     #puts deletedRecords.inspect
      return deletedRecords.result.records
   else
     return nil
