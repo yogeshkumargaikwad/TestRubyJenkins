@@ -30,10 +30,10 @@ class RollbarUtility
 	      @@logHash = Hash.new()
 	      @@logHash.store(specId, logMessage)
 	    else
-	      puts "Inside else: #{@@logHash}"
+	      #puts "Inside else: #{@@logHash}"
 	      @@logHash[@@sId] = @@logHash[@@sId]+"\n"+logMessage
 	    end
-	    puts @@logHash
+	    #puts @@logHash
 	    return @@logHash
   	end
 end
