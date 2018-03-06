@@ -19,7 +19,7 @@ class ManageTours
 		recordsInJson = recordFile.read()
 		@records = JSON.parse(recordsInJson)
 		@timeSettingMap = YAML.load_file(Dir.pwd+'/timeSettings.yaml')
-		@mapCredentials = YAML.load_file(Dir.pwd+'credentials.yaml')
+		@mapCredentials = YAML.load_file(Dir.pwd+'/credentials.yaml')
 		@driver.get "https://test.salesforce.com/login.jsp?pw=#{@mapCredentials[sandBoxType]['password']}&un=#{@mapCredentials[sandBoxType]['username']}"
 		@salesforceBulk = Salesforce.login(@mapCredentials["#{sandBoxType}"]['username'],@mapCredentials["#{sandBoxType}"]['password'],true)
 		EnziUIUtility.wait(driver,:id,"tsid",@timeSettingMap['Wait']['Environment']['Classic'])
