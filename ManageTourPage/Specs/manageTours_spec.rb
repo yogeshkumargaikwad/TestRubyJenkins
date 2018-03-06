@@ -3,7 +3,7 @@
 #Modified date : 31/01/2018
 require_relative File.expand_path(Dir.pwd + '/GemUtilities/RollbarUtility/rollbarUtility.rb')
 require_relative File.expand_path(Dir.pwd+"/ManageTourPage/PageObjects/manageTours(Staging).rb")
-require_relative File.expand_path("GemUtilities/EnziTestRailUtility/lib/EnziTestRailUtility.rb")
+require_relative File.expand_path(Dir.pwd+"/GemUtilities/EnziTestRailUtility/lib/EnziTestRailUtility.rb")
 require "selenium-webdriver"
 require "rspec"
 require 'enziUIUtility'
@@ -702,13 +702,11 @@ describe ManageTours do
         puts "---------------------------------------------------------------------------------------------------------------------------"
         puts "\n"
         @testRailUtility.postResult(94,"Result for case 94 is #{"success"}",1,@runId)
-        @testRailUtility.postResult(362,"Result for case 94 is #{"success"}",1,@runId)
       rescue Exception => excp
          @objRollbar.postRollbarData(caseInfo['id'], caseInfo['title'], passedLogs[caseInfo['id']])
          Rollbar.error(excp)
 
         @testRailUtility.postResult(94,"Result for case 94 is #{excp}",5,@runId)
-        @testRailUtility.postResult(362,"Result for case 94 is #{"success"}",5,@runId)
         raise excp
       end
     end

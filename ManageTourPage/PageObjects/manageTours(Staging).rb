@@ -19,7 +19,7 @@ class ManageTours
 		recordsInJson = recordFile.read()
 		@records = JSON.parse(recordsInJson)
 		@timeSettingMap = YAML.load_file(Dir.pwd+'/timeSettings.yaml')
-		@mapCredentials = YAML.load_file('credentials.yaml')
+		@mapCredentials = YAML.load_file(Dir.pwd+'/credentials.yaml')
 		@driver.get "https://test.salesforce.com/login.jsp?pw=#{@mapCredentials[sandBoxType]['password']}&un=#{@mapCredentials[sandBoxType]['username']}"
 		@salesforceBulk = Salesforce.login(@mapCredentials["#{sandBoxType}"]['username'],@mapCredentials["#{sandBoxType}"]['password'],true)
 		EnziUIUtility.wait(driver,:id,"tsid",@timeSettingMap['Wait']['Environment']['Classic'])
@@ -193,11 +193,11 @@ class ManageTours
 	end
 	def bookNewTour
 		EnziUIUtility.wait(@driver,:class,"visible",@timeSettingMap['Wait']['Environment']['Lightening'])
-    EnziUIUtility.wait(@driver,:class,"visible",@timeSettingMap['Wait']['Environment']['Lightening'])
+    	EnziUIUtility.wait(@driver,:class,"visible",@timeSettingMap['Wait']['Environment']['Lightening'])
 		newButtonContainer = @driver.find_element(:class,"visible")
 		EnziUIUtility.wait(@driver,:class,"lightningPrimitiveIcon",@timeSettingMap['Wait']['Environment']['Lightening'])
-    EnziUIUtility.wait(@driver,:class,"lightningPrimitiveIcon",@timeSettingMap['Wait']['Environment']['Lightening'])
-    newButtonContainer.find_elements(:class,"lightningPrimitiveIcon")[0].click
+    	EnziUIUtility.wait(@driver,:class,"lightningPrimitiveIcon",@timeSettingMap['Wait']['Environment']['Lightening'])
+    	newButtonContainer.find_elements(:class,"lightningPrimitiveIcon")[0].click
 	end
 	def openPageForLead(id)
 		#puts "opening page for id = #{id}"
@@ -209,6 +209,8 @@ class ManageTours
 	end
 	def checkError(errorMessage)
 		 @driver.find_elements(:class,"slds-theme--error")[0].text.eql? "#{errorMessage}"
+		 EnziUIUtility.wait(@driver,:class,"slds-icon slds-icon--small",@timeSettingMap['Wait']['Environment']['Lightening'])
+		 @driver.find_elements(:class,"slds-icon slds-icon--small")[0].click
   end
   def getData(onlySelected)
     #puts "in GetDAta"
