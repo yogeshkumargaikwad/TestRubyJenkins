@@ -88,7 +88,7 @@ class EnziUIUtility
         allWindows.each do |window|
           #if isMainWindow && @@mainWindow != window then
             driver.switch_to.window(window)
-          	puts driver.title
+          	#puts driver.title
             if(titleName == driver.title) then
               break
             end
