@@ -19,7 +19,7 @@ class ManageTours
 		recordsInJson = recordFile.read()
 		@records = JSON.parse(recordsInJson)
 		@timeSettingMap = YAML.load_file(Dir.pwd+'/timeSettings.yaml')
-		@mapCredentials = YAML.load_file('credentials.yaml')
+		@mapCredentials = YAML.load_file(Dir.pwd+'/credentials.yaml')
 		@driver.get "https://test.salesforce.com/login.jsp?pw=#{@mapCredentials[sandBoxType]['password']}&un=#{@mapCredentials[sandBoxType]['username']}"
 		@salesforceBulk = Salesforce.login(@mapCredentials["#{sandBoxType}"]['username'],@mapCredentials["#{sandBoxType}"]['password'],true)
 		EnziUIUtility.wait(driver,:id,"tsid",@timeSettingMap['Wait']['Environment']['Classic'])
@@ -185,33 +185,35 @@ class ManageTours
 			@@recordInsertedIds["#{object}"] = result.result.records[0]
 		else
 			@@recordInsertedIds["Lead1"] = result.result.records[0]
-			puts "Lead created => #{@@recordInsertedIds['Lead1']}"
+			#puts "Lead created => #{@@recordInsertedIds['Lead1']}"
 		end
     Salesforce.addRecordsToDelete(object,result.result.records[0].fetch('Id'))
-		puts "#{object} created => #{@@recordInsertedIds[object]}"
+		#puts "#{object} created => #{@@recordInsertedIds[object]}"
 		result.result.records
 	end
 	def bookNewTour
 		EnziUIUtility.wait(@driver,:class,"visible",@timeSettingMap['Wait']['Environment']['Lightening'])
-    EnziUIUtility.wait(@driver,:class,"visible",@timeSettingMap['Wait']['Environment']['Lightening'])
+    	EnziUIUtility.wait(@driver,:class,"visible",@timeSettingMap['Wait']['Environment']['Lightening'])
 		newButtonContainer = @driver.find_element(:class,"visible")
 		EnziUIUtility.wait(@driver,:class,"lightningPrimitiveIcon",@timeSettingMap['Wait']['Environment']['Lightening'])
-    EnziUIUtility.wait(@driver,:class,"lightningPrimitiveIcon",@timeSettingMap['Wait']['Environment']['Lightening'])
-    newButtonContainer.find_elements(:class,"lightningPrimitiveIcon")[0].click
+    	EnziUIUtility.wait(@driver,:class,"lightningPrimitiveIcon",@timeSettingMap['Wait']['Environment']['Lightening'])
+    	newButtonContainer.find_elements(:class,"lightningPrimitiveIcon")[0].click
 	end
 	def openPageForLead(id)
-		puts "opening page for id = #{id}"
+		#puts "opening page for id = #{id}"
 		newUrl = @driver.current_url.split("?")[0]
 		EnziUIUtility.navigateToUrl(@driver,"#{newUrl}?leadId=#{id}")
-		puts "navigated to #{@driver.current_url()}"
+		#puts "navigated to #{@driver.current_url()}"
 		newWindow = @driver.current_url();
     	EnziUIUtility.switchToWindow(@driver,newWindow)
 	end
 	def checkError(errorMessage)
 		 @driver.find_elements(:class,"slds-theme--error")[0].text.eql? "#{errorMessage}"
+		 EnziUIUtility.wait(@driver,:class,"slds-icon slds-icon--small",@timeSettingMap['Wait']['Environment']['Lightening'])
+		 @driver.find_elements(:class,"slds-icon slds-icon--small")[0].click
   end
   def getData(onlySelected)
-    puts "in GetDAta"
+    #puts "in GetDAta"
     EnziUIUtility.wait(@driver, nil, nil, 10)
     EnziUIUtility.wait(@driver, :id, "enzi-data-table-container", 100)
     arrTable = @driver.find_elements(:id, 'enzi-data-table-container')
@@ -274,7 +276,7 @@ class ManageTours
       pageNumber += 1
       EnziUIUtility.wait(@driver,nil,nil,5)
       if(@driver.find_element(:id, "btnNext").enabled? == true)
-        puts "btnNextEnability: #{@driver.find_element(:id, "btnNext").enabled?}"
+       #puts "btnNextEnability: #{@driver.find_element(:id, "btnNext").enabled?}"
         clickElement("btnNext")
       else
         break
@@ -300,7 +302,7 @@ class ManageTours
     wait.until {!@driver.find_element(:id ,"spinner").displayed?}
 		tourStatusChecked = false
 		rescheduledTours = Salesforce.getRecords(@salesforceBulk,"Tour_Outcome__c","SELECT id,Status__c,Original_Tour__c FROM Tour_Outcome__c WHERE Primary_Member__r.email = '#{primaryMember}'",nil)
-		puts "tours :: #{rescheduledTours.inspect}"
+		#puts "tours :: #{rescheduledTours.inspect}"
     rescheduledTours.result.records.each do |res|
 			@@recordInsertedIds['Tour_Outcome__c1'] = res
 			if res.fetch('Status__c').eql? "#{statusToCheck}" then

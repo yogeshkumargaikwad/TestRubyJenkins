@@ -4,7 +4,7 @@
 require 'yaml'
 require 'rspec'
 require 'json'
-require_relative File.expand_path("GemUtilities/EnziTestRailUtility/lib/EnziTestRailUtility.rb")
+require_relative File.expand_path(Dir.pwd+"/GemUtilities/EnziTestRailUtility/lib/EnziTestRailUtility.rb")
 specMap = Hash.new
 mapSuitRunId = Hash.new
 config = YAML.load_file('credentials.yaml')
