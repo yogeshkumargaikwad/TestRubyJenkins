@@ -2,7 +2,7 @@
 #Created Date : 28/12/2017
 #Modified date : 31/01/2018
 require_relative File.expand_path(Dir.pwd+"/ManageTourPage/PageObjects/manageTours(Staging).rb")
-require_relative File.expand_path("GemUtilities/EnziTestRailUtility/lib/EnziTestRailUtility.rb")
+require_relative File.expand_path(Dir.pwd+"/GemUtilities/EnziTestRailUtility/lib/EnziTestRailUtility.rb")
 require "selenium-webdriver"
 require "rspec"
 require 'enziUIUtility'
