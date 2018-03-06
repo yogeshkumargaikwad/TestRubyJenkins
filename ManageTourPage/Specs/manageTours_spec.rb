@@ -69,10 +69,10 @@ describe ManageTours do
     begin
         puts "\n"
         caseInfo = @testRailUtility.getCase('149')
-        
+        passedLogs = @objRollbar.addLog("[Step]     Checking manage tour page ", caseInfo['id'])
         @leadsTestData[0]['email'] = "test_enzigmaPre#{rand(9999)}@example.com"
         @leadsTestData[0]['company'] = "Test_Enzigma#{rand(1111)}"
-        passedLogs = @objRollbar.addLog("[Step]     Checking manage tour page ", caseInfo['id'])
+        
        # puts "[Step]     Checking manage tour page"
         puts "\n"
         @objManageTours.openPage(Salesforce.createRecords(@objManageTours.instance_variable_get(:@salesforceBulk),'Lead',@leadsTestData)[0]['Id'],:name,"lightning_manage_tours")
@@ -396,17 +396,14 @@ describe ManageTours do
       puts "\n"
       begin
         caseInfo = @testRailUtility.getCase('86')
-        passedLogs = @objRollbar.addLog("[Step]     Success message for booked tour should be displayed", caseInfo['id'])
-        #puts "[Step]     Success message for booked tour should be displayed"
-        passedLogs = @objRollbar.addLog("\n[Expected] Success Message as 'Tour booked successfully and will be synced shortly' and 'Tours synced successfully' should be displayed \n[Result]   Success")
         
-        #puts "[Expected] Success Message as 'Tour booked successfully and will be synced shortly' and 'Tours synced successfully' should be displayed"
-        #puts "[Result]   Success"
         puts "\n"
         EnziUIUtility.wait(@driver,:id,"enzi-data-table-container",@objManageTours.instance_variable_get(:@timeSettingMap)['Wait']['Environment']['Lightening'])
         @objManageTours.duplicateAccountSelector("Create Account and Don't Merge",nil)
         leadName = "#{@objManageTours.instance_variable_get(:@records)[0]['lead'][0]['firstName']}#{@objManageTours.instance_variable_get(:@records)[0]['lead'][0]['lastName']}"
-        passedLogs = @objRollbar.addLog("[Step]    #{leadName} named lead should be converted")
+        
+        passedLogs = @objRollbar.addLog("[Step]    #{leadName} named lead should be converted",caseInfo['id'])
+
         #puts  "[Step]    #{leadName} named lead should be converted"
         expect(@objManageTours.checkRecordCreated("Lead","SELECT id,isConverted FROM Lead WHERE Email = '#{@leadsTestData[0]['email']}'")[0].fetch("IsConverted").eql? 'true').to be true
         passedLogs = @objRollbar.addLog("\n[Expected] Successfully lead is converted \n[Result]   Success")
@@ -416,7 +413,7 @@ describe ManageTours do
         passedLogs = @objRollbar.addLog("[Step]     Contact Should be created with name #{leadName}")
         #puts "[Step]     Contact Should be created with name #{leadName}"
         expect(@objManageTours.checkRecordCreated("Contact","SELECT id,total_Scheduled_Tours__c FROM Contact WHERE Email = '#{@leadsTestData[0]['email']}'")[0].fetch("Id")).to_not eql nil
-         passedLogs = @objRollbar.addLog("\n[Expected] Successfully contact is created \n[Result]   Success")
+        passedLogs = @objRollbar.addLog("\n[Expected] Successfully contact is created \n[Result]   Success")
         #puts "[Expected] Successfully contact is created"
         #puts "[Result]   Success"
         puts "\n"
@@ -465,6 +462,12 @@ describe ManageTours do
         expect(@objManageTours.checkRecordCreated("Tour_Outcome__c","SELECT id,Status__c FROM Tour_Outcome__c WHERE Primary_Member__r.email = '#{@leadsTestData[0]['email']}'")[0].fetch("Id")).to_not eql nil
         passedLogs = @objRollbar.addLog("\n[Expected]Successfully tour is created \n[Result]   Success")
         #puts "[Expected] Successfully tour is created "
+        #puts "[Result]   Success"
+        puts "\n"
+
+        passedLogs = @objRollbar.addLog("[Step]     Success message for booked tour should be displayed \n[Expected] Success Message as 'Tour booked successfully and will be synced shortly' and 'Tours synced successfully' should be displayed \n[Result]   Success")
+        #puts "[Step]     Success message for booked tour should be displayed"
+        #puts "[Expected] Success Message as 'Tour booked successfully and will be synced shortly' and 'Tours synced successfully' should be displayed"
         #puts "[Result]   Success"
         puts "\n"
 
@@ -762,14 +765,14 @@ describe ManageTours do
       puts "\n"
       begin
         caseInfo = @testRailUtility.getCase('102')
-         passedLogs = @objRollbar.addLog("[Step]     Lead with #{@leadsTestData[0]['email']} email id should be converted", caseInfo['id'])
+        passedLogs = @objRollbar.addLog("[Step]     Lead with #{@leadsTestData[0]['email']} email id should be converted", caseInfo['id'])
        
 
         sleep(@objManageTours.instance_variable_get(:@timeSettingMap)['Sleep']['Environment']['Lightening'])
         @leadsTestData[0]['email'] = "test_enzigmaPre#{rand(9999)}@example.com"
         @objManageTours.openPageForLead(Salesforce.createRecords(@objManageTours.instance_variable_get(:@salesforceBulk),'Lead',@leadsTestData)[0]['Id'])
         #@objManageTours.openPage(Salesforce.createRecords(@objManageTours.instance_variable_get(:@salesforceBulk),'Lead',@leadsTestData)[0]['Id'],:name,"lightning_manage_tours")
-       @objManageTours.checkRecordCreated("Journey__c","SELECT id FROM Journey__c WHERE Primary_Email__c = '#{@leadsTestData[0]['email']}'")[0].fetch('Id')
+        @objManageTours.checkRecordCreated("Journey__c","SELECT id FROM Journey__c WHERE Primary_Email__c = '#{@leadsTestData[0]['email']}'")[0].fetch('Id')
         sleep(@objManageTours.instance_variable_get(:@timeSettingMap)['Sleep']['Environment']['Lightening'])
         @objManageTours.bookTour(0,true)
         @objManageTours.duplicateAccountSelector("Use Selected Account","Yes")
@@ -796,6 +799,9 @@ describe ManageTours do
         passedLogs = @objRollbar.addLog("[Expected] Tour created successfully \n[Result]   Success")
         #puts "[Expected] Tour created successfully"
         #puts "[Result]   Success"
+        puts "\n"
+
+        passedLogs = @objRollbar.addLog("[Step]     Success message for booked tour should be displayed \n[Expected] Success Message as 'Tour booked successfully and will be synced shortly' and 'Tours synced successfully' should be displayed \n[Result]   Success")
         puts "\n"
 
         passedLogs = @objRollbar.addLog("[Step]     To check status of created tour \n[Validate] Does status of tour updated as 'Scheduled' ?")
