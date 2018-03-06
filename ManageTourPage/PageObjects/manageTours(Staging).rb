@@ -193,11 +193,11 @@ class ManageTours
 	end
 	def bookNewTour
 		EnziUIUtility.wait(@driver,:class,"visible",@timeSettingMap['Wait']['Environment']['Lightening'])
-    EnziUIUtility.wait(@driver,:class,"visible",@timeSettingMap['Wait']['Environment']['Lightening'])
+    	EnziUIUtility.wait(@driver,:class,"visible",@timeSettingMap['Wait']['Environment']['Lightening'])
 		newButtonContainer = @driver.find_element(:class,"visible")
 		EnziUIUtility.wait(@driver,:class,"lightningPrimitiveIcon",@timeSettingMap['Wait']['Environment']['Lightening'])
-    EnziUIUtility.wait(@driver,:class,"lightningPrimitiveIcon",@timeSettingMap['Wait']['Environment']['Lightening'])
-    newButtonContainer.find_elements(:class,"lightningPrimitiveIcon")[0].click
+    	EnziUIUtility.wait(@driver,:class,"lightningPrimitiveIcon",@timeSettingMap['Wait']['Environment']['Lightening'])
+    	newButtonContainer.find_elements(:class,"lightningPrimitiveIcon")[0].click
 	end
 	def openPageForLead(id)
 		#puts "opening page for id = #{id}"
@@ -209,6 +209,8 @@ class ManageTours
 	end
 	def checkError(errorMessage)
 		 @driver.find_elements(:class,"slds-theme--error")[0].text.eql? "#{errorMessage}"
+		 EnziUIUtility.wait(@driver,:class,"slds-icon slds-icon--small",@timeSettingMap['Wait']['Environment']['Lightening'])
+		 @driver.find_elements(:class,"slds-icon slds-icon--small")[0].click
   end
   def getData(onlySelected)
     #puts "in GetDAta"
