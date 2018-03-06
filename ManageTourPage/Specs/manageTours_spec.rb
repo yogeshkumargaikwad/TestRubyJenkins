@@ -539,10 +539,8 @@ describe ManageTours do
         puts "---------------------------------------------------------------------------------------------------------------------------"
         puts "\n"
         @testRailUtility.postResult(94,"Result for case 94 is #{"success"}",1,@runId)
-        @testRailUtility.postResult(362,"Result for case 94 is #{"success"}",1,@runId)
       rescue Exception => excp
         @testRailUtility.postResult(94,"Result for case 94 is #{excp}",5,@runId)
-        @testRailUtility.postResult(362,"Result for case 94 is #{"success"}",5,@runId)
         raise excp
       end
     end
