@@ -69,7 +69,7 @@ describe ManageTours do
     begin
         puts "\n"
         caseInfo = @testRailUtility.getCase('149')
-        passedLogs = @objRollbar.addLog("[Step]     Checking manage tour page ", caseInfo['id'])
+        passedLogs = @objRollbar.addLog("[Step    ]  Checking manage tour page ", caseInfo['id'])
         @leadsTestData[0]['email'] = "test_enzigmaPre#{rand(9999)}@example.com"
         @leadsTestData[0]['company'] = "Test_Enzigma#{rand(1111)}"
         
@@ -80,17 +80,18 @@ describe ManageTours do
       #@objManageTours.openPage(@objManageTours.checkRecordCreated("Journey__c","SELECT id FROM Journey__c WHERE Primary_Email__c = '#{@objManageTours.instance_variable_get(:@records)[0]['lead'][0]['email']}'")[0].fetch('Id'),:id,"taction:0")
         @objManageTours.checkRecordCreated("Journey__c","SELECT id FROM Journey__c WHERE Primary_Email__c = '#{@leadsTestData[0]['email']}'")[0].fetch('Id')
         expect(@driver.title).to eql "Manage Tours"
-        passedLogs = @objRollbar.addLog("\n[Expected]  Manage tour page opened successfully \n[Result]   Sucess")
+        passedLogs = @objRollbar.addLog("[Expected]  Manage tour page opened successfully \n[Result  ]  Success")
         #puts "[Expected]  Manage tour page opened successfully"
         #puts "[Result]    Success"
-
-
         puts "\n"
-        @testRailUtility.postResult(149,"Result for case 149 is #{"success"}",1,@runId)
+         passedLogs = @objRollbar.addLog("[Step    ]  Adding result in testrail")
+         @testRailUtility.postResult(149,"Pass",1,@runId)
+         passedLogs = @objRollbar.addLog("[Result  ]  Success")
     rescue Exception => excp
-        @objRollbar.postRollbarData(caseInfo['id'], caseInfo['title'], passedLogs[caseInfo['id']])
-        Rollbar.error(excp)
 
+        @objRollbar.postRollbarData(caseInfo['id'], caseInfo['title'], passedLogs[caseInfo['id']])
+        passedLogs = @objRollbar.addLog("[Result  ]  Failed")
+        Rollbar.error(excp)
         @testRailUtility.postResult(149,"Result for case 149 is #{excp}",5,@runId)
       raise excp
     end
@@ -103,17 +104,20 @@ describe ManageTours do
     begin
         puts "\n"
         caseInfo = @testRailUtility.getCase('883')
-        passedLogs = @objRollbar.addLog("[Step]    Checking 'Book a tour' button ", caseInfo['id'])
+        passedLogs = @objRollbar.addLog("[Step    ]  Checking 'Book a tour' button ", caseInfo['id'])
         #puts "[Step]     Checking 'Book a tour' button"
         expect(@objManageTours.buttonDisabled?).to be true
-        passedLogs = @objRollbar.addLog("\n[Expected]  'Book a tour' button is disable \n[Result]   Success")
+        passedLogs = @objRollbar.addLog("[Expected]  'Book a tour' button is disable \n[Result  ]  Success")
         #puts "[Expected] 'Book a tour' button is disable"
         #puts "[Result]    Success"
         puts "\n"
-        @testRailUtility.postResult(883,"Result for case 883 is #{"success"}",1,@runId)
+         passedLogs = @objRollbar.addLog("[Step    ]  Adding result in testrail")
+        @testRailUtility.postResult(883,"Pass",1,@runId)
+        passedLogs = @objRollbar.addLog("[Result  ]  Success")
     rescue Exception => excp
 
        @objRollbar.postRollbarData(caseInfo['id'], caseInfo['title'], passedLogs[caseInfo['id']])
+       passedLogs = @objRollbar.addLog("[Result  ]  Failed")
         Rollbar.error(excp)
 
         @testRailUtility.postResult(883,"Result for case 883 is #{excp}",5,@runId)
@@ -128,19 +132,24 @@ describe ManageTours do
         puts "\n"
     begin
         caseInfo = @testRailUtility.getCase('7')
-        passedLogs = @objRollbar.addLog("[Step]     Checking 'Book a tour' button when all required fields of form are properly filled", caseInfo['id'])
+        passedLogs = @objRollbar.addLog("[Step    ]  Checking 'Book a tour' button when all required fields of form are properly filled", caseInfo['id'])
         #puts "[Step]     Checking 'Book a tour' button when all required fields of form are properly filled"
         @objManageTours.bookTour(0,false)
         sleep(@objManageTours.instance_variable_get(:@timeSettingMap)['Sleep']['Environment']['Lightening'])
         expect(@objManageTours.buttonDisabled?).to be true
-        passedLogs = @objRollbar.addLog("\n[Expected] 'Book a Tour' button is enabled \n[Result]   Success")
+        passedLogs = @objRollbar.addLog("[Expected]  'Book a Tour' button is enabled \n[Result  ]  Success")
         #puts "[Expected] 'Book a Tour' button is enabled"
         #puts "[Result]   Success"
         puts "\n"
-        @testRailUtility.postResult(7,"Result for case 7 is #{"success"}",1,@runId)
+        passedLogs = @objRollbar.addLog("[Step    ]  Adding result in testrail")
+        @testRailUtility.postResult(7,"Pass",1,@runId)
+        passedLogs = @objRollbar.addLog("[Result  ]  Success")
+    rescue Exception => excp
+
    rescue Exception => excp
 
        @objRollbar.postRollbarData(caseInfo['id'], caseInfo['title'], passedLogs[caseInfo['id']])
+       passedLogs = @objRollbar.addLog("[Result  ]  Failed")
         Rollbar.error(excp)
 
         @testRailUtility.postResult(7,"Result for case 7 is #{excp}",5,@runId)
@@ -155,19 +164,22 @@ describe ManageTours do
         puts "\n"
     begin
         caseInfo = @testRailUtility.getCase('885')
-        passedLogs = @objRollbar.addLog("[Step]     Checking Building Name and Tour Date fields", caseInfo['id'])
+        passedLogs = @objRollbar.addLog("[Step    ]  Checking Building Name and Tour Date fields", caseInfo['id'])
         #puts "[Step]     Checking Building Name and Tour Date fields"
         sleep(@objManageTours.instance_variable_get(:@timeSettingMap)['Sleep']['Environment']['Lightening'])
         expect(@objManageTours.childDisabled?(ManageTours.selectBuilding(@driver.find_element(:id,"BookTours0"),nil,@objManageTours.instance_variable_get(:@timeSettingMap)),ManageTours.selectTourDate(@driver.find_element(:id,"BookTours0"),@objManageTours.instance_variable_get(:@timeSettingMap)))).to be false
-        passedLogs = @objRollbar.addLog("\n[Expected] Tour date field should be disabled as building name field is not filled out \n[Result]   Success ")
+        passedLogs = @objRollbar.addLog("[Expected]  Tour date field should be disabled as building name field is not filled out \n[Result  ]  Success ")
         #puts "[Expected] Tour date field should be disabled as building name field is not filled out"
         #puts "[Result]   Success"
       #puts "C885 : successfully checked"
         puts "\n"
-        @testRailUtility.postResult(885 ,"Result for case 885  is #{"success"}",1,@runId)
+        passedLogs = @objRollbar.addLog("[Step    ]  Adding result in testrail")
+        @testRailUtility.postResult(885 ,"Pass",1,@runId)
+        passedLogs = @objRollbar.addLog("[Result  ]  Success")
     rescue Exception => excp
 
        @objRollbar.postRollbarData(caseInfo['id'], caseInfo['title'], passedLogs[caseInfo['id']])
+        passedLogs = @objRollbar.addLog("[Result  ]  Failed")
         Rollbar.error(excp)
 
       @testRailUtility.postResult(885 ,"Result for case 885  is #{excp}",5,@runId)
@@ -181,21 +193,24 @@ describe ManageTours do
     begin
         puts "\n"
         caseInfo = @testRailUtility.getCase('1016')
-         passedLogs = @objRollbar.addLog("[Step]     Checking Tour date field for previous date", caseInfo['id'])
+         passedLogs = @objRollbar.addLog("[Step    ]  Checking Tour date field for previous date", caseInfo['id'])
         #puts "[Step]     Checking Tour date field for previous date"
         ManageTours.selectTourDate(@driver.find_element(:id,"BookTours0"),@objManageTours.instance_variable_get(:@timeSettingMap))
         EnziUIUtility.clickElement(@driver,:id,Date.today.prev_day.to_s)
         sleep(@objManageTours.instance_variable_get(:@timeSettingMap)['Sleep']['Environment']['Lightening'])
         expect(EnziUIUtility.checkErrorMessage(@driver,'h2','No times slots available for the selected date')).to be true
-        passedLogs = @objRollbar.addLog("\n[Expected] Previous tour date should not be selected \n[Result]   Success ")
+        passedLogs = @objRollbar.addLog("[Expected]  Previous tour date should not be selected \n[Result  ]  Success ")
         #puts "[Expected] Previous tour date should not be selected"
         #puts "[Result]   Success"
         puts "\n"
       #puts "successfully checked C1016"
-      @testRailUtility.postResult(1016 ,"Result for case 1016  is #{"success"}",1,@runId)
+      passedLogs = @objRollbar.addLog("[Step    ]  Adding result in testrail")
+      @testRailUtility.postResult(1016 ,"Pass",1,@runId)
+      passedLogs = @objRollbar.addLog("[Result  ]  Success")
     rescue Exception => excp
 
        @objRollbar.postRollbarData(caseInfo['id'], caseInfo['title'], passedLogs[caseInfo['id']])
+        passedLogs = @objRollbar.addLog("[Result  ]  Failed")
         Rollbar.error(excp)
 
       @testRailUtility.postResult(1016 ,"Result for case 1016  is #{excp}",5,@runId)
@@ -209,7 +224,7 @@ describe ManageTours do
     puts "\n"
     begin
         caseInfo = @testRailUtility.getCase('81')
-         passedLogs = @objRollbar.addLog("[Step]     Start Time field should be selectable", caseInfo['id'])
+         passedLogs = @objRollbar.addLog("[Step    ]  Start Time field should be selectable", caseInfo['id'])
         #puts "[Step]     Start Time field should be selected"
         ManageTours.selectBuilding(@driver.find_element(:id,"BookTours0"),"LA-Santa Monica",@objManageTours.instance_variable_get(:@timeSettingMap))
         ManageTours.selectTourDate(@driver.find_element(:id,"BookTours0"),@objManageTours.instance_variable_get(:@timeSettingMap))
@@ -221,14 +236,17 @@ describe ManageTours do
         sleep(@objManageTours.instance_variable_get(:@timeSettingMap)['Sleep']['Environment']['Lightening'])
         expect(@objManageTours.childDisabled?(ManageTours.selectTourDate(@driver.find_element(:id,"BookTours0"),@objManageTours.instance_variable_get(:@timeSettingMap)),ManageTours.setElementValue(@driver.find_element(:id,"BookTours0"),"startTime",nil))).to be false
      # puts "C81 : successfully checked"
-         passedLogs = @objRollbar.addLog("\n[Expected] Start Time field should be selected after selecting Building Name and Tour Date fields \n[Result]   Success ")
+         passedLogs = @objRollbar.addLog("[Expected]  Start Time field should be selected after selecting Building Name and Tour Date fields \n[Result  ]  Success ")
         #puts "[Expected] Start Time field should be selected after selecting Building Name and Tour Date fields"
         #puts "[Result]   Success"
         puts "\n"
-      @testRailUtility.postResult(81,"Result for case 81 is #{"success"}",1,@runId)
+        passedLogs = @objRollbar.addLog("[Step    ]  Adding result in testrail")
+        @testRailUtility.postResult(81,"Pass",1,@runId)
+        passedLogs = @objRollbar.addLog("[Result  ]  Success")
     rescue Exception => excp
 
        @objRollbar.postRollbarData(caseInfo['id'], caseInfo['title'], passedLogs[caseInfo['id']])
+       passedLogs = @objRollbar.addLog("[Result  ]  Failed")
         Rollbar.error(excp)
 
       @testRailUtility.postResult(81,"Result for case 81 is #{excp}",5,@runId)
@@ -242,20 +260,23 @@ describe ManageTours do
     puts "\n"
     begin
         caseInfo = @testRailUtility.getCase('887')
-        passedLogs = @objRollbar.addLog("[Step]     Checking Start Time and End Time fields", caseInfo['id'])
+        passedLogs = @objRollbar.addLog("[Step    ]  Checking Start Time and End Time fields", caseInfo['id'])
         #puts "[Step]     Checking Start Time and End Time fields"
         ManageTours.setElementValue(@driver.find_element(:id,"BookTours0"),"startTime",nil)
         sleep(@objManageTours.instance_variable_get(:@timeSettingMap)['Sleep']['Environment']['Lightening'])
         expect(ManageTours.getElement("input","endTime",@driver.find_element(:id,"BookTours0"))).to_not eql nil
       #puts "C887 : successfully checked"
-        passedLogs = @objRollbar.addLog("\n[Expected]  End Time field should be selected after selecting Start Time \n[Result]   Success ")
+        passedLogs = @objRollbar.addLog("[Expected]  End Time field should be selected after selecting Start Time \n[Result  ]  Success ")
         #puts "[Expected] End Time field should be selected after selecting Start Time"
         #puts "[Result]   Success"
         puts "\n"
-        @testRailUtility.postResult(887,"Result for case 887 is #{"success"}",1,@runId)
+        passedLogs = @objRollbar.addLog("[Step    ]  Adding result in testrail")
+        @testRailUtility.postResult(887,"Pass",1,@runId)
+        passedLogs = @objRollbar.addLog("[Result  ]  Success")
     rescue Exception => excp
 
        @objRollbar.postRollbarData(caseInfo['id'], caseInfo['title'], passedLogs[caseInfo['id']])
+       passedLogs = @objRollbar.addLog("[Result  ]  Failed")
         Rollbar.error(excp)
 
       @testRailUtility.postResult(887,"Result for case 887 is #{excp}",5,@runId)
@@ -269,7 +290,7 @@ describe ManageTours do
     puts "\n"
     begin
       caseInfo = @testRailUtility.getCase('92')
-      passedLogs = @objRollbar.addLog("[Step]     Checking error message after entering single character in Building Name field", caseInfo['id'])
+      passedLogs = @objRollbar.addLog("[Step    ]  Checking error message after entering single character in Building Name field", caseInfo['id'])
         #puts "[Step]     Checking error message after entering single character in Building Name field"
       ManageTours.selectBuilding(@driver.find_element(:id,"BookTours0"),nil,@objManageTours.instance_variable_get(:@timeSettingMap)).clear
       #ManageTours.selectBuilding(@driver.find_element(:id,"BookTours0"),nil).send_keys "a"
@@ -277,20 +298,24 @@ describe ManageTours do
         expect(@driver.find_element(:xpath ,"//span[starts-with(@id, 'lookup-option')]").text).to eql nil
         #puts "C92 : successfully checked"
 
-        passedLogs = @objRollbar.addLog("\n[Expected]  Error message as 'Enter at least 2 characters to search' should be displayed \n[Result]   Success ")
+        passedLogs = @objRollbar.addLog("[Expected]  Error message as 'Enter at least 2 characters to search' should be displayed \n[Result  ]  Success ")
         #puts "[Expected] Error message as 'Enter at least 2 characters to search' should be displayed "
         #puts "[Result]   Success"
         puts "\n"
       else
         expect(@driver.find_element(:xpath ,"//span[starts-with(@id, 'lookup-option')]")).to_not eql nil
       end
-      @testRailUtility.postResult(92,"Result for case 92 is #{"success"}",1,@runId)
+      passedLogs = @objRollbar.addLog("[Step    ]  Adding result in testrail")
+      @testRailUtility.postResult(92,"Pass",1,@runId)
+      passedLogs = @objRollbar.addLog("[Result  ]  Success")
     rescue Exception => excp
 
          @objRollbar.postRollbarData(caseInfo['id'], caseInfo['title'], passedLogs[caseInfo['id']])
+         passedLogs = @objRollbar.addLog("[Result  ]  Failed")
         Rollbar.error(excp)
 
       @testRailUtility.postResult(92,"Result for case 92 is #{excp}",5,@runId)
+
       raise excp
     end
     #ManageTours.selectBuilding(@driver.find_element(:id,"BookTours0"),nil).clear
@@ -302,14 +327,14 @@ describe ManageTours do
     puts "\n"
     begin
       caseInfo = @testRailUtility.getCase('91')
-      passedLogs = @objRollbar.addLog("[Step]     Checking lead data on mange tour page", caseInfo['id'])
+      passedLogs = @objRollbar.addLog("[Step    ]  Checking lead data on mange tour page", caseInfo['id'])
         #puts "[Step]     Checking lead data on mange tour page"
       if !@driver.find_elements(:id,"Name").empty? then
         expect(@driver.find_element(:id,"Name").attribute('value').eql? "").to be false
         leadName = "#{@objManageTours.instance_variable_get(:@records)[0]['lead'][0]['firstName']}#{@objManageTours.instance_variable_get(:@records)[0]['lead'][0]['lastName']}"
         expect(@driver.find_element(:id,"Name").attribute('value').eql? "#{leadName}")
-        passedLogs = @objRollbar.addLog("[Validate] Does Name field of manage tour page contain lead name?");
-        passedLogs = @objRollbar.addLog("\n[Expected] Lead.Name= #{leadName} \n[Result]   Success")
+        passedLogs = @objRollbar.addLog("[Validate]  Does Name field of manage tour page contain lead name?");
+        passedLogs = @objRollbar.addLog("[Expected]  Lead.Name= #{leadName} \n[Result  ]  Success")
         #puts "[Validate] Does Name field of manage tour page contain lead name?"
         #puts "[Expected] Lead.Name= #{leadName}"
         #puts "[Result]   Success"
@@ -320,8 +345,8 @@ describe ManageTours do
         expect(@driver.find_element(:id,"Company").attribute('value').eql? "").to be false
         expect(@driver.find_element(:id,"Company").attribute('value').eql? "#{@leadsTestData[0]['company']}")
 
-        passedLogs = @objRollbar.addLog("[Validate] Does Company field of manage tour page contain lead company name ?");
-        passedLogs = @objRollbar.addLog("\n[Expected] Lead.Company= #{@leadsTestData[0]['company']} \n[Result]   Success")
+        passedLogs = @objRollbar.addLog("[Validate]  Does Company field of manage tour page contain lead company name ?");
+        passedLogs = @objRollbar.addLog("[Expected]  Lead.Company= #{@leadsTestData[0]['company']} \n[Result  ]  Success")
         
         #puts "[Validate] Does Company field of manage tour page contain lead company name ? "
         #puts "[Expected] Lead.Company= #{@leadsTestData[0]['company']}"
@@ -332,8 +357,8 @@ describe ManageTours do
       if !@driver.find_elements(:id,"Email").empty? then
         expect(@driver.find_element(:id,"Email").attribute('value').eql? "").to be false
         expect(@driver.find_element(:id,"Email").attribute('value').eql? "#{@leadsTestData[0]['email']}")
-        passedLogs = @objRollbar.addLog("[Validate] Does Email field of manage tour page contain lead email id ? ");
-        passedLogs = @objRollbar.addLog("\n[Expected] Lead.Email= #{@leadsTestData[0]['email']} \n[Result]   Success")
+        passedLogs = @objRollbar.addLog("[Validate]  Does Email field of manage tour page contain lead email id ? ");
+        passedLogs = @objRollbar.addLog("[Expected]  Lead.Email= #{@leadsTestData[0]['email']} \n[Result  ]  Success")
 
         #puts "[Validate] Does Email field of manage tour page contain lead email id ? "
         #puts "[Expected] Lead.Email= #{@leadsTestData[0]['email']}"
@@ -342,10 +367,13 @@ describe ManageTours do
       end
 
       #puts "C91 : successfully checked\n"
-      @testRailUtility.postResult(91,"Result for case 91 is #{"success"}",1,@runId)
+       passedLogs = @objRollbar.addLog("[Step    ]  Adding result in testrail")
+      @testRailUtility.postResult(91,"Pass",1,@runId)
+       passedLogs = @objRollbar.addLog("[Result  ]  Success")
     rescue Exception => excp
 
       @objRollbar.postRollbarData(caseInfo['id'], caseInfo['title'], passedLogs[caseInfo['id']])
+      passedLogs = @objRollbar.addLog("[Result  ]  Failed")
       Rollbar.error(excp)
 
       @testRailUtility.postResult(91,"Result for case 91 is #{excp}",5,@runId)
@@ -370,17 +398,19 @@ describe ManageTours do
         EnziUIUtility.wait(@driver,:id,"header43",@objManageTours.instance_variable_get(:@timeSettingMap)['Sleep']['Environment']['Lightening'])
         expect(@driver.find_element(:id,"header43").text.eql? "Duplicate Account Selector").to be true
         
-        passedLogs = @objRollbar.addLog("\n[Expected]  Duplicate account selector pop up is displayed \n[Result]   Success")
+        passedLogs = @objRollbar.addLog("[Expected]  Duplicate account selector pop up is displayed \n[Result  ]  Success")
         #puts "[Expected] Duplicate account selector pop up is displayed"
         #puts "[Result]   Success"
      # puts "C85 : successfully checked"
         puts "\n"
-
-      @testRailUtility.postResult(85,"Result for case 85 is #{"success"}",1,@runId)
+        passedLogs = @objRollbar.addLog("[Step    ]  Adding result in testrail")
+        @testRailUtility.postResult(85,"Result for case 85 is #{"success"}",1,@runId)
+        passedLogs = @objRollbar.addLog("[Result  ]  Success")
       #@objManageTours.getAllData(false).values
     rescue Exception => excp
 
        @objRollbar.postRollbarData(caseInfo['id'], caseInfo['title'], passedLogs[caseInfo['id']])
+       passedLogs = @objRollbar.addLog("[Result  ]  Failed")
       Rollbar.error(excp)
 
       @testRailUtility.postResult(85,"Result for case 85 is #{excp}",5,@runId)
@@ -402,26 +432,26 @@ describe ManageTours do
         @objManageTours.duplicateAccountSelector("Create Account and Don't Merge",nil)
         leadName = "#{@objManageTours.instance_variable_get(:@records)[0]['lead'][0]['firstName']}#{@objManageTours.instance_variable_get(:@records)[0]['lead'][0]['lastName']}"
         
-        passedLogs = @objRollbar.addLog("[Step]    #{leadName} named lead should be converted",caseInfo['id'])
+        passedLogs = @objRollbar.addLog("[Step    ]  #{leadName} named lead should be converted",caseInfo['id'])
 
         #puts  "[Step]    #{leadName} named lead should be converted"
         expect(@objManageTours.checkRecordCreated("Lead","SELECT id,isConverted FROM Lead WHERE Email = '#{@leadsTestData[0]['email']}'")[0].fetch("IsConverted").eql? 'true').to be true
-        passedLogs = @objRollbar.addLog("\n[Expected] Successfully lead is converted \n[Result]   Success")
+        passedLogs = @objRollbar.addLog("[Expected]  Successfully lead is converted \n[Result  ]  Success")
         #puts "[Expected] Successfully lead is converted "
         #puts "[Result]   Success"
         puts "\n"
-        passedLogs = @objRollbar.addLog("[Step]     Contact Should be created with name #{leadName}")
+        passedLogs = @objRollbar.addLog("[Step    ]  Contact Should be created with name #{leadName}")
         #puts "[Step]     Contact Should be created with name #{leadName}"
         expect(@objManageTours.checkRecordCreated("Contact","SELECT id,total_Scheduled_Tours__c FROM Contact WHERE Email = '#{@leadsTestData[0]['email']}'")[0].fetch("Id")).to_not eql nil
-        passedLogs = @objRollbar.addLog("\n[Expected] Successfully contact is created \n[Result]   Success")
+        passedLogs = @objRollbar.addLog("[Expected]  Successfully contact is created \n[Result  ]  Success")
         #puts "[Expected] Successfully contact is created"
         #puts "[Result]   Success"
         puts "\n"
         
-        passedLogs = @objRollbar.addLog("[Step]     Account Should be created with name #{@leadsTestData[0]['company']}")
+        passedLogs = @objRollbar.addLog("[Step    ]  Account Should be created with name #{@leadsTestData[0]['company']}")
         #puts "[Step]     Account Should be created with name #{@leadsTestData[0]['company']}"
         expect(@objManageTours.checkRecordCreated("Account","SELECT id,allow_merge__c FROM Account WHERE name = '#{@leadsTestData[0]['company']}'")[0].fetch("Id")).to_not eql nil
-        passedLogs = @objRollbar.addLog("\n[Expected] Successfully account is created \n[Result]   Success")
+        passedLogs = @objRollbar.addLog("[Expected]  Successfully account is created \n[Result  ]  Success")
         #puts "[Expected] Successfully account is created"
         #puts "[Result]   Success"
         puts "\n"
@@ -429,69 +459,72 @@ describe ManageTours do
       
         sleep(30)
         createdOpportunity = @objManageTours.checkRecordCreated("Opportunity","SELECT id,name FROM Opportunity WHERE Account.name = '#{@leadsTestData[0]['company']}'")[0]
-         passedLogs = @objRollbar.addLog("[Step]     Opportunity should be created with name #{createdOpportunity.fetch("Name")}")
+         passedLogs = @objRollbar.addLog("[Step    ]  Opportunity should be created with name #{createdOpportunity.fetch("Name")}")
         #puts "[Step]     Opportunity should be created with name #{createdOpportunity.fetch("Name")}"
         expect(createdOpportunity.fetch("Id")).to_not eql nil
         sleep(@objManageTours.instance_variable_get(:@timeSettingMap)['Sleep']['Environment']['Lightening'])
-        passedLogs = @objRollbar.addLog("\n[Expected] Successfully opportunity is created \n[Result]   Success")
+        passedLogs = @objRollbar.addLog("[Expected]  Successfully opportunity is created \n[Result  ]  Success")
         #puts "[Expected] Successfully opportunity is created"
         #puts "[Result]   Success"
         puts "\n"
 
-        passedLogs = @objRollbar.addLog("[Step]     Checking allow merge field on account \n[Validate] Does Allow Merge field on account is unchecked?")
+        passedLogs = @objRollbar.addLog("[Step    ]  Checking allow merge field on account \n[Validate]  Does Allow Merge field on account is unchecked?")
         #puts "[Step]     Checking allow merge field on account "
         #puts "[Validate] Does Allow Merge field on account is unchecked?"
         expect(ManageTours.class_variable_get(:@@recordInsertedIds)['Account'].fetch('Allow_Merge__c').eql? 'false').to be true
-        passedLogs = @objRollbar.addLog("\n[Expected] Allow merge = #{ManageTours.class_variable_get(:@@recordInsertedIds)['Account'].fetch('Allow_Merge__c')}\t \n[Result]   Success")
+        passedLogs = @objRollbar.addLog("[Expected]  Allow merge = #{ManageTours.class_variable_get(:@@recordInsertedIds)['Account'].fetch('Allow_Merge__c')}\t \n[Result  ]  Success")
         #puts "[Expected] Allow merge = #{ManageTours.class_variable_get(:@@recordInsertedIds)['Account'].fetch('Allow_Merge__c')}\t\n"
         #puts "[Result]   Success"
         puts "\n"
 
-        passedLogs = @objRollbar.addLog("[Step]     Checking total number of scheduled tours on contact \n[Validate] Does Total number of scheduled tours field of contact updated after tour booking?")
+        passedLogs = @objRollbar.addLog("[Step    ]  Checking total number of scheduled tours on contact \n[Validate]  Does Total number of scheduled tours field of contact updated after tour booking?")
         #puts "[Step]     Checking total number of scheduled tours on contact"
         #puts "[Validate] Does Total number of scheduled tours field of contact updated after tour booking?"
         sleep(@objManageTours.instance_variable_get(:@timeSettingMap)['Sleep']['Environment']['Lightening'])
         expect(ManageTours.class_variable_get(:@@recordInsertedIds)['Contact'].fetch('Total_Scheduled_Tours__c').to_i > 0).to be true
-        passedLogs = @objRollbar.addLog("[Expected] Total number of scheduled tours = #{ManageTours.class_variable_get(:@@recordInsertedIds)['Contact'].fetch('Total_Scheduled_Tours__c')}\t \n[Result]   Success")
+        passedLogs = @objRollbar.addLog("[Expected]  Total number of scheduled tours = #{ManageTours.class_variable_get(:@@recordInsertedIds)['Contact'].fetch('Total_Scheduled_Tours__c')}\t \n[Result  ]  Success")
         #puts "[Expected] Total number of scheduled tours = #{ManageTours.class_variable_get(:@@recordInsertedIds)['Contact'].fetch('Total_Scheduled_Tours__c')}\t\n"
         #puts "[Result]   Success"
         puts "\n"
 
-        passedLogs = @objRollbar.addLog("[Step]     Tour should be created")
+        passedLogs = @objRollbar.addLog("[Step    ]  Tour should be created")
         #puts "[Step]     Tour should be created"
         expect(@objManageTours.checkRecordCreated("Tour_Outcome__c","SELECT id,Status__c FROM Tour_Outcome__c WHERE Primary_Member__r.email = '#{@leadsTestData[0]['email']}'")[0].fetch("Id")).to_not eql nil
-        passedLogs = @objRollbar.addLog("\n[Expected]Successfully tour is created \n[Result]   Success")
+        passedLogs = @objRollbar.addLog("[Expected]  Successfully tour is created \n[Result  ]  Success")
         #puts "[Expected] Successfully tour is created "
         #puts "[Result]   Success"
         puts "\n"
 
-        passedLogs = @objRollbar.addLog("[Step]     Success message for booked tour should be displayed \n[Expected] Success Message as 'Tour booked successfully and will be synced shortly' and 'Tours synced successfully' should be displayed \n[Result]   Success")
+        passedLogs = @objRollbar.addLog("[Step    ]  Success message for booked tour should be displayed \n[Expected]  Success Message as 'Tour booked successfully and will be synced shortly' and 'Tours synced successfully' should be displayed \n[Result  ]  Success")
         #puts "[Step]     Success message for booked tour should be displayed"
         #puts "[Expected] Success Message as 'Tour booked successfully and will be synced shortly' and 'Tours synced successfully' should be displayed"
         #puts "[Result]   Success"
         puts "\n"
 
-        passedLogs = @objRollbar.addLog("[Step]     To check status of created tour \n[Validate] Does status of tour updated as 'Scheduled' ?")
+        passedLogs = @objRollbar.addLog("[Step    ]  To check status of created tour \n[Validate]  Does status of tour updated as 'Scheduled' ?")
         #puts "[Step]     To check status of created tour"
         #puts "[Validate] Does status of tour updated as 'Scheduled' ?"
         expect(ManageTours.class_variable_get(:@@recordInsertedIds)['Tour_Outcome__c'].fetch('Status__c').eql? "Scheduled").to be true
-        passedLogs = @objRollbar.addLog("\n[Expected] Status= #{ManageTours.class_variable_get(:@@recordInsertedIds)['Tour_Outcome__c'].fetch('Status__c')} \n[Result]   Success")
+        passedLogs = @objRollbar.addLog("[Expected]  Status= #{ManageTours.class_variable_get(:@@recordInsertedIds)['Tour_Outcome__c'].fetch('Status__c')} \n[Result  ]  Success")
         #puts "[Expected] Status= #{ManageTours.class_variable_get(:@@recordInsertedIds)['Tour_Outcome__c'].fetch('Status__c')}"
         #puts "[Result]   Success"
         puts "\n"
 
-        passedLogs = @objRollbar.addLog("[Step]     Activity should be created for tour")
+        passedLogs = @objRollbar.addLog("[Step    ]  Activity should be created for tour")
         puts "[Step]     Activity should be created for tour"
         expect(@objManageTours.checkRecordCreated('Task',"SELECT id FROM Task WHERE whatId = '#{ManageTours.class_variable_get(:@@recordInsertedIds)['Tour_Outcome__c'].fetch('Id')}'")[0].fetch('Id')).to_not eql nil
-        passedLogs = @objRollbar.addLog("\n[Expected] 'Book a tour' activity is created \n[Result]   Success")
+        passedLogs = @objRollbar.addLog("[Expected]  'Book a tour' activity is created \n[Result  ]  Success")
         #puts "[Expected] 'Book a tour' activity is created"
         #puts "[Result]   Success"
         puts "\n"
-        
-        @testRailUtility.postResult(86,"Result for case 86 is #{"success"}",1,@runId)
+        passedLogs = @objRollbar.addLog("[Step    ]  Adding result in testrail")
+        @testRailUtility.postResult(86,"Pass",1,@runId)
+        passedLogs = @objRollbar.addLog("[Result  ]  Success")
+
       rescue Exception => excp
 
          @objRollbar.postRollbarData(caseInfo['id'], caseInfo['title'], passedLogs[caseInfo['id']])
+         passedLogs = @objRollbar.addLog("[Result  ]  Failed")
          Rollbar.error(excp)
 
         @testRailUtility.postResult(86,"Result for case 86 is #{excp}",5,@runId)
@@ -505,18 +538,22 @@ describe ManageTours do
       puts "\n"
       begin
         caseInfo = @testRailUtility.getCase('89')
-        passedLogs = @objRollbar.addLog("[Step]     Checking booked tour information", caseInfo['id'])
+        passedLogs = @objRollbar.addLog("[Step    ]  Checking booked tour information", caseInfo['id'])
         #puts "[Step]     Checking booked tour information"
         expect(@objManageTours.numberOfTourBooked == 3).to be true
-        passedLogs = @objRollbar.addLog("\n[Expected] Tour records are displayed on same manage tour page \n[Result]   Success")
+        passedLogs = @objRollbar.addLog("[Expected]  Tour records are displayed on same manage tour page \n[Result  ]  Success")
         #puts "[Expected] Tour information is displayed on same manage tour page"
         #puts "C89 : successfully checked"
         #puts "[Result]   Success"
         puts "\n"
-        @testRailUtility.postResult(89,"Result for case 89 is #{"success"}",1,@runId)
+        passedLogs = @objRollbar.addLog("[Step    ]  Adding result in testrail")
+        @testRailUtility.postResult(89,"Pass",1,@runId)
+        passedLogs = @objRollbar.addLog("[Result  ]  Success")
+     
       rescue Exception => excp
 
          @objRollbar.postRollbarData(caseInfo['id'], caseInfo['title'], passedLogs[caseInfo['id']])
+          passedLogs = @objRollbar.addLog("[Result  ]  Failed")
          Rollbar.error(excp)
 
         @testRailUtility.postResult(89,"Result for case 89 is #{excp}",5,@runId)
@@ -531,7 +568,7 @@ describe ManageTours do
         puts "\n"
         begin
           caseInfo = @testRailUtility.getCase('96')
-          passedLogs = @objRollbar.addLog("[Step]     Multiple tours should be booked", caseInfo['id'])
+          passedLogs = @objRollbar.addLog("[Step    ]  Multiple tours should be booked", caseInfo['id'])
         #puts "[Step]     Multiple tours should be booked"
         sleep(@objManageTours.instance_variable_get(:@timeSettingMap)['Sleep']['Environment']['Lightening'])
         @objManageTours.bookNewTour
@@ -547,48 +584,51 @@ describe ManageTours do
         
         expect(bookedTours.size > 1).to be true
 
-        passedLogs = @objRollbar.addLog("\n[Expected] Multiple tours are booked and those are = #{bookedTours.inspect} \n[Result]   Success")
+        passedLogs = @objRollbar.addLog("[Expected]  Multiple tours are booked and those are = #{bookedTours.inspect} \n[Result  ]  Success")
         #puts "[Expected] Multiple tours are booked and those are =>  #{bookedTours.inspect}\t\n"
         #puts "[Result]   Success"
         puts "\n"
         sleep(@objManageTours.instance_variable_get(:@timeSettingMap)['Sleep']['Environment']['Lightening'])
         
-        passedLogs = @objRollbar.addLog("[Step]     Open activities for tours should be created")
+        passedLogs = @objRollbar.addLog("[Step    ]  Open activities for tours should be created")
         #puts "[Step]     Open activities for tours should be created"
         expect(@objManageTours.checkRecordCreated('Task',"SELECT id FROM Task WHERE whatId = '#{bookedTours[0].fetch('Id')}'")[0].fetch('Id')).to_not eql nil
         expect(@objManageTours.checkRecordCreated('Task',"SELECT id FROM Task WHERE whatId = '#{bookedTours[1].fetch('Id')}'")[0].fetch('Id')).to_not eql nil
-        passedLogs = @objRollbar.addLog("\n[Expected] Open activities are created for multiple tours \n[Result]   Success")
+        passedLogs = @objRollbar.addLog("[Expected]  Open activities are created for multiple tours \n[Result  ]  Success")
         #puts "[Expected] Open activities are created for multiple tours"
         #puts "[Result]   Success"
         puts "\n"
 
-        passedLogs = @objRollbar.addLog("[Step]     User should see booked tour information")
+        passedLogs = @objRollbar.addLog("[Step    ]  User should see booked tour information")
         #puts "[Step]     User should see booked tour information"
         expect(@objManageTours.numberOfTourBooked > 3).to be true
-        passedLogs = @objRollbar.addLog("\n[Expected] Booked tours records are available on manage tour page \n[Result]   Success")
+        passedLogs = @objRollbar.addLog("[Expected]  Booked tours records are available on manage tour page \n[Result  ]  Success")
         #puts "[Expected] Booked tours records are available on manage tour page"
         #puts "[Result]   Success"
         puts "\n"
-        puts "C96 : Checked successfully"
-        puts "---------------------------------------------------------------------------------------------------------------------------"
-        puts "\n"
-          @testRailUtility.postResult(96,"Result for case 96 is #{"success"}",1,@runId)
+        
+        passedLogs = @objRollbar.addLog("[Step    ]  Adding result in testrail")
+        @testRailUtility.postResult(96,"Pass",1,@runId)
+        passedLogs = @objRollbar.addLog("[Result  ]  Success")
         rescue Exception => excp
            @objRollbar.postRollbarData(caseInfo['id'], caseInfo['title'], passedLogs[caseInfo['id']])
+           passedLogs = @objRollbar.addLog("[Result  ]  Failed")
           Rollbar.error(excp)
 
           @testRailUtility.postResult(96,"Result for case 96 is #{excp}",5,@runId)
           raise excp
         end
       end
-       
+        puts "C96 : Checked successfully"
+        puts "---------------------------------------------------------------------------------------------------------------------------"
+        
     end
     it "C94 : To check tour is booked, when user clicks on 'create account and merge' button" do
       puts "C94 : To check tour is booked, when user clicks on 'create account and merge' button"
       puts "\n"
       begin
         caseInfo = @testRailUtility.getCase('94')
-        passedLogs = @objRollbar.addLog("[Step]     Multiple tours should be booked", caseInfo['id'])
+        
 
         
         sleep(@objManageTours.instance_variable_get(:@timeSettingMap)['Sleep']['Environment']['Lightening'])
@@ -603,119 +643,125 @@ describe ManageTours do
         @objManageTours.duplicateAccountSelector("Create Account and Merge",nil)
          
         #puts "[Step]     Lead with #{@leadsTestData[0]['email']} email id should be converted"
-        passedLogs = @objRollbar.addLog("[Step]     Lead with #{@leadsTestData[0]['email']} email id should be converted")
+        passedLogs = @objRollbar.addLog("[Step    ]  Lead with #{@leadsTestData[0]['email']} email id should be converted",caseInfo['id'])
         #puts "\n"
         expect(@objManageTours.checkRecordCreated("Lead","SELECT id,isConverted FROM Lead WHERE Email = '#{@leadsTestData[0]['email']}'")[0].fetch("IsConverted").eql? 'true').to be true
-        passedLogs = @objRollbar.addLog("\n[Expected] Lead converted Sucessfully \n[Result]   Success")
+        passedLogs = @objRollbar.addLog("[Expected]  Lead converted Sucessfully \n[Result  ]  Success")
         #puts "[Expected] Lead converted Sucessfully"
         #puts "[Result]   Success"
         puts "\n"
 
-        passedLogs = @objRollbar.addLog("[Step]     Contact should be created with name #leadName")
+        passedLogs = @objRollbar.addLog("[Step    ]  Contact should be created with name #leadName")
         #puts "[Step]     Contact should be created with name #leadName"
         expect(@objManageTours.checkRecordCreated("Contact","SELECT id,total_Scheduled_Tours__c FROM Contact WHERE Email = '#{@leadsTestData[0]['email']}'")[0].fetch("Id")).to_not eql nil
-        passedLogs = @objRollbar.addLog("\n[Expected] Contact created successfully \n[Result]   Success")
+        passedLogs = @objRollbar.addLog("[Expected]  Contact created successfully \n[[Result  ]  Success")
         #puts "[Expected] Contact created successfully"
         #puts "[Result]   Success"
         puts "\n"
 
-        passedLogs = @objRollbar.addLog("[Step]     Account should be created with name #{@leadsTestData[0]['company']}")
+        passedLogs = @objRollbar.addLog("[Step    ]  Account should be created with name #{@leadsTestData[0]['company']}")
         #puts "[Step]     Account should be created with name #{@leadsTestData[0]['company']}"
         expect(@objManageTours.checkRecordCreated("Account","SELECT id,allow_merge__c FROM Account WHERE name = '#{@leadsTestData[0]['company']}'")[0].fetch("Id")).to_not eql nil
-        passedLogs = @objRollbar.addLog("\n[Expected] Account created successfully \n[Result]   Success")
+        passedLogs = @objRollbar.addLog("[Expected]  Account created successfully \n[Result  ]  Success")
         #puts "[Expected] Account created successfully"
         #puts "[Result]   Success"
         puts "\n"
 
-        passedLogs = @objRollbar.addLog("[Step]     Opportunity should be created")
+        passedLogs = @objRollbar.addLog("[Step    ]  Opportunity should be created")
         #puts "[Step]     Opportunity should be created"
         sleep(30)
         expect(@objManageTours.checkRecordCreated("Opportunity","SELECT id FROM Opportunity WHERE Account.name = '#{@leadsTestData[0]['company']}'")[0].fetch("Id")).to_not eql nil
-        passedLogs = @objRollbar.addLog("\n[Expected] Opportunity created successfully \n[Result]   Success")
+        passedLogs = @objRollbar.addLog("[Expected]  Opportunity created successfully \n[Result  ]  Success")
         #puts "[Expected] Opportunity created successfully"
         #puts "[Result]   Success"
         puts "\n"
 
         sleep(@objManageTours.instance_variable_get(:@timeSettingMap)['Sleep']['Environment']['Lightening'])
         
-        passedLogs = @objRollbar.addLog("[Step]     To check allow merge field on account \n[Validate] Does Allow Merge field on account is checked?")
+        passedLogs = @objRollbar.addLog("[Step    ]  To check allow merge field on account \n[Validate]  Does Allow Merge field on account is checked?")
         #puts "[Step]     To check allow merge field on account "
         #puts "[Validate] Does Allow Merge field on account is checked?"
         expect(ManageTours.class_variable_get(:@@recordInsertedIds)['Account'].fetch('Allow_Merge__c').eql? 'true').to be true
-        passedLogs = @objRollbar.addLog("\n[Expected] Allow merge status = #{ManageTours.class_variable_get(:@@recordInsertedIds)['Account'].fetch('Allow_Merge__c')}\t \n[Result]   Success")
+        passedLogs = @objRollbar.addLog("[Expected]  Allow merge status = #{ManageTours.class_variable_get(:@@recordInsertedIds)['Account'].fetch('Allow_Merge__c')}\t \n[Result  ]  Success")
         #puts "[Expected] Allow merge status = #{ManageTours.class_variable_get(:@@recordInsertedIds)['Account'].fetch('Allow_Merge__c')}\t\n"
         #puts "[Result]   Success"
         puts"\n"
 
-        passedLogs = @objRollbar.addLog("[Step]     Checking total number of scheduled tours on contact \n[Validate] Does Total number of scheduled tours field of contact updated after tour booking?")
+        passedLogs = @objRollbar.addLog("[Step    ]  Checking total number of scheduled tours on contact \n[Validate]  Does Total number of scheduled tours field of contact updated after tour booking?")
         #puts "[Step]     Checking total number of scheduled tours on contact"
         #puts "[Validate] Does Total number of scheduled tours field of contact updated after tour booking?"
 
         expect(ManageTours.class_variable_get(:@@recordInsertedIds)['Contact'].fetch('Total_Scheduled_Tours__c').to_i > 0).to be true
-        passedLogs = @objRollbar.addLog("\n[Expected] Total number of scheduled tours = #{ManageTours.class_variable_get(:@@recordInsertedIds)['Contact'].fetch('Total_Scheduled_Tours__c')}\t \n[Result]   Success")
+        passedLogs = @objRollbar.addLog("[Expected]  Total number of scheduled tours = #{ManageTours.class_variable_get(:@@recordInsertedIds)['Contact'].fetch('Total_Scheduled_Tours__c')}\t \n[Result  ]  Success")
 
         #puts "[Expected] Total number of scheduled tours => #{ManageTours.class_variable_get(:@@recordInsertedIds)['Contact'].fetch('Total_Scheduled_Tours__c')}\t\n"
         #puts "[Result]   Success"
         puts "\n"
 
-        passedLogs = @objRollbar.addLog("[Step]     Tour should be created")
+        passedLogs = @objRollbar.addLog("[Step    ]  Tour should be created")
         #puts "[Step]     Tour should be created"
         expect(@objManageTours.checkRecordCreated("Tour_Outcome__c","SELECT id,Status__c FROM Tour_Outcome__c WHERE Primary_Member__r.email = '#{@leadsTestData[0]['email']}'")[0].fetch("Id")).to_not eql nil
-        passedLogs = @objRollbar.addLog("\n[Expected] Tour created successfully \n[Result]   Success")
+        passedLogs = @objRollbar.addLog("[Expected]  Tour created successfully \n[Result  ]  Success")
         #puts "[Expected] Tour created successfully"
         #puts "[Result]   Success"
         puts "\n"
 
-        passedLogs = @objRollbar.addLog("[Step]     Success message for booked tour should be displayed \n[Expected] Success Message as 'Tour booked successfully and will be synced shortly' and 'Tours synced successfully' should be displayed \n[Result]   Success")
+        passedLogs = @objRollbar.addLog("[Step    ]  Success message for booked tour should be displayed \n[Expected]  Success Message as 'Tour booked successfully and will be synced shortly' and 'Tours synced successfully' should be displayed \n[Result  ]  Success")
         #puts "[Step]     Success message for booked tour should be displayed"
         #puts "[Expected] Success Message as 'Tour booked successfully and will be synced shortly' and 'Tours synced successfully' should be displayed"
         #puts "[Result]   Success"
         puts "\n"
 
-        passedLogs = @objRollbar.addLog("[Step]     To check status of created tour \n[Validate] Does status of tour updated as 'Scheduled' ?")
+        passedLogs = @objRollbar.addLog("[Step    ]  To check status of created tour \n[Validate]  Does status of tour updated as 'Scheduled' ?")
         #puts "[Step]     To check status of created tour"
         #puts "[Validate] Does status of tour updated as 'Scheduled' ?"
         expect(ManageTours.class_variable_get(:@@recordInsertedIds)['Tour_Outcome__c'].fetch('Status__c').eql? "Scheduled").to be true
-        passedLogs = @objRollbar.addLog("\n[Expected] Status =Scheduled \n[Result]   Success")
+        passedLogs = @objRollbar.addLog("[Expected]  Status =Scheduled \n[Result  ]  Success")
         #puts "[Expected] Status =Scheduled"
         #puts "[Result]   Success"
         puts "\n"
 
-        passedLogs = @objRollbar.addLog("[Step]     Checking open activities")
+        passedLogs = @objRollbar.addLog("[Step    ]  Checking open activities")
         #puts "[Step]     Checking open activities"
         expect(@objManageTours.checkRecordCreated('Task',"SELECT id FROM Task WHERE whatId = '#{ManageTours.class_variable_get(:@@recordInsertedIds)['Tour_Outcome__c'].fetch('Id')}'")[0].fetch('Id')).to_not eql nil
-        passedLogs = @objRollbar.addLog("\n[Expected] 'Book a tour' named open activity created successfully \n[Result]   Success")
+        passedLogs = @objRollbar.addLog("[Expected]  'Book a tour' named open activity created successfully \n[Result  ]  Success")
         #puts "[Expected] 'Book a tour' named open activity created successfully"
         #puts "[Result]   Success"
         puts "\n"
 
-        passedLogs = @objRollbar.addLog("[Step]     User should see records of booked tour")
+        passedLogs = @objRollbar.addLog("[Step    ]  User should see records of booked tour")
         #puts "[Step]     User should see records of booked tour "
         sleep(@objManageTours.instance_variable_get(:@timeSettingMap)['Sleep']['Environment']['Lightening'])
         expect(@objManageTours.numberOfTourBooked == 3).to be true
-        passedLogs = @objRollbar.addLog("\n[Expected] Booked tours records are available on manage tour page \n[Result]   Success")
+        passedLogs = @objRollbar.addLog("[Expected]  Booked tours records are available on manage tour page \n[Result  ]  Success")
         #puts "[Expected] Booked tours records are available on manage tour page"
         #puts "[Result]   Success"
         puts "\n"
 
-        puts "C94 : Checked successfully"
-        puts "---------------------------------------------------------------------------------------------------------------------------"
-        puts "\n"
-        @testRailUtility.postResult(94,"Result for case 94 is #{"success"}",1,@runId)
+       
+        passedLogs = @objRollbar.addLog("[Step    ]  Adding result in testrail")
+        @testRailUtility.postResult(94,"Pass",1,@runId)
+        passedLogs = @objRollbar.addLog("[Result  ]  Success")
+       
       rescue Exception => excp
          @objRollbar.postRollbarData(caseInfo['id'], caseInfo['title'], passedLogs[caseInfo['id']])
+         passedLogs = @objRollbar.addLog("[Result  ]  Failed")
          Rollbar.error(excp)
 
         @testRailUtility.postResult(94,"Result for case 94 is #{excp}",5,@runId)
+
         raise excp
       end
+        puts "C94 : Checked successfully"
+        puts "---------------------------------------------------------------------------------------------------------------------------"
+       
     end
     it "C129 : to check user can cancel a tour"  , :test => true do
       puts "C129 : to check user can cancel a tour"
       puts "\n"
       begin
         caseInfo = @testRailUtility.getCase('129')
-        passedLogs = @objRollbar.addLog("[Step]     User can fill cancellation reason \n[validate] Does cancel tour pop-up accept cancellation reason ? ", caseInfo['id'])
+        passedLogs = @objRollbar.addLog("[Step    ]  User can fill cancellation reason \n[validate]  Does cancel tour pop-up accept cancellation reason ? ", caseInfo['id'])
 
         #puts "[Step]     User can fill cancellation reason"
         #puts "[validate] Does cancel tour pop-up accept cancellation reason ? "
@@ -723,47 +769,51 @@ describe ManageTours do
         EnziUIUtility.selectElement(@driver,"Cancel","button")
         EnziUIUtility.wait(@driver,:id,"header43",@objManageTours.instance_variable_get(:@timeSettingMap)['Sleep']['Environment']['Lightening'])
         EnziUIUtility.selectChild(@driver,:id,"Cancellation_Reason__c","No reason (didn't provide)","option")
-        passedLogs = @objRollbar.addLog("\n[Expected] Cancellation Reason= No reason \n[Result]   Success")
+        passedLogs = @objRollbar.addLog("[Expected]  Cancellation Reason= No reason \n[Result  ]  Success")
         #puts "[Expected] Cancellation Reason= No reason"
         #puts "[Result]   Success"
         puts "\n"
 
-        passedLogs = @objRollbar.addLog("[validate] Does save button get enabled after filling out cancellation reason ? ")
+        passedLogs = @objRollbar.addLog("[validate]  Does save button get enabled after filling out cancellation reason ? ")
         #puts "[validate] Does save button get enabled after filling out cancellation reason ? "
         sleep(@objManageTours.instance_variable_get(:@timeSettingMap)['Sleep']['Environment']['Lightening'])
         EnziUIUtility.selectElement(@driver,"Save","button")
         sleep(@objManageTours.instance_variable_get(:@timeSettingMap)['Sleep']['Environment']['Lightening'])
-        passedLogs = @objRollbar.addLog("\n[Expected] Save button get enabled \n[Result]   Success")
+        passedLogs = @objRollbar.addLog("[Expected]  Save button get enabled \n[Result  ]  Success")
         #puts "[Expected] Save button get enabled"
         #puts "[Result]   Success"
         puts "\n"
 
-        passedLogs = @objRollbar.addLog("[Validate] Does status of tour change after cancellation of tour")
+        passedLogs = @objRollbar.addLog("[Validate]  Does status of tour change after cancellation of tour")
         #puts "[Validate] Does status of tour change after cancellation of tour"
         expect(@objManageTours.tourStatusChecked?("Cancelled" , @leadsTestData[0]['email'])).to be true
-        passedLogs = @objRollbar.addLog("\n[Expected] Tour status=Cancelled \n[Result]   Success")
+        passedLogs = @objRollbar.addLog("[Expected]  Tour status=Cancelled \n[Result  ]  Success")
         #puts "[Expected] Tour status=Cancelled"
         #puts "[Result]   Success"
         puts "\n"
-
-         puts "C129 : Checked successfully"
-         puts "---------------------------------------------------------------------------------------------------------------------------"
-        puts "\n"
-        @testRailUtility.postResult(129,"Result for case 129 is #{"success"}",1,@runId)
+      
+        passedLogs = @objRollbar.addLog("[Step    ]  Adding result in testrail")
+        @testRailUtility.postResult(129,"Pass",1,@runId)
+        passedLogs = @objRollbar.addLog("[Result  ]  Success")
+       
       rescue Exception => excp
          @objRollbar.postRollbarData(caseInfo['id'], caseInfo['title'], passedLogs[caseInfo['id']])
+        passedLogs = @objRollbar.addLog("[Result  ]  Failed")
          Rollbar.error(excp)
 
         @testRailUtility.postResult(129,"Result for case 129 is #{excp}",5,@runId)
         raise excp
       end
+      puts "C129 : Checked successfully"
+      puts "---------------------------------------------------------------------------------------------------------------------------"
+        
     end
     it "C102 : to check that tour is booked, when user clicks on 'Use Selector Account' button" , :test => true do
       puts "C102 : to check that tour is booked, when user clicks on 'Use Selector Account' button"
       puts "\n"
       begin
         caseInfo = @testRailUtility.getCase('102')
-        passedLogs = @objRollbar.addLog("[Step]     Lead with #{@leadsTestData[0]['email']} email id should be converted", caseInfo['id'])
+        passedLogs = @objRollbar.addLog("[Step    ]  Lead with #{@leadsTestData[0]['email']} email id should be converted", caseInfo['id'])
        
 
         sleep(@objManageTours.instance_variable_get(:@timeSettingMap)['Sleep']['Environment']['Lightening'])
@@ -778,38 +828,38 @@ describe ManageTours do
         
         #puts "[Step]     Lead with #{@leadsTestData[0]['email']} email id should be converted"
         expect(@objManageTours.checkRecordCreated("Lead","SELECT id,isConverted FROM Lead WHERE Email = '#{@leadsTestData[0]['email']}'")[0].fetch("IsConverted").eql? 'true').to be true
-        passedLogs = @objRollbar.addLog("[Expected] Lead converted Sucessfully \n[Result]   Success")
+        passedLogs = @objRollbar.addLog("[Expected]  Lead converted Sucessfully \n[Result  ]  Success")
         #puts "[Expected] Lead converted Sucessfully"
         #puts "[Result]   Success"
         puts "\n"
 
-        passedLogs = @objRollbar.addLog("[Step]     Contact should be created")
+        passedLogs = @objRollbar.addLog("[Step    ]  Contact should be created")
         #puts "[Step]     Contact should be created with name #leadName"
         expect(@objManageTours.checkRecordCreated("Contact","SELECT id,Account.name FROM Contact WHERE Email = '#{@leadsTestData[0]['email']}'")[0].fetch("Id")).to_not eql nil
-        passedLogs = @objRollbar.addLog("[Expected] Contact created successfully \n[Result]   Success")
+        passedLogs = @objRollbar.addLog("[Expected]  Contact created successfully \n[Result  ]  Success")
         #puts "[Expected] Contact created successfully"
         #puts "[Result]   Success"
         puts "\n"
 
-        passedLogs = @objRollbar.addLog("[Step]     Tour should be created")
+        passedLogs = @objRollbar.addLog("[Step    ]  Tour should be created")
         #puts "[Step]     Tour should be created"
         expect(@objManageTours.checkRecordCreated("Tour_Outcome__c","SELECT id,Status__c FROM Tour_Outcome__c WHERE Primary_Member__r.email = '#{@leadsTestData[0]['email']}'")[0].fetch("Id")).to_not eql nil
-        passedLogs = @objRollbar.addLog("[Expected] Tour created successfully \n[Result]   Success")
+        passedLogs = @objRollbar.addLog("[Expected]  Tour created successfully \n[Result  ]  Success")
         #puts "[Expected] Tour created successfully"
         #puts "[Result]   Success"
         puts "\n"
 
-        passedLogs = @objRollbar.addLog("[Step]     Success message for booked tour should be displayed \n[Expected] Success Message as 'Tour booked successfully and will be synced shortly' and 'Tours synced successfully' should be displayed \n[Result]   Success")
+        passedLogs = @objRollbar.addLog("[Step    ]  Success message for booked tour should be displayed \n[Expected]  Success Message as 'Tour booked successfully and will be synced shortly' and 'Tours synced successfully' should be displayed \n[Result  ]  Success")
         puts "\n"
 
-        passedLogs = @objRollbar.addLog("[Step]     To check status of created tour \n[Validate] Does status of tour updated as 'Scheduled' ?")
+        passedLogs = @objRollbar.addLog("[Step    ]  To check status of created tour \n[Validate]  Does status of tour updated as 'Scheduled' ?")
         #puts "[Step]     To check status of created tour"
         #puts "[Validate] Does status of tour updated as 'Scheduled' ?"
         expect(ManageTours.class_variable_get(:@@recordInsertedIds)['Tour_Outcome__c'].fetch('Status__c').eql? "Scheduled").to be true
         #puts "Tour outcome id ::"+ManageTours.class_variable_get(:@@recordInsertedIds)['Tour_Outcome__c'].fetch('Id')
         #puts "Tour status checked successfully"
         #puts "\n"
-        passedLogs = @objRollbar.addLog("\n[Expected] Status = #{ManageTours.class_variable_get(:@@recordInsertedIds)["Tour_Outcome__c"].fetch("Status__c")} \n[Result]   Success")
+        passedLogs = @objRollbar.addLog("[Expected]  Status = #{ManageTours.class_variable_get(:@@recordInsertedIds)["Tour_Outcome__c"].fetch("Status__c")} \n[Result  ]  Success")
         #puts "[Expected] Status = #{ManageTours.class_variable_get(:@@recordInsertedIds)["Tour_Outcome__c"].fetch("Status__c")}"
         #puts "[Result]   Success"
         puts "\n"
@@ -820,33 +870,38 @@ describe ManageTours do
         #expect(@objManageTours.checkRecordCreated("Opportunity","SELECT id FROM Opportunity WHERE Account.email = '#{@objManageTours.instance_variable_get(:@records)[2]['existingAccount']['email']}'")[0]).to eql nil
         #end
         sleep(@objManageTours.instance_variable_get(:@timeSettingMap)['Sleep']['Environment']['Lightening'])
-        passedLogs = @objRollbar.addLog("[Step]     Checking open activities")
+        passedLogs = @objRollbar.addLog("[Step    ]  Checking open activities")
         #puts "[Step]     Checking open activities"
         expect(@objManageTours.checkRecordCreated('Task',"SELECT id FROM Task WHERE whatId = '#{ManageTours.class_variable_get(:@@recordInsertedIds)['Tour_Outcome__c'].fetch('Id')}'")[0].fetch('Id')).to_not eql nil
-        passedLogs = @objRollbar.addLog("[Expected] 'Book a tour' named open activity created successfully \n[Result]   Success")
+        passedLogs = @objRollbar.addLog("[Expected]  'Book a tour' named open activity created successfully \n[Result  ]  Success")
         #puts "[Expected] 'Book a tour' named open activity created successfully"
         #puts "[Result]   Success"
         puts "\n"
 
-        passedLogs = @objRollbar.addLog("[Step]     User should see records of booked tour")
+        passedLogs = @objRollbar.addLog("[Step    ]  User should see records of booked tour")
         #puts "[Step]     User should see records of booked tour "
         expect(@objManageTours.numberOfTourBooked == 3).to be true
-        passedLogs = @objRollbar.addLog("[Expected] Booked tours records are available on manage tour page \n[Result]   Success")
+        passedLogs = @objRollbar.addLog("[Expected]  Booked tours records are available on manage tour page \n[Result  ]  Success")
         #puts "[Expected] Booked tours records are available on manage tour page"
         #puts "[Result]   Success"
         puts "\n"
-        puts "C102 : Checked successfully"
-        puts "---------------------------------------------------------------------------------------------------------------------------"
-        @testRailUtility.postResult(102,"Result for case 102 is #{"success"}",1,@runId)
+        
+        passedLogs = @objRollbar.addLog("[Step    ]  Adding result in testrail")
+        @testRailUtility.postResult(102,"Pass",1,@runId)
+        passedLogs = @objRollbar.addLog("[Result  ]  Success")
+       
       rescue Exception => excp
 
          @objRollbar.postRollbarData(caseInfo['id'], caseInfo['title'], passedLogs[caseInfo['id']])
+         passedLogs = @objRollbar.addLog("[Result  ]  Failed")
          Rollbar.error(excp)
         @testRailUtility.postResult(102,"Result for case 102 is #{excp}",5,@runId)
         raise excp
       end
     end
-     
+     puts "C102 : Checked successfully"
+     puts "---------------------------------------------------------------------------------------------------------------------------"
+        
   end
 
   context "should check reschedule functionality" do
@@ -855,7 +910,7 @@ describe ManageTours do
       puts "\n"
       begin
         caseInfo = @testRailUtility.getCase('115')
-        passedLogs = @objRollbar.addLog("[Step]    Check status of tour after rescheduling \n[Validate] Does status of tour updated as Rescheduled ?", caseInfo['id'])
+        passedLogs = @objRollbar.addLog("[Step    ]  Check status of tour after rescheduling \n[Validate]  Does status of tour updated as Rescheduled ?", caseInfo['id'])
         
         puts "\n"
 
@@ -876,22 +931,29 @@ describe ManageTours do
         sleep(@objManageTours.instance_variable_get(:@timeSettingMap)['Sleep']['Environment']['Lightening'])
         expect(@objManageTours.tourStatusChecked?("Rescheduled" , @leadsTestData[0]['email'])).to be true
        
-        passedLogs = @objRollbar.addLog("[Expected] Status = Rescheduled \n[Result]   Success")
+        passedLogs = @objRollbar.addLog("[Expected]  Status = Rescheduled \n[Result  ]  Success")
         #puts "[Expected] Status = Rescheduled"
         #puts "[Result]   Success"
         
         puts "\n"
-        puts "C115 : checked successfully"
+        puts "C115 : Checked successfully"
         puts "---------------------------------------------------------------------------------------------------------------------------"
         puts "\n"
-        @testRailUtility.postResult(115,"Result for case 115 is #{"success"}",1,@runId)
+        passedLogs = @objRollbar.addLog("[Step    ]  Adding result in testrail")
+        @testRailUtility.postResult(115,"Pass",1,@runId)
+        passedLogs = @objRollbar.addLog("[Result  ]  Success")
+        
       rescue Exception => excp
 
          @objRollbar.postRollbarData(caseInfo['id'], caseInfo['title'], passedLogs[caseInfo['id']])
+         passedLogs = @objRollbar.addLog("[Result  ]  Failed")
          Rollbar.error(excp)
         @testRailUtility.postResult(115,"Result for case 115 is #{excp}",5,@runId)
         raise excp
       end
     end
+    puts "C115 : Checked successfully"
+    puts "---------------------------------------------------------------------------------------------------------------------------"
+        
   end
 end
