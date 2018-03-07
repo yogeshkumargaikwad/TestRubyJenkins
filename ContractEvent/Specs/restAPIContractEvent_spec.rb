@@ -60,9 +60,9 @@ end
     @testData = JSON.parse(testDataInJson)
     @sfRESTService = SfRESTService.new()
     @contractEvent = ContractEvent.new()
-    puts "Creating Common Test Data..."
+    #puts "Creating Common Test Data..."
     @recordCreated = @contractEvent.createCommonTestData()
-    puts @recordCreated
+    #puts @recordCreated
   }
   before(:each) {
     puts ""
@@ -493,20 +493,22 @@ end
         passedLogs = @objRollbar.addLog("[Result  ] Success")
         puts "\n" 
 
-        puts "******************************************************************************************"
-        puts "Checking Updated Opportunity Move Outs"
+        passedLogs = @objRollbar.addLog("[Step    ] Checking Updated Opportunity Move Outs")
+        puts "\n"
 
-        puts "Checking Opportunity Move Outs Should not null..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Opportunity Move Outs not null?")
         expect(updatedOppMoveOuts.fetch("Id")).not_to eq nil
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "[Validate] Should Pending Desks in Opportunity Move Outs Updated With Move Outs Quantity?"
-        puts "[Expected] Pending Desks=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity']}"
+        passedLogs = @objRollbar.addLog("[Validate] Does Pending Desks in Opportunity Move outs update With Move outs Quantity?")
+        passedLogs = @objRollbar.addLog("[Expected] Pending Desks=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity']}")
         expect(updatedOppMoveOuts.fetch("Pending_Desks__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity'].to_i
         passedLogs = @objRollbar.addLog("[Result  ] Success")
         puts "\n" 
 
-        puts "[Validate] Should Move Out Date in Opportunity Move Out Updated?"
-        puts "[Expected] Move out Date=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['move_out_date']}"
+        passedLogs = @objRollbar.addLog("[Validate] Does Move out Date in Opportunity Move out Update?")
+        passedLogs = @objRollbar.addLog("[Expected] Move out Date=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['move_out_date']}")
         expect(updatedOppMoveOuts.fetch("Move_Out_Date__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['move_out_date'].to_s
         passedLogs = @objRollbar.addLog("[Result  ] Success")
         puts "\n" 
@@ -707,20 +709,22 @@ end
         passedLogs = @objRollbar.addLog("[Result  ] Success")
         puts "\n" 
     
-        puts "**************************************************************************"
-        puts "Checking Updated Opportunity Move Outs"
+        passedLogs = @objRollbar.addLog("[Step    ] Checking Updated Opportunity Move Outs")
+        puts "\n"
 
-        puts "Checking Opportunity Move Outs should not null..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Opportunity Move Outs not null?")
         expect(updatedOppMoveOuts.fetch("Id")).not_to eq nil
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "[Validate] Should Pending Desks in Opportunity Move outs updated with Move outs Quantity?"
-        puts "[expected] Pending Desks=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity']}"
+        passedLogs = @objRollbar.addLog("[Validate] Does Pending Desks in Opportunity Move outs update With Move outs Quantity?")
+        passedLogs = @objRollbar.addLog("[Expected] Pending Desks=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity']}")
         expect(updatedOppMoveOuts.fetch("Pending_Desks__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity'].to_i
         passedLogs = @objRollbar.addLog("[Result  ] Success")
         puts "\n" 
 
-        puts "[Validate] Should Move out date in Opportunity Move out updated?"
-        puts "[expected] Move out Date=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['move_out_date']}"
+        passedLogs = @objRollbar.addLog("[Validate] Does Move out Date in Opportunity Move out Update?")
+        passedLogs = @objRollbar.addLog("[Expected] Move out Date=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['move_out_date']}")
         expect(updatedOppMoveOuts.fetch("Move_Out_Date__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['move_out_date'].to_s
         passedLogs = @objRollbar.addLog("[Result  ] Success")
         puts "\n" 
@@ -921,20 +925,22 @@ end
         passedLogs = @objRollbar.addLog("[Result  ] Success")
         puts "\n" 
 
-        puts "**************************************************************************"
-        puts "Checking Updated Opportunity Move Outs"
+        passedLogs = @objRollbar.addLog("[Step    ] Checking Updated Opportunity Move Outs")
+        puts "\n"
 
-        puts "Checking Opportunity Move Outs should not null..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Opportunity Move Outs not null?")
         expect(updatedOppMoveOuts.fetch("Id")).not_to eq nil
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "[Validate] Should Pending Desks in Opportunity Move outs updated with Move outs Quantity?"
-        puts "[expected] Pending Desks=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity']}"
+        passedLogs = @objRollbar.addLog("[Validate] Does Pending Desks in Opportunity Move outs update With Move outs Quantity?")
+        passedLogs = @objRollbar.addLog("[Expected] Pending Desks=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity']}")
         expect(updatedOppMoveOuts.fetch("Pending_Desks__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity'].to_i
         passedLogs = @objRollbar.addLog("[Result  ] Success")
         puts "\n" 
         
-        puts "[Validate] Should Move out date in Opportunity Move out updated?"
-        puts "[expected] Move out Date=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['move_out_date']}"
+        passedLogs = @objRollbar.addLog("[Validate] Does Move out Date in Opportunity Move out Update?")
+        passedLogs = @objRollbar.addLog("[Expected] Move out Date=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['move_out_date']}")
         expect(updatedOppMoveOuts.fetch("Move_Out_Date__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['move_out_date'].to_s
         passedLogs = @objRollbar.addLog("[Result  ] Success")
         puts "\n" 
@@ -1146,20 +1152,22 @@ end
         puts "\n" 
 
 
-        puts "**************************************************************************"
-        puts "Checking Updated Opportunity Move Outs"
+        passedLogs = @objRollbar.addLog("[Step    ] Checking Updated Opportunity Move Outs")
+        puts "\n"
 
-        puts "Checking Opportunity Move Outs should not null..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Opportunity Move Outs not null?")
         expect(updatedOppMoveOuts.fetch("Id")).not_to eq nil
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "[Validate] Should Pending Desks in Opportunity Move outs updated with Move outs Quantity?"
-        puts "[expected] Pending Desks=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity']}"
+        passedLogs = @objRollbar.addLog("[Validate] Does Pending Desks in Opportunity Move outs update With Move outs Quantity?")
+        passedLogs = @objRollbar.addLog("[Expected] Pending Desks=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity']}")
         expect(updatedOppMoveOuts.fetch("Pending_Desks__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity'].to_i
         passedLogs = @objRollbar.addLog("[Result  ] Success")
         puts "\n" 
 
-        puts "[Validate] Should Move out date in Opportunity Move out updated?"
-        puts "[expected] Move out Date=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['move_out_date']}"
+        passedLogs = @objRollbar.addLog("[Validate] Does Move out Date in Opportunity Move out Update?")
+        passedLogs = @objRollbar.addLog("[Expected] Move out Date=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['move_out_date']}")
         expect(updatedOppMoveOuts.fetch("Move_Out_Date__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['move_out_date'].to_s
         passedLogs = @objRollbar.addLog("[Result  ] Success")
         puts "\n" 
@@ -1319,20 +1327,27 @@ end
 
         puts "Checking OppReservable- Monthly Price..."
         expect(updatedOppReservable.fetch("Monthly_Price__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['price'].to_s
-        puts "**************************************************************************"
-        puts "Checking Updated Opportunity Move Outs"
+        passedLogs = @objRollbar.addLog("[Step    ] Checking Updated Opportunity Move Outs")
+        puts "\n"
 
-        puts "Checking Opportunity Move Outs should not null..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Opportunity Move Outs not null?")
         expect(updatedOppMoveOuts.fetch("Id")).not_to eq nil
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity Move Outs- pending desk..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Pending Desks in Opportunity Move outs update With Move outs Quantity?")
+        passedLogs = @objRollbar.addLog("[Expected] Pending Desks=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity']}")
         expect(updatedOppMoveOuts.fetch("Pending_Desks__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity'].to_i
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity Move Outs- Move_Out_Date__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Move out Date in Opportunity Move out Update?")
+        passedLogs = @objRollbar.addLog("[Expected] Move out Date=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['move_out_date']}")
         expect(updatedOppMoveOuts.fetch("Move_Out_Date__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['move_out_date'].to_s
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "**************************************************************************"
-
+        puts "------------------------------------------------------------------------------------------------------------------"
         @testRailUtility.postResult(858, "pass", 1, @run)
       rescue Exception => e
         @testRailUtility.postResult(858, e, 5, @run)
@@ -1483,20 +1498,27 @@ end
         puts "Checking OppReservable- Monthly Price..."
         expect(updatedOppReservable.fetch("Monthly_Price__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['price'].to_s
 
-        puts "**************************************************************************"
-        puts "Checking Updated Opportunity Move Outs"
+        passedLogs = @objRollbar.addLog("[Step    ] Checking Updated Opportunity Move Outs")
+        puts "\n"
 
-        puts "Checking Opportunity Move Outs should not null..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Opportunity Move Outs not null?")
         expect(updatedOppMoveOuts.fetch("Id")).not_to eq nil
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity Move Outs- pending desk..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Pending Desks in Opportunity Move outs update With Move outs Quantity?")
+        passedLogs = @objRollbar.addLog("[Expected] Pending Desks=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity']}")
         expect(updatedOppMoveOuts.fetch("Pending_Desks__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity'].to_i
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity Move Outs- Move_Out_Date__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Move out Date in Opportunity Move out Update?")
+        passedLogs = @objRollbar.addLog("[Expected] Move out Date=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['move_out_date']}")
         expect(updatedOppMoveOuts.fetch("Move_Out_Date__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['move_out_date'].to_s
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "**************************************************************************"
-
+        puts "------------------------------------------------------------------------------------------------------------------"
         @testRailUtility.postResult(862, "pass", 1, @run)
       rescue Exception => e
         @testRailUtility.postResult(862, e, 5, @run)
@@ -1655,20 +1677,28 @@ end
 
         puts "Checking OppReservable- Monthly Price..."
         expect(updatedOppReservable.fetch("Monthly_Price__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['price'].to_s
-        puts "**************************************************************************"
-        puts "Checking Updated Opportunity Move Outs"
+        
+        passedLogs = @objRollbar.addLog("[Step    ] Checking Updated Opportunity Move Outs")
+        puts "\n"
 
-        puts "Checking Opportunity Move Outs should not null..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Opportunity Move Outs not null?")
         expect(updatedOppMoveOuts.fetch("Id")).not_to eq nil
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity Move Outs- pending desk..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Pending Desks in Opportunity Move outs update With Move outs Quantity?")
+        passedLogs = @objRollbar.addLog("[Expected] Pending Desks=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity']}")
         expect(updatedOppMoveOuts.fetch("Pending_Desks__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity'].to_i
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity Move Outs- Move_Out_Date__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Move out Date in Opportunity Move out Update?")
+        passedLogs = @objRollbar.addLog("[Expected] Move out Date=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['move_out_date']}")
         expect(updatedOppMoveOuts.fetch("Move_Out_Date__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['move_out_date'].to_s
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "**************************************************************************"
-
+        puts "------------------------------------------------------------------------------------------------------------------"
         @testRailUtility.postResult(905, "pass", 1, @run)
       rescue Exception => e
         @testRailUtility.postResult(905, e, 5, @run)
@@ -1822,20 +1852,28 @@ end
 
         puts "Checking OppReservable- Monthly Price..."
         expect(updatedOppReservable.fetch("Monthly_Price__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['price'].to_s
-        puts "**************************************************************************"
-        puts "Checking Updated Opportunity Move Outs"
+        
+        passedLogs = @objRollbar.addLog("[Step    ] Checking Updated Opportunity Move Outs")
+        puts "\n"
 
-        puts "Checking Opportunity Move Outs should not null..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Opportunity Move Outs not null?")
         expect(updatedOppMoveOuts.fetch("Id")).not_to eq nil
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity Move Outs- pending desk..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Pending Desks in Opportunity Move outs update With Move outs Quantity?")
+        passedLogs = @objRollbar.addLog("[Expected] Pending Desks=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity']}")
         expect(updatedOppMoveOuts.fetch("Pending_Desks__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity'].to_i
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity Move Outs- Move_Out_Date__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Move out Date in Opportunity Move out Update?")
+        passedLogs = @objRollbar.addLog("[Expected] Move out Date=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['move_out_date']}")
         expect(updatedOppMoveOuts.fetch("Move_Out_Date__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['move_out_date'].to_s
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "**************************************************************************"
-
+        puts "------------------------------------------------------------------------------------------------------------------"
         @testRailUtility.postResult(903, "pass", 1, @run)
       rescue Exception => e
         @testRailUtility.postResult(903, e, 5, @run)
@@ -1994,20 +2032,28 @@ end
 
         puts "Checking OppReservable- Monthly Price..."
         expect(updatedOppReservable.fetch("Monthly_Price__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['price'].to_s
-        puts "**************************************************************************"
-        puts "Checking Updated Opportunity Move Outs"
+        
+        passedLogs = @objRollbar.addLog("[Step    ] Checking Updated Opportunity Move Outs")
+        puts "\n"
 
-        puts "Checking Opportunity Move Outs should not null..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Opportunity Move Outs not null?")
         expect(updatedOppMoveOuts.fetch("Id")).not_to eq nil
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity Move Outs- pending desk..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Pending Desks in Opportunity Move outs update With Move outs Quantity?")
+        passedLogs = @objRollbar.addLog("[Expected] Pending Desks=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity']}")
         expect(updatedOppMoveOuts.fetch("Pending_Desks__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity'].to_i
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity Move Outs- Move_Out_Date__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Move out Date in Opportunity Move out Update?")
+        passedLogs = @objRollbar.addLog("[Expected] Move out Date=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['move_out_date']}")
         expect(updatedOppMoveOuts.fetch("Move_Out_Date__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['move_out_date'].to_s
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "**************************************************************************"
-
+        puts "------------------------------------------------------------------------------------------------------------------"
         @testRailUtility.postResult(907, "pass", 1, @run)
       rescue Exception => e
         @testRailUtility.postResult(907, e, 5, @run)
@@ -2167,20 +2213,28 @@ end
 
         puts "Checking OppReservable- Monthly Price..."
         expect(updatedOppReservable.fetch("Monthly_Price__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['price'].to_s
-        puts "**************************************************************************"
-        puts "Checking Updated Opportunity Move Outs"
+        
+        passedLogs = @objRollbar.addLog("[Step    ] Checking Updated Opportunity Move Outs")
+        puts "\n"
 
-        puts "Checking Opportunity Move Outs should not null..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Opportunity Move Outs not null?")
         expect(updatedOppMoveOuts.fetch("Id")).not_to eq nil
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity Move Outs- pending desk..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Pending Desks in Opportunity Move outs update With Move outs Quantity?")
+        passedLogs = @objRollbar.addLog("[Expected] Pending Desks=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity']}")
         expect(updatedOppMoveOuts.fetch("Pending_Desks__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity'].to_i
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity Move Outs- Move_Out_Date__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Move out Date in Opportunity Move out Update?")
+        passedLogs = @objRollbar.addLog("[Expected] Move out Date=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['move_out_date']}")
         expect(updatedOppMoveOuts.fetch("Move_Out_Date__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['move_out_date'].to_s
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "**************************************************************************"
-
+        puts "------------------------------------------------------------------------------------------------------------------"
         @testRailUtility.postResult(908, "pass", 1, @run)
       rescue Exception => e
         @testRailUtility.postResult(908, e, 5, @run)
@@ -2340,20 +2394,28 @@ end
 
         puts "Checking OppReservable- Monthly Price..."
         expect(updatedOppReservable.fetch("Monthly_Price__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['price'].to_s
-        puts "**************************************************************************"
-        puts "Checking Updated Opportunity Move Outs"
+        
+        passedLogs = @objRollbar.addLog("[Step    ] Checking Updated Opportunity Move Outs")
+        puts "\n"
 
-        puts "Checking Opportunity Move Outs should not null..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Opportunity Move Outs not null?")
         expect(updatedOppMoveOuts.fetch("Id")).not_to eq nil
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity Move Outs- pending desk..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Pending Desks in Opportunity Move outs update With Move outs Quantity?")
+        passedLogs = @objRollbar.addLog("[Expected] Pending Desks=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity']}")
         expect(updatedOppMoveOuts.fetch("Pending_Desks__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity'].to_i
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity Move Outs- Move_Out_Date__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Move out Date in Opportunity Move out Update?")
+        passedLogs = @objRollbar.addLog("[Expected] Move out Date=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['move_out_date']}")
         expect(updatedOppMoveOuts.fetch("Move_Out_Date__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['move_out_date'].to_s
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "**************************************************************************"
-
+        puts "------------------------------------------------------------------------------------------------------------------"
         @testRailUtility.postResult(909, "pass", 1, @run)
       rescue Exception => e
         @testRailUtility.postResult(909, e, 5, @run)
@@ -2507,20 +2569,28 @@ end
 
         puts "Checking OppReservable- Monthly Price..."
         expect(updatedOppReservable.fetch("Monthly_Price__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['price'].to_s
-        puts "**************************************************************************"
-        puts "Checking Updated Opportunity Move Outs"
+        
+        passedLogs = @objRollbar.addLog("[Step    ] Checking Updated Opportunity Move Outs")
+        puts "\n"
 
-        puts "Checking Opportunity Move Outs should not null..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Opportunity Move Outs not null?")
         expect(updatedOppMoveOuts.fetch("Id")).not_to eq nil
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity Move Outs- pending desk..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Pending Desks in Opportunity Move outs update With Move outs Quantity?")
+        passedLogs = @objRollbar.addLog("[Expected] Pending Desks=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity']}")
         expect(updatedOppMoveOuts.fetch("Pending_Desks__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity'].to_i
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity Move Outs- Move_Out_Date__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Move out Date in Opportunity Move out Update?")
+        passedLogs = @objRollbar.addLog("[Expected] Move out Date=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['move_out_date']}")
         expect(updatedOppMoveOuts.fetch("Move_Out_Date__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['move_out_date'].to_s
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "**************************************************************************"
-
+        puts "------------------------------------------------------------------------------------------------------------------"
 
         @testRailUtility.postResult(911, "pass", 1, @run)
       rescue Exception => e
@@ -2674,20 +2744,27 @@ end
         puts "Checking OppReservable- Monthly Price..."
         expect(updatedOppReservable.fetch("Monthly_Price__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['price'].to_s
 
-        puts "**************************************************************************"
-        puts "Checking Updated Opportunity Move Outs"
+        passedLogs = @objRollbar.addLog("[Step    ] Checking Updated Opportunity Move Outs")
+        puts "\n"
 
-        puts "Checking Opportunity Move Outs should not null..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Opportunity Move Outs not null?")
         expect(updatedOppMoveOuts.fetch("Id")).not_to eq nil
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity Move Outs- pending desk..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Pending Desks in Opportunity Move outs update With Move outs Quantity?")
+        passedLogs = @objRollbar.addLog("[Expected] Pending Desks=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity']}")
         expect(updatedOppMoveOuts.fetch("Pending_Desks__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity'].to_i
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity Move Outs- Move_Out_Date__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Move out Date in Opportunity Move out Update?")
+        passedLogs = @objRollbar.addLog("[Expected] Move out Date=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['move_out_date']}")
         expect(updatedOppMoveOuts.fetch("Move_Out_Date__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['move_out_date'].to_s
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "**************************************************************************"
-
+        puts "------------------------------------------------------------------------------------------------------------------"
         @testRailUtility.postResult(912, "pass", 1, @run)
       rescue Exception => e
         @testRailUtility.postResult(912, e, 5, @run)
@@ -2845,20 +2922,28 @@ end
 
         puts "Checking OppReservable- Monthly Price..."
         expect(updatedOppReservable.fetch("Monthly_Price__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['price'].to_s
-        puts "**************************************************************************"
-        puts "Checking Updated Opportunity Move Outs"
+        
+        passedLogs = @objRollbar.addLog("[Step    ] Checking Updated Opportunity Move Outs")
+        puts "\n"
 
-        puts "Checking Opportunity Move Outs should not null..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Opportunity Move Outs not null?")
         expect(updatedOppMoveOuts.fetch("Id")).not_to eq nil
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity Move Outs- pending desk..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Pending Desks in Opportunity Move outs update With Move outs Quantity?")
+        passedLogs = @objRollbar.addLog("[Expected] Pending Desks=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity']}")
         expect(updatedOppMoveOuts.fetch("Pending_Desks__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity'].to_i
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity Move Outs- Move_Out_Date__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Move out Date in Opportunity Move out Update?")
+        passedLogs = @objRollbar.addLog("[Expected] Move out Date=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['move_out_date']}")
         expect(updatedOppMoveOuts.fetch("Move_Out_Date__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['move_out_date'].to_s
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "**************************************************************************"
-
+        puts "------------------------------------------------------------------------------------------------------------------"
         @testRailUtility.postResult(914, "pass", 1, @run)
       rescue Exception => e
         @testRailUtility.postResult(914, e, 5, @run)
@@ -3013,20 +3098,28 @@ end
 
         puts "Checking OppReservable- Monthly Price..."
         expect(updatedOppReservable.fetch("Monthly_Price__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['price'].to_s
-        puts "**************************************************************************"
-        puts "Checking Updated Opportunity Move Outs"
+        
+        passedLogs = @objRollbar.addLog("[Step    ] Checking Updated Opportunity Move Outs")
+        puts "\n"
 
-        puts "Checking Opportunity Move Outs should not null..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Opportunity Move Outs not null?")
         expect(updatedOppMoveOuts.fetch("Id")).not_to eq nil
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity Move Outs- pending desk..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Pending Desks in Opportunity Move outs update With Move outs Quantity?")
+        passedLogs = @objRollbar.addLog("[Expected] Pending Desks=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity']}")
         expect(updatedOppMoveOuts.fetch("Pending_Desks__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity'].to_i
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity Move Outs- Move_Out_Date__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Move out Date in Opportunity Move out Update?")
+        passedLogs = @objRollbar.addLog("[Expected] Move out Date=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['move_out_date']}")
         expect(updatedOppMoveOuts.fetch("Move_Out_Date__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['move_out_date'].to_s
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "**************************************************************************"
-
+        puts "------------------------------------------------------------------------------------------------------------------"
         @testRailUtility.postResult(913, "pass", 1, @run)
       rescue Exception => e
         @testRailUtility.postResult(913, e, 5, @run)
@@ -3185,20 +3278,28 @@ end
 
         puts "Checking OppReservable- Monthly Price..."
         expect(updatedOppReservable.fetch("Monthly_Price__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['price'].to_s
-        puts "**************************************************************************"
-        puts "Checking Updated Opportunity Move Outs"
+        
+        passedLogs = @objRollbar.addLog("[Step    ] Checking Updated Opportunity Move Outs")
+        puts "\n"
 
-        puts "Checking Opportunity Move Outs should not null..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Opportunity Move Outs not null?")
         expect(updatedOppMoveOuts.fetch("Id")).not_to eq nil
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity Move Outs- pending desk..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Pending Desks in Opportunity Move outs update With Move outs Quantity?")
+        passedLogs = @objRollbar.addLog("[Expected] Pending Desks=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity']}")
         expect(updatedOppMoveOuts.fetch("Pending_Desks__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity'].to_i
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity Move Outs- Move_Out_Date__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Move out Date in Opportunity Move out Update?")
+        passedLogs = @objRollbar.addLog("[Expected] Move out Date=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['move_out_date']}")
         expect(updatedOppMoveOuts.fetch("Move_Out_Date__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['move_out_date'].to_s
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "**************************************************************************"
-
+        puts "------------------------------------------------------------------------------------------------------------------"
         @testRailUtility.postResult(915, "pass", 1, @run)
       rescue Exception => e
         @testRailUtility.postResult(915, e, 5, @run)
@@ -3357,20 +3458,28 @@ end
 
         puts "Checking OppReservable- Monthly Price..."
         expect(updatedOppReservable.fetch("Monthly_Price__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['price'].to_s
-        puts "**************************************************************************"
-        puts "Checking Updated Opportunity Move Outs"
+        
+        passedLogs = @objRollbar.addLog("[Step    ] Checking Updated Opportunity Move Outs")
+        puts "\n"
 
-        puts "Checking Opportunity Move Outs should not null..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Opportunity Move Outs not null?")
         expect(updatedOppMoveOuts.fetch("Id")).not_to eq nil
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity Move Outs- pending desk..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Pending Desks in Opportunity Move outs update With Move outs Quantity?")
+        passedLogs = @objRollbar.addLog("[Expected] Pending Desks=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity']}")
         expect(updatedOppMoveOuts.fetch("Pending_Desks__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity'].to_i
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity Move Outs- Move_Out_Date__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Move out Date in Opportunity Move out Update?")
+        passedLogs = @objRollbar.addLog("[Expected] Move out Date=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['move_out_date']}")
         expect(updatedOppMoveOuts.fetch("Move_Out_Date__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['move_out_date'].to_s
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "**************************************************************************"
-
+        puts "------------------------------------------------------------------------------------------------------------------"
         @testRailUtility.postResult(916, "pass", 1, @run)
       rescue Exception => e
         @testRailUtility.postResult(916, e, 5, @run)
@@ -3531,20 +3640,28 @@ end
 
         puts "Checking OppReservable- Monthly Price..."
         expect(updatedOppReservable.fetch("Monthly_Price__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['price'].to_s
-        puts "**************************************************************************"
-        puts "Checking Updated Opportunity Move Outs"
+        
+        passedLogs = @objRollbar.addLog("[Step    ] Checking Updated Opportunity Move Outs")
+        puts "\n"
 
-        puts "Checking Opportunity Move Outs should not null..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Opportunity Move Outs not null?")
         expect(updatedOppMoveOuts.fetch("Id")).not_to eq nil
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity Move Outs- pending desk..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Pending Desks in Opportunity Move outs update With Move outs Quantity?")
+        passedLogs = @objRollbar.addLog("[Expected] Pending Desks=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity']}")
         expect(updatedOppMoveOuts.fetch("Pending_Desks__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity'].to_i
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity Move Outs- Move_Out_Date__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Move out Date in Opportunity Move out Update?")
+        passedLogs = @objRollbar.addLog("[Expected] Move out Date=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['move_out_date']}")
         expect(updatedOppMoveOuts.fetch("Move_Out_Date__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['move_out_date'].to_s
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "**************************************************************************"
-
+        puts "------------------------------------------------------------------------------------------------------------------"
         @testRailUtility.postResult(917, "pass", 1, @run)
       rescue Exception => e
         @testRailUtility.postResult(917, e, 5, @run)
@@ -3697,20 +3814,28 @@ end
 
         puts "Checking OppReservable- Monthly Price..."
         expect(updatedOppReservable.fetch("Monthly_Price__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['price'].to_s
-        puts "**************************************************************************"
-        puts "Checking Updated Opportunity Move Outs"
+        
+        passedLogs = @objRollbar.addLog("[Step    ] Checking Updated Opportunity Move Outs")
+        puts "\n"
 
-        puts "Checking Opportunity Move Outs should not null..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Opportunity Move Outs not null?")
         expect(updatedOppMoveOuts.fetch("Id")).not_to eq nil
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity Move Outs- pending desk..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Pending Desks in Opportunity Move outs update With Move outs Quantity?")
+        passedLogs = @objRollbar.addLog("[Expected] Pending Desks=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity']}")
         expect(updatedOppMoveOuts.fetch("Pending_Desks__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity'].to_i
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity Move Outs- Move_Out_Date__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Move out Date in Opportunity Move out Update?")
+        passedLogs = @objRollbar.addLog("[Expected] Move out Date=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['move_out_date']}")
         expect(updatedOppMoveOuts.fetch("Move_Out_Date__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['move_out_date'].to_s
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "**************************************************************************"
-
+        puts "------------------------------------------------------------------------------------------------------------------"
         @testRailUtility.postResult(918, "pass", 1, @run)
       rescue Exception => e
         @testRailUtility.postResult(918, e, 5, @run)
@@ -3865,20 +3990,27 @@ end
         puts "Checking OppReservable- Monthly Price..."
         expect(updatedOppReservable.fetch("Monthly_Price__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['price'].to_s
 
-        puts "**************************************************************************"
-        puts "Checking Updated Opportunity Move Outs"
+        passedLogs = @objRollbar.addLog("[Step    ] Checking Updated Opportunity Move Outs")
+        puts "\n"
 
-        puts "Checking Opportunity Move Outs should not null..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Opportunity Move Outs not null?")
         expect(updatedOppMoveOuts.fetch("Id")).not_to eq nil
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity Move Outs- pending desk..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Pending Desks in Opportunity Move outs update With Move outs Quantity?")
+        passedLogs = @objRollbar.addLog("[Expected] Pending Desks=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity']}")
         expect(updatedOppMoveOuts.fetch("Pending_Desks__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity'].to_i
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity Move Outs- Move_Out_Date__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Move out Date in Opportunity Move out Update?")
+        passedLogs = @objRollbar.addLog("[Expected] Move out Date=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['move_out_date']}")
         expect(updatedOppMoveOuts.fetch("Move_Out_Date__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['move_out_date'].to_s
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "**************************************************************************"
-
+        puts "------------------------------------------------------------------------------------------------------------------"
         @testRailUtility.postResult(919, "pass", 1, @run)
       rescue Exception => e
         @testRailUtility.postResult(919, e, 5, @run)
@@ -4025,20 +4157,27 @@ end
         puts "Checking OppReservable  null..."
         puts updatedOppReservable.class
 
-        puts "**************************************************************************"
-        puts "Checking Updated Opportunity Move Outs"
+        passedLogs = @objRollbar.addLog("[Step    ] Checking Updated Opportunity Move Outs")
+        puts "\n"
 
-        puts "Checking Opportunity Move Outs should not null..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Opportunity Move Outs not null?")
         expect(updatedOppMoveOuts.fetch("Id")).not_to eq nil
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity Move Outs- pending desk..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Pending Desks in Opportunity Move outs update With Move outs Quantity?")
+        passedLogs = @objRollbar.addLog("[Expected] Pending Desks=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity']}")
         expect(updatedOppMoveOuts.fetch("Pending_Desks__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity'].to_i
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity Move Outs- Move_Out_Date__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Move out Date in Opportunity Move out Update?")
+        passedLogs = @objRollbar.addLog("[Expected] Move out Date=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['move_out_date']}")
         expect(updatedOppMoveOuts.fetch("Move_Out_Date__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['move_out_date'].to_s
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "**************************************************************************"
-
+        puts "------------------------------------------------------------------------------------------------------------------"
         @testRailUtility.postResult(924, "pass", 1, @run)
       rescue Exception => e
         @testRailUtility.postResult(924, e, 5, @run)
@@ -4182,20 +4321,27 @@ end
 
         puts "Checking OppReservable should null..."
 
-        puts "**************************************************************************"
-        puts "Checking Updated Opportunity Move Outs"
+        passedLogs = @objRollbar.addLog("[Step    ] Checking Updated Opportunity Move Outs")
+        puts "\n"
 
-        puts "Checking Opportunity Move Outs should not null..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Opportunity Move Outs not null?")
         expect(updatedOppMoveOuts.fetch("Id")).not_to eq nil
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity Move Outs- pending desk..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Pending Desks in Opportunity Move outs update With Move outs Quantity?")
+        passedLogs = @objRollbar.addLog("[Expected] Pending Desks=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity']}")
         expect(updatedOppMoveOuts.fetch("Pending_Desks__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity'].to_i
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity Move Outs- Move_Out_Date__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Move out Date in Opportunity Move out Update?")
+        passedLogs = @objRollbar.addLog("[Expected] Move out Date=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['move_out_date']}")
         expect(updatedOppMoveOuts.fetch("Move_Out_Date__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['move_out_date'].to_s
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "**************************************************************************"
-
+        puts "------------------------------------------------------------------------------------------------------------------"
         @testRailUtility.postResult(921, "pass", 1, @run)
       rescue Exception => e
         @testRailUtility.postResult(921, e, 5, @run)
@@ -4345,20 +4491,27 @@ end
 
         puts "Checking OppReservable should null..."
 
-        puts "**************************************************************************"
-        puts "Checking Updated Opportunity Move Outs"
+        passedLogs = @objRollbar.addLog("[Step    ] Checking Updated Opportunity Move Outs")
+        puts "\n"
 
-        puts "Checking Opportunity Move Outs should not null..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Opportunity Move Outs not null?")
         expect(updatedOppMoveOuts.fetch("Id")).not_to eq nil
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity Move Outs- pending desk..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Pending Desks in Opportunity Move outs update With Move outs Quantity?")
+        passedLogs = @objRollbar.addLog("[Expected] Pending Desks=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity']}")
         expect(updatedOppMoveOuts.fetch("Pending_Desks__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity'].to_i
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity Move Outs- Move_Out_Date__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Move out Date in Opportunity Move out Update?")
+        passedLogs = @objRollbar.addLog("[Expected] Move out Date=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['move_out_date']}")
         expect(updatedOppMoveOuts.fetch("Move_Out_Date__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['move_out_date'].to_s
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "**************************************************************************"
-
+        puts "------------------------------------------------------------------------------------------------------------------"
         @testRailUtility.postResult(927, "pass", 1, @run)
       rescue Exception => e
         @testRailUtility.postResult(927, e, 5, @run)
@@ -4507,20 +4660,27 @@ end
 
         puts "Checking OppReservable should null..."
 
-        puts "**************************************************************************"
-        puts "Checking Updated Opportunity Move Outs"
+        passedLogs = @objRollbar.addLog("[Step    ] Checking Updated Opportunity Move Outs")
+        puts "\n"
 
-        puts "Checking Opportunity Move Outs should not null..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Opportunity Move Outs not null?")
         expect(updatedOppMoveOuts.fetch("Id")).not_to eq nil
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity Move Outs- pending desk..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Pending Desks in Opportunity Move outs update With Move outs Quantity?")
+        passedLogs = @objRollbar.addLog("[Expected] Pending Desks=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity']}")
         expect(updatedOppMoveOuts.fetch("Pending_Desks__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity'].to_i
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity Move Outs- Move_Out_Date__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Move out Date in Opportunity Move out Update?")
+        passedLogs = @objRollbar.addLog("[Expected] Move out Date=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['move_out_date']}")
         expect(updatedOppMoveOuts.fetch("Move_Out_Date__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['move_out_date'].to_s
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "**************************************************************************"
-
+        puts "------------------------------------------------------------------------------------------------------------------"
         @testRailUtility.postResult(930, "pass", 1, @run)
       rescue Exception => e
         @testRailUtility.postResult(930, e, 5, @run)
@@ -4673,20 +4833,27 @@ end
 
         puts "Checking OppReservable should null..."
 
-        puts "**************************************************************************"
-        puts "Checking Updated Opportunity Move Outs"
+        passedLogs = @objRollbar.addLog("[Step    ] Checking Updated Opportunity Move Outs")
+        puts "\n"
 
-        puts "Checking Opportunity Move Outs should not null..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Opportunity Move Outs not null?")
         expect(updatedOppMoveOuts.fetch("Id")).not_to eq nil
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity Move Outs- pending desk..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Pending Desks in Opportunity Move outs update With Move outs Quantity?")
+        passedLogs = @objRollbar.addLog("[Expected] Pending Desks=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity']}")
         expect(updatedOppMoveOuts.fetch("Pending_Desks__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity'].to_i
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity Move Outs- Move_Out_Date__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Move out Date in Opportunity Move out Update?")
+        passedLogs = @objRollbar.addLog("[Expected] Move out Date=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['move_out_date']}")
         expect(updatedOppMoveOuts.fetch("Move_Out_Date__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['move_out_date'].to_s
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "**************************************************************************"
-
+        puts "------------------------------------------------------------------------------------------------------------------"
 
         @testRailUtility.postResult(932, "pass", 1, @run)
       rescue Exception => e
@@ -4830,20 +4997,27 @@ end
 
         puts "Checking OppReservable should null..."
 
-        puts "**************************************************************************"
-        puts "Checking Updated Opportunity Move Outs"
+        passedLogs = @objRollbar.addLog("[Step    ] Checking Updated Opportunity Move Outs")
+        puts "\n"
 
-        puts "Checking Opportunity Move Outs should not null..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Opportunity Move Outs not null?")
         expect(updatedOppMoveOuts.fetch("Id")).not_to eq nil
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity Move Outs- pending desk..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Pending Desks in Opportunity Move outs update With Move outs Quantity?")
+        passedLogs = @objRollbar.addLog("[Expected] Pending Desks=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity']}")
         expect(updatedOppMoveOuts.fetch("Pending_Desks__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity'].to_i
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity Move Outs- Move_Out_Date__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Move out Date in Opportunity Move out Update?")
+        passedLogs = @objRollbar.addLog("[Expected] Move out Date=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['move_out_date']}")
         expect(updatedOppMoveOuts.fetch("Move_Out_Date__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['move_out_date'].to_s
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "**************************************************************************"
-
+        puts "------------------------------------------------------------------------------------------------------------------"
         @testRailUtility.postResult(935, "pass", 1, @run)
       rescue Exception => e
         @testRailUtility.postResult(935, e, 5, @run)
@@ -4987,20 +5161,27 @@ end
         puts "Checking OppReservable should null..."
 
 
-        puts "**************************************************************************"
-        puts "Checking Updated Opportunity Move Outs"
+        passedLogs = @objRollbar.addLog("[Step    ] Checking Updated Opportunity Move Outs")
+        puts "\n"
 
-        puts "Checking Opportunity Move Outs should not null..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Opportunity Move Outs not null?")
         expect(updatedOppMoveOuts.fetch("Id")).not_to eq nil
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity Move Outs- pending desk..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Pending Desks in Opportunity Move outs update With Move outs Quantity?")
+        passedLogs = @objRollbar.addLog("[Expected] Pending Desks=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity']}")
         expect(updatedOppMoveOuts.fetch("Pending_Desks__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity'].to_i
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity Move Outs- Move_Out_Date__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Move out Date in Opportunity Move out Update?")
+        passedLogs = @objRollbar.addLog("[Expected] Move out Date=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['move_out_date']}")
         expect(updatedOppMoveOuts.fetch("Move_Out_Date__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['move_out_date'].to_s
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "**************************************************************************"
-
+        puts "------------------------------------------------------------------------------------------------------------------"
         @testRailUtility.postResult(938, "pass", 1, @run)
       rescue Exception => e
         @testRailUtility.postResult(938, e, 5, @run)
@@ -6297,20 +6478,27 @@ end
         puts "Checking OppReservable- Monthly Price..."
         expect(updatedOppReservable.fetch("Monthly_Price__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['price'].to_s
 
-        puts "**************************************************************************"
-        puts "Checking Updated Opportunity Move Outs"
+        passedLogs = @objRollbar.addLog("[Step    ] Checking Updated Opportunity Move Outs")
+        puts "\n"
 
-        puts "Checking Opportunity Move Outs should not null..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Opportunity Move Outs not null?")
         expect(updatedOppMoveOuts.fetch("Id")).not_to eq nil
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity Move Outs- pending desk..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Pending Desks in Opportunity Move outs update With Move outs Quantity?")
+        passedLogs = @objRollbar.addLog("[Expected] Pending Desks=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity']}")
         expect(updatedOppMoveOuts.fetch("Pending_Desks__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity'].to_i
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity Move Outs- Move_Out_Date__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Move out Date in Opportunity Move out Update?")
+        passedLogs = @objRollbar.addLog("[Expected] Move out Date=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['move_out_date']}")
         expect(updatedOppMoveOuts.fetch("Move_Out_Date__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['move_out_date'].to_s
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "**************************************************************************"
-
+        puts "------------------------------------------------------------------------------------------------------------------"
         @testRailUtility.postResult(841, "pass", 1, @run)
       rescue Exception => e
         @testRailUtility.postResult(841, e, 5, @run)
@@ -6463,20 +6651,27 @@ end
         puts "Checking OppReservable- Monthly Price..."
         expect(updatedOppReservable.fetch("Monthly_Price__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['price'].to_s
 
-        puts "**************************************************************************"
-        puts "Checking Updated Opportunity Move Outs"
+        passedLogs = @objRollbar.addLog("[Step    ] Checking Updated Opportunity Move Outs")
+        puts "\n"
 
-        puts "Checking Opportunity Move Outs should not null..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Opportunity Move Outs not null?")
         expect(updatedOppMoveOuts.fetch("Id")).not_to eq nil
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity Move Outs- pending desk..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Pending Desks in Opportunity Move outs update With Move outs Quantity?")
+        passedLogs = @objRollbar.addLog("[Expected] Pending Desks=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity']}")
         expect(updatedOppMoveOuts.fetch("Pending_Desks__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity'].to_i
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity Move Outs- Move_Out_Date__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Move out Date in Opportunity Move out Update?")
+        passedLogs = @objRollbar.addLog("[Expected] Move out Date=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['move_out_date']}")
         expect(updatedOppMoveOuts.fetch("Move_Out_Date__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['move_out_date'].to_s
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "**************************************************************************"
-
+        puts "------------------------------------------------------------------------------------------------------------------"
         @testRailUtility.postResult(843, "pass", 1, @run)
       rescue Exception => e
         @testRailUtility.postResult(843, e, 5, @run)

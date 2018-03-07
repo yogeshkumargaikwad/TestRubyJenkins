@@ -145,7 +145,7 @@ if !ARGV.empty? then
             end
 =end
             RSpec.clear_examples
-            RSpec.reset
+            #RSpec.reset
           end
         else
           #puts [spec['path']]
@@ -164,7 +164,7 @@ if !ARGV.empty? then
             end
 =end
             RSpec.clear_examples
-            RSpec.reset
+            #RSpec.reset
         end
       end
     end
