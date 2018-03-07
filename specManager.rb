@@ -105,19 +105,19 @@ if !ARGV.empty? then
   end
   
   if !ENV['PROJECT_ID'].nil? && ENV['SUIT_ID'].nil? && ENV['SECTION_ID'].nil? then
-    puts "Run Id :: #{ENV['RUN_ID'].split(",")}"
+    #puts "Run Id :: #{ENV['RUN_ID'].split(",")}"
     ENV['RUN_ID'].split(",").each do |runId|
-      puts "Run Id :: #{runId}"
+      #puts "Run Id :: #{runId}"
       mapSuitRunId[testRailUtility.getSpecLocations(nil,nil,testRailUtility.getRun(runId)['suite_id'],nil,ENV['PROJECT_ID'])[0]['path']] = runId
     end
-    puts "Map :: #{mapSuitRunId}"
-    puts "Map :: #{mapSuitRunId}"
+    #puts "Map :: #{mapSuitRunId}"
+    #puts "Map :: #{mapSuitRunId}"
   end
   if !specs.empty? then
     specs.uniq.each do |spec|
       #Run spec in multiple browsers
       if !spec.nil? then
-        puts "spec to run :: #{spec}"
+        #puts "spec to run :: #{spec}"
 =begin
         if !ENV['PROJECT_ID'].nil? && ENV['SUIT_ID'].nil? && ENV['SECTION_ID'].nil? then
           ENV['RUN_ID'] = spec['runId']
@@ -129,7 +129,7 @@ if !ARGV.empty? then
         if spec['isBrowserDependent'] then
           specMap.fetch('browser')[0].split(" ").each do |browser|
             ENV['BROWSER'] = browser
-            puts [spec['path']]
+            #puts [spec['path']]
             RSpec::Core::Runner.run([spec['path']], $stderr, $stdout)
 
             
@@ -148,9 +148,9 @@ if !ARGV.empty? then
             RSpec.reset
           end
         else
-          puts [spec['path']]
+          #puts [spec['path']]
           RSpec::Core::Runner.run([spec['path']], $stderr, $stdout)
-          puts "Errors are :: #{RSpec.configuration.formatters[0].inspect}"
+          #puts "Errors are :: #{RSpec.configuration.formatters[0].inspect}"
           #puts "Failed examples are :: #{RSpec.configuration.reporter.failed_examples}"
 =begin
             if !RSpec.configuration.reporter.failed_examples.empty? then
