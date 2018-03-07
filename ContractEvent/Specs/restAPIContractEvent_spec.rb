@@ -60,9 +60,9 @@ end
     @testData = JSON.parse(testDataInJson)
     @sfRESTService = SfRESTService.new()
     @contractEvent = ContractEvent.new()
-    puts "Creating Common Test Data..."
+    #puts "Creating Common Test Data..."
     @recordCreated = @contractEvent.createCommonTestData()
-    puts @recordCreated
+    #puts @recordCreated
   }
   before(:each) {
     puts ""
