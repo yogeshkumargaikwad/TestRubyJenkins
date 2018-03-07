@@ -127,7 +127,6 @@ if !ARGV.empty? then
           ENV['RUN_ID'] = mapSuitRunId[spec['path']]
         end
         if spec['isBrowserDependent'] then
-          puts "running on browser #{browser}"
           specMap.fetch('browser')[0].split(" ").each do |browser|
             ENV['BROWSER'] = browser
             #puts [spec['path']]
@@ -146,7 +145,7 @@ if !ARGV.empty? then
             end
 =end
             RSpec.clear_examples
-            RSpec.reset
+            #RSpec.reset
           end
         else
           #puts [spec['path']]
@@ -165,7 +164,7 @@ if !ARGV.empty? then
             end
 =end
             RSpec.clear_examples
-            RSpec.reset
+            #RSpec.reset
         end
       end
     end
