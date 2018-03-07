@@ -66,7 +66,7 @@ end
   }
   before(:each) {
     puts ""
-    puts "----------------------------------------------------------------------------------------------------------------------"
+    puts "------------------------------------------------------------------------------------------------------------------"
   }
   context 'ContractEvent-->sent', :'72' => true do
     #******************************** upgrade ****************************************
@@ -6326,17 +6326,25 @@ end
 
     after(:each) {
       if @mapOpportunityId != nil then
+        passedLogs = @objRollbar.addLog("[Step    ] Deleting Opportunity Test Data")
         @contractEvent.deleteCreatedOpportunities(@mapOpportunityId['opportunity'])
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity Test Data should be deleted.")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
       end
-      puts "Opportunity Test Data Deleted..."
+     
     }
   end
 
   after(:all) {
     puts ""
     puts "------------------------------------------------------------------------------------------------------------------"
+    passedLogs = @objRollbar.addLog("[Step    ] Deleting Test Data")
     @contractEvent.deleteCreatedRecord()
-    puts "Common Test Data Deleted..."
+    passedLogs = @objRollbar.addLog("[Expected] Test Data should be deleted.")
+    passedLogs = @objRollbar.addLog("[Result  ] Success")
+    puts "\n"
+    
     puts "------------------------------------------------------------------------------------------------------------------"
   }
   after(:each) {

@@ -638,10 +638,10 @@ describe ManageTours do
           @testRailUtility.postResult(96,"Result for case 96 is #{excp}",5,@runId)
           raise excp
         end
-      end
         puts "C96 : Checked successfully"
         puts "---------------------------------------------------------------------------------------------------------------------------"
         
+      end   
     end
     it "C94 : To check tour is booked, when user clicks on 'create account and merge' button" do
       puts "C94 : To check tour is booked, when user clicks on 'create account and merge' button"
