@@ -530,7 +530,7 @@ describe ManageTours do
         puts "\n"
 
         passedLogs = @objRollbar.addLog("[Step    ]  Activity should be created for tour")
-        puts "[Step]     Activity should be created for tour"
+        #puts "[Step]     Activity should be created for tour"
         expect(@objManageTours.checkRecordCreated('Task',"SELECT id FROM Task WHERE whatId = '#{ManageTours.class_variable_get(:@@recordInsertedIds)['Tour_Outcome__c'].fetch('Id')}'")[0].fetch('Id')).to_not eql nil
         passedLogs = @objRollbar.addLog("[Expected]  'Book a tour' activity is created \n[Result  ]  Success")
         #puts "[Expected] 'Book a tour' activity is created"
@@ -671,7 +671,7 @@ describe ManageTours do
         #puts "[Result]   Success"
         puts "\n"
 
-        passedLogs = @objRollbar.addLog("[Step    ]  Contact should be created with name #leadName")
+        passedLogs = @objRollbar.addLog("[Step    ]  Contact should be created with name #{leadName}")
         #puts "[Step]     Contact should be created with name #leadName"
         expect(@objManageTours.checkRecordCreated("Contact","SELECT id,total_Scheduled_Tours__c FROM Contact WHERE Email = '#{@leadsTestData[0]['email']}'")[0].fetch("Id")).to_not eql nil
         passedLogs = @objRollbar.addLog("[Expected]  Contact created successfully \n[[Result  ]  Success")
