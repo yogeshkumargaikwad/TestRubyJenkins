@@ -80,7 +80,7 @@ describe ManageTours do
     @driver.quit
   }
    puts "---------------------------------------------------------------------------------------------------------------------------"
-  it "C149 : To check manage tour page is displayed" , :test => true do
+  it "C149 : To check manage tour page is displayed" , :"149" => true do
     puts "C149 : To check manage tour page is displayed"
     begin
         puts "\n"
