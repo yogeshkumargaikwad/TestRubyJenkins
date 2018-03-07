@@ -117,7 +117,7 @@ end
         passedLogs = @objRollbar.addLog("[Step    ] Fetching Opportunity Reservable details")
         updatedOppReservable = @contractEvent.getOppReservableDetails(updatedOpp.fetch("Id"))
         passedLogs = @objRollbar.addLog("[Expected] Opportunity Reservable fields are successfully fetched")
-        passedLogs =@objRollbar.addLog("[Result   ] Success")
+        passedLogs =@objRollbar.addLog(" [Result  ] Success")
         puts "\n"
 
         passedLogs = @objRollbar.addLog("[Step    ] Fetching Opportunity Move Outs details")
@@ -1258,6 +1258,8 @@ end
         passedLogs = @objRollbar.addLog("[Validate] Does Total Desks Reserved Update to Moveins Quantity?") 
         passedLogs = @objRollbar.addLog("[Expected] Total Desks Reserved=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['quantity']}")
         expect(createdOpp.fetch("Total_Desks_Reserved__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['products'][0]['quantity'].to_i
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
         puts "Checking Opportunity- Total Desks Move Outs..."
         expect(createdOpp.fetch("Total_Desks_Move_Outs__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity'].to_i
@@ -1420,6 +1422,8 @@ end
         passedLogs = @objRollbar.addLog("[Validate] Does Total Desks Reserved Update to Moveins Quantity?") 
         passedLogs = @objRollbar.addLog("[Expected] Total Desks Reserved=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['quantity']}")
         expect(updatedOpp.fetch("Total_Desks_Reserved__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['products'][0]['quantity'].to_i
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
         puts "Checking Opportunity- Total Desks Move Outs..."
         expect(updatedOpp.fetch("Total_Desks_Move_Outs__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity'].to_i
@@ -1585,6 +1589,8 @@ end
         passedLogs = @objRollbar.addLog("[Validate] Does Total Desks Reserved Update to Moveins Quantity?") 
         passedLogs = @objRollbar.addLog("[Expected] Total Desks Reserved=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['quantity']}")
         expect(updatedOpp.fetch("Total_Desks_Reserved__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['products'][0]['quantity'].to_i
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
         puts "Checking Opportunity- Total Desks Move Outs..."
         expect(updatedOpp.fetch("Total_Desks_Move_Outs__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity'].to_i
@@ -1741,6 +1747,8 @@ end
         passedLogs = @objRollbar.addLog("[Validate] Does Total Desks Reserved Update to Moveins Quantity?") 
         passedLogs = @objRollbar.addLog("[Expected] Total Desks Reserved=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['quantity']}")
         expect(updatedOpp.fetch("Total_Desks_Reserved__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['products'][0]['quantity'].to_i
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
         puts "Checking Opportunity- Total Desks Move Outs..."
         expect(updatedOpp.fetch("Total_Desks_Move_Outs__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity'].to_i
@@ -1907,6 +1915,8 @@ end
         passedLogs = @objRollbar.addLog("[Validate] Does Total Desks Reserved Update to Moveins Quantity?") 
         passedLogs = @objRollbar.addLog("[Expected] Total Desks Reserved=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['quantity']}")
         expect(updatedOpp.fetch("Total_Desks_Reserved__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['products'][0]['quantity'].to_i
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
         puts "Checking Opportunity- Total Desks Move Outs..."
         expect(updatedOpp.fetch("Total_Desks_Move_Outs__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity'].to_i
@@ -2073,6 +2083,8 @@ end
         passedLogs = @objRollbar.addLog("[Validate] Does Total Desks Reserved Update to Moveins Quantity?") 
         passedLogs = @objRollbar.addLog("[Expected] Total Desks Reserved=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['quantity']}")
         expect(updatedOpp.fetch("Total_Desks_Reserved__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['products'][0]['quantity'].to_i
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
         puts "Checking Opportunity- Total Desks Move Outs..."
         expect(updatedOpp.fetch("Total_Desks_Move_Outs__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity'].to_i
@@ -2231,6 +2243,8 @@ end
         passedLogs = @objRollbar.addLog("[Validate] Does Total Desks Reserved Update to Moveins Quantity?") 
         passedLogs = @objRollbar.addLog("[Expected] Total Desks Reserved=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['quantity']}")
         expect(createdOpp.fetch("Total_Desks_Reserved__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['products'][0]['quantity'].to_i
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
         puts "Checking Opportunity- Total Desks Move Outs..."
         expect(createdOpp.fetch("Total_Desks_Move_Outs__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity'].to_i
@@ -2390,6 +2404,8 @@ end
         passedLogs = @objRollbar.addLog("[Validate] Does Total Desks Reserved Update to Moveins Quantity?") 
         passedLogs = @objRollbar.addLog("[Expected] Total Desks Reserved=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['quantity']}")
         expect(createdOpp.fetch("Total_Desks_Reserved__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['products'][0]['quantity'].to_i
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
         puts "Checking Opportunity- Total Desks Move Outs..."
         expect(createdOpp.fetch("Total_Desks_Move_Outs__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity'].to_i
@@ -2555,6 +2571,8 @@ end
         passedLogs = @objRollbar.addLog("[Validate] Does Total Desks Reserved Update to Moveins Quantity?") 
         passedLogs = @objRollbar.addLog("[Expected] Total Desks Reserved=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['quantity']}")
         expect(updatedOpp.fetch("Total_Desks_Reserved__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['products'][0]['quantity'].to_i
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
         puts "Checking Opportunity- Total Desks Move Outs..."
         expect(updatedOpp.fetch("Total_Desks_Move_Outs__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity'].to_i
@@ -2719,6 +2737,8 @@ end
         passedLogs = @objRollbar.addLog("[Validate] Does Total Desks Reserved Update to Moveins Quantity?") 
         passedLogs = @objRollbar.addLog("[Expected] Total Desks Reserved=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['quantity']}")
         expect(updatedOpp.fetch("Total_Desks_Reserved__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['products'][0]['quantity'].to_i
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
         puts "Checking Opportunity- Total Desks Move Outs..."
         expect(updatedOpp.fetch("Total_Desks_Move_Outs__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity'].to_i
@@ -2876,6 +2896,8 @@ end
         passedLogs = @objRollbar.addLog("[Validate] Does Total Desks Reserved Update to Moveins Quantity?") 
         passedLogs = @objRollbar.addLog("[Expected] Total Desks Reserved=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['quantity']}")
         expect(updatedOpp.fetch("Total_Desks_Reserved__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['products'][0]['quantity'].to_i
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
         puts "Checking Opportunity- Total Desks Move Outs..."
         expect(updatedOpp.fetch("Total_Desks_Move_Outs__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity'].to_i
@@ -3042,6 +3064,8 @@ end
         passedLogs = @objRollbar.addLog("[Validate] Does Total Desks Reserved Update to Moveins Quantity?") 
         passedLogs = @objRollbar.addLog("[Expected] Total Desks Reserved=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['quantity']}")
         expect(updatedOpp.fetch("Total_Desks_Reserved__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['products'][0]['quantity'].to_i
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
         puts "Checking Opportunity- Total Desks Move Outs..."
         expect(updatedOpp.fetch("Total_Desks_Move_Outs__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity'].to_i
@@ -3207,6 +3231,8 @@ end
         passedLogs = @objRollbar.addLog("[Validate] Does Total Desks Reserved Update to Moveins Quantity?") 
         passedLogs = @objRollbar.addLog("[Expected] Total Desks Reserved=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['quantity']}")
         expect(updatedOpp.fetch("Total_Desks_Reserved__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['products'][0]['quantity'].to_i
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
         puts "Checking Opportunity- Total Desks Move Outs..."
         expect(updatedOpp.fetch("Total_Desks_Move_Outs__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity'].to_i
@@ -3366,6 +3392,8 @@ end
         passedLogs = @objRollbar.addLog("[Validate] Does Total Desks Reserved Update to Moveins Quantity?") 
         passedLogs = @objRollbar.addLog("[Expected] Total Desks Reserved=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['quantity']}")
         expect(createdOpp.fetch("Total_Desks_Reserved__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['products'][0]['quantity'].to_i
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
         puts "Checking Opportunity- Total Desks Move Outs..."
         expect(createdOpp.fetch("Total_Desks_Move_Outs__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity'].to_i
@@ -3524,6 +3552,8 @@ end
         passedLogs = @objRollbar.addLog("[Validate] Does Total Desks Reserved Update to Moveins Quantity?") 
         passedLogs = @objRollbar.addLog("[Expected] Total Desks Reserved=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['quantity']}")
         expect(createdOpp.fetch("Total_Desks_Reserved__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['products'][0]['quantity'].to_i
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
         puts "Checking Opportunity- Total Desks Move Outs..."
         expect(createdOpp.fetch("Total_Desks_Move_Outs__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity'].to_i
@@ -3690,6 +3720,8 @@ end
         passedLogs = @objRollbar.addLog("[Validate] Does Total Desks Reserved Update to Moveins Quantity?") 
         passedLogs = @objRollbar.addLog("[Expected] Total Desks Reserved=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['quantity']}")
         expect(updatedOpp.fetch("Total_Desks_Reserved__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['products'][0]['quantity'].to_i
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
         puts "Checking Opportunity- Total Desks Move Outs..."
         expect(updatedOpp.fetch("Total_Desks_Move_Outs__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity'].to_i
@@ -3851,6 +3883,8 @@ end
         passedLogs = @objRollbar.addLog("[Validate] Does Total Desks Reserved Update to Moveins Quantity?") 
         passedLogs = @objRollbar.addLog("[Expected] Total Desks Reserved=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['quantity']}")
         expect(updatedOpp.fetch("Total_Desks_Reserved__c").to_i).to eq 0
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
         puts "Checking Opportunity- Total Desks Move Outs..."
         expect(updatedOpp.fetch("Total_Desks_Move_Outs__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity'].to_i
@@ -3998,6 +4032,8 @@ end
         passedLogs = @objRollbar.addLog("[Validate] Does Total Desks Reserved Update to Moveins Quantity?") 
         passedLogs = @objRollbar.addLog("[Expected] Total Desks Reserved=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['quantity']}")
         expect(updatedOpp.fetch("Total_Desks_Reserved__c").to_i).to eq 0
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
         puts "Checking Opportunity- Total Desks Move Outs..."
         expect(updatedOpp.fetch("Total_Desks_Move_Outs__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity'].to_i
@@ -4155,6 +4191,8 @@ end
         passedLogs = @objRollbar.addLog("[Validate] Does Total Desks Reserved Update to Moveins Quantity?") 
         passedLogs = @objRollbar.addLog("[Expected] Total Desks Reserved=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['quantity']}")
         expect(updatedOpp.fetch("Total_Desks_Reserved__c").to_i).to eq 0
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
         puts "Checking Opportunity- Total Desks Move Outs..."
         expect(updatedOpp.fetch("Total_Desks_Move_Outs__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity'].to_i
@@ -4310,6 +4348,8 @@ end
         passedLogs = @objRollbar.addLog("[Validate] Does Total Desks Reserved Update to Moveins Quantity?") 
         passedLogs = @objRollbar.addLog("[Expected] Total Desks Reserved=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['quantity']}")
         expect(updatedOpp.fetch("Total_Desks_Reserved__c").to_i).to eq 0
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
         puts "Checking Opportunity- Total Desks Move Outs..."
         expect(updatedOpp.fetch("Total_Desks_Move_Outs__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity'].to_i
@@ -4461,6 +4501,8 @@ end
         passedLogs = @objRollbar.addLog("[Validate] Does Total Desks Reserved Update to Moveins Quantity?") 
         passedLogs = @objRollbar.addLog("[Expected] Total Desks Reserved=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['quantity']}")
         expect(createdOpp.fetch("Total_Desks_Reserved__c").to_i).to eq 0
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
         puts "Checking Opportunity- Total Desks Move Outs..."
         expect(createdOpp.fetch("Total_Desks_Move_Outs__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity'].to_i
@@ -4610,6 +4652,8 @@ end
         passedLogs = @objRollbar.addLog("[Validate] Does Total Desks Reserved Update to Moveins Quantity?") 
         passedLogs = @objRollbar.addLog("[Expected] Total Desks Reserved=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['quantity']}")
         expect(createdOpp.fetch("Total_Desks_Reserved__c").to_i).to eq 0
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
         puts "Checking Opportunity- Total Desks Move Outs..."
         expect(createdOpp.fetch("Total_Desks_Move_Outs__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity'].to_i
@@ -4765,6 +4809,8 @@ end
         passedLogs = @objRollbar.addLog("[Validate] Does Total Desks Reserved Update to Moveins Quantity?") 
         passedLogs = @objRollbar.addLog("[Expected] Total Desks Reserved=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['quantity']}")
         expect(updatedOpp.fetch("Total_Desks_Reserved__c").to_i).to eq 0
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
         puts "Checking Opportunity- Total Desks Move Outs..."
         expect(updatedOpp.fetch("Total_Desks_Move_Outs__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity'].to_i
@@ -4920,6 +4966,8 @@ end
         passedLogs = @objRollbar.addLog("[Validate] Does Total Desks Reserved Update to Moveins Quantity?") 
         passedLogs = @objRollbar.addLog("[Expected] Total Desks Reserved=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['quantity']}")
         expect(updatedOpp.fetch("Total_Desks_Reserved__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['products'][0]['quantity'].to_i
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
         puts "Checking Opportunity- Total Desks Move Outs..."
         expect(updatedOpp.fetch("Total_Desks_Move_Outs__c").to_i).to eq 0
@@ -5069,6 +5117,8 @@ end
         passedLogs = @objRollbar.addLog("[Validate] Does Total Desks Reserved Update to Moveins Quantity?") 
         passedLogs = @objRollbar.addLog("[Expected] Total Desks Reserved=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['quantity']}")
         expect(updatedOpp.fetch("Total_Desks_Reserved__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['products'][0]['quantity'].to_i
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
         puts "Checking Opportunity- Total Desks Move Outs..."
         expect(updatedOpp.fetch("Total_Desks_Move_Outs__c").to_i).to eq 0
