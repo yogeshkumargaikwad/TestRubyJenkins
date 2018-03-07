@@ -3,7 +3,7 @@
 #Purpose: This class contains specs related to salesforce rest web service
 #Modified date :
 require "rspec"
-require 'rspec/repeat'
+#require 'rspec/repeat'
 require 'date'
 #require_relative "helper.rb"
 require 'salesforce'
