@@ -199,6 +199,7 @@ describe ManageTours do
         EnziUIUtility.clickElement(@driver,:id,Date.today.prev_day.to_s)
         sleep(@objManageTours.instance_variable_get(:@timeSettingMap)['Sleep']['Environment']['Lightening'])
         expect(EnziUIUtility.checkErrorMessage(@driver,'h2','No times slots available for the selected date')).to be true
+        @driver.find_elements(:class,"slds-button_icon-inverse")[0].click
         passedLogs = @objRollbar.addLog("[Expected]  Previous tour date should not be selected \n[Result  ]  Success ")
         #puts "[Expected] Previous tour date should not be selected"
         #puts "[Result]   Success"
