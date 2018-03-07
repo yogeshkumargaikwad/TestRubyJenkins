@@ -54,13 +54,29 @@ describe ManageTours do
     allRecordIds = Salesforce.class_variable_get(:@@createdRecordsIds)
     #puts "Records to delete :: #{allRecordIds}"
     #Salesforce.deleteRecords(@objManageTours.instance_variable_get(:@salesforceBulk),"Journey__c",[@objManageTours.instance_variable_get(:@recordInsertedIdsToDelete)['Journey__c']['Id']])
+    puts "Deleting created test data of Journey"
     Salesforce.deleteRecords(@objManageTours.instance_variable_get(:@salesforceBulk),"Journey__c",allRecordIds['Journey__c'])
+    puts "Test data deleted successfully"
+    puts "\n"
+    puts "Deleting created test data of Tour"
     Salesforce.deleteRecords(@objManageTours.instance_variable_get(:@salesforceBulk),"Tour_Outcome__c",allRecordIds['Tour_Outcome__c'])
+    puts "Test data deleted successfully"
+    puts "\n"
+    puts "Deleting created test data of Opportunity"
     Salesforce.deleteRecords(@objManageTours.instance_variable_get(:@salesforceBulk),"Opportunity",allRecordIds['Opportunity'])
+    puts "Test data deleted successfully"
+    puts "\n"
+    puts "Deleting created test data of Lead"
     Salesforce.deleteRecords(@objManageTours.instance_variable_get(:@salesforceBulk),"Lead",allRecordIds['Lead'].uniq)
+    puts "Test data deleted successfully"
+    puts "\n"
+    puts "Deleting created test data of Account"
     Salesforce.deleteRecords(@objManageTours.instance_variable_get(:@salesforceBulk),"Account",allRecordIds['Account'])
+    puts "Test data deleted successfully"
+    puts "\n"
+    puts "Deleting created test data of Contact"
     Salesforce.deleteRecords(@objManageTours.instance_variable_get(:@salesforceBulk),"Contact",allRecordIds['Contact'])
-
+    puts "Test data deleted successfully"
     @driver.quit
   }
    puts "---------------------------------------------------------------------------------------------------------------------------"

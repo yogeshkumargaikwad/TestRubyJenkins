@@ -26,8 +26,8 @@ class Salesforce
       (result.result.records).each_with_index do |object, index|
        sObjectRecordMap.store(((result.result.records[index]).to_hash)[key],(result.result.records[index]).to_hash)
     end
-    puts 'sObjectRecordMap==>'
-    puts sObjectRecordMap
+    #puts 'sObjectRecordMap==>'
+    #puts sObjectRecordMap
     end
   end
   def self.addRecordsToDelete(key,value)
@@ -68,7 +68,7 @@ class Salesforce
     #puts query+" Id IN "+setIds+""
     result = sfBulk.query(objectType, query+" WHERE Id IN "+setIds+"")
     #puts 'result.result.records==>'
-    puts result.result.records
+    #puts result.result.records
  end
 
  def self.deleteRecords(sfBulk,sObjectType,recordsToDelete)
