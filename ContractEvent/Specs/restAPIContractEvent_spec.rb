@@ -82,9 +82,8 @@ end
         companyUUID = SecureRandom.uuid
         @mapOpportunityId = Hash.new
         
-
+        passedLogs = @objRollbar.addLog("[Step    ] Opportunity Should be Created With Name:'#{@testData['ContractEvent']['Account'][1]['name']}', Stage:'Closing', Building:'#{@testData['ContractEvent']['Building__c'][0]['Name']}', Contract UUID:'#{contractUUID}'", caseInfo['id'])
         @opportunity = @contractEvent.createOpportunity(1, 'Closing', 0, contractUUID, nil)
-        passedLogs = @objRollbar.addLog("[Step    ] Opportunity Should be Created With Name:#{@testData['ContractEvent']['Account'][1]['name']}, Stage:'Closing', Building:#{@testData['ContractEvent']['Building__c'][0]['Name']}, Contract UUID:#{contractUUID}", caseInfo['id'])
         expect(@opportunity).not_to eq nil
         passedLogs = @objRollbar.addLog("[Expected] Opportunity is successfully created")
         passedLogs = @objRollbar.addLog("[Result  ] Success")
@@ -108,25 +107,25 @@ end
         puts "\n"
         updatedOpp = @contractEvent.getOpportunityDetails(id)
        
-        passedLogs = @objRollbar.addLog("[Step    ] Fetching Updated Opportunity details")
+        passedLogs = @objRollbar.addLog("[Step    ] Fetching Updated Opportunity details after hitting payload")
         expect(updatedOpp.fetch("Id")).not_to eq nil
         passedLogs = @objRollbar.addLog("[Expected] Opportunity fields are successfully fetched")
-        passedLogs =@objRollbar.addLog(" [Result  ] Success")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
         puts "\n"
         
-        passedLogs = @objRollbar.addLog("[Step    ] Fetching Opportunity Reservable details")
+        passedLogs = @objRollbar.addLog("[Step    ] Fetching Opportunity Reservable details for Opportunity:'#{@testData['ContractEvent']['Account'][1]['name']}'")
         updatedOppReservable = @contractEvent.getOppReservableDetails(updatedOpp.fetch("Id"))
         passedLogs = @objRollbar.addLog("[Expected] Opportunity Reservable fields are successfully fetched")
-        passedLogs =@objRollbar.addLog(" [Result  ] Success")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
         puts "\n"
 
-        passedLogs = @objRollbar.addLog("[Step    ] Fetching Opportunity Move Outs details")
+        passedLogs = @objRollbar.addLog("[Step    ] Fetching Opportunity Move Outs details for Opportunity:'#{@testData['ContractEvent']['Account'][1]['name']}'")
         updatedOppMoveOuts = @contractEvent.getOppMoveOutsDetails(updatedOpp.fetch("Id"))
         passedLogs = @objRollbar.addLog("[Expected] Opportunity Move Outs fields are successfully fetched")
-        passedLogs =@objRollbar.addLog(" [Result  ] Success")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
         puts "\n"
 
-        passedLogs = @objRollbar.addLog("[Step    ] Checking Updated Opportunity Fields")
+        passedLogs = @objRollbar.addLog("[Step    ] Checking Updated Opportunity Fields for Opportunity:'#{@testData['ContractEvent']['Account'][1]['name']}'")
         puts "\n"
         
 

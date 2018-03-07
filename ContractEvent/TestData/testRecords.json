@@ -92,21 +92,21 @@
       {"contractEvent":"/services/apexrest/contractEvent"}
     ],
     "Account":[
-      {"name":"test_Account_ContractEvent1","UUID__c":"account-1111-1111-acc1","RecordTypeId":""},
-      {"name":"test_Account_ContractEvent2","UUID__c":"account-2222-2222-acc2","RecordTypeId":""},
-      {"name":"test_Account_ContractEvent3","UUID__c":"account-3333-3333-acc3","RecordTypeId":""},
-      {"name":"test_Account_ContractEvent4","UUID__c":"account-4444-4444-acc4","RecordTypeId":""}
+      {"name":"TestAccountContractEvent1","UUID__c":"account-1111-1111-acc1","RecordTypeId":""},
+      {"name":"TestAccountContractEvent2","UUID__c":"account-2222-2222-acc2","RecordTypeId":""},
+      {"name":"TestAccountContractEvent3","UUID__c":"account-3333-3333-acc3","RecordTypeId":""},
+      {"name":"TestAccountContractEvent4","UUID__c":"account-4444-4444-acc4","RecordTypeId":""}
     ],
     "Contact":[
-      {"firstname":"test_Contact1","lastname":"ContractEvent1","email":"enzi_Contact_ContractEvent1@example.com","UUID__c":"contact-1111-1111-contact1","AccountId":""},
-      {"firstname":"test_Contact2","lastname":"ContractEvent2","email":"enzi_Contact_ContractEvent2@example.com","UUID__c":"contact-2222-2222-contact2","AccountId":""},
-      {"firstname":"test_Contact3","lastname":"ContractEvent3","email":"enzi_Contact_ContractEvent3@example.com","UUID__c":"contact-3333-3333-contact3","AccountId":""},
-      {"firstname":"test_Contact4","lastname":"ContractEvent4","email":"enzi_Contact_ContractEvent4@example.com","UUID__c":"contact-4444-4444-contact4","AccountId":""}
+      {"firstname":"TestContact1","lastname":"ContractEvent1","email":"enzi_Contact_ContractEvent1@example.com","UUID__c":"contact-1111-1111-contact1","AccountId":""},
+      {"firstname":"TestContact2","lastname":"ContractEvent2","email":"enzi_Contact_ContractEvent2@example.com","UUID__c":"contact-2222-2222-contact2","AccountId":""},
+      {"firstname":"TestContact3","lastname":"ContractEvent3","email":"enzi_Contact_ContractEvent3@example.com","UUID__c":"contact-3333-3333-contact3","AccountId":""},
+      {"firstname":"TestContact4","lastname":"ContractEvent4","email":"enzi_Contact_ContractEvent4@example.com","UUID__c":"contact-4444-4444-contact4","AccountId":""}
     ],
     "Building__c":[
-      {"Name":"B1","City__c":"test1", "uuid__c":"building-1111-1111-b1"},
-      {"Name":"B2","City__c":"test2", "uuid__c":"building-2222-2222-b2"},
-      {"Name":"B3","City__c":"test3", "uuid__c":"building-3333-3333-b3"}
+      {"Name":"TestBuilding1","City__c":"testCity1", "uuid__c":"building-1111-1111-b1"},
+      {"Name":"TestBuilding2","City__c":"testCity2", "uuid__c":"building-2222-2222-b2"},
+      {"Name":"TestBuilding3","City__c":"testCity3", "uuid__c":"building-3333-3333-b3"}
     ],
     "Reservable__c":[
       {"Building__c":"","Name":"Residential Unit1-1015166","Monthly_Price__c":"50","UUID__c":"reservable-1111-1111-reservable1","Office_Work_Station_Type__c":"Office","Office_Capacity__c":"10"},
@@ -120,7 +120,7 @@
       {"Name":"DedicatedDesk","ProductCode":"NotConsidered","IsActive":"true"}
     ],
     "Opportunity":[
-      {"Name":"test_ContractEvent2","StageName":"Selling","CloseDate":"2018-06-03T10:34:24.000Z","AccountId":"0013D00000PnWz8","Primary_Member__c":"","Building__c":"a003D00000116QE","Contract_UUID__c":"","Locations_Interested__c":"AMS-Metropool;AUS-Domain;","Contract_Stage__c":""}
+      {"Name":"TestOppContractEvent","StageName":"Selling","CloseDate":"2018-06-03T10:34:24.000Z","AccountId":"","Primary_Member__c":"","Building__c":"","Contract_UUID__c":"","Locations_Interested__c":"AMS-Metropool;AUS-Domain;","Contract_Stage__c":""}
     ],
     "Scenarios":[
    {"body":{"event_name": "","opportunity_id": "","company_uuid": "","community_manager_uuid": "contact-2222-2222-contact2","primary_member_email": "john.smith1901201802@example.com","membership_agreement_uuid": "","original_contract_uuid": "","currencyVal": "USD","contract_pdf": "", "contract_date":"2016-09-12","products":[{"product_code":"PRDE-000200","quantity":"15","unit_price":"300.0","building_uuid":"building-1111-1111-b1","start_date": "2016-10-14"}],"move_ins": [{"reservable_uuid": "","building_uuid": "building-1111-1111-b1","start_date": "2016-10-14","price": "4500.0","quantity":"15","commitment_end_date":"2018-04-04"}],"move_outs":[{"reservable_uuid":"","building_uuid":"building-1111-1111-b1","move_out_date":"2016-10-14","price":"3000.0","quantity":"10"}],"downgrade_reason": "","downgrade_notes": "","transfer_type": ""}}
