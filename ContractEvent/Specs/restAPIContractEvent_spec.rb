@@ -107,11 +107,11 @@ end
         passedLogs = @objRollbar.addLog("[Result  ] Success")
 
         updatedOpp = @contractEvent.getOpportunityDetails(id)
-       puts updatedOpp 
+       
         passedLogs = @objRollbar.addLog("[Step    ] Fetching Updated Opportunity details")
         expect(updatedOpp.fetch("Id")).not_to eq nil
         passedLogs = @objRollbar.addLog("[Expected] Opportunity fields are successfully fetched")
-        passedLogs =@objRollbar.addLog("[Result   ] Success")
+        passedLogs =@objRollbar.addLog(" [Result  ] Success")
         puts "\n"
         
         passedLogs = @objRollbar.addLog("[Step    ] Fetching Opportunity Reservable details")
@@ -337,105 +337,137 @@ end
         puts "\n"
 
         id = @getResponse['result'].split(':')[1].chomp('"').delete(' ')
+        passedLogs = @objRollbar.addLog("[Validate] Does Opportunity Update after hitting Payload?")
+        expect(id).to eq  @opportunity[0].fetch("Id")
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity is successfully updated")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+
         updatedOpp = @contractEvent.getOpportunityDetails(id)
-        updatedOppReservable = @contractEvent.getOppReservableDetails(updatedOpp[0])
-        updatedOppMoveOuts = @contractEvent.getOppMoveOutsDetails(updatedOpp[0])
-
-
-        puts "***********************************************************************************************"
-        puts "Checking Updated Opportunity Fields"
-
-        puts "Checking Opportunity Should Not Null..."
+        passedLogs = @objRollbar.addLog("[Step    ] Fetching Updated Opportunity details")
         expect(updatedOpp.fetch("Id")).not_to eq nil
-        puts "[Result  ] Success
-        "
-        puts "[Validate] Should Paperwork Sent On Date Updated With Contract Date?"
-        puts "[Expected] Paperwork Sent on Date=#{@testData['ContractEvent']['Scenarios'][0]['body']['contract_date']}"
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity fields are successfully fetched")
+        passedLogs =@objRollbar.addLog(" [Result  ] Success")
+        puts "\n"
+
+        passedLogs = @objRollbar.addLog("[Step    ] Fetching Opportunity Reservable details")
+        updatedOppReservable = @contractEvent.getOppReservableDetails(updatedOpp[0])
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity Reservable fields are successfully fetched")
+        passedLogs =@objRollbar.addLog("[Result   ] Success")
+        puts "\n"
+
+        passedLogs = @objRollbar.addLog("[Step    ] Fetching Opportunity Move Outs details")
+        updatedOppMoveOuts = @contractEvent.getOppMoveOutsDetails(updatedOpp[0])
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity Move Outs fields are successfully fetched")
+        passedLogs =@objRollbar.addLog(" [Result  ] Success")
+        puts "\n"
+
+        passedLogs = @objRollbar.addLog("[Step    ] Checking Updated Opportunity Fields")
+        puts "\n"
+            
+        passedLogs = @objRollbar.addLog("[Validate] Does Paperwork Sent On Date Update to Contract Date?")
+        passedLogs = @objRollbar.addLog("[Expected] Paperwork sent on Date= '#{@testData['ContractEvent']['Scenarios'][0]['body']['contract_date']}'")
         expect(updatedOpp.fetch("Paperwork_Sent_On_Date__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['contract_date'].to_s
-        puts "[Result  ] Success"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "[Validate] Should Contract UUID Updated With Membership Agreement UUID?"
-        puts "[Expected] Contract UUID= #{membershipAgreementUUID}"
+        passedLogs = @objRollbar.addLog("[Validate] Does Contract UUID Update to Membership Agreement UUID?")
+        passedLogs = @objRollbar.addLog("[Expected] Contract UUID= #{membershipAgreementUUID}")
         expect(updatedOpp.fetch("Contract_UUID__c")).to eq membershipAgreementUUID
-        puts "[Result  ] Success"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "[Validate] Should Contract Stage Updated With Contract Sent?"
-        puts "[Expected] Contract Stage= Contract Sent"
+        passedLogs = @objRollbar.addLog("[Validate] Does Contract Stage Update to Contract Sent?") 
+        passedLogs = @objRollbar.addLog("[Expected] Contract Stage= Contract Sent") 
         expect(updatedOpp.fetch("Contract_Stage__c")).to eq "Contract Sent"
-        puts "[Result  ] Success"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
-        puts "[Validate] Should Paperwork Sent By Updated With Contact id?"
-        puts "[Expected] Paperwork Sent By=#{@recordCreated['contact'][1].fetch("Id")}"
+        passedLogs = @objRollbar.addLog("[Validate] Does Paperwork Sent By Update to Contact Id?") 
+        passedLogs = @objRollbar.addLog("[Expected] Paperwork Sent By=#{@recordCreated['contact'][1].fetch("Id")}") 
         expect(updatedOpp.fetch("Send_Paperwork_By__c")).to eq @recordCreated['contact'][1].fetch("Id")
-        puts "[Result  ] Success"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
-        puts "[Validate] Should Actual Start Date Updated With Start Date?"
-        puts "[Expected] Actual Start Date=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['start_date']}"
+        passedLogs = @objRollbar.addLog("[Validate] Does Actual Start Date Update to Start Date?") 
+        passedLogs = @objRollbar.addLog("[Expected] Actual Start Date=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['start_date']}") 
         expect(updatedOpp.fetch("Actual_Start_Date__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['start_date'].to_s
-        puts "[Result  ] Success"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
-        puts "[Validate] Should Total Desks Reserved Updated With Moveins Quantity?"
-        puts "[Expected] Total Desks Reserved=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['quantity']}"
+        passedLogs = @objRollbar.addLog("[Validate] Does Total Desks Reserved Update to Moveins Quantity?") 
+        passedLogs = @objRollbar.addLog("[Expected] Total Desks Reserved=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['quantity']}")
         expect(updatedOpp.fetch("Total_Desks_Reserved__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['quantity'].to_i
-        puts "[Result  ] Success"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
         puts "[Validate] Should Total Desks Moveout should Updated With Moveouts Quantity?"
         puts "[Expected] Total Desks Move outs=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity']}"
         expect(updatedOpp.fetch("Total_Desks_Move_Outs__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity'].to_i
-        puts "[Result  ] Success"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
         puts "[Validate] Should Total Desks Reserved(Net) Updated With Difference Between Opportunity Move ins and Opportunity Move outs?"
         puts "[Expected] Total Desks Reserved(Net)=#{(@testData['ContractEvent']['Scenarios'][0]['body']['products'][0]['quantity'].to_i) - (@testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity'].to_i)}"
         expect(updatedOpp.fetch("Total_Desks_Reserved_net__c").to_i).to eq (@testData['ContractEvent']['Scenarios'][0]['body']['products'][0]['quantity'].to_i - @testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity'].to_i)
-        puts "[Result  ] Success"
+       passedLogs = @objRollbar.addLog("[Result  ] Success")
+ 
 
         puts "[Validate] Should No of Desks Updated with Sum of Quantity of Product?"
         puts "[Expected] No of Desks=#{@testData['ContractEvent']['Scenarios'][0]['body']['products'][0]['quantity']}"
         expect(updatedOpp.fetch("Quantity__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['products'][0]['quantity'].to_i
-        puts "[Result  ] Success"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
         puts "[Validate] No of Desks(Gross) Should Updated With Product Quantity?"
         puts "[Expected] No of Desks(Gross)=#{@testData['ContractEvent']['Scenarios'][0]['body']['products'][0]['quantity']}"
         expect(updatedOpp.fetch("No_of_Desks_gross__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['products'][0]['quantity'].to_i
-        puts "[Result  ] Success"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
         puts "[Validate] Should Original Contract UUID Updated With Membership Agreement UUID?"
         puts "[Expected] Original Contract UUID= "
         expect(updatedOpp.fetch("Original_Contract_UUID__c")).to eq ""
-        puts "[Result  ] Success"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
         puts "[Validate] Should Opportunity Stage Updated to Closing?"
         puts "[Expected] Stage Name= Closing"
         expect(updatedOpp.fetch("StageName")).to eq "Closing"
-        puts "[Result  ] Success"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
         puts "[Validate] Should Opportunity Building Updated With Move ins Building Passing through Payload?"
         puts "[Expected] Building=#{@recordCreated['building'][0].fetch("Id")}"
         #puts  updatedOpp.fetch("Building__c")
         expect(updatedOpp.fetch("Building__c")).to eq @recordCreated['building'][0].fetch("Id")
-        puts "[Result  ] Success"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
         puts "[Validate] Should Move out Building Updated to Building from Which Move Out Occured?"
         #puts updatedOpp.fetch("Move_Out_Building__c")
         puts "[Expected] Move out Building=#{@recordCreated['building'][0].fetch("Id")}"
         expect(updatedOpp.fetch("Move_Out_Building__c")).to eq @recordCreated['building'][0].fetch("Id")
-        puts "[Result  ] Success"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
         puts "[Validate] Should No of Desks(Unweighted) Updated?"
         puts "[expected] No of Desks(Unweighted)=#{(@testData['ContractEvent']['Scenarios'][0]['body']['products'][0]['quantity'].to_i) - (@testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity'].to_i)}"
         expect(updatedOpp.fetch("No_of_Desks_unweighted__c").to_i).to eq (@testData['ContractEvent']['Scenarios'][0]['body']['products'][0]['quantity'].to_i - @testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity'].to_i)
-        puts "[Result  ] Success"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
         puts "[Validate] Should No of Desks(Weighted) Updated?"
         weightedDesk = (updatedOpp.fetch("No_of_Desks_unweighted__c").to_f * (updatedOpp.fetch("Probability").to_f / 100.to_f).to_f).round
         puts "[Expected] No of Desks(Weighted)=#{weightedDesk}"
         expect(updatedOpp.fetch("No_of_Desks_weighted__c").to_i).to eq weightedDesk
-        puts "[Result  ] Success"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
         puts "[Validate] Should Contract type Updated With Upgrade?"
         puts "[Expected] Contract Type= Upgrade"
         expect(updatedOpp.fetch("Contract_Type__c")).to eq "Upgrade"
-        puts "[Result  ] Success"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
         puts "******************************************************************************************"
         puts "Checking Updated Opportunity Reservables"
@@ -446,18 +478,21 @@ end
         puts "[Validate] Should Pending desks in Opportunity Reservables Updated With Move ins Quantity?"
         puts "[Expected] Pending Desks=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['quantity']}"
         expect(updatedOppReservable.fetch("Pending_Desks__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['quantity'].to_i
-        puts "[Result  ] Success"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
 
         puts "[Validate] Should Start date in Opportunity Reservable Updated With Move ins Start Date?"
         puts "[Expected] Start Date=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['start_date']}"
         expect(updatedOppReservable.fetch("Start_Date__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['start_date'].to_s
-        puts "[Result  ] Success"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
         puts "[Validate] Should Monthly Price on Opportunity Reservable Updated With Move ins Price?"
         puts "[Expected] Monthly Price=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['price']}"
         expect(updatedOppReservable.fetch("Monthly_Price__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['price'].to_s
-        puts "[Result  ] Success"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
         puts "******************************************************************************************"
         puts "Checking Updated Opportunity Move Outs"
@@ -468,12 +503,14 @@ end
         puts "[Validate] Should Pending Desks in Opportunity Move Outs Updated With Move Outs Quantity?"
         puts "[Expected] Pending Desks=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity']}"
         expect(updatedOppMoveOuts.fetch("Pending_Desks__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity'].to_i
-        puts "[Result  ] Success"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
         puts "[Validate] Should Move Out Date in Opportunity Move Out Updated?"
         puts "[Expected] Move out Date=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['move_out_date']}"
         expect(updatedOppMoveOuts.fetch("Move_Out_Date__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['move_out_date'].to_s
-        puts "[Result  ] Success"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
         puts "******************************************************************************************"
 
@@ -520,91 +557,123 @@ end
         puts "\n"
 
         id = @getResponse['result'].split(':')[1].chomp('"').delete(' ')
+        passedLogs = @objRollbar.addLog("[Validate] Does Opportunity Update after hitting Payload?")
+        expect(id).to eq  @opportunity[0].fetch("Id")
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity is successfully updated")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+
         updatedOpp = @contractEvent.getOpportunityDetails(id)
-        updatedOppReservable = @contractEvent.getOppReservableDetails(updatedOpp[0])
-        updatedOppMoveOuts = @contractEvent.getOppMoveOutsDetails(updatedOpp[0])
-
-
-        puts "**************************************************************************"
-        puts "Checking Updated Opportunity"
-
-        puts "Checking Opportunity should not null..."
+        passedLogs = @objRollbar.addLog("[Step    ] Fetching Updated Opportunity details")
         expect(updatedOpp.fetch("Id")).not_to eq nil
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity fields are successfully fetched")
+        passedLogs =@objRollbar.addLog(" [Result  ] Success")
+        puts "\n"
 
-        puts "[Validate] Should Paperwork Sent On Date Updated with Contract date?"
-        puts "[Expected] Paperwork Sent On Date=#{@testData['ContractEvent']['Scenarios'][0]['body']['contract_date']}"
+        passedLogs = @objRollbar.addLog("[Step    ] Fetching Opportunity Reservable details")
+        updatedOppReservable = @contractEvent.getOppReservableDetails(updatedOpp[0])
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity Reservable fields are successfully fetched")
+        passedLogs =@objRollbar.addLog(" [Result  ] Success")
+        puts "\n"
+
+        passedLogs = @objRollbar.addLog("[Step    ] Fetching Opportunity Move Outs details")
+        updatedOppMoveOuts = @contractEvent.getOppMoveOutsDetails(updatedOpp[0])
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity Move Outs fields are successfully fetched")
+        passedLogs =@objRollbar.addLog(" [Result  ] Success")
+        puts "\n"
+
+        passedLogs = @objRollbar.addLog("[Step    ] Checking Updated Opportunity Fields")
+        puts "\n"
+        
+
+        passedLogs = @objRollbar.addLog("[Validate] Does Paperwork Sent On Date Update to Contract Date?")
+        passedLogs = @objRollbar.addLog("[Expected] Paperwork sent on Date= '#{@testData['ContractEvent']['Scenarios'][0]['body']['contract_date']}'")
         expect(updatedOpp.fetch("Paperwork_Sent_On_Date__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['contract_date'].to_s
-        puts "[Result  ] Success"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "[Validate] Should Contract UUID Updated With Membership Agreement UUID?"
-        puts "[Expected] Contract UUID=#{membershipAgreementUUID}"
+        passedLogs = @objRollbar.addLog("[Validate] Does Contract UUID Update to Membership Agreement UUID?")
+        passedLogs = @objRollbar.addLog("[Expected] Contract UUID= #{membershipAgreementUUID}")
         expect(updatedOpp.fetch("Contract_UUID__c")).to eq membershipAgreementUUID
-        puts "[Result  ] Success"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "[Validate] Should Contract Stage updated with Contract Sent?"
-        puts "[Expected] Contract Stage= Contract Sent"
+        passedLogs = @objRollbar.addLog("[Validate] Does Contract Stage Update to Contract Sent?") 
+        passedLogs = @objRollbar.addLog("[Expected] Contract Stage= Contract Sent") 
         expect(updatedOpp.fetch("Contract_Stage__c")).to eq "Contract Sent"
-        puts "[Result  ] Success"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
-        puts "[Validate] Should Paperwork Sent by Updated with Contact id?"
-        puts "[expected] Paperwork Sent By=#{@recordCreated['contact'][1].fetch("Id")}"
+        passedLogs = @objRollbar.addLog("[Validate] Does Paperwork Sent By Update to Contact Id?") 
+        passedLogs = @objRollbar.addLog("[Expected] Paperwork Sent By=#{@recordCreated['contact'][1].fetch("Id")}") 
         expect(updatedOpp.fetch("Send_Paperwork_By__c")).to eq @recordCreated['contact'][1].fetch("Id")
-        puts "[result] success"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
-        puts "[Validate] Should Actual Start Date updated with Start Date?"
-        puts "[expected] Actual Start Date=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['start_date']}"
+        passedLogs = @objRollbar.addLog("[Validate] Does Actual Start Date Update to Start Date?") 
+        passedLogs = @objRollbar.addLog("[Expected] Actual Start Date=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['start_date']}") 
         expect(updatedOpp.fetch("Actual_Start_Date__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['start_date'].to_s
-        puts "[result] success"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
-        puts "[Validate]Should Total Desks Reserved updated with Moveins quantity?"
-        puts "[expected] Total Desks Reserved=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['quantity']}"
+        passedLogs = @objRollbar.addLog("[Validate] Does Total Desks Reserved Update to Moveins Quantity?") 
+        passedLogs = @objRollbar.addLog("[Expected] Total Desks Reserved=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['quantity']}")
         expect(updatedOpp.fetch("Total_Desks_Reserved__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['quantity'].to_i
-        puts "[result] success"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
         puts "[Validate] Should Total Desks Moveout should updated with Moveouts quantity?"
         puts "[expected] Total Desks Move out=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity']}"
         expect(updatedOpp.fetch("Total_Desks_Move_Outs__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity'].to_i
-        puts "[result] success"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
         puts "[Validate] Should Total Desks Reserved(net) updated with difference between Opportunity Move ins and Opportunity Move outs?"
         puts "[expected] Total Desks Reserved(net)=#{(@testData['ContractEvent']['Scenarios'][0]['body']['products'][0]['quantity'].to_i)-(@testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity'].to_i)}"
         expect(updatedOpp.fetch("Total_Desks_Reserved_net__c").to_i).to eq (@testData['ContractEvent']['Scenarios'][0]['body']['products'][0]['quantity'].to_i - @testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity'].to_i)
-        puts "[result] success"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
         puts "[Validate] Should No of Desks updated with Sum of quantity of Product?"
         puts "[expected] No of Desks=#{@testData['ContractEvent']['Scenarios'][0]['body']['products'][0]['quantity']}"
         expect(updatedOpp.fetch("Quantity__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['products'][0]['quantity'].to_i
-        puts "[result] success"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
         puts "[Validate] No of Desks(Gross) should updated with Product Quantity?"
         puts "[expected] No of Desks(Gross)=#{@testData['ContractEvent']['Scenarios'][0]['body']['products'][0]['quantity']}"
         expect(updatedOpp.fetch("No_of_Desks_gross__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['products'][0]['quantity'].to_i
-        puts "[result] success"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
         puts "[Validate] Should Original Contract UUID updated with Membership Agreement UUID?"
         puts "[expected] original Contract UUID= "
         expect(updatedOpp.fetch("Original_Contract_UUID__c")).to eq ""
-        puts "[result] success"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
         puts "[Validate] Should Opportunity Stage updated to Closing?"
         puts "[expected] Stage Name= Closing"
         expect(updatedOpp.fetch("StageName")).to eq "Closing"
-        puts "[result] success"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
         puts "[Validate] Should Opportunity Building updated with move ins Building passing through payload?"
         puts "[expected] Building=#{@recordCreated['building'][0].fetch("Id")}"
         expect(updatedOpp.fetch("Building__c")).to eq @recordCreated['building'][0].fetch("Id")
-        puts "[result] success"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
         puts "[Validate] Should Move out Building updated to Building from which move out occured?"
         puts "[expected] Move out Building=#{@recordCreated['building'][0].fetch("Id")}"
         expect(updatedOpp.fetch("Move_Out_Building__c")).to eq @recordCreated['building'][0].fetch("Id")
-        puts "[result] success"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
         puts "[Validate] Should No of Desks(Unweighted) updated?"
         puts "[expected] No of Desks(Unweighted)=#{(@testData['ContractEvent']['Scenarios'][0]['body']['products'][0]['quantity'].to_i)- (@testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity'].to_i)}"
         expect(updatedOpp.fetch("No_of_Desks_unweighted__c").to_i).to eq (@testData['ContractEvent']['Scenarios'][0]['body']['products'][0]['quantity'].to_i - @testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity'].to_i)
-        puts "[result] success"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
         puts "Checking Opportunity- No. of Desks (weighted)..."
         expect(updatedOpp.fetch("No_of_Desks_weighted__c").to_i).to eq (updatedOpp.fetch("No_of_Desks_unweighted__c").to_f * (updatedOpp.fetch("Probability").to_f / 100.to_f).to_f).round
@@ -612,7 +681,8 @@ end
         puts "[Validate] Should Contract type updated with Upgrade?"
         puts "[expected] Contract Type= Upgrade"
         expect(updatedOpp.fetch("Contract_Type__c")).to eq "Upgrade"
-        puts "[result] success"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
         puts "**************************************************************************"
         puts "Checking Updated Opportunity Reservables"
@@ -623,18 +693,21 @@ end
         puts "[Validate] Should Pending desks in Opportunity Reservables updated with Move ins Quantity?"
         puts "[expected] Pending Desks=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['quantity']}"
         expect(updatedOppReservable.fetch("Pending_Desks__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['quantity'].to_i
-        puts "[result] success"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
         puts "[Validate] Should Start date in Opportunity Reservable updated with Move ins Start Date?"
         puts "[expected] Start Date=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['start_date']}"
         expect(updatedOppReservable.fetch("Start_Date__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['start_date'].to_s
-        puts "[result] success"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
         puts "[Validate] Should Monthly price on Opportunity Reservable updated with Move ins price?"
         puts "[expected] Monthly Price=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['price']}"
         expect(updatedOppReservable.fetch("Monthly_Price__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['price'].to_s
-        puts "[result] success"
-
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
+    
         puts "**************************************************************************"
         puts "Checking Updated Opportunity Move Outs"
 
@@ -644,12 +717,14 @@ end
         puts "[Validate] Should Pending Desks in Opportunity Move outs updated with Move outs Quantity?"
         puts "[expected] Pending Desks=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity']}"
         expect(updatedOppMoveOuts.fetch("Pending_Desks__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity'].to_i
-        puts "[result] success"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
         puts "[Validate] Should Move out date in Opportunity Move out updated?"
         puts "[expected] Move out Date=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['move_out_date']}"
         expect(updatedOppMoveOuts.fetch("Move_Out_Date__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['move_out_date'].to_s
-        puts "[result] success"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
         puts "**************************************************************************"
 
@@ -698,90 +773,122 @@ end
         puts "\n"
 
         id = @getResponse['result'].split(':')[1].chomp('"').delete(' ')
+        passedLogs = @objRollbar.addLog("[Validate] Does Opportunity Update after hitting Payload?")
+        expect(id).to eq  @opportunity[0].fetch("Id")
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity is successfully updated")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+
         updatedOpp = @contractEvent.getOpportunityDetails(id)
-        updatedOppReservable = @contractEvent.getOppReservableDetails(updatedOpp[0])
-        updatedOppMoveOuts = @contractEvent.getOppMoveOutsDetails(updatedOpp[0])
-
-        puts "**************************************************************************"
-        puts "Checking Updated Opportunity"
-
-        puts "Checking Opportunity should not null..."
+        passedLogs = @objRollbar.addLog("[Step    ] Fetching Updated Opportunity details")
         expect(updatedOpp.fetch("Id")).to eq @opportunity2[0].fetch("Id")
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity fields are successfully fetched")
+        passedLogs =@objRollbar.addLog(" [Result  ] Success")
+        puts "\n"
 
-        puts "[Validate] Should Paperwork Sent on date updated with Contract date?"
-        puts "[expected] Paperwork Sent on Date=#{@testData['ContractEvent']['Scenarios'][0]['body']['contract_date']}"
+        passedLogs = @objRollbar.addLog("[Step    ] Fetching Opportunity Reservable details")
+        updatedOppReservable = @contractEvent.getOppReservableDetails(updatedOpp[0])
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity Reservable fields are successfully fetched")
+        passedLogs =@objRollbar.addLog("[Result   ] Success")
+        puts "\n"
+
+        passedLogs = @objRollbar.addLog("[Step    ] Fetching Opportunity Move Outs details")
+        updatedOppMoveOuts = @contractEvent.getOppMoveOutsDetails(updatedOpp[0])
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity Move Outs fields are successfully fetched")
+        passedLogs =@objRollbar.addLog(" [Result  ] Success")
+        puts "\n"
+
+        passedLogs = @objRollbar.addLog("[Step    ] Checking Updated Opportunity Fields")
+        puts "\n"
+        
+        passedLogs = @objRollbar.addLog("[Validate] Does Paperwork Sent On Date Update to Contract Date?")
+        passedLogs = @objRollbar.addLog("[Expected] Paperwork sent on Date= '#{@testData['ContractEvent']['Scenarios'][0]['body']['contract_date']}'")
         expect(updatedOpp.fetch("Paperwork_Sent_On_Date__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['contract_date'].to_s
-        puts "[result] success"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "[Validate] Should Contract UUID updated with Membership agreement uuid?"
-        puts "[expected] Contract UUID=#{membershipAgreementUUID}"
+        passedLogs = @objRollbar.addLog("[Validate] Does Contract UUID Update to Membership Agreement UUID?")
+        passedLogs = @objRollbar.addLog("[Expected] Contract UUID= #{membershipAgreementUUID}")
         expect(updatedOpp.fetch("Contract_UUID__c")).to eq membershipAgreementUUID
-        puts "[result] success"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "[Validate] Should Contract Stage updated with Contract Sent?"
-        puts "[expected] Contract Stage= Contract Sent"
+        passedLogs = @objRollbar.addLog("[Validate] Does Contract Stage Update to Contract Sent?") 
+        passedLogs = @objRollbar.addLog("[Expected] Contract Stage= Contract Sent") 
         expect(updatedOpp.fetch("Contract_Stage__c")).to eq "Contract Sent"
-        puts "[result] success"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
-        puts "[Validate] Should Paperwork Sent by Updated with Contact id?"
-        puts "[expected] Paperwork Sent By=#{@recordCreated['contact'][1].fetch("Id")}"
+        passedLogs = @objRollbar.addLog("[Validate] Does Paperwork Sent By Update to Contact Id?") 
+        passedLogs = @objRollbar.addLog("[Expected] Paperwork Sent By=#{@recordCreated['contact'][1].fetch("Id")}") 
         expect(updatedOpp.fetch("Send_Paperwork_By__c")).to eq @recordCreated['contact'][1].fetch("Id")
-        puts "[result] success"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
-        puts "[Validate] Should Actual Start Date updated with Start Date?"
-        puts "[expected] Actual Start Date=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['start_date']}"
+        passedLogs = @objRollbar.addLog("[Validate] Does Actual Start Date Update to Start Date?") 
+        passedLogs = @objRollbar.addLog("[Expected] Actual Start Date=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['start_date']}") 
         expect(updatedOpp.fetch("Actual_Start_Date__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['start_date'].to_s
-        puts "[result] success"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
-        puts "[Validate]Should Total Desks Reserved updated with Moveins quantity?"
-        puts "[expected] Total Desks Reserved=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['quantity']}"
+        passedLogs = @objRollbar.addLog("[Validate] Does Total Desks Reserved Update to Moveins Quantity?") 
+        passedLogs = @objRollbar.addLog("[Expected] Total Desks Reserved=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['quantity']}")
         expect(updatedOpp.fetch("Total_Desks_Reserved__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['quantity'].to_i
-        puts "[result] success"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
         puts "[Validate] Should Total Desks Moveout should updated with Moveouts quantity?"
         puts "[expected] Total Desks Moveout=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity']}"
         expect(updatedOpp.fetch("Total_Desks_Move_Outs__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity'].to_i
-        puts "[result] success"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
         puts "[Validate] Should Total Desks Reserved(net) updated with difference between Opportunity Move ins and Opportunity Move outs?"
         puts "[expected] Total Desks Reserved(net)=#{(@testData['ContractEvent']['Scenarios'][0]['body']['products'][0]['quantity'].to_i)-(@testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity'].to_i)}"
         expect(updatedOpp.fetch("Total_Desks_Reserved_net__c").to_i).to eq (@testData['ContractEvent']['Scenarios'][0]['body']['products'][0]['quantity'].to_i - @testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity'].to_i)
-        puts "[result] success"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
         puts "[Validate] Should No of Desks updated with Sum of quantity of Product?"
         puts "[expected] No of Desks=#{@testData['ContractEvent']['Scenarios'][0]['body']['products'][0]['quantity']}"
         expect(updatedOpp.fetch("Quantity__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['products'][0]['quantity'].to_i
-        puts "[result] success"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
         puts "[Validate] No of Desks(Gross) should updated with Product Quantity?"
         puts "[expected] No of Desks(Gross)=#{@testData['ContractEvent']['Scenarios'][0]['body']['products'][0]['quantity']}"
         expect(updatedOpp.fetch("No_of_Desks_gross__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['products'][0]['quantity'].to_i
-        puts "[result] success"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
         puts "[Validate] Should Original Contract UUID updated with Membership Agreement UUID?"
         puts "[expected] Original Contract UUID= "
         expect(updatedOpp.fetch("Original_Contract_UUID__c")).to eq ""
-        puts "[result] success"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
         puts "[Validate] Should Opportunity Stage updated to Closing?"
         puts "[expected] Stage Name= Closing"
         expect(updatedOpp.fetch("StageName")).to eq "Closing"
-        puts "[result] success"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
         puts "[Validate] Should Opportunity Building updated with move ins Building passing through payload?"
         puts "[expected] Building=#{@recordCreated['building'][0].fetch("Id")}"
         expect(updatedOpp.fetch("Building__c")).to eq @recordCreated['building'][0].fetch("Id")
-        puts "[result] success"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
         puts "[Validate] Should Move out Building updated to Building from which move out occured?"
         puts "[expected] Move out Building=#{@recordCreated['building'][0].fetch("Id")}"
         expect(updatedOpp.fetch("Move_Out_Building__c")).to eq @recordCreated['building'][0].fetch("Id")
-        puts "[result] success"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
         puts "[Validate] Should No of Desks(Unweighted) updated?"
         puts "[expected] No of Desks(Unweighted)= #{(@testData['ContractEvent']['Scenarios'][0]['body']['products'][0]['quantity'].to_i)-(@testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity'].to_i)}"
         expect(updatedOpp.fetch("No_of_Desks_unweighted__c").to_i).to eq (@testData['ContractEvent']['Scenarios'][0]['body']['products'][0]['quantity'].to_i - @testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity'].to_i)
-        puts "[result] success"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
         puts "Checking Opportunity- No. of Desks (weighted)..."
         expect(updatedOpp.fetch("No_of_Desks_weighted__c").to_i).to eq (updatedOpp.fetch("No_of_Desks_unweighted__c").to_f * (updatedOpp.fetch("Probability").to_f / 100.to_f).to_f).round
@@ -789,7 +896,8 @@ end
         puts "[Validate] Should Contract type updated with Upgrade?"
         puts "[expected] Contract Type= Upgrade"
         expect(updatedOpp.fetch("Contract_Type__c")).to eq "Upgrade"
-        puts "[result] success"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
         puts "**************************************************************************"
         puts "Checking Updated Opportunity Reservables"
 
@@ -799,17 +907,20 @@ end
         puts "[Validate] Should Pending desks in Opportunity Reservables updated with Move ins Quantity?"
         puts "[expected] Pending Desks=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['quantity']}"
         expect(updatedOppReservable.fetch("Pending_Desks__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['quantity'].to_i
-        puts "[result] success"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
         puts "[Validate] Should Start date in Opportunity Reservable updated with Move ins Start Date?"
         puts "[expected] Start Date=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['start_date']}"
         expect(updatedOppReservable.fetch("Start_Date__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['start_date'].to_s
-        puts "[result] success"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
         puts "[Validate] Should Monthly price on Opportunity Reservable updated with Move ins price?"
         puts "[expected] Monthly Price=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['price']}"
         expect(updatedOppReservable.fetch("Monthly_Price__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['price'].to_s
-        puts "[result] success"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
         puts "**************************************************************************"
         puts "Checking Updated Opportunity Move Outs"
@@ -820,12 +931,14 @@ end
         puts "[Validate] Should Pending Desks in Opportunity Move outs updated with Move outs Quantity?"
         puts "[expected] Pending Desks=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity']}"
         expect(updatedOppMoveOuts.fetch("Pending_Desks__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity'].to_i
-        puts "[result] success"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
         
         puts "[Validate] Should Move out date in Opportunity Move out updated?"
         puts "[expected] Move out Date=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['move_out_date']}"
         expect(updatedOppMoveOuts.fetch("Move_Out_Date__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['move_out_date'].to_s
-        puts "[result] success"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
         puts "**************************************************************************"
 
         @testRailUtility.postResult(726, "pass", 1, @run)
@@ -874,105 +987,131 @@ end
         puts "\n"
 
         id = @getResponse['result'].split(':')[1].chomp('"').delete(' ')
+        
 
         @mapOpportunityId["opportunity"] << Hash["Id" => id]
 
         createdOpp = @contractEvent.getOpportunityDetails(id)
+        passedLogs = @objRollbar.addLog("[Step    ] Fetching Opportunity Reservable details")
         updatedOppReservable = @contractEvent.getOppReservableDetails(createdOpp[0])
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity Reservable fields are successfully fetched")
+        passedLogs =@objRollbar.addLog("[Result   ] Success")
+        puts "\n"
+
+        passedLogs = @objRollbar.addLog("[Step    ] Fetching Opportunity Move Outs details")
         updatedOppMoveOuts = @contractEvent.getOppMoveOutsDetails(createdOpp[0])
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity Move Outs fields are successfully fetched")
+        passedLogs =@objRollbar.addLog(" [Result  ] Success")
+        puts "\n"
 
-
-        puts "**************************************************************************"
-        puts "Checking Updated Opportunity"
+        passedLogs = @objRollbar.addLog("[Step    ] Checking Updated Opportunity Fields")
+        puts "\n"
 
         puts "Checking Opportunity should not null..."
         expect(createdOpp.fetch("Id")).not_to eq nil
 
-        puts "[Validate] Should Paperwork Sent on date updated with Contract date?"
-        puts "[expected] Paperwork Sent On Date=#{@testData['ContractEvent']['Scenarios'][0]['body']['contract_date']}"
+        passedLogs = @objRollbar.addLog("[Validate] Does Paperwork Sent On Date Update to Contract Date?")
+        passedLogs = @objRollbar.addLog("[Expected] Paperwork sent on Date= '#{@testData['ContractEvent']['Scenarios'][0]['body']['contract_date']}'")
         expect(createdOpp.fetch("Paperwork_Sent_On_Date__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['contract_date'].to_s
-        puts "[result] success"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "[Validate] Should Contract UUID updated with Membership agreement uuid?"
-        puts "[expected] Contract UUID =#{membershipAgreementUUID}"
+        passedLogs = @objRollbar.addLog("[Validate] Does Contract UUID Update to Membership Agreement UUID?")
+        passedLogs = @objRollbar.addLog("[Expected] Contract UUID= #{membershipAgreementUUID}")
         expect(createdOpp.fetch("Contract_UUID__c")).to eq membershipAgreementUUID
-        puts "[result] success"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "[Validate] Should Contract Stage updated with Contract Sent?"
-        puts "[expected] Contract Stage= Contract Sent"
+        passedLogs = @objRollbar.addLog("[Validate] Does Contract Stage Update to Contract Sent?") 
+        passedLogs = @objRollbar.addLog("[Expected] Contract Stage= Contract Sent") 
         expect(createdOpp.fetch("Contract_Stage__c")).to eq "Contract Sent"
-        puts "[result] success"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
-        puts "[Validate] Should Paperwork Sent by Updated with Contact id?"
-        puts "[expected] Paperwork Sent By=#{@recordCreated['contact'][1].fetch("Id")}"
+        passedLogs = @objRollbar.addLog("[Validate] Does Paperwork Sent By Update to Contact Id?") 
+        passedLogs = @objRollbar.addLog("[Expected] Paperwork Sent By=#{@recordCreated['contact'][1].fetch("Id")}") 
         expect(createdOpp.fetch("Send_Paperwork_By__c")).to eq @recordCreated['contact'][1].fetch("Id")
-        puts "[result] success"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
-        puts "[Validate] Should Actual Start Date updated with Start Date?"
-        puts "[expected] Actual Start Date=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['start_date']}"
+        passedLogs = @objRollbar.addLog("[Validate] Does Actual Start Date Update to Start Date?") 
+        passedLogs = @objRollbar.addLog("[Expected] Actual Start Date=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['start_date']}") 
         expect(createdOpp.fetch("Actual_Start_Date__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['start_date'].to_s
-        puts "[result] success"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
-        puts "[Validate]Should Total Desks Reserved updated with Moveins quantity?"
-        puts "[expected] Total Desks Reserved=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['quantity']}"
+        passedLogs = @objRollbar.addLog("[Validate] Does Total Desks Reserved Update to Moveins Quantity?") 
+        passedLogs = @objRollbar.addLog("[Expected] Total Desks Reserved=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['quantity']}")
         expect(createdOpp.fetch("Total_Desks_Reserved__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['quantity'].to_i
-        puts "[result] success"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
         puts "[Validate] Should Total Desks Moveout should updated with Moveouts quantity?"
         puts "[expected] Total Desks Moveouts=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity']}"
         expect(createdOpp.fetch("Total_Desks_Move_Outs__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity'].to_i
-        puts "[result] success"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
         puts "[Validate] Should Total Desks Reserved(net) updated with difference between Opportunity Move ins and Opportunity Move outs?"
         puts "[expected] Total Desks Reserved(net)=#{(@testData['ContractEvent']['Scenarios'][0]['body']['products'][0]['quantity'].to_i)-(@testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity'].to_i)}"
         expect(createdOpp.fetch("Total_Desks_Reserved_net__c").to_i).to eq (@testData['ContractEvent']['Scenarios'][0]['body']['products'][0]['quantity'].to_i - @testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity'].to_i)
-        puts "[result] success"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
         puts "[Validate] Should No of Desks updated with Sum of quantity of Product?"
         puts "[expected] No of Desks=#{@testData['ContractEvent']['Scenarios'][0]['body']['products'][0]['quantity']}"
         expect(createdOpp.fetch("Quantity__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['products'][0]['quantity'].to_i
-        puts "[result] success"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
         puts "[Validate] No of Desks(Gross) should updated with Product Quantity?"
         puts "[expected] No of Desks(Gross)=#{@testData['ContractEvent']['Scenarios'][0]['body']['products'][0]['quantity']}"
         expect(createdOpp.fetch("No_of_Desks_gross__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['products'][0]['quantity'].to_i
-        puts "[result] success"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
         puts "[Validate] Should Original Contract UUID updated with Membership Agreement UUID?"
         puts "[expected] Original Contract UUID= "
         expect(createdOpp.fetch("Original_Contract_UUID__c")).to eq ""
-        puts "[result] success"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
         puts "[Validate] Should Opportunity Stage updated to Closing?"
         puts "[expected] Stage Name= Closing"
         expect(createdOpp.fetch("StageName")).to eq "Closing"
-        puts "[result] success"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
         puts "[Validate] Should Opportunity Building updated with move ins Building passing through payload?"
         puts "[expected] Building=#{@recordCreated['building'][0].fetch("Id")}"
         expect(createdOpp.fetch("Building__c")).to eq @recordCreated['building'][0].fetch("Id")
-        puts "[result] success"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
         puts "[Validate] Should Move out Building updated to Building from which move out occured?"
         puts "[expected] Move out Building=#{@recordCreated['building'][0].fetch("Id")}"
         expect(createdOpp.fetch("Move_Out_Building__c")).to eq @recordCreated['building'][0].fetch("Id")
-        puts "[result] success"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
         puts "[Validate] Should Close date updated?"
         d = Date.today
         puts "[expected] Close Date=#{(d + 30).to_s}"
         expect(createdOpp.fetch("CloseDate")).to eq (d + 30).to_s
-        puts "[result] success"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
         puts "[Validate] Should Opportunity Owner Update?"
         puts "[expected] Opportunity Owner=#{@config['Staging']['username']}"
         expect(createdOpp.fetch("Owner.Username")).to eq @config['Staging']['username']
-        puts "[result] success"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
         puts "[Validate] Should No of Desks(Unweighted) updated?"
         puts "[expected] No of Desks(Unweighted)=#{(@testData['ContractEvent']['Scenarios'][0]['body']['products'][0]['quantity'].to_i)-(@testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity'].to_i)}"
         expect(createdOpp.fetch("No_of_Desks_unweighted__c").to_i).to eq (@testData['ContractEvent']['Scenarios'][0]['body']['products'][0]['quantity'].to_i - @testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity'].to_i)
-        puts "[result] success"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
         puts "Checking Opportunity- No. of Desks (weighted)..."
         expect(createdOpp.fetch("No_of_Desks_weighted__c").to_i).to eq (createdOpp.fetch("No_of_Desks_unweighted__c").to_f * (createdOpp.fetch("Probability").to_f / 100.to_f).to_f).round
@@ -980,7 +1119,8 @@ end
         puts "[Validate] Should Contract type updated with Upgrade?"
         puts "[expected] Contract Type= Upgrade"
         expect(createdOpp.fetch("Contract_Type__c")).to eq "Upgrade"
-        puts "[result] success"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
         
         puts "**************************************************************************"
         puts "Checking Updated Opportunity Reservables"
@@ -991,17 +1131,20 @@ end
         puts "[Validate] Should Pending desks in Opportunity Reservables updated with Move ins Quantity?"
         puts "[expected] Pending Desks=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['quantity']}"
         expect(updatedOppReservable.fetch("Pending_Desks__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['quantity'].to_i
-        puts "[result] success"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
         puts "[Validate] Should Start date in Opportunity Reservable updated with Move ins Start Date?"
         puts "[expected] Start Date=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['start_date']}"
         expect(updatedOppReservable.fetch("Start_Date__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['start_date'].to_s
-        puts "[result] success"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
         puts "[Validate] Should Monthly price on Opportunity Reservable updated with Move ins price?"
         puts "[expected] Monthly Price=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['price']}"
         expect(updatedOppReservable.fetch("Monthly_Price__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['price'].to_s
-        puts "[result] success"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
 
         puts "**************************************************************************"
@@ -1013,12 +1156,14 @@ end
         puts "[Validate] Should Pending Desks in Opportunity Move outs updated with Move outs Quantity?"
         puts "[expected] Pending Desks=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity']}"
         expect(updatedOppMoveOuts.fetch("Pending_Desks__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity'].to_i
-        puts "[result] success"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
         puts "[Validate] Should Move out date in Opportunity Move out updated?"
         puts "[expected] Move out Date=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['move_out_date']}"
         expect(updatedOppMoveOuts.fetch("Move_Out_Date__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['move_out_date'].to_s
-        puts "[result] success"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
         puts "**************************************************************************"
 
         @testRailUtility.postResult(857, "pass", 1, @run)
@@ -1058,34 +1203,60 @@ end
 
         id = @getResponse['result'].split(':')[1].chomp('"').delete(' ')
 
+
         @mapOpportunityId["opportunity"] << Hash["Id" => id]
 
         createdOpp = @contractEvent.getOpportunityDetails(id)
+        passedLogs = @objRollbar.addLog("[Step    ] Fetching Opportunity Reservable details")
         updatedOppReservable = @contractEvent.getOppReservableDetails(createdOpp[0])
-        updatedOppMoveOuts = @contractEvent.getOppMoveOutsDetails(createdOpp[0])
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity Reservable fields are successfully fetched")
+        passedLogs =@objRollbar.addLog("[Result   ] Success")
+        puts "\n"
 
-        puts "**************************************************************************"
-        puts "Checking Updated Opportunity"
+        passedLogs = @objRollbar.addLog("[Step    ] Fetching Opportunity Move Outs details")
+        updatedOppMoveOuts = @contractEvent.getOppMoveOutsDetails(createdOpp[0])
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity Move Outs fields are successfully fetched")
+        passedLogs =@objRollbar.addLog(" [Result  ] Success")
+        puts "\n"
+
+        passedLogs = @objRollbar.addLog("[Step    ] Checking Updated Opportunity Fields")
+        puts "\n"
 
         puts "Checking Opportunity should not null..."
         expect(createdOpp.fetch("Id")).not_to eq nil
 
-        puts "Checking Opportunity- Paperwork_Sent_On_Date__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Paperwork Sent On Date Update to Contract Date?")
+        passedLogs = @objRollbar.addLog("[Expected] Paperwork sent on Date= '#{@testData['ContractEvent']['Scenarios'][0]['body']['contract_date']}'")
         expect(createdOpp.fetch("Paperwork_Sent_On_Date__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['contract_date'].to_s
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity- Contract_UUID__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Contract UUID Update to Membership Agreement UUID?")
+        passedLogs = @objRollbar.addLog("[Expected] Contract UUID= #{membershipAgreementUUID}")
         expect(createdOpp.fetch("Contract_UUID__c")).to eq membershipAgreementUUID
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity- Contract_Stage__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Contract Stage Update to Contract Sent?") 
+        passedLogs = @objRollbar.addLog("[Expected] Contract Stage= Contract Sent") 
         expect(createdOpp.fetch("Contract_Stage__c")).to eq "Contract Sent"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
-        puts "Checking Opportunity- Send_Paperwork_By__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Paperwork Sent By Update to Contact Id?") 
+        passedLogs = @objRollbar.addLog("[Expected] Paperwork Sent By=#{@recordCreated['contact'][1].fetch("Id")}") 
         expect(createdOpp.fetch("Send_Paperwork_By__c")).to eq @recordCreated['contact'][1].fetch("Id")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
-        puts "Checking Opportunity- Actual_Start_Date__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Actual Start Date Update to Start Date?") 
+        passedLogs = @objRollbar.addLog("[Expected] Actual Start Date=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['start_date']}") 
         expect(createdOpp.fetch("Actual_Start_Date__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['start_date'].to_s
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
-        puts "Checking Opportunity- Total Desks Reserved..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Total Desks Reserved Update to Moveins Quantity?") 
+        passedLogs = @objRollbar.addLog("[Expected] Total Desks Reserved=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['quantity']}")
         expect(createdOpp.fetch("Total_Desks_Reserved__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['products'][0]['quantity'].to_i
 
         puts "Checking Opportunity- Total Desks Move Outs..."
@@ -1190,34 +1361,64 @@ end
         puts "\n"
 
         id = @getResponse['result'].split(':')[1].chomp('"').delete(' ')
+        passedLogs = @objRollbar.addLog("[Validate] Does Opportunity Update after hitting Payload?")
+        expect(id).to eq  @opportunity[0].fetch("Id")
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity is successfully updated")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
 
         updatedOpp = @contractEvent.getOpportunityDetails(id)
-        updatedOppReservable = @contractEvent.getOppReservableDetails(updatedOpp[0])
-        updatedOppMoveOuts = @contractEvent.getOppMoveOutsDetails(updatedOpp[0])
-
-
-        puts "**************************************************************************"
-        puts "Checking Updated Opportunity"
-
-        puts "Checking Opportunity should not null..."
+        passedLogs = @objRollbar.addLog("[Step    ] Fetching Updated Opportunity details")
         expect(updatedOpp.fetch("Id")).to eq @opportunity[0].fetch("Id")
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity fields are successfully fetched")
+        passedLogs =@objRollbar.addLog(" [Result  ] Success")
+        puts "\n"
+        passedLogs = @objRollbar.addLog("[Step    ] Fetching Opportunity Reservable details")
+        updatedOppReservable = @contractEvent.getOppReservableDetails(updatedOpp[0])
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity Reservable fields are successfully fetched")
+        passedLogs =@objRollbar.addLog("[Result   ] Success")
+        puts "\n"
+        
+        passedLogs = @objRollbar.addLog("[Step    ] Fetching Opportunity Move Outs details")
+        updatedOppMoveOuts = @contractEvent.getOppMoveOutsDetails(updatedOpp[0])
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity Move Outs fields are successfully fetched")
+        passedLogs =@objRollbar.addLog(" [Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity- Paperwork_Sent_On_Date__c..."
+        passedLogs = @objRollbar.addLog("[Step    ] Checking Updated Opportunity Fields")
+        puts "\n"
+       
+        passedLogs = @objRollbar.addLog("[Validate] Does Paperwork Sent On Date Update to Contract Date?")
+        passedLogs = @objRollbar.addLog("[Expected] Paperwork sent on Date= '#{@testData['ContractEvent']['Scenarios'][0]['body']['contract_date']}'")
         expect(updatedOpp.fetch("Paperwork_Sent_On_Date__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['contract_date'].to_s
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity- Contract_UUID__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Contract UUID Update to Membership Agreement UUID?")
+        passedLogs = @objRollbar.addLog("[Expected] Contract UUID= #{membershipAgreementUUID}")
         expect(updatedOpp.fetch("Contract_UUID__c")).to eq membershipAgreementUUID
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity- Contract_Stage__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Contract Stage Update to Contract Sent?") 
+        passedLogs = @objRollbar.addLog("[Expected] Contract Stage= Contract Sent") 
         expect(updatedOpp.fetch("Contract_Stage__c")).to eq "Contract Sent"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
-        puts "Checking Opportunity- Send_Paperwork_By__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Paperwork Sent By Update to Contact Id?") 
+        passedLogs = @objRollbar.addLog("[Expected] Paperwork Sent By=#{@recordCreated['contact'][1].fetch("Id")}") 
         expect(updatedOpp.fetch("Send_Paperwork_By__c")).to eq @recordCreated['contact'][1].fetch("Id")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
-        puts "Checking Opportunity- Actual_Start_Date__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Actual Start Date Update to Start Date?") 
+        passedLogs = @objRollbar.addLog("[Expected] Actual Start Date=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['start_date']}") 
         expect(updatedOpp.fetch("Actual_Start_Date__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['start_date'].to_s
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
-        puts "Checking Opportunity- Total Desks Reserved..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Total Desks Reserved Update to Moveins Quantity?") 
+        passedLogs = @objRollbar.addLog("[Expected] Total Desks Reserved=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['quantity']}")
         expect(updatedOpp.fetch("Total_Desks_Reserved__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['products'][0]['quantity'].to_i
 
         puts "Checking Opportunity- Total Desks Move Outs..."
@@ -1322,33 +1523,67 @@ end
 
         #puts "get only id from responce"
         id = @getResponse['result'].split(':')[1].chomp('"').delete(' ')
+        passedLogs = @objRollbar.addLog("[Validate] Does Opportunity Update after hitting Payload?")
+        expect(id).to eq  @opportunity[0].fetch("Id")
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity is successfully updated")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
 
         updatedOpp = @contractEvent.getOpportunityDetails(id)
+        passedLogs = @objRollbar.addLog("[Step    ] Fetching Updated Opportunity details")
+        expect(updatedOpp.fetch("Id")).not_to eq nil
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity fields are successfully fetched")
+        passedLogs =@objRollbar.addLog(" [Result  ] Success")
+        puts "\n"
 
         puts "Checking Opportunity should not null..."
-        expect(updatedOpp.fetch("Id")).not_to eq nil
-
+        
+        passedLogs = @objRollbar.addLog("[Step    ] Fetching Opportunity Reservable details")
         updatedOppReservable = @contractEvent.getOppReservableDetails(updatedOpp.fetch("Id"))
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity Reservable fields are successfully fetched")
+        passedLogs =@objRollbar.addLog("[Result   ] Success")
+        puts "\n"
+
+        passedLogs = @objRollbar.addLog("[Step    ] Fetching Opportunity Move Outs details")
         updatedOppMoveOuts = @contractEvent.getOppMoveOutsDetails(updatedOpp.fetch("Id"))
-        puts "**************************************************************************"
-        puts "Checking Updated Opportunity"
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity Move Outs fields are successfully fetched")
+        passedLogs =@objRollbar.addLog(" [Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity- Paperwork_Sent_On_Date__c..."
+        passedLogs = @objRollbar.addLog("[Step    ] Checking Updated Opportunity Fields")
+        puts "\n"
+
+        passedLogs = @objRollbar.addLog("[Validate] Does Paperwork Sent On Date Update to Contract Date?")
+        passedLogs = @objRollbar.addLog("[Expected] Paperwork sent on Date= '#{@testData['ContractEvent']['Scenarios'][0]['body']['contract_date']}'")
         expect(updatedOpp.fetch("Paperwork_Sent_On_Date__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['contract_date'].to_s
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity- Contract_UUID__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Contract UUID Update to Membership Agreement UUID?")
+        passedLogs = @objRollbar.addLog("[Expected] Contract UUID= #{membershipAgreementUUID}")
         expect(updatedOpp.fetch("Contract_UUID__c")).to eq membershipAgreementUUID
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity- Contract_Stage__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Contract Stage Update to Contract Sent?") 
+        passedLogs = @objRollbar.addLog("[Expected] Contract Stage= Contract Sent") 
         expect(updatedOpp.fetch("Contract_Stage__c")).to eq "Contract Sent"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
-        puts "Checking Opportunity- Send_Paperwork_By__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Paperwork Sent By Update to Contact Id?") 
+        passedLogs = @objRollbar.addLog("[Expected] Paperwork Sent By=#{@recordCreated['contact'][1].fetch("Id")}") 
         expect(updatedOpp.fetch("Send_Paperwork_By__c")).to eq @recordCreated['contact'][1].fetch("Id")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
-        puts "Checking Opportunity- Actual_Start_Date__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Actual Start Date Update to Start Date?") 
+        passedLogs = @objRollbar.addLog("[Expected] Actual Start Date=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['start_date']}") 
         expect(updatedOpp.fetch("Actual_Start_Date__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['start_date'].to_s
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
-        puts "Checking Opportunity- Total Desks Reserved..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Total Desks Reserved Update to Moveins Quantity?") 
+        passedLogs = @objRollbar.addLog("[Expected] Total Desks Reserved=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['quantity']}")
         expect(updatedOpp.fetch("Total_Desks_Reserved__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['products'][0]['quantity'].to_i
 
         puts "Checking Opportunity- Total Desks Move Outs..."
@@ -1429,7 +1664,7 @@ end
         @mapOpportunityId = Hash.new
         puts "Created Opportunity"
         @opportunity = @contractEvent.createOpportunity(1, "selling", 0, nil, nil)
-       passedLogs = @objRollbar.addLog("[Step    ] Opportunity Should be Created With Id:#{@opportunity}, Name:#{@testData['ContractEvent']['Account'][1]['name']}, Stage:'Closing', Building:#{@testData['ContractEvent']['Building__c'][0]['Name']}, Contract UUID:#{contractUUID}", caseInfo['id'])
+        passedLogs = @objRollbar.addLog("[Step    ] Opportunity Should be Created With Id:#{@opportunity}, Name:#{@testData['ContractEvent']['Account'][1]['name']}, Stage:'Closing', Building:#{@testData['ContractEvent']['Building__c'][0]['Name']}, Contract UUID:#{contractUUID}", caseInfo['id'])
         expect(@opportunity).not_to eq nil
         passedLogs = @objRollbar.addLog("[Expected] Opportunity is successfully created")
         passedLogs = @objRollbar.addLog("[Result  ] Success")
@@ -1445,33 +1680,66 @@ end
         puts "\n"
 
         id = @getResponse['result'].split(':')[1].chomp('"').delete(' ')
+        passedLogs = @objRollbar.addLog("[Validate] Does Opportunity Update after hitting Payload?")
+        expect(id).to eq  @opportunity[0].fetch("Id")
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity is successfully updated")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+
         updatedOpp = @contractEvent.getOpportunityDetails(id)
-        updatedOppReservable = @contractEvent.getOppReservableDetails(updatedOpp[0])
-        updatedOppMoveOuts = @contractEvent.getOppMoveOutsDetails(updatedOpp[0])
-
-
-        puts "**************************************************************************"
-        puts "Checking Updated Opportunity"
-
-        puts "Checking Opportunity should not null..."
+        passedLogs = @objRollbar.addLog("[Step    ] Fetching Updated Opportunity details")
         expect(updatedOpp.fetch("Id")).not_to eq nil
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity fields are successfully fetched")
+        passedLogs =@objRollbar.addLog(" [Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity- Paperwork_Sent_On_Date__c..."
+        passedLogs = @objRollbar.addLog("[Step    ] Fetching Opportunity Reservable details")
+        updatedOppReservable = @contractEvent.getOppReservableDetails(updatedOpp[0])
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity Reservable fields are successfully fetched")
+        passedLogs =@objRollbar.addLog("[Result   ] Success")
+        puts "\n"
+
+        passedLogs = @objRollbar.addLog("[Step    ] Fetching Opportunity Move Outs details")
+        updatedOppMoveOuts = @contractEvent.getOppMoveOutsDetails(updatedOpp[0])
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity Move Outs fields are successfully fetched")
+        passedLogs =@objRollbar.addLog(" [Result  ] Success")
+        puts "\n"
+
+        passedLogs = @objRollbar.addLog("[Step    ] Checking Updated Opportunity Fields")
+        puts "\n"
+        
+
+        passedLogs = @objRollbar.addLog("[Validate] Does Paperwork Sent On Date Update to Contract Date?")
+        passedLogs = @objRollbar.addLog("[Expected] Paperwork sent on Date= '#{@testData['ContractEvent']['Scenarios'][0]['body']['contract_date']}'")
         expect(updatedOpp.fetch("Paperwork_Sent_On_Date__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['contract_date'].to_s
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity- Contract_UUID__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Contract UUID Update to Membership Agreement UUID?")
+        passedLogs = @objRollbar.addLog("[Expected] Contract UUID= #{membershipAgreementUUID}")
         expect(updatedOpp.fetch("Contract_UUID__c")).to eq membershipAgreementUUID
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity- Contract_Stage__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Contract Stage Update to Contract Sent?") 
+        passedLogs = @objRollbar.addLog("[Expected] Contract Stage= Contract Sent") 
         expect(updatedOpp.fetch("Contract_Stage__c")).to eq "Contract Sent"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
-        puts "Checking Opportunity- Send_Paperwork_By__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Paperwork Sent By Update to Contact Id?") 
+        passedLogs = @objRollbar.addLog("[Expected] Paperwork Sent By=#{@recordCreated['contact'][1].fetch("Id")}") 
         expect(updatedOpp.fetch("Send_Paperwork_By__c")).to eq @recordCreated['contact'][1].fetch("Id")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
-        puts "Checking Opportunity- Actual_Start_Date__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Actual Start Date Update to Start Date?") 
+        passedLogs = @objRollbar.addLog("[Expected] Actual Start Date=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['start_date']}") 
         expect(updatedOpp.fetch("Actual_Start_Date__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['start_date'].to_s
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
-        puts "Checking Opportunity- Total Desks Reserved..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Total Desks Reserved Update to Moveins Quantity?") 
+        passedLogs = @objRollbar.addLog("[Expected] Total Desks Reserved=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['quantity']}")
         expect(updatedOpp.fetch("Total_Desks_Reserved__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['products'][0]['quantity'].to_i
 
         puts "Checking Opportunity- Total Desks Move Outs..."
@@ -1578,33 +1846,66 @@ end
         puts "\n"
 
         id = @getResponse['result'].split(':')[1].chomp('"').delete(' ')
+        passedLogs = @objRollbar.addLog("[Validate] Does Opportunity Update after hitting Payload?")
+        expect(id).to eq  @opportunity[0].fetch("Id")
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity is successfully updated")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+
         updatedOpp = @contractEvent.getOpportunityDetails(id)
-        updatedOppReservable = @contractEvent.getOppReservableDetails(updatedOpp[0])
-        updatedOppMoveOuts = @contractEvent.getOppMoveOutsDetails(updatedOpp[0])
-
-
-        puts "**************************************************************************"
-        puts "Checking Updated Opportunity"
-
-        puts "Checking Opportunity should not null..."
+        passedLogs = @objRollbar.addLog("[Step    ] Fetching Updated Opportunity details")
         expect(updatedOpp.fetch("Id")).not_to eq nil
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity fields are successfully fetched")
+        passedLogs =@objRollbar.addLog(" [Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity- Paperwork_Sent_On_Date__c..."
+        passedLogs = @objRollbar.addLog("[Step    ] Fetching Opportunity Reservable details")
+        updatedOppReservable = @contractEvent.getOppReservableDetails(updatedOpp[0])
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity Reservable fields are successfully fetched")
+        passedLogs =@objRollbar.addLog("[Result   ] Success")
+        puts "\n"
+
+        passedLogs = @objRollbar.addLog("[Step    ] Fetching Opportunity Move Outs details")
+        updatedOppMoveOuts = @contractEvent.getOppMoveOutsDetails(updatedOpp[0])
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity Move Outs fields are successfully fetched")
+        passedLogs =@objRollbar.addLog(" [Result  ] Success")
+        puts "\n"
+
+        passedLogs = @objRollbar.addLog("[Step    ] Checking Updated Opportunity Fields")
+        puts "\n"
+        
+
+        passedLogs = @objRollbar.addLog("[Validate] Does Paperwork Sent On Date Update to Contract Date?")
+        passedLogs = @objRollbar.addLog("[Expected] Paperwork sent on Date= '#{@testData['ContractEvent']['Scenarios'][0]['body']['contract_date']}'")
         expect(updatedOpp.fetch("Paperwork_Sent_On_Date__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['contract_date'].to_s
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity- Contract_UUID__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Contract UUID Update to Membership Agreement UUID?")
+        passedLogs = @objRollbar.addLog("[Expected] Contract UUID= #{membershipAgreementUUID}")
         expect(updatedOpp.fetch("Contract_UUID__c")).to eq membershipAgreementUUID
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity- Contract_Stage__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Contract Stage Update to Contract Sent?") 
+        passedLogs = @objRollbar.addLog("[Expected] Contract Stage= Contract Sent") 
         expect(updatedOpp.fetch("Contract_Stage__c")).to eq "Contract Sent"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
-        puts "Checking Opportunity- Send_Paperwork_By__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Paperwork Sent By Update to Contact Id?") 
+        passedLogs = @objRollbar.addLog("[Expected] Paperwork Sent By=#{@recordCreated['contact'][1].fetch("Id")}") 
         expect(updatedOpp.fetch("Send_Paperwork_By__c")).to eq @recordCreated['contact'][1].fetch("Id")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
-        puts "Checking Opportunity- Actual_Start_Date__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Actual Start Date Update to Start Date?") 
+        passedLogs = @objRollbar.addLog("[Expected] Actual Start Date=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['start_date']}") 
         expect(updatedOpp.fetch("Actual_Start_Date__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['start_date'].to_s
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
-        puts "Checking Opportunity- Total Desks Reserved..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Total Desks Reserved Update to Moveins Quantity?") 
+        passedLogs = @objRollbar.addLog("[Expected] Total Desks Reserved=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['quantity']}")
         expect(updatedOpp.fetch("Total_Desks_Reserved__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['products'][0]['quantity'].to_i
 
         puts "Checking Opportunity- Total Desks Move Outs..."
@@ -1711,32 +2012,66 @@ end
         puts "\n"
 
         id = @getResponse['result'].split(':')[1].chomp('"').delete(' ')
+        passedLogs = @objRollbar.addLog("[Validate] Does Opportunity Update after hitting Payload?")
+        expect(id).to eq  @opportunity[0].fetch("Id")
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity is successfully updated")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+
         updatedOpp = @contractEvent.getOpportunityDetails(id)
-        updatedOppReservable = @contractEvent.getOppReservableDetails(updatedOpp[0])
-        updatedOppMoveOuts = @contractEvent.getOppMoveOutsDetails(updatedOpp[0])
-
-        puts "**************************************************************************"
-        puts "Checking Updated Opportunity"
-
-        puts "Checking Opportunity should not null..."
+        passedLogs = @objRollbar.addLog("[Step    ] Fetching Updated Opportunity details")
         expect(updatedOpp.fetch("Id")).to eq @opportunity2[0].fetch("Id")
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity fields are successfully fetched")
+        passedLogs =@objRollbar.addLog(" [Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity- Paperwork_Sent_On_Date__c..."
+        passedLogs = @objRollbar.addLog("[Step    ] Fetching Opportunity Reservable details")
+        updatedOppReservable = @contractEvent.getOppReservableDetails(updatedOpp[0])
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity Reservable fields are successfully fetched")
+        passedLogs =@objRollbar.addLog("[Result   ] Success")
+        puts "\n"
+
+        passedLogs = @objRollbar.addLog("[Step    ] Fetching Opportunity Move Outs details")
+        updatedOppMoveOuts = @contractEvent.getOppMoveOutsDetails(updatedOpp[0])
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity Move Outs fields are successfully fetched")
+        passedLogs =@objRollbar.addLog(" [Result  ] Success")
+        puts "\n"
+
+        passedLogs = @objRollbar.addLog("[Step    ] Checking Updated Opportunity Fields")
+        puts "\n"
+        
+
+        passedLogs = @objRollbar.addLog("[Validate] Does Paperwork Sent On Date Update to Contract Date?")
+        passedLogs = @objRollbar.addLog("[Expected] Paperwork sent on Date= '#{@testData['ContractEvent']['Scenarios'][0]['body']['contract_date']}'")
         expect(updatedOpp.fetch("Paperwork_Sent_On_Date__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['contract_date'].to_s
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity- Contract_UUID__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Contract UUID Update to Membership Agreement UUID?")
+        passedLogs = @objRollbar.addLog("[Expected] Contract UUID= #{membershipAgreementUUID}")
         expect(updatedOpp.fetch("Contract_UUID__c")).to eq membershipAgreementUUID
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity- Contract_Stage__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Contract Stage Update to Contract Sent?") 
+        passedLogs = @objRollbar.addLog("[Expected] Contract Stage= Contract Sent") 
         expect(updatedOpp.fetch("Contract_Stage__c")).to eq "Contract Sent"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
-        puts "Checking Opportunity- Send_Paperwork_By__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Paperwork Sent By Update to Contact Id?") 
+        passedLogs = @objRollbar.addLog("[Expected] Paperwork Sent By=#{@recordCreated['contact'][1].fetch("Id")}") 
         expect(updatedOpp.fetch("Send_Paperwork_By__c")).to eq @recordCreated['contact'][1].fetch("Id")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
-        puts "Checking Opportunity- Actual_Start_Date__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Actual Start Date Update to Start Date?") 
+        passedLogs = @objRollbar.addLog("[Expected] Actual Start Date=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['start_date']}") 
         expect(updatedOpp.fetch("Actual_Start_Date__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['start_date'].to_s
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
-        puts "Checking Opportunity- Total Desks Reserved..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Total Desks Reserved Update to Moveins Quantity?") 
+        passedLogs = @objRollbar.addLog("[Expected] Total Desks Reserved=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['quantity']}")
         expect(updatedOpp.fetch("Total_Desks_Reserved__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['products'][0]['quantity'].to_i
 
         puts "Checking Opportunity- Total Desks Move Outs..."
@@ -1845,32 +2180,56 @@ end
         @mapOpportunityId["opportunity"] << Hash["Id" => id]
 
         createdOpp = @contractEvent.getOpportunityDetails(id)
+        passedLogs = @objRollbar.addLog("[Step    ] Fetching Opportunity Reservable details")
         updatedOppReservable = @contractEvent.getOppReservableDetails(createdOpp[0])
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity Reservable fields are successfully fetched")
+        passedLogs =@objRollbar.addLog("[Result   ] Success")
+        puts "\n"
+
+        passedLogs = @objRollbar.addLog("[Step    ] Fetching Opportunity Move Outs details")
         updatedOppMoveOuts = @contractEvent.getOppMoveOutsDetails(createdOpp[0])
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity Move Outs fields are successfully fetched")
+        passedLogs =@objRollbar.addLog(" [Result  ] Success")
+        puts "\n"
 
-
-        puts "**************************************************************************"
-        puts "Checking Updated Opportunity"
+        passedLogs = @objRollbar.addLog("[Step    ] Checking Updated Opportunity Fields")
+        puts "\n"
 
         puts "Checking Opportunity should not null..."
         expect(createdOpp.fetch("Id")).not_to eq nil
 
-        puts "Checking Opportunity- Paperwork_Sent_On_Date__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Paperwork Sent On Date Update to Contract Date?")
+        passedLogs = @objRollbar.addLog("[Expected] Paperwork sent on Date= '#{@testData['ContractEvent']['Scenarios'][0]['body']['contract_date']}'")
         expect(createdOpp.fetch("Paperwork_Sent_On_Date__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['contract_date'].to_s
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity- Contract_UUID__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Contract UUID Update to Membership Agreement UUID?")
+        passedLogs = @objRollbar.addLog("[Expected] Contract UUID= #{membershipAgreementUUID}")
         expect(createdOpp.fetch("Contract_UUID__c")).to eq membershipAgreementUUID
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity- Contract_Stage__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Contract Stage Update to Contract Sent?") 
+        passedLogs = @objRollbar.addLog("[Expected] Contract Stage= Contract Sent") 
         expect(createdOpp.fetch("Contract_Stage__c")).to eq "Contract Sent"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
-        puts "Checking Opportunity- Send_Paperwork_By__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Paperwork Sent By Update to Contact Id?") 
+        passedLogs = @objRollbar.addLog("[Expected] Paperwork Sent By=#{@recordCreated['contact'][1].fetch("Id")}") 
         expect(createdOpp.fetch("Send_Paperwork_By__c")).to eq @recordCreated['contact'][1].fetch("Id")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
-        puts "Checking Opportunity- Actual_Start_Date__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Actual Start Date Update to Start Date?") 
+        passedLogs = @objRollbar.addLog("[Expected] Actual Start Date=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['start_date']}") 
         expect(createdOpp.fetch("Actual_Start_Date__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['start_date'].to_s
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
-        puts "Checking Opportunity- Total Desks Reserved..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Total Desks Reserved Update to Moveins Quantity?") 
+        passedLogs = @objRollbar.addLog("[Expected] Total Desks Reserved=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['quantity']}")
         expect(createdOpp.fetch("Total_Desks_Reserved__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['products'][0]['quantity'].to_i
 
         puts "Checking Opportunity- Total Desks Move Outs..."
@@ -1980,31 +2339,56 @@ end
         @mapOpportunityId["opportunity"] << Hash["Id" => id]
 
         createdOpp = @contractEvent.getOpportunityDetails(id)
+        passedLogs = @objRollbar.addLog("[Step    ] Fetching Opportunity Reservable details")
         updatedOppReservable = @contractEvent.getOppReservableDetails(createdOpp[0])
-        updatedOppMoveOuts = @contractEvent.getOppMoveOutsDetails(createdOpp[0])
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity Reservable fields are successfully fetched")
+        passedLogs =@objRollbar.addLog("[Result   ] Success")
+        puts "\n"
 
-        puts "**************************************************************************"
-        puts "Checking Updated Opportunity"
+        passedLogs = @objRollbar.addLog("[Step    ] Fetching Opportunity Move Outs details")
+        updatedOppMoveOuts = @contractEvent.getOppMoveOutsDetails(createdOpp[0])
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity Move Outs fields are successfully fetched")
+        passedLogs =@objRollbar.addLog(" [Result  ] Success")
+        puts "\n"
+
+        passedLogs = @objRollbar.addLog("[Step    ] Checking Updated Opportunity Fields")
+        puts "\n"
 
         puts "Checking Opportunity should not null..."
         expect(createdOpp.fetch("Id")).not_to eq nil
 
-        puts "Checking Opportunity- Paperwork_Sent_On_Date__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Paperwork Sent On Date Update to Contract Date?")
+        passedLogs = @objRollbar.addLog("[Expected] Paperwork sent on Date= '#{@testData['ContractEvent']['Scenarios'][0]['body']['contract_date']}'")
         expect(createdOpp.fetch("Paperwork_Sent_On_Date__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['contract_date'].to_s
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity- Contract_UUID__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Contract UUID Update to Membership Agreement UUID?")
+        passedLogs = @objRollbar.addLog("[Expected] Contract UUID= #{membershipAgreementUUID}")
         expect(createdOpp.fetch("Contract_UUID__c")).to eq membershipAgreementUUID
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity- Contract_Stage__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Contract Stage Update to Contract Sent?") 
+        passedLogs = @objRollbar.addLog("[Expected] Contract Stage= Contract Sent") 
         expect(createdOpp.fetch("Contract_Stage__c")).to eq "Contract Sent"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
-        puts "Checking Opportunity- Send_Paperwork_By__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Paperwork Sent By Update to Contact Id?") 
+        passedLogs = @objRollbar.addLog("[Expected] Paperwork Sent By=#{@recordCreated['contact'][1].fetch("Id")}") 
         expect(createdOpp.fetch("Send_Paperwork_By__c")).to eq @recordCreated['contact'][1].fetch("Id")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
-        puts "Checking Opportunity- Actual_Start_Date__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Actual Start Date Update to Start Date?") 
+        passedLogs = @objRollbar.addLog("[Expected] Actual Start Date=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['start_date']}") 
         expect(createdOpp.fetch("Actual_Start_Date__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['start_date'].to_s
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
-        puts "Checking Opportunity- Total Desks Reserved..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Total Desks Reserved Update to Moveins Quantity?") 
+        passedLogs = @objRollbar.addLog("[Expected] Total Desks Reserved=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['quantity']}")
         expect(createdOpp.fetch("Total_Desks_Reserved__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['products'][0]['quantity'].to_i
 
         puts "Checking Opportunity- Total Desks Move Outs..."
@@ -2110,34 +2494,66 @@ end
         puts "\n"
 
         id = @getResponse['result'].split(':')[1].chomp('"').delete(' ')
+        passedLogs = @objRollbar.addLog("[Validate] Does Opportunity Update after hitting Payload?")
+        expect(id).to eq  @opportunity[0].fetch("Id")
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity is successfully updated")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
 
         updatedOpp = @contractEvent.getOpportunityDetails(id)
-        updatedOppReservable = @contractEvent.getOppReservableDetails(updatedOpp[0])
-        updatedOppMoveOuts = @contractEvent.getOppMoveOutsDetails(updatedOpp[0])
-
-
-        puts "**************************************************************************"
-        puts "Checking Updated Opportunity"
-
-        puts "Checking Opportunity should not null..."
+        passedLogs = @objRollbar.addLog("[Step    ] Fetching Updated Opportunity details")
         expect(updatedOpp.fetch("Id")).to eq @opportunity[0].fetch("Id")
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity fields are successfully fetched")
+        passedLogs =@objRollbar.addLog(" [Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity- Paperwork_Sent_On_Date__c..."
+        passedLogs = @objRollbar.addLog("[Step    ] Fetching Opportunity Reservable details")
+        updatedOppReservable = @contractEvent.getOppReservableDetails(updatedOpp[0])
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity Reservable fields are successfully fetched")
+        passedLogs =@objRollbar.addLog("[Result   ] Success")
+        puts "\n"
+
+        passedLogs = @objRollbar.addLog("[Step    ] Fetching Opportunity Move Outs details")
+        updatedOppMoveOuts = @contractEvent.getOppMoveOutsDetails(updatedOpp[0])
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity Move Outs fields are successfully fetched")
+        passedLogs =@objRollbar.addLog(" [Result  ] Success")
+        puts "\n"
+
+        passedLogs = @objRollbar.addLog("[Step    ] Checking Updated Opportunity Fields")
+        puts "\n"
+        
+
+        passedLogs = @objRollbar.addLog("[Validate] Does Paperwork Sent On Date Update to Contract Date?")
+        passedLogs = @objRollbar.addLog("[Expected] Paperwork sent on Date= '#{@testData['ContractEvent']['Scenarios'][0]['body']['contract_date']}'")
         expect(updatedOpp.fetch("Paperwork_Sent_On_Date__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['contract_date'].to_s
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity- Contract_UUID__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Contract UUID Update to Membership Agreement UUID?")
+        passedLogs = @objRollbar.addLog("[Expected] Contract UUID= #{membershipAgreementUUID}")
         expect(updatedOpp.fetch("Contract_UUID__c")).to eq membershipAgreementUUID
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity- Contract_Stage__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Contract Stage Update to Contract Sent?") 
+        passedLogs = @objRollbar.addLog("[Expected] Contract Stage= Contract Sent") 
         expect(updatedOpp.fetch("Contract_Stage__c")).to eq "Contract Sent"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
-        puts "Checking Opportunity- Send_Paperwork_By__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Paperwork Sent By Update to Contact Id?") 
+        passedLogs = @objRollbar.addLog("[Expected] Paperwork Sent By=#{@recordCreated['contact'][1].fetch("Id")}") 
         expect(updatedOpp.fetch("Send_Paperwork_By__c")).to eq @recordCreated['contact'][1].fetch("Id")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
-        puts "Checking Opportunity- Actual_Start_Date__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Actual Start Date Update to Start Date?") 
+        passedLogs = @objRollbar.addLog("[Expected] Actual Start Date=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['start_date']}") 
         expect(updatedOpp.fetch("Actual_Start_Date__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['start_date'].to_s
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
-        puts "Checking Opportunity- Total Desks Reserved..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Total Desks Reserved Update to Moveins Quantity?") 
+        passedLogs = @objRollbar.addLog("[Expected] Total Desks Reserved=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['quantity']}")
         expect(updatedOpp.fetch("Total_Desks_Reserved__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['products'][0]['quantity'].to_i
 
         puts "Checking Opportunity- Total Desks Move Outs..."
@@ -2223,7 +2639,7 @@ end
         puts 'Created Opportunity'
 
         @opportunity = @contractEvent.createOpportunity(1, 'Closing', 0, contractUUID, nil)
-       passedLogs = @objRollbar.addLog("[Step    ] Opportunity Should be Created With Id:#{@opportunity}, Name:#{@testData['ContractEvent']['Account'][1]['name']}, Stage:'Closing', Building:#{@testData['ContractEvent']['Building__c'][0]['Name']}, Contract UUID:#{contractUUID}", caseInfo['id'])
+        passedLogs = @objRollbar.addLog("[Step    ] Opportunity Should be Created With Id:#{@opportunity}, Name:#{@testData['ContractEvent']['Account'][1]['name']}, Stage:'Closing', Building:#{@testData['ContractEvent']['Building__c'][0]['Name']}, Contract UUID:#{contractUUID}", caseInfo['id'])
         expect(@opportunity).not_to eq nil
         passedLogs = @objRollbar.addLog("[Expected] Opportunity is successfully created")
         passedLogs = @objRollbar.addLog("[Result  ] Success")
@@ -2241,33 +2657,67 @@ end
 
         #puts "get only id from responce"
         id = @getResponse['result'].split(':')[1].chomp('"').delete(' ')
+        passedLogs = @objRollbar.addLog("[Validate] Does Opportunity Update after hitting Payload?")
+        expect(id).to eq  @opportunity[0].fetch("Id")
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity is successfully updated")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
 
         updatedOpp = @contractEvent.getOpportunityDetails(id)
-
-        puts "Checking Opportunity should not null..."
+        passedLogs = @objRollbar.addLog("[Step    ] Fetching Updated Opportunity details")
         expect(updatedOpp.fetch("Id")).not_to eq nil
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity fields are successfully fetched")
+        passedLogs =@objRollbar.addLog(" [Result  ] Success")
+        puts "\n"
 
+
+        
+        passedLogs = @objRollbar.addLog("[Step    ] Fetching Opportunity Reservable details")
         updatedOppReservable = @contractEvent.getOppReservableDetails(updatedOpp.fetch("Id"))
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity Reservable fields are successfully fetched")
+        passedLogs =@objRollbar.addLog("[Result   ] Success")
+        puts "\n"
+
+        passedLogs = @objRollbar.addLog("[Step    ] Fetching Opportunity Move Outs details")
         updatedOppMoveOuts = @contractEvent.getOppMoveOutsDetails(updatedOpp.fetch("Id"))
-        puts "**************************************************************************"
-        puts "Checking Updated Opportunity"
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity Move Outs fields are successfully fetched")
+        passedLogs =@objRollbar.addLog(" [Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity- Paperwork_Sent_On_Date__c..."
+        passedLogs = @objRollbar.addLog("[Step    ] Checking Updated Opportunity Fields")
+        puts "\n"
+
+        passedLogs = @objRollbar.addLog("[Validate] Does Paperwork Sent On Date Update to Contract Date?")
+        passedLogs = @objRollbar.addLog("[Expected] Paperwork sent on Date= '#{@testData['ContractEvent']['Scenarios'][0]['body']['contract_date']}'")
         expect(updatedOpp.fetch("Paperwork_Sent_On_Date__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['contract_date'].to_s
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity- Contract_UUID__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Contract UUID Update to Membership Agreement UUID?")
+        passedLogs = @objRollbar.addLog("[Expected] Contract UUID= #{membershipAgreementUUID}")
         expect(updatedOpp.fetch("Contract_UUID__c")).to eq membershipAgreementUUID
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity- Contract_Stage__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Contract Stage Update to Contract Sent?") 
+        passedLogs = @objRollbar.addLog("[Expected] Contract Stage= Contract Sent") 
         expect(updatedOpp.fetch("Contract_Stage__c")).to eq "Contract Sent"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
-        puts "Checking Opportunity- Send_Paperwork_By__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Paperwork Sent By Update to Contact Id?") 
+        passedLogs = @objRollbar.addLog("[Expected] Paperwork Sent By=#{@recordCreated['contact'][1].fetch("Id")}") 
         expect(updatedOpp.fetch("Send_Paperwork_By__c")).to eq @recordCreated['contact'][1].fetch("Id")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
-        puts "Checking Opportunity- Actual_Start_Date__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Actual Start Date Update to Start Date?") 
+        passedLogs = @objRollbar.addLog("[Expected] Actual Start Date=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['start_date']}") 
         expect(updatedOpp.fetch("Actual_Start_Date__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['start_date'].to_s
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
-        puts "Checking Opportunity- Total Desks Reserved..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Total Desks Reserved Update to Moveins Quantity?") 
+        passedLogs = @objRollbar.addLog("[Expected] Total Desks Reserved=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['quantity']}")
         expect(updatedOpp.fetch("Total_Desks_Reserved__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['products'][0]['quantity'].to_i
 
         puts "Checking Opportunity- Total Desks Move Outs..."
@@ -2364,33 +2814,67 @@ end
         puts "\n"
 
         id = @getResponse['result'].split(':')[1].chomp('"').delete(' ')
+        passedLogs = @objRollbar.addLog("[Validate] Does Opportunity Update after hitting Payload?")
+        expect(id).to eq  @opportunity[0].fetch("Id")
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity is successfully updated")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+
         updatedOpp = @contractEvent.getOpportunityDetails(id)
-        updatedOppReservable = @contractEvent.getOppReservableDetails(updatedOpp[0])
-        updatedOppMoveOuts = @contractEvent.getOppMoveOutsDetails(updatedOpp[0])
-
-
-        puts "**************************************************************************"
-        puts "Checking Updated Opportunity"
-
-        puts "Checking Opportunity should not null..."
+        passedLogs = @objRollbar.addLog("[Step    ] Fetching Updated Opportunity details")
         expect(updatedOpp.fetch("Id")).not_to eq nil
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity fields are successfully fetched")
+        passedLogs =@objRollbar.addLog(" [Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity- Paperwork_Sent_On_Date__c..."
+        passedLogs = @objRollbar.addLog("[Step    ] Fetching Opportunity Reservable details")
+        updatedOppReservable = @contractEvent.getOppReservableDetails(updatedOpp[0])
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity Reservable fields are successfully fetched")
+        passedLogs =@objRollbar.addLog("[Result   ] Success")
+        puts "\n"
+
+        passedLogs = @objRollbar.addLog("[Step    ] Fetching Opportunity Move Outs details")
+        updatedOppMoveOuts = @contractEvent.getOppMoveOutsDetails(updatedOpp[0])
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity Move Outs fields are successfully fetched")
+        passedLogs =@objRollbar.addLog(" [Result  ] Success")
+        puts "\n"
+
+
+        passedLogs = @objRollbar.addLog("[Step    ] Checking Updated Opportunity Fields")
+        puts "\n"
+        
+
+        passedLogs = @objRollbar.addLog("[Validate] Does Paperwork Sent On Date Update to Contract Date?")
+        passedLogs = @objRollbar.addLog("[Expected] Paperwork sent on Date= '#{@testData['ContractEvent']['Scenarios'][0]['body']['contract_date']}'")
         expect(updatedOpp.fetch("Paperwork_Sent_On_Date__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['contract_date'].to_s
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity- Contract_UUID__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Contract UUID Update to Membership Agreement UUID?")
+        passedLogs = @objRollbar.addLog("[Expected] Contract UUID= #{membershipAgreementUUID}")
         expect(updatedOpp.fetch("Contract_UUID__c")).to eq membershipAgreementUUID
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity- Contract_Stage__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Contract Stage Update to Contract Sent?") 
+        passedLogs = @objRollbar.addLog("[Expected] Contract Stage= Contract Sent") 
         expect(updatedOpp.fetch("Contract_Stage__c")).to eq "Contract Sent"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
-        puts "Checking Opportunity- Send_Paperwork_By__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Paperwork Sent By Update to Contact Id?") 
+        passedLogs = @objRollbar.addLog("[Expected] Paperwork Sent By=#{@recordCreated['contact'][1].fetch("Id")}") 
         expect(updatedOpp.fetch("Send_Paperwork_By__c")).to eq @recordCreated['contact'][1].fetch("Id")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
-        puts "Checking Opportunity- Actual_Start_Date__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Actual Start Date Update to Start Date?") 
+        passedLogs = @objRollbar.addLog("[Expected] Actual Start Date=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['start_date']}") 
         expect(updatedOpp.fetch("Actual_Start_Date__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['start_date'].to_s
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
-        puts "Checking Opportunity- Total Desks Reserved..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Total Desks Reserved Update to Moveins Quantity?") 
+        passedLogs = @objRollbar.addLog("[Expected] Total Desks Reserved=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['quantity']}")
         expect(updatedOpp.fetch("Total_Desks_Reserved__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['products'][0]['quantity'].to_i
 
         puts "Checking Opportunity- Total Desks Move Outs..."
@@ -2497,33 +2981,66 @@ end
         puts "\n"
 
         id = @getResponse['result'].split(':')[1].chomp('"').delete(' ')
+        passedLogs = @objRollbar.addLog("[Validate] Does Opportunity Update after hitting Payload?")
+        expect(id).to eq  @opportunity[0].fetch("Id")
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity is successfully updated")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+
         updatedOpp = @contractEvent.getOpportunityDetails(id)
-        updatedOppReservable = @contractEvent.getOppReservableDetails(updatedOpp[0])
-        updatedOppMoveOuts = @contractEvent.getOppMoveOutsDetails(updatedOpp[0])
-
-
-        puts "**************************************************************************"
-        puts "Checking Updated Opportunity"
-
-        puts "Checking Opportunity should not null..."
+        passedLogs = @objRollbar.addLog("[Step    ] Fetching Updated Opportunity details")
         expect(updatedOpp.fetch("Id")).not_to eq nil
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity fields are successfully fetched")
+        passedLogs =@objRollbar.addLog(" [Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity- Paperwork_Sent_On_Date__c..."
+        passedLogs = @objRollbar.addLog("[Step    ] Fetching Opportunity Reservable details")
+        updatedOppReservable = @contractEvent.getOppReservableDetails(updatedOpp[0])
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity Reservable fields are successfully fetched")
+        passedLogs =@objRollbar.addLog("[Result   ] Success")
+        puts "\n"
+
+        passedLogs = @objRollbar.addLog("[Step    ] Fetching Opportunity Move Outs details")
+        updatedOppMoveOuts = @contractEvent.getOppMoveOutsDetails(updatedOpp[0])
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity Move Outs fields are successfully fetched")
+        passedLogs =@objRollbar.addLog(" [Result  ] Success")
+        puts "\n"
+
+        passedLogs = @objRollbar.addLog("[Step    ] Checking Updated Opportunity Fields")
+        puts "\n"
+        
+
+        passedLogs = @objRollbar.addLog("[Validate] Does Paperwork Sent On Date Update to Contract Date?")
+        passedLogs = @objRollbar.addLog("[Expected] Paperwork sent on Date= '#{@testData['ContractEvent']['Scenarios'][0]['body']['contract_date']}'")
         expect(updatedOpp.fetch("Paperwork_Sent_On_Date__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['contract_date'].to_s
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity- Contract_UUID__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Contract UUID Update to Membership Agreement UUID?")
+        passedLogs = @objRollbar.addLog("[Expected] Contract UUID= #{membershipAgreementUUID}")
         expect(updatedOpp.fetch("Contract_UUID__c")).to eq membershipAgreementUUID
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity- Contract_Stage__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Contract Stage Update to Contract Sent?") 
+        passedLogs = @objRollbar.addLog("[Expected] Contract Stage= Contract Sent") 
         expect(updatedOpp.fetch("Contract_Stage__c")).to eq "Contract Sent"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
-        puts "Checking Opportunity- Send_Paperwork_By__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Paperwork Sent By Update to Contact Id?") 
+        passedLogs = @objRollbar.addLog("[Expected] Paperwork Sent By=#{@recordCreated['contact'][1].fetch("Id")}") 
         expect(updatedOpp.fetch("Send_Paperwork_By__c")).to eq @recordCreated['contact'][1].fetch("Id")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
-        puts "Checking Opportunity- Actual_Start_Date__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Actual Start Date Update to Start Date?") 
+        passedLogs = @objRollbar.addLog("[Expected] Actual Start Date=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['start_date']}") 
         expect(updatedOpp.fetch("Actual_Start_Date__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['start_date'].to_s
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
-        puts "Checking Opportunity- Total Desks Reserved..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Total Desks Reserved Update to Moveins Quantity?") 
+        passedLogs = @objRollbar.addLog("[Expected] Total Desks Reserved=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['quantity']}")
         expect(updatedOpp.fetch("Total_Desks_Reserved__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['products'][0]['quantity'].to_i
 
         puts "Checking Opportunity- Total Desks Move Outs..."
@@ -2629,32 +3146,66 @@ end
         puts "\n"
 
         id = @getResponse['result'].split(':')[1].chomp('"').delete(' ')
+        passedLogs = @objRollbar.addLog("[Validate] Does Opportunity Update after hitting Payload?")
+        expect(id).to eq  @opportunity[0].fetch("Id")
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity is successfully updated")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+
         updatedOpp = @contractEvent.getOpportunityDetails(id)
-        updatedOppReservable = @contractEvent.getOppReservableDetails(updatedOpp[0])
-        updatedOppMoveOuts = @contractEvent.getOppMoveOutsDetails(updatedOpp[0])
-
-        puts "**************************************************************************"
-        puts "Checking Updated Opportunity"
-
-        puts "Checking Opportunity should not null..."
+        passedLogs = @objRollbar.addLog("[Step    ] Fetching Updated Opportunity details")
         expect(updatedOpp.fetch("Id")).to eq @opportunity2[0].fetch("Id")
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity fields are successfully fetched")
+        passedLogs =@objRollbar.addLog(" [Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity- Paperwork_Sent_On_Date__c..."
+        passedLogs = @objRollbar.addLog("[Step    ] Fetching Opportunity Reservable details")
+        updatedOppReservable = @contractEvent.getOppReservableDetails(updatedOpp[0])
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity Reservable fields are successfully fetched")
+        passedLogs =@objRollbar.addLog("[Result   ] Success")
+        puts "\n"
+
+        passedLogs = @objRollbar.addLog("[Step    ] Fetching Opportunity Move Outs details")
+        updatedOppMoveOuts = @contractEvent.getOppMoveOutsDetails(updatedOpp[0])
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity Move Outs fields are successfully fetched")
+        passedLogs =@objRollbar.addLog(" [Result  ] Success")
+        puts "\n"
+
+        passedLogs = @objRollbar.addLog("[Step    ] Checking Updated Opportunity Fields")
+        puts "\n"
+        
+
+        passedLogs = @objRollbar.addLog("[Validate] Does Paperwork Sent On Date Update to Contract Date?")
+        passedLogs = @objRollbar.addLog("[Expected] Paperwork sent on Date= '#{@testData['ContractEvent']['Scenarios'][0]['body']['contract_date']}'")
         expect(updatedOpp.fetch("Paperwork_Sent_On_Date__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['contract_date'].to_s
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity- Contract_UUID__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Contract UUID Update to Membership Agreement UUID?")
+        passedLogs = @objRollbar.addLog("[Expected] Contract UUID= #{membershipAgreementUUID}")
         expect(updatedOpp.fetch("Contract_UUID__c")).to eq membershipAgreementUUID
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity- Contract_Stage__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Contract Stage Update to Contract Sent?") 
+        passedLogs = @objRollbar.addLog("[Expected] Contract Stage= Contract Sent") 
         expect(updatedOpp.fetch("Contract_Stage__c")).to eq "Contract Sent"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
-        puts "Checking Opportunity- Send_Paperwork_By__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Paperwork Sent By Update to Contact Id?") 
+        passedLogs = @objRollbar.addLog("[Expected] Paperwork Sent By=#{@recordCreated['contact'][1].fetch("Id")}") 
         expect(updatedOpp.fetch("Send_Paperwork_By__c")).to eq @recordCreated['contact'][1].fetch("Id")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
-        puts "Checking Opportunity- Actual_Start_Date__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Actual Start Date Update to Start Date?") 
+        passedLogs = @objRollbar.addLog("[Expected] Actual Start Date=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['start_date']}") 
         expect(updatedOpp.fetch("Actual_Start_Date__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['start_date'].to_s
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
-        puts "Checking Opportunity- Total Desks Reserved..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Total Desks Reserved Update to Moveins Quantity?") 
+        passedLogs = @objRollbar.addLog("[Expected] Total Desks Reserved=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['quantity']}")
         expect(updatedOpp.fetch("Total_Desks_Reserved__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['products'][0]['quantity'].to_i
 
         puts "Checking Opportunity- Total Desks Move Outs..."
@@ -2760,35 +3311,60 @@ end
 
         id = @getResponse['result'].split(':')[1].chomp('"').delete(' ')
 
+
         @mapOpportunityId["opportunity"] << Hash["Id" => id]
 
         createdOpp = @contractEvent.getOpportunityDetails(id)
+        passedLogs = @objRollbar.addLog("[Step    ] Fetching Opportunity Reservable details")
         updatedOppReservable = @contractEvent.getOppReservableDetails(createdOpp[0])
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity Reservable fields are successfully fetched")
+        passedLogs =@objRollbar.addLog("[Result   ] Success")
+        puts "\n"
+
+        passedLogs = @objRollbar.addLog("[Step    ] Fetching Opportunity Move Outs details")
         updatedOppMoveOuts = @contractEvent.getOppMoveOutsDetails(createdOpp[0])
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity Move Outs fields are successfully fetched")
+        passedLogs =@objRollbar.addLog(" [Result  ] Success")
+        puts "\n"
 
-
-        puts "**************************************************************************"
-        puts "Checking Updated Opportunity"
+        passedLogs = @objRollbar.addLog("[Step    ] Checking Updated Opportunity Fields")
+        puts "\n"
 
         puts "Checking Opportunity should not null..."
         expect(createdOpp.fetch("Id")).not_to eq nil
 
-        puts "Checking Opportunity- Paperwork_Sent_On_Date__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Paperwork Sent On Date Update to Contract Date?")
+        passedLogs = @objRollbar.addLog("[Expected] Paperwork sent on Date= '#{@testData['ContractEvent']['Scenarios'][0]['body']['contract_date']}'")
         expect(createdOpp.fetch("Paperwork_Sent_On_Date__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['contract_date'].to_s
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity- Contract_UUID__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Contract UUID Update to Membership Agreement UUID?")
+        passedLogs = @objRollbar.addLog("[Expected] Contract UUID= #{membershipAgreementUUID}")
         expect(createdOpp.fetch("Contract_UUID__c")).to eq membershipAgreementUUID
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity- Contract_Stage__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Contract Stage Update to Contract Sent?") 
+        passedLogs = @objRollbar.addLog("[Expected] Contract Stage= Contract Sent") 
         expect(createdOpp.fetch("Contract_Stage__c")).to eq "Contract Sent"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
-        puts "Checking Opportunity- Send_Paperwork_By__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Paperwork Sent By Update to Contact Id?") 
+        passedLogs = @objRollbar.addLog("[Expected] Paperwork Sent By=#{@recordCreated['contact'][1].fetch("Id")}") 
         expect(createdOpp.fetch("Send_Paperwork_By__c")).to eq @recordCreated['contact'][1].fetch("Id")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
-        puts "Checking Opportunity- Actual_Start_Date__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Actual Start Date Update to Start Date?") 
+        passedLogs = @objRollbar.addLog("[Expected] Actual Start Date=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['start_date']}") 
         expect(createdOpp.fetch("Actual_Start_Date__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['start_date'].to_s
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
-        puts "Checking Opportunity- Total Desks Reserved..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Total Desks Reserved Update to Moveins Quantity?") 
+        passedLogs = @objRollbar.addLog("[Expected] Total Desks Reserved=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['quantity']}")
         expect(createdOpp.fetch("Total_Desks_Reserved__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['products'][0]['quantity'].to_i
 
         puts "Checking Opportunity- Total Desks Move Outs..."
@@ -2897,31 +3473,56 @@ end
         @mapOpportunityId["opportunity"] << Hash["Id" => id]
 
         createdOpp = @contractEvent.getOpportunityDetails(id)
+        passedLogs = @objRollbar.addLog("[Step    ] Fetching Opportunity Reservable details")
         updatedOppReservable = @contractEvent.getOppReservableDetails(createdOpp[0])
-        updatedOppMoveOuts = @contractEvent.getOppMoveOutsDetails(createdOpp[0])
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity Reservable fields are successfully fetched")
+        passedLogs =@objRollbar.addLog("[Result   ] Success")
+        puts "\n"
 
-        puts "**************************************************************************"
-        puts "Checking Updated Opportunity"
+        passedLogs = @objRollbar.addLog("[Step    ] Fetching Opportunity Move Outs details")
+        updatedOppMoveOuts = @contractEvent.getOppMoveOutsDetails(createdOpp[0])
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity Move Outs fields are successfully fetched")
+        passedLogs =@objRollbar.addLog(" [Result  ] Success")
+        puts "\n"
+
+        passedLogs = @objRollbar.addLog("[Step    ] Checking Updated Opportunity Fields")
+        puts "\n"
 
         puts "Checking Opportunity should not null..."
         expect(createdOpp.fetch("Id")).not_to eq nil
 
-        puts "Checking Opportunity- Paperwork_Sent_On_Date__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Paperwork Sent On Date Update to Contract Date?")
+        passedLogs = @objRollbar.addLog("[Expected] Paperwork sent on Date= '#{@testData['ContractEvent']['Scenarios'][0]['body']['contract_date']}'")
         expect(createdOpp.fetch("Paperwork_Sent_On_Date__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['contract_date'].to_s
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity- Contract_UUID__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Contract UUID Update to Membership Agreement UUID?")
+        passedLogs = @objRollbar.addLog("[Expected] Contract UUID= #{membershipAgreementUUID}")
         expect(createdOpp.fetch("Contract_UUID__c")).to eq membershipAgreementUUID
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity- Contract_Stage__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Contract Stage Update to Contract Sent?") 
+        passedLogs = @objRollbar.addLog("[Expected] Contract Stage= Contract Sent") 
         expect(createdOpp.fetch("Contract_Stage__c")).to eq "Contract Sent"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
-        puts "Checking Opportunity- Send_Paperwork_By__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Paperwork Sent By Update to Contact Id?") 
+        passedLogs = @objRollbar.addLog("[Expected] Paperwork Sent By=#{@recordCreated['contact'][1].fetch("Id")}") 
         expect(createdOpp.fetch("Send_Paperwork_By__c")).to eq @recordCreated['contact'][1].fetch("Id")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
-        puts "Checking Opportunity- Actual_Start_Date__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Actual Start Date Update to Start Date?") 
+        passedLogs = @objRollbar.addLog("[Expected] Actual Start Date=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['start_date']}") 
         expect(createdOpp.fetch("Actual_Start_Date__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['start_date'].to_s
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
-        puts "Checking Opportunity- Total Desks Reserved..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Total Desks Reserved Update to Moveins Quantity?") 
+        passedLogs = @objRollbar.addLog("[Expected] Total Desks Reserved=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['quantity']}")
         expect(createdOpp.fetch("Total_Desks_Reserved__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['products'][0]['quantity'].to_i
 
         puts "Checking Opportunity- Total Desks Move Outs..."
@@ -3027,34 +3628,67 @@ end
         puts "\n"
 
         id = @getResponse['result'].split(':')[1].chomp('"').delete(' ')
+        passedLogs = @objRollbar.addLog("[Validate] Does Opportunity Update after hitting Payload?")
+        expect(id).to eq  @opportunity[0].fetch("Id")
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity is successfully updated")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
 
         updatedOpp = @contractEvent.getOpportunityDetails(id)
-        updatedOppReservable = @contractEvent.getOppReservableDetails(updatedOpp[0])
-        updatedOppMoveOuts = @contractEvent.getOppMoveOutsDetails(updatedOpp[0])
-
-
-        puts "**************************************************************************"
-        puts "Checking Updated Opportunity"
-
-        puts "Checking Opportunity should not null..."
+        passedLogs = @objRollbar.addLog("[Step    ] Fetching Updated Opportunity details")
         expect(updatedOpp.fetch("Id")).to eq @opportunity[0].fetch("Id")
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity fields are successfully fetched")
+        passedLogs =@objRollbar.addLog(" [Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity- Paperwork_Sent_On_Date__c..."
+        passedLogs = @objRollbar.addLog("[Step    ] Fetching Opportunity Reservable details")
+        updatedOppReservable = @contractEvent.getOppReservableDetails(updatedOpp[0])
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity Reservable fields are successfully fetched")
+        passedLogs =@objRollbar.addLog("[Result   ] Success")
+        puts "\n"
+
+        passedLogs = @objRollbar.addLog("[Step    ] Fetching Opportunity Move Outs details")
+        updatedOppMoveOuts = @contractEvent.getOppMoveOutsDetails(updatedOpp[0])
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity Move Outs fields are successfully fetched")
+        passedLogs =@objRollbar.addLog(" [Result  ] Success")
+        puts "\n"
+
+
+        passedLogs = @objRollbar.addLog("[Step    ] Checking Updated Opportunity Fields")
+        puts "\n"
+        
+
+        passedLogs = @objRollbar.addLog("[Validate] Does Paperwork Sent On Date Update to Contract Date?")
+        passedLogs = @objRollbar.addLog("[Expected] Paperwork sent on Date= '#{@testData['ContractEvent']['Scenarios'][0]['body']['contract_date']}'")
         expect(updatedOpp.fetch("Paperwork_Sent_On_Date__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['contract_date'].to_s
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity- Contract_UUID__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Contract UUID Update to Membership Agreement UUID?")
+        passedLogs = @objRollbar.addLog("[Expected] Contract UUID= #{membershipAgreementUUID}")
         expect(updatedOpp.fetch("Contract_UUID__c")).to eq membershipAgreementUUID
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity- Contract_Stage__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Contract Stage Update to Contract Sent?") 
+        passedLogs = @objRollbar.addLog("[Expected] Contract Stage= Contract Sent") 
         expect(updatedOpp.fetch("Contract_Stage__c")).to eq "Contract Sent"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
-        puts "Checking Opportunity- Send_Paperwork_By__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Paperwork Sent By Update to Contact Id?") 
+        passedLogs = @objRollbar.addLog("[Expected] Paperwork Sent By=#{@recordCreated['contact'][1].fetch("Id")}") 
         expect(updatedOpp.fetch("Send_Paperwork_By__c")).to eq @recordCreated['contact'][1].fetch("Id")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
-        puts "Checking Opportunity- Actual_Start_Date__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Actual Start Date Update to Start Date?") 
+        passedLogs = @objRollbar.addLog("[Expected] Actual Start Date=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['start_date']}") 
         expect(updatedOpp.fetch("Actual_Start_Date__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['start_date'].to_s
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
-        puts "Checking Opportunity- Total Desks Reserved..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Total Desks Reserved Update to Moveins Quantity?") 
+        passedLogs = @objRollbar.addLog("[Expected] Total Desks Reserved=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['quantity']}")
         expect(updatedOpp.fetch("Total_Desks_Reserved__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['products'][0]['quantity'].to_i
 
         puts "Checking Opportunity- Total Desks Move Outs..."
@@ -3157,33 +3791,65 @@ end
         puts "\n"
 
         id = @getResponse['result'].split(':')[1].chomp('"').delete(' ')
+        passedLogs = @objRollbar.addLog("[Validate] Does Opportunity Update after hitting Payload?")
+        expect(id).to eq  @opportunity[0].fetch("Id")
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity is successfully updated")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
 
         updatedOpp = @contractEvent.getOpportunityDetails(id)
-
-        puts "Checking Opportunity should not null..."
+        passedLogs = @objRollbar.addLog("[Step    ] Fetching Updated Opportunity details")
         expect(updatedOpp.fetch("Id")).not_to eq nil
-
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity fields are successfully fetched")
+        passedLogs =@objRollbar.addLog(" [Result  ] Success")
+        puts "\n"
+        
+        passedLogs = @objRollbar.addLog("[Step    ] Fetching Opportunity Reservable details")
         updatedOppReservable = @contractEvent.getOppReservableDetails(updatedOpp.fetch("Id"))
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity Reservable fields are successfully fetched")
+        passedLogs =@objRollbar.addLog("[Result   ] Success")
+        puts "\n"
+
+        passedLogs = @objRollbar.addLog("[Step    ] Fetching Opportunity Move Outs details")
         updatedOppMoveOuts = @contractEvent.getOppMoveOutsDetails(updatedOpp.fetch("Id"))
-        puts "**************************************************************************"
-        puts "Checking Updated Opportunity"
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity Move Outs fields are successfully fetched")
+        passedLogs =@objRollbar.addLog(" [Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity- Paperwork_Sent_On_Date__c..."
+        passedLogs = @objRollbar.addLog("[Step    ] Checking Updated Opportunity Fields")
+        puts "\n"
+
+        passedLogs = @objRollbar.addLog("[Validate] Does Paperwork Sent On Date Update to Contract Date?")
+        passedLogs = @objRollbar.addLog("[Expected] Paperwork sent on Date= '#{@testData['ContractEvent']['Scenarios'][0]['body']['contract_date']}'")
         expect(updatedOpp.fetch("Paperwork_Sent_On_Date__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['contract_date'].to_s
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity- Contract_UUID__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Contract UUID Update to Membership Agreement UUID?")
+        passedLogs = @objRollbar.addLog("[Expected] Contract UUID= #{membershipAgreementUUID}")
         expect(updatedOpp.fetch("Contract_UUID__c")).to eq membershipAgreementUUID
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity- Contract_Stage__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Contract Stage Update to Contract Sent?") 
+        passedLogs = @objRollbar.addLog("[Expected] Contract Stage= Contract Sent") 
         expect(updatedOpp.fetch("Contract_Stage__c")).to eq "Contract Sent"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
-        puts "Checking Opportunity- Send_Paperwork_By__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Paperwork Sent By Update to Contact Id?") 
+        passedLogs = @objRollbar.addLog("[Expected] Paperwork Sent By=#{@recordCreated['contact'][1].fetch("Id")}") 
         expect(updatedOpp.fetch("Send_Paperwork_By__c")).to eq @recordCreated['contact'][1].fetch("Id")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
-        puts "Checking Opportunity- Actual_Start_Date__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Actual Start Date Update to Start Date?") 
+        passedLogs = @objRollbar.addLog("[Expected] Actual Start Date=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['start_date']}") 
         expect(updatedOpp.fetch("Actual_Start_Date__c")).to eq ""
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
-        puts "Checking Opportunity- Total Desks Reserved..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Total Desks Reserved Update to Moveins Quantity?") 
+        passedLogs = @objRollbar.addLog("[Expected] Total Desks Reserved=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['quantity']}")
         expect(updatedOpp.fetch("Total_Desks_Reserved__c").to_i).to eq 0
 
         puts "Checking Opportunity- Total Desks Move Outs..."
@@ -3271,33 +3937,66 @@ end
         puts "\n"
 
         id = @getResponse['result'].split(':')[1].chomp('"').delete(' ')
+        passedLogs = @objRollbar.addLog("[Validate] Does Opportunity Update after hitting Payload?")
+        expect(id).to eq  @opportunity[0].fetch("Id")
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity is successfully updated")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+
         updatedOpp = @contractEvent.getOpportunityDetails(id)
-        updatedOppReservable = @contractEvent.getOppReservableDetails(updatedOpp[0])
-        updatedOppMoveOuts = @contractEvent.getOppMoveOutsDetails(updatedOpp[0])
-
-
-        puts "**************************************************************************"
-        puts "Checking Updated Opportunity"
-
-        puts "Checking Opportunity should not null..."
+        passedLogs = @objRollbar.addLog("[Step    ] Fetching Updated Opportunity details")
         expect(updatedOpp.fetch("Id")).not_to eq nil
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity fields are successfully fetched")
+        passedLogs =@objRollbar.addLog(" [Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity- Paperwork_Sent_On_Date__c..."
+        passedLogs = @objRollbar.addLog("[Step    ] Fetching Opportunity Reservable details")
+        updatedOppReservable = @contractEvent.getOppReservableDetails(updatedOpp[0])
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity Reservable fields are successfully fetched")
+        passedLogs =@objRollbar.addLog("[Result   ] Success")
+        puts "\n"
+
+        passedLogs = @objRollbar.addLog("[Step    ] Fetching Opportunity Move Outs details")
+        updatedOppMoveOuts = @contractEvent.getOppMoveOutsDetails(updatedOpp[0])
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity Move Outs fields are successfully fetched")
+        passedLogs =@objRollbar.addLog(" [Result  ] Success")
+        puts "\n"
+
+        passedLogs = @objRollbar.addLog("[Step    ] Checking Updated Opportunity Fields")
+        puts "\n"
+        
+
+        passedLogs = @objRollbar.addLog("[Validate] Does Paperwork Sent On Date Update to Contract Date?")
+        passedLogs = @objRollbar.addLog("[Expected] Paperwork sent on Date= '#{@testData['ContractEvent']['Scenarios'][0]['body']['contract_date']}'")
         expect(updatedOpp.fetch("Paperwork_Sent_On_Date__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['contract_date'].to_s
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity- Contract_UUID__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Contract UUID Update to Membership Agreement UUID?")
+        passedLogs = @objRollbar.addLog("[Expected] Contract UUID= #{membershipAgreementUUID}")
         expect(updatedOpp.fetch("Contract_UUID__c")).to eq membershipAgreementUUID
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity- Contract_Stage__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Contract Stage Update to Contract Sent?") 
+        passedLogs = @objRollbar.addLog("[Expected] Contract Stage= Contract Sent") 
         expect(updatedOpp.fetch("Contract_Stage__c")).to eq "Contract Sent"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
-        puts "Checking Opportunity- Send_Paperwork_By__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Paperwork Sent By Update to Contact Id?") 
+        passedLogs = @objRollbar.addLog("[Expected] Paperwork Sent By=#{@recordCreated['contact'][1].fetch("Id")}") 
         expect(updatedOpp.fetch("Send_Paperwork_By__c")).to eq @recordCreated['contact'][1].fetch("Id")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
-        puts "Checking Opportunity- Actual_Start_Date__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Actual Start Date Update to Start Date?") 
+        passedLogs = @objRollbar.addLog("[Expected] Actual Start Date=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['start_date']}") 
         expect(updatedOpp.fetch("Actual_Start_Date__c")).to eq ""
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
-        puts "Checking Opportunity- Total Desks Reserved..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Total Desks Reserved Update to Moveins Quantity?") 
+        passedLogs = @objRollbar.addLog("[Expected] Total Desks Reserved=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['quantity']}")
         expect(updatedOpp.fetch("Total_Desks_Reserved__c").to_i).to eq 0
 
         puts "Checking Opportunity- Total Desks Move Outs..."
@@ -3395,33 +4094,66 @@ end
         puts "\n"
 
         id = @getResponse['result'].split(':')[1].chomp('"').delete(' ')
+        passedLogs = @objRollbar.addLog("[Validate] Does Opportunity Update after hitting Payload?")
+        expect(id).to eq  @opportunity[0].fetch("Id")
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity is successfully updated")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+
         updatedOpp = @contractEvent.getOpportunityDetails(id)
-        updatedOppReservable = @contractEvent.getOppReservableDetails(updatedOpp[0])
-        updatedOppMoveOuts = @contractEvent.getOppMoveOutsDetails(updatedOpp[0])
-
-
-        puts "**************************************************************************"
-        puts "Checking Updated Opportunity"
-
-        puts "Checking Opportunity should not null..."
+        passedLogs = @objRollbar.addLog("[Step    ] Fetching Updated Opportunity details")
         expect(updatedOpp.fetch("Id")).not_to eq nil
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity fields are successfully fetched")
+        passedLogs =@objRollbar.addLog(" [Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity- Paperwork_Sent_On_Date__c..."
+        passedLogs = @objRollbar.addLog("[Step    ] Fetching Opportunity Reservable details")
+        updatedOppReservable = @contractEvent.getOppReservableDetails(updatedOpp[0])
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity Reservable fields are successfully fetched")
+        passedLogs =@objRollbar.addLog("[Result   ] Success")
+        puts "\n"
+
+        passedLogs = @objRollbar.addLog("[Step    ] Fetching Opportunity Move Outs details")
+        updatedOppMoveOuts = @contractEvent.getOppMoveOutsDetails(updatedOpp[0])
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity Move Outs fields are successfully fetched")
+        passedLogs =@objRollbar.addLog(" [Result  ] Success")
+        puts "\n"
+
+        passedLogs = @objRollbar.addLog("[Step    ] Checking Updated Opportunity Fields")
+        puts "\n"
+        
+
+        passedLogs = @objRollbar.addLog("[Validate] Does Paperwork Sent On Date Update to Contract Date?")
+        passedLogs = @objRollbar.addLog("[Expected] Paperwork sent on Date= '#{@testData['ContractEvent']['Scenarios'][0]['body']['contract_date']}'")
         expect(updatedOpp.fetch("Paperwork_Sent_On_Date__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['contract_date'].to_s
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity- Contract_UUID__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Contract UUID Update to Membership Agreement UUID?")
+        passedLogs = @objRollbar.addLog("[Expected] Contract UUID= #{membershipAgreementUUID}")
         expect(updatedOpp.fetch("Contract_UUID__c")).to eq membershipAgreementUUID
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity- Contract_Stage__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Contract Stage Update to Contract Sent?") 
+        passedLogs = @objRollbar.addLog("[Expected] Contract Stage= Contract Sent") 
         expect(updatedOpp.fetch("Contract_Stage__c")).to eq "Contract Sent"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
-        puts "Checking Opportunity- Send_Paperwork_By__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Paperwork Sent By Update to Contact Id?") 
+        passedLogs = @objRollbar.addLog("[Expected] Paperwork Sent By=#{@recordCreated['contact'][1].fetch("Id")}") 
         expect(updatedOpp.fetch("Send_Paperwork_By__c")).to eq @recordCreated['contact'][1].fetch("Id")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
-        puts "Checking Opportunity- Actual_Start_Date__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Actual Start Date Update to Start Date?") 
+        passedLogs = @objRollbar.addLog("[Expected] Actual Start Date=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['start_date']}") 
         expect(updatedOpp.fetch("Actual_Start_Date__c")).to eq ""
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
-        puts "Checking Opportunity- Total Desks Reserved..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Total Desks Reserved Update to Moveins Quantity?") 
+        passedLogs = @objRollbar.addLog("[Expected] Total Desks Reserved=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['quantity']}")
         expect(updatedOpp.fetch("Total_Desks_Reserved__c").to_i).to eq 0
 
         puts "Checking Opportunity- Total Desks Move Outs..."
@@ -3517,32 +4249,66 @@ end
         puts "\n"
 
         id = @getResponse['result'].split(':')[1].chomp('"').delete(' ')
+        passedLogs = @objRollbar.addLog("[Validate] Does Opportunity Update after hitting Payload?")
+        expect(id).to eq  @opportunity[0].fetch("Id")
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity is successfully updated")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+
         updatedOpp = @contractEvent.getOpportunityDetails(id)
-        updatedOppReservable = @contractEvent.getOppReservableDetails(updatedOpp[0])
-        updatedOppMoveOuts = @contractEvent.getOppMoveOutsDetails(updatedOpp[0])
-
-        puts "**************************************************************************"
-        puts "Checking Updated Opportunity"
-
-        puts "Checking Opportunity should not null..."
+        passedLogs = @objRollbar.addLog("[Step    ] Fetching Updated Opportunity details")
         expect(updatedOpp.fetch("Id")).to eq @opportunity2[0].fetch("Id")
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity fields are successfully fetched")
+        passedLogs =@objRollbar.addLog(" [Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity- Paperwork_Sent_On_Date__c..."
+        passedLogs = @objRollbar.addLog("[Step    ] Fetching Opportunity Reservable details")
+        updatedOppReservable = @contractEvent.getOppReservableDetails(updatedOpp[0])
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity Reservable fields are successfully fetched")
+        passedLogs =@objRollbar.addLog("[Result   ] Success")
+        puts "\n"
+
+        passedLogs = @objRollbar.addLog("[Step    ] Fetching Opportunity Move Outs details")
+        updatedOppMoveOuts = @contractEvent.getOppMoveOutsDetails(updatedOpp[0])
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity Move Outs fields are successfully fetched")
+        passedLogs =@objRollbar.addLog(" [Result  ] Success")
+        puts "\n"
+
+        passedLogs = @objRollbar.addLog("[Step    ] Checking Updated Opportunity Fields")
+        puts "\n"
+        
+
+        passedLogs = @objRollbar.addLog("[Validate] Does Paperwork Sent On Date Update to Contract Date?")
+        passedLogs = @objRollbar.addLog("[Expected] Paperwork sent on Date= '#{@testData['ContractEvent']['Scenarios'][0]['body']['contract_date']}'")
         expect(updatedOpp.fetch("Paperwork_Sent_On_Date__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['contract_date'].to_s
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity- Contract_UUID__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Contract UUID Update to Membership Agreement UUID?")
+        passedLogs = @objRollbar.addLog("[Expected] Contract UUID= #{membershipAgreementUUID}")
         expect(updatedOpp.fetch("Contract_UUID__c")).to eq membershipAgreementUUID
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity- Contract_Stage__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Contract Stage Update to Contract Sent?") 
+        passedLogs = @objRollbar.addLog("[Expected] Contract Stage= Contract Sent") 
         expect(updatedOpp.fetch("Contract_Stage__c")).to eq "Contract Sent"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
-        puts "Checking Opportunity- Send_Paperwork_By__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Paperwork Sent By Update to Contact Id?") 
+        passedLogs = @objRollbar.addLog("[Expected] Paperwork Sent By=#{@recordCreated['contact'][1].fetch("Id")}") 
         expect(updatedOpp.fetch("Send_Paperwork_By__c")).to eq @recordCreated['contact'][1].fetch("Id")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
-        puts "Checking Opportunity- Actual_Start_Date__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Actual Start Date Update to Start Date?") 
+        passedLogs = @objRollbar.addLog("[Expected] Actual Start Date=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['start_date']}") 
         expect(updatedOpp.fetch("Actual_Start_Date__c")).to eq ""
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
-        puts "Checking Opportunity- Total Desks Reserved..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Total Desks Reserved Update to Moveins Quantity?") 
+        passedLogs = @objRollbar.addLog("[Expected] Total Desks Reserved=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['quantity']}")
         expect(updatedOpp.fetch("Total_Desks_Reserved__c").to_i).to eq 0
 
         puts "Checking Opportunity- Total Desks Move Outs..."
@@ -3639,35 +4405,61 @@ end
 
         id = @getResponse['result'].split(':')[1].chomp('"').delete(' ')
 
+
         @mapOpportunityId["opportunity"] << Hash["Id" => id]
 
         createdOpp = @contractEvent.getOpportunityDetails(id)
+
+        passedLogs = @objRollbar.addLog("[Step    ] Fetching Opportunity Reservable details")
         updatedOppReservable = @contractEvent.getOppReservableDetails(createdOpp[0])
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity Reservable fields are successfully fetched")
+        passedLogs =@objRollbar.addLog("[Result   ] Success")
+        puts "\n"
+
+        passedLogs = @objRollbar.addLog("[Step    ] Fetching Opportunity Move Outs details")
         updatedOppMoveOuts = @contractEvent.getOppMoveOutsDetails(createdOpp[0])
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity Move Outs fields are successfully fetched")
+        passedLogs =@objRollbar.addLog(" [Result  ] Success")
+        puts "\n"
 
-
-        puts "**************************************************************************"
-        puts "Checking Updated Opportunity"
+        passedLogs = @objRollbar.addLog("[Step    ] Checking Updated Opportunity Fields")
+        puts "\n"
 
         puts "Checking Opportunity should not null..."
         expect(createdOpp.fetch("Id")).not_to eq nil
 
-        puts "Checking Opportunity- Paperwork_Sent_On_Date__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Paperwork Sent On Date Update to Contract Date?")
+        passedLogs = @objRollbar.addLog("[Expected] Paperwork sent on Date= '#{@testData['ContractEvent']['Scenarios'][0]['body']['contract_date']}'")
         expect(createdOpp.fetch("Paperwork_Sent_On_Date__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['contract_date'].to_s
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity- Contract_UUID__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Contract UUID Update to Membership Agreement UUID?")
+        passedLogs = @objRollbar.addLog("[Expected] Contract UUID= #{membershipAgreementUUID}")
         expect(createdOpp.fetch("Contract_UUID__c")).to eq membershipAgreementUUID
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity- Contract_Stage__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Contract Stage Update to Contract Sent?") 
+        passedLogs = @objRollbar.addLog("[Expected] Contract Stage= Contract Sent") 
         expect(createdOpp.fetch("Contract_Stage__c")).to eq "Contract Sent"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
-        puts "Checking Opportunity- Send_Paperwork_By__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Paperwork Sent By Update to Contact Id?") 
+        passedLogs = @objRollbar.addLog("[Expected] Paperwork Sent By=#{@recordCreated['contact'][1].fetch("Id")}") 
         expect(createdOpp.fetch("Send_Paperwork_By__c")).to eq @recordCreated['contact'][1].fetch("Id")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
-        puts "Checking Opportunity- Actual_Start_Date__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Actual Start Date Update to Start Date?") 
+        passedLogs = @objRollbar.addLog("[Expected] Actual Start Date=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['start_date']}") 
         expect(createdOpp.fetch("Actual_Start_Date__c")).to eq ""
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
-        puts "Checking Opportunity- Total Desks Reserved..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Total Desks Reserved Update to Moveins Quantity?") 
+        passedLogs = @objRollbar.addLog("[Expected] Total Desks Reserved=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['quantity']}")
         expect(createdOpp.fetch("Total_Desks_Reserved__c").to_i).to eq 0
 
         puts "Checking Opportunity- Total Desks Move Outs..."
@@ -3767,31 +4559,56 @@ end
         @mapOpportunityId["opportunity"] << Hash["Id" => id]
 
         createdOpp = @contractEvent.getOpportunityDetails(id)
+        passedLogs = @objRollbar.addLog("[Step    ] Fetching Opportunity Reservable details")
         updatedOppReservable = @contractEvent.getOppReservableDetails(createdOpp[0])
-        updatedOppMoveOuts = @contractEvent.getOppMoveOutsDetails(createdOpp[0])
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity Reservable fields are successfully fetched")
+        passedLogs =@objRollbar.addLog("[Result   ] Success")
+        puts "\n"
 
-        puts "**************************************************************************"
-        puts "Checking Updated Opportunity"
+        passedLogs = @objRollbar.addLog("[Step    ] Fetching Opportunity Move Outs details")
+        updatedOppMoveOuts = @contractEvent.getOppMoveOutsDetails(createdOpp[0])
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity Move Outs fields are successfully fetched")
+        passedLogs =@objRollbar.addLog(" [Result  ] Success")
+        puts "\n"
+
+        passedLogs = @objRollbar.addLog("[Step    ] Checking Updated Opportunity Fields")
+        puts "\n"
 
         puts "Checking Opportunity should not null..."
         expect(createdOpp.fetch("Id")).not_to eq nil
 
-        puts "Checking Opportunity- Paperwork_Sent_On_Date__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Paperwork Sent On Date Update to Contract Date?")
+        passedLogs = @objRollbar.addLog("[Expected] Paperwork sent on Date= '#{@testData['ContractEvent']['Scenarios'][0]['body']['contract_date']}'")
         expect(createdOpp.fetch("Paperwork_Sent_On_Date__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['contract_date'].to_s
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity- Contract_UUID__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Contract UUID Update to Membership Agreement UUID?")
+        passedLogs = @objRollbar.addLog("[Expected] Contract UUID= #{membershipAgreementUUID}")
         expect(createdOpp.fetch("Contract_UUID__c")).to eq membershipAgreementUUID
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity- Contract_Stage__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Contract Stage Update to Contract Sent?") 
+        passedLogs = @objRollbar.addLog("[Expected] Contract Stage= Contract Sent") 
         expect(createdOpp.fetch("Contract_Stage__c")).to eq "Contract Sent"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
-        puts "Checking Opportunity- Send_Paperwork_By__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Paperwork Sent By Update to Contact Id?") 
+        passedLogs = @objRollbar.addLog("[Expected] Paperwork Sent By=#{@recordCreated['contact'][1].fetch("Id")}") 
         expect(createdOpp.fetch("Send_Paperwork_By__c")).to eq @recordCreated['contact'][1].fetch("Id")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
-        puts "Checking Opportunity- Actual_Start_Date__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Actual Start Date Update to Start Date?") 
+        passedLogs = @objRollbar.addLog("[Expected] Actual Start Date=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['start_date']}") 
         expect(createdOpp.fetch("Actual_Start_Date__c")).to eq ""
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
-        puts "Checking Opportunity- Total Desks Reserved..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Total Desks Reserved Update to Moveins Quantity?") 
+        passedLogs = @objRollbar.addLog("[Expected] Total Desks Reserved=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['quantity']}")
         expect(createdOpp.fetch("Total_Desks_Reserved__c").to_i).to eq 0
 
         puts "Checking Opportunity- Total Desks Move Outs..."
@@ -3888,34 +4705,65 @@ end
         puts "\n"
 
         id = @getResponse['result'].split(':')[1].chomp('"').delete(' ')
+        passedLogs = @objRollbar.addLog("[Validate] Does Opportunity Update after hitting Payload?")
+        expect(id).to eq  @opportunity[0].fetch("Id")
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity is successfully updated")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
 
         updatedOpp = @contractEvent.getOpportunityDetails(id)
-        updatedOppReservable = @contractEvent.getOppReservableDetails(updatedOpp[0])
-        updatedOppMoveOuts = @contractEvent.getOppMoveOutsDetails(updatedOpp[0])
-
-
-        puts "**************************************************************************"
-        puts "Checking Updated Opportunity"
-
-        puts "Checking Opportunity should not null..."
+        passedLogs = @objRollbar.addLog("[Step    ] Fetching Updated Opportunity details")
         expect(updatedOpp.fetch("Id")).to eq @opportunity[0].fetch("Id")
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity fields are successfully fetched")
+        passedLogs =@objRollbar.addLog(" [Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity- Paperwork_Sent_On_Date__c..."
+        passedLogs = @objRollbar.addLog("[Step    ] Fetching Opportunity Reservable details")
+        updatedOppReservable = @contractEvent.getOppReservableDetails(updatedOpp[0])
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity Reservable fields are successfully fetched")
+        passedLogs =@objRollbar.addLog("[Result   ] Success")
+        puts "\n"
+
+        passedLogs = @objRollbar.addLog("[Step    ] Fetching Opportunity Move Outs details")
+        updatedOppMoveOuts = @contractEvent.getOppMoveOutsDetails(updatedOpp[0])
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity Move Outs fields are successfully fetched")
+        passedLogs =@objRollbar.addLog(" [Result  ] Success")
+        puts "\n"
+
+        passedLogs = @objRollbar.addLog("[Step    ] Checking Updated Opportunity Fields")
+        puts "\n"
+
+        passedLogs = @objRollbar.addLog("[Validate] Does Paperwork Sent On Date Update to Contract Date?")
+        passedLogs = @objRollbar.addLog("[Expected] Paperwork sent on Date= '#{@testData['ContractEvent']['Scenarios'][0]['body']['contract_date']}'")
         expect(updatedOpp.fetch("Paperwork_Sent_On_Date__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['contract_date'].to_s
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity- Contract_UUID__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Contract UUID Update to Membership Agreement UUID?")
+        passedLogs = @objRollbar.addLog("[Expected] Contract UUID= #{membershipAgreementUUID}")
         expect(updatedOpp.fetch("Contract_UUID__c")).to eq membershipAgreementUUID
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity- Contract_Stage__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Contract Stage Update to Contract Sent?") 
+        passedLogs = @objRollbar.addLog("[Expected] Contract Stage= Contract Sent") 
         expect(updatedOpp.fetch("Contract_Stage__c")).to eq "Contract Sent"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
-        puts "Checking Opportunity- Send_Paperwork_By__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Paperwork Sent By Update to Contact Id?") 
+        passedLogs = @objRollbar.addLog("[Expected] Paperwork Sent By=#{@recordCreated['contact'][1].fetch("Id")}") 
         expect(updatedOpp.fetch("Send_Paperwork_By__c")).to eq @recordCreated['contact'][1].fetch("Id")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
-        puts "Checking Opportunity- Actual_Start_Date__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Actual Start Date Update to Start Date?") 
+        passedLogs = @objRollbar.addLog("[Expected] Actual Start Date=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['start_date']}") 
         expect(updatedOpp.fetch("Actual_Start_Date__c")).to eq ""
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
-        puts "Checking Opportunity- Total Desks Reserved..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Total Desks Reserved Update to Moveins Quantity?") 
+        passedLogs = @objRollbar.addLog("[Expected] Total Desks Reserved=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['quantity']}")
         expect(updatedOpp.fetch("Total_Desks_Reserved__c").to_i).to eq 0
 
         puts "Checking Opportunity- Total Desks Move Outs..."
@@ -4011,34 +4859,66 @@ end
 
         #puts "get only id from responce"
         id = @getResponse['result'].split(':')[1].chomp('"').delete(' ')
+        passedLogs = @objRollbar.addLog("[Validate] Does Opportunity Update after hitting Payload?")
+        expect(id).to eq  @opportunity[0].fetch("Id")
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity is successfully updated")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
 
         updatedOpp = @contractEvent.getOpportunityDetails(id)
-
-        puts "Checking Opportunity should not null..."
+        passedLogs = @objRollbar.addLog("[Step    ] Fetching Updated Opportunity details")
         expect(updatedOpp.fetch("Id")).not_to eq nil
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity fields are successfully fetched")
+        passedLogs =@objRollbar.addLog(" [Result  ] Success")
+        puts "\n"
 
+        passedLogs = @objRollbar.addLog("[Step    ] Fetching Opportunity Reservable details")
         updatedOppReservable = @contractEvent.getOppReservableDetails(updatedOpp.fetch("Id"))
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity Reservable fields are successfully fetched")
+        passedLogs =@objRollbar.addLog("[Result   ] Success")
+        puts "\n"
+
+        passedLogs = @objRollbar.addLog("[Step    ] Fetching Opportunity Move Outs details")
         updatedOppMoveOuts = @contractEvent.getOppMoveOutsDetails(updatedOpp.fetch("Id"))
-        puts "**************************************************************************"
-        puts "Checking Updated Opportunity"
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity Move Outs fields are successfully fetched")
+        passedLogs =@objRollbar.addLog(" [Result  ] Success")
+        puts "\n"
+
+        passedLogs = @objRollbar.addLog("[Step    ] Checking Updated Opportunity Fields")
+        puts "\n"
 
 
-        puts "Checking Opportunity- Paperwork_Sent_On_Date__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Paperwork Sent On Date Update to Contract Date?")
+        passedLogs = @objRollbar.addLog("[Expected] Paperwork sent on Date= '#{@testData['ContractEvent']['Scenarios'][0]['body']['contract_date']}'")
         expect(updatedOpp.fetch("Paperwork_Sent_On_Date__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['contract_date'].to_s
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity- Contract_UUID__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Contract UUID Update to Membership Agreement UUID?")
+        passedLogs = @objRollbar.addLog("[Expected] Contract UUID= #{membershipAgreementUUID}")
         expect(updatedOpp.fetch("Contract_UUID__c")).to eq membershipAgreementUUID
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity- Contract_Stage__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Contract Stage Update to Contract Sent?") 
+        passedLogs = @objRollbar.addLog("[Expected] Contract Stage= Contract Sent") 
         expect(updatedOpp.fetch("Contract_Stage__c")).to eq "Contract Sent"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
-        puts "Checking Opportunity- Send_Paperwork_By__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Paperwork Sent By Update to Contact Id?") 
+        passedLogs = @objRollbar.addLog("[Expected] Paperwork Sent By=#{@recordCreated['contact'][1].fetch("Id")}") 
         expect(updatedOpp.fetch("Send_Paperwork_By__c")).to eq @recordCreated['contact'][1].fetch("Id")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
-        puts "Checking Opportunity- Actual_Start_Date__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Actual Start Date Update to Start Date?") 
+        passedLogs = @objRollbar.addLog("[Expected] Actual Start Date=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['start_date']}") 
         expect(updatedOpp.fetch("Actual_Start_Date__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['start_date'].to_s
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
-        puts "Checking Opportunity- Total Desks Reserved..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Total Desks Reserved Update to Moveins Quantity?") 
+        passedLogs = @objRollbar.addLog("[Expected] Total Desks Reserved=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['quantity']}")
         expect(updatedOpp.fetch("Total_Desks_Reserved__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['products'][0]['quantity'].to_i
 
         puts "Checking Opportunity- Total Desks Move Outs..."
@@ -4128,33 +5008,66 @@ end
         puts "\n"
 
         id = @getResponse['result'].split(':')[1].chomp('"').delete(' ')
+        passedLogs = @objRollbar.addLog("[Validate] Does Opportunity Update after hitting Payload?")
+        expect(id).to eq  @opportunity[0].fetch("Id")
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity is successfully updated")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+
         updatedOpp = @contractEvent.getOpportunityDetails(id)
-        updatedOppReservable = @contractEvent.getOppReservableDetails(updatedOpp[0])
-        updatedOppMoveOuts = @contractEvent.getOppMoveOutsDetails(updatedOpp[0])
-
-
-        puts "**************************************************************************"
-        puts "Checking Updated Opportunity"
-
-        puts "Checking Opportunity should not null..."
+        passedLogs = @objRollbar.addLog("[Step    ] Fetching Updated Opportunity details")
         expect(updatedOpp.fetch("Id")).not_to eq nil
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity fields are successfully fetched")
+        passedLogs =@objRollbar.addLog(" [Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity- Paperwork_Sent_On_Date__c..."
+        passedLogs = @objRollbar.addLog("[Step    ] Fetching Opportunity Reservable details")
+        updatedOppReservable = @contractEvent.getOppReservableDetails(updatedOpp[0])
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity Reservable fields are successfully fetched")
+        passedLogs =@objRollbar.addLog("[Result   ] Success")
+        puts "\n"
+
+        passedLogs = @objRollbar.addLog("[Step    ] Fetching Opportunity Move Outs details")
+        updatedOppMoveOuts = @contractEvent.getOppMoveOutsDetails(updatedOpp[0])
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity Move Outs fields are successfully fetched")
+        passedLogs =@objRollbar.addLog(" [Result  ] Success")
+        puts "\n"
+
+        passedLogs = @objRollbar.addLog("[Step    ] Checking Updated Opportunity Fields")
+        puts "\n"
+        
+
+        passedLogs = @objRollbar.addLog("[Validate] Does Paperwork Sent On Date Update to Contract Date?")
+        passedLogs = @objRollbar.addLog("[Expected] Paperwork sent on Date= '#{@testData['ContractEvent']['Scenarios'][0]['body']['contract_date']}'")
         expect(updatedOpp.fetch("Paperwork_Sent_On_Date__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['contract_date'].to_s
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity- Contract_UUID__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Contract UUID Update to Membership Agreement UUID?")
+        passedLogs = @objRollbar.addLog("[Expected] Contract UUID= #{membershipAgreementUUID}")
         expect(updatedOpp.fetch("Contract_UUID__c")).to eq membershipAgreementUUID
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity- Contract_Stage__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Contract Stage Update to Contract Sent?") 
+        passedLogs = @objRollbar.addLog("[Expected] Contract Stage= Contract Sent") 
         expect(updatedOpp.fetch("Contract_Stage__c")).to eq "Contract Sent"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
-        puts "Checking Opportunity- Send_Paperwork_By__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Paperwork Sent By Update to Contact Id?") 
+        passedLogs = @objRollbar.addLog("[Expected] Paperwork Sent By=#{@recordCreated['contact'][1].fetch("Id")}") 
         expect(updatedOpp.fetch("Send_Paperwork_By__c")).to eq @recordCreated['contact'][1].fetch("Id")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
-        puts "Checking Opportunity- Actual_Start_Date__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Actual Start Date Update to Start Date?") 
+        passedLogs = @objRollbar.addLog("[Expected] Actual Start Date=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['start_date']}") 
         expect(updatedOpp.fetch("Actual_Start_Date__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['start_date'].to_s
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
-        puts "Checking Opportunity- Total Desks Reserved..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Total Desks Reserved Update to Moveins Quantity?") 
+        passedLogs = @objRollbar.addLog("[Expected] Total Desks Reserved=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['quantity']}")
         expect(updatedOpp.fetch("Total_Desks_Reserved__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['products'][0]['quantity'].to_i
 
         puts "Checking Opportunity- Total Desks Move Outs..."
@@ -4254,33 +5167,66 @@ end
         puts "\n"
 
         id = @getResponse['result'].split(':')[1].chomp('"').delete(' ')
+        passedLogs = @objRollbar.addLog("[Validate] Does Opportunity Update after hitting Payload?")
+        expect(id).to eq  @opportunity[0].fetch("Id")
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity is successfully updated")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+
         updatedOpp = @contractEvent.getOpportunityDetails(id)
-        updatedOppReservable = @contractEvent.getOppReservableDetails(updatedOpp[0])
-        updatedOppMoveOuts = @contractEvent.getOppMoveOutsDetails(updatedOpp[0])
-
-
-        puts "**************************************************************************"
-        puts "Checking Updated Opportunity"
-
-        puts "Checking Opportunity should not null..."
+        passedLogs = @objRollbar.addLog("[Step    ] Fetching Updated Opportunity details")
         expect(updatedOpp.fetch("Id")).not_to eq nil
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity fields are successfully fetched")
+        passedLogs =@objRollbar.addLog(" [Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity- Paperwork_Sent_On_Date__c..."
+        passedLogs = @objRollbar.addLog("[Step    ] Fetching Opportunity Reservable details")
+        updatedOppReservable = @contractEvent.getOppReservableDetails(updatedOpp[0])
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity Reservable fields are successfully fetched")
+        passedLogs =@objRollbar.addLog("[Result   ] Success")
+        puts "\n"
+
+        passedLogs = @objRollbar.addLog("[Step    ] Fetching Opportunity Move Outs details")
+        updatedOppMoveOuts = @contractEvent.getOppMoveOutsDetails(updatedOpp[0])
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity Move Outs fields are successfully fetched")
+        passedLogs =@objRollbar.addLog(" [Result  ] Success")
+        puts "\n"
+
+        passedLogs = @objRollbar.addLog("[Step    ] Checking Updated Opportunity Fields")
+        puts "\n"
+        
+
+        passedLogs = @objRollbar.addLog("[Validate] Does Paperwork Sent On Date Update to Contract Date?")
+        passedLogs = @objRollbar.addLog("[Expected] Paperwork sent on Date= '#{@testData['ContractEvent']['Scenarios'][0]['body']['contract_date']}'")
         expect(updatedOpp.fetch("Paperwork_Sent_On_Date__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['contract_date'].to_s
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity- Contract_UUID__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Contract UUID Update to Membership Agreement UUID?")
+        passedLogs = @objRollbar.addLog("[Expected] Contract UUID= #{membershipAgreementUUID}")
         expect(updatedOpp.fetch("Contract_UUID__c")).to eq membershipAgreementUUID
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity- Contract_Stage__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Contract Stage Update to Contract Sent?") 
+        passedLogs = @objRollbar.addLog("[Expected] Contract Stage= Contract Sent") 
         expect(updatedOpp.fetch("Contract_Stage__c")).to eq "Contract Sent"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
-        puts "Checking Opportunity- Send_Paperwork_By__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Paperwork Sent By Update to Contact Id?") 
+        passedLogs = @objRollbar.addLog("[Expected] Paperwork Sent By=#{@recordCreated['contact'][1].fetch("Id")}") 
         expect(updatedOpp.fetch("Send_Paperwork_By__c")).to eq @recordCreated['contact'][1].fetch("Id")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
-        puts "Checking Opportunity- Actual_Start_Date__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Actual Start Date Update to Start Date?") 
+        passedLogs = @objRollbar.addLog("[Expected] Actual Start Date=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['start_date']}") 
         expect(updatedOpp.fetch("Actual_Start_Date__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['start_date'].to_s
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
-        puts "Checking Opportunity- Total Desks Reserved..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Total Desks Reserved Update to Moveins Quantity?") 
+        passedLogs = @objRollbar.addLog("[Expected] Total Desks Reserved=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['quantity']}")
         expect(updatedOpp.fetch("Total_Desks_Reserved__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['products'][0]['quantity'].to_i
 
         puts "Checking Opportunity- Total Desks Move Outs..."
@@ -4379,32 +5325,66 @@ end
         puts "\n"
 
         id = @getResponse['result'].split(':')[1].chomp('"').delete(' ')
+        passedLogs = @objRollbar.addLog("[Validate] Does Opportunity Update after hitting Payload?")
+        expect(id).to eq  @opportunity[0].fetch("Id")
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity is successfully updated")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+
         updatedOpp = @contractEvent.getOpportunityDetails(id)
-        updatedOppReservable = @contractEvent.getOppReservableDetails(updatedOpp[0])
-        updatedOppMoveOuts = @contractEvent.getOppMoveOutsDetails(updatedOpp[0])
-
-        puts "**************************************************************************"
-        puts "Checking Updated Opportunity"
-
-        puts "Checking Opportunity should not null..."
+        passedLogs = @objRollbar.addLog("[Step    ] Fetching Updated Opportunity details")
         expect(updatedOpp.fetch("Id")).to eq @opportunity2[0].fetch("Id")
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity fields are successfully fetched")
+        passedLogs =@objRollbar.addLog(" [Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity- Paperwork_Sent_On_Date__c..."
+        passedLogs = @objRollbar.addLog("[Step    ] Fetching Opportunity Reservable details")
+        updatedOppReservable = @contractEvent.getOppReservableDetails(updatedOpp[0])
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity Reservable fields are successfully fetched")
+        passedLogs =@objRollbar.addLog("[Result   ] Success")
+        puts "\n"
+
+        passedLogs = @objRollbar.addLog("[Step    ] Fetching Opportunity Move Outs details")
+        updatedOppMoveOuts = @contractEvent.getOppMoveOutsDetails(updatedOpp[0])
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity Move Outs fields are successfully fetched")
+        passedLogs =@objRollbar.addLog(" [Result  ] Success")
+        puts "\n"
+
+        passedLogs = @objRollbar.addLog("[Step    ] Checking Updated Opportunity Fields")
+        puts "\n"
+       
+
+        passedLogs = @objRollbar.addLog("[Validate] Does Paperwork Sent On Date Update to Contract Date?")
+        passedLogs = @objRollbar.addLog("[Expected] Paperwork sent on Date= '#{@testData['ContractEvent']['Scenarios'][0]['body']['contract_date']}'")
         expect(updatedOpp.fetch("Paperwork_Sent_On_Date__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['contract_date'].to_s
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity- Contract_UUID__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Contract UUID Update to Membership Agreement UUID?")
+        passedLogs = @objRollbar.addLog("[Expected] Contract UUID= #{membershipAgreementUUID}")
         expect(updatedOpp.fetch("Contract_UUID__c")).to eq membershipAgreementUUID
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity- Contract_Stage__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Contract Stage Update to Contract Sent?") 
+        passedLogs = @objRollbar.addLog("[Expected] Contract Stage= Contract Sent") 
         expect(updatedOpp.fetch("Contract_Stage__c")).to eq "Contract Sent"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
-        puts "Checking Opportunity- Send_Paperwork_By__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Paperwork Sent By Update to Contact Id?") 
+        passedLogs = @objRollbar.addLog("[Expected] Paperwork Sent By=#{@recordCreated['contact'][1].fetch("Id")}") 
         expect(updatedOpp.fetch("Send_Paperwork_By__c")).to eq @recordCreated['contact'][1].fetch("Id")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
-        puts "Checking Opportunity- Actual_Start_Date__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Actual Start Date Update to Start Date?") 
+        passedLogs = @objRollbar.addLog("[Expected] Actual Start Date=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['start_date']}") 
         expect(updatedOpp.fetch("Actual_Start_Date__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['start_date'].to_s
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
-        puts "Checking Opportunity- Total Desks Reserved..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Total Desks Reserved Update to Moveins Quantity?") 
+        passedLogs = @objRollbar.addLog("[Expected] Total Desks Reserved=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['quantity']}")
         expect(updatedOpp.fetch("Total_Desks_Reserved__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['products'][0]['quantity'].to_i
 
         puts "Checking Opportunity- Total Desks Move Outs..."
@@ -4503,36 +5483,62 @@ end
         puts "\n"
 
         id = @getResponse['result'].split(':')[1].chomp('"').delete(' ')
+        
+
 
         @mapOpportunityId["opportunity"] << Hash["Id" => id]
 
         createdOpp = @contractEvent.getOpportunityDetails(id)
+        passedLogs = @objRollbar.addLog("[Step    ] Fetching Opportunity Reservable details")
         updatedOppReservable = @contractEvent.getOppReservableDetails(createdOpp[0])
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity Reservable fields are successfully fetched")
+        passedLogs =@objRollbar.addLog("[Result   ] Success")
+        puts "\n"
+
+        passedLogs = @objRollbar.addLog("[Step    ] Fetching Opportunity Move Outs details")
         updatedOppMoveOuts = @contractEvent.getOppMoveOutsDetails(createdOpp[0])
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity Move Outs fields are successfully fetched")
+        passedLogs =@objRollbar.addLog(" [Result  ] Success")
+        puts "\n"
 
-
-        puts "**************************************************************************"
-        puts "Checking Updated Opportunity"
+        passedLogs = @objRollbar.addLog("[Step    ] Checking Updated Opportunity Fields")
+        puts "\n"
 
         puts "Checking Opportunity should not null..."
         expect(createdOpp.fetch("Id")).not_to eq nil
 
-        puts "Checking Opportunity- Paperwork_Sent_On_Date__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Paperwork Sent On Date Update to Contract Date?")
+        passedLogs = @objRollbar.addLog("[Expected] Paperwork sent on Date= '#{@testData['ContractEvent']['Scenarios'][0]['body']['contract_date']}'")
         expect(createdOpp.fetch("Paperwork_Sent_On_Date__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['contract_date'].to_s
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity- Contract_UUID__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Contract UUID Update to Membership Agreement UUID?")
+        passedLogs = @objRollbar.addLog("[Expected] Contract UUID= #{membershipAgreementUUID}")
         expect(createdOpp.fetch("Contract_UUID__c")).to eq membershipAgreementUUID
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity- Contract_Stage__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Contract Stage Update to Contract Sent?") 
+        passedLogs = @objRollbar.addLog("[Expected] Contract Stage= Contract Sent") 
         expect(createdOpp.fetch("Contract_Stage__c")).to eq "Contract Sent"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
-        puts "Checking Opportunity- Send_Paperwork_By__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Paperwork Sent By Update to Contact Id?") 
+        passedLogs = @objRollbar.addLog("[Expected] Paperwork Sent By=#{@recordCreated['contact'][1].fetch("Id")}") 
         expect(createdOpp.fetch("Send_Paperwork_By__c")).to eq @recordCreated['contact'][1].fetch("Id")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
-        puts "Checking Opportunity- Actual_Start_Date__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Actual Start Date Update to Start Date?") 
+        passedLogs = @objRollbar.addLog("[Expected] Actual Start Date=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['start_date']}") 
         expect(createdOpp.fetch("Actual_Start_Date__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['start_date'].to_s
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
-        puts "Checking Opportunity- Total Desks Reserved..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Total Desks Reserved Update to Moveins Quantity?") 
+        passedLogs = @objRollbar.addLog("[Expected] Total Desks Reserved=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['quantity']}")
         expect(createdOpp.fetch("Total_Desks_Reserved__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['products'][0]['quantity'].to_i
 
         puts "Checking Opportunity- Total Desks Move Outs..."
@@ -4630,35 +5636,61 @@ end
         puts "\n"
 
         id = @getResponse['result'].split(':')[1].chomp('"').delete(' ')
+        
 
         @mapOpportunityId["opportunity"] << Hash["Id" => id]
 
         createdOpp = @contractEvent.getOpportunityDetails(id)
+        passedLogs = @objRollbar.addLog("[Step    ] Fetching Opportunity Reservable details")
         updatedOppReservable = @contractEvent.getOppReservableDetails(createdOpp[0])
-        updatedOppMoveOuts = @contractEvent.getOppMoveOutsDetails(createdOpp[0])
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity Reservable fields are successfully fetched")
+        passedLogs =@objRollbar.addLog("[Result   ] Success")
+        puts "\n"
 
-        puts "**************************************************************************"
-        puts "Checking Updated Opportunity"
+        passedLogs = @objRollbar.addLog("[Step    ] Fetching Opportunity Move Outs details")
+        updatedOppMoveOuts = @contractEvent.getOppMoveOutsDetails(createdOpp[0])
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity Move Outs fields are successfully fetched")
+        passedLogs =@objRollbar.addLog(" [Result  ] Success")
+        puts "\n"
+
+        passedLogs = @objRollbar.addLog("[Step    ] Checking Updated Opportunity Fields")
+        puts "\n"
 
         puts "Checking Opportunity should not null..."
         expect(createdOpp.fetch("Id")).not_to eq nil
 
-        puts "Checking Opportunity- Paperwork_Sent_On_Date__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Paperwork Sent On Date Update to Contract Date?")
+        passedLogs = @objRollbar.addLog("[Expected] Paperwork sent on Date= '#{@testData['ContractEvent']['Scenarios'][0]['body']['contract_date']}'")
         expect(createdOpp.fetch("Paperwork_Sent_On_Date__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['contract_date'].to_s
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity- Contract_UUID__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Contract UUID Update to Membership Agreement UUID?")
+        passedLogs = @objRollbar.addLog("[Expected] Contract UUID= #{membershipAgreementUUID}")
         expect(createdOpp.fetch("Contract_UUID__c")).to eq membershipAgreementUUID
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity- Contract_Stage__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Contract Stage Update to Contract Sent?") 
+        passedLogs = @objRollbar.addLog("[Expected] Contract Stage= Contract Sent") 
         expect(createdOpp.fetch("Contract_Stage__c")).to eq "Contract Sent"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
-        puts "Checking Opportunity- Send_Paperwork_By__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Paperwork Sent By Update to Contact Id?") 
+        passedLogs = @objRollbar.addLog("[Expected] Paperwork Sent By=#{@recordCreated['contact'][1].fetch("Id")}") 
         expect(createdOpp.fetch("Send_Paperwork_By__c")).to eq @recordCreated['contact'][1].fetch("Id")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
-        puts "Checking Opportunity- Actual_Start_Date__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Actual Start Date Update to Start Date?") 
+        passedLogs = @objRollbar.addLog("[Expected] Actual Start Date=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['start_date']}") 
         expect(createdOpp.fetch("Actual_Start_Date__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['start_date'].to_s
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
-        puts "Checking Opportunity- Total Desks Reserved..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Total Desks Reserved Update to Moveins Quantity?") 
+        passedLogs = @objRollbar.addLog("[Expected] Total Desks Reserved=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['quantity']}")
         expect(createdOpp.fetch("Total_Desks_Reserved__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['products'][0]['quantity'].to_i
 
         puts "Checking Opportunity- Total Desks Move Outs..."
@@ -4756,34 +5788,67 @@ end
         puts "\n"
 
         id = @getResponse['result'].split(':')[1].chomp('"').delete(' ')
+        passedLogs = @objRollbar.addLog("[Validate] Does Opportunity Update after hitting Payload?")
+        expect(id).to eq  @opportunity[0].fetch("Id")
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity is successfully updated")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
 
         updatedOpp = @contractEvent.getOpportunityDetails(id)
-        updatedOppReservable = @contractEvent.getOppReservableDetails(updatedOpp[0])
-        updatedOppMoveOuts = @contractEvent.getOppMoveOutsDetails(updatedOpp[0])
-
-
-        puts "**************************************************************************"
-        puts "Checking Updated Opportunity"
-
-        puts "Checking Opportunity should not null..."
+        passedLogs = @objRollbar.addLog("[Step    ] Fetching Updated Opportunity details")
         expect(updatedOpp.fetch("Id")).to eq @opportunity[0].fetch("Id")
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity fields are successfully fetched")
+        passedLogs =@objRollbar.addLog(" [Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity- Paperwork_Sent_On_Date__c..."
+        passedLogs = @objRollbar.addLog("[Step    ] Fetching Opportunity Reservable details")
+        updatedOppReservable = @contractEvent.getOppReservableDetails(updatedOpp[0])
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity Reservable fields are successfully fetched")
+        passedLogs =@objRollbar.addLog("[Result   ] Success")
+        puts "\n"
+
+        passedLogs = @objRollbar.addLog("[Step    ] Fetching Opportunity Move Outs details")
+        updatedOppMoveOuts = @contractEvent.getOppMoveOutsDetails(updatedOpp[0])
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity Move Outs fields are successfully fetched")
+        passedLogs =@objRollbar.addLog(" [Result  ] Success")
+        puts "\n"
+
+
+        passedLogs = @objRollbar.addLog("[Step    ] Checking Updated Opportunity Fields")
+        puts "\n"
+        
+
+        passedLogs = @objRollbar.addLog("[Validate] Does Paperwork Sent On Date Update to Contract Date?")
+        passedLogs = @objRollbar.addLog("[Expected] Paperwork sent on Date= '#{@testData['ContractEvent']['Scenarios'][0]['body']['contract_date']}'")
         expect(updatedOpp.fetch("Paperwork_Sent_On_Date__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['contract_date'].to_s
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity- Contract_UUID__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Contract UUID Update to Membership Agreement UUID?")
+        passedLogs = @objRollbar.addLog("[Expected] Contract UUID= #{membershipAgreementUUID}")
         expect(updatedOpp.fetch("Contract_UUID__c")).to eq membershipAgreementUUID
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity- Contract_Stage__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Contract Stage Update to Contract Sent?") 
+        passedLogs = @objRollbar.addLog("[Expected] Contract Stage= Contract Sent") 
         expect(updatedOpp.fetch("Contract_Stage__c")).to eq "Contract Sent"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
-        puts "Checking Opportunity- Send_Paperwork_By__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Paperwork Sent By Update to Contact Id?") 
+        passedLogs = @objRollbar.addLog("[Expected] Paperwork Sent By=#{@recordCreated['contact'][1].fetch("Id")}") 
         expect(updatedOpp.fetch("Send_Paperwork_By__c")).to eq @recordCreated['contact'][1].fetch("Id")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
-        puts "Checking Opportunity- Actual_Start_Date__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Actual Start Date Update to Start Date?") 
+        passedLogs = @objRollbar.addLog("[Expected] Actual Start Date=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['start_date']}") 
         expect(updatedOpp.fetch("Actual_Start_Date__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['start_date'].to_s
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
-        puts "Checking Opportunity- Total Desks Reserved..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Total Desks Reserved Update to Moveins Quantity?") 
+        passedLogs = @objRollbar.addLog("[Expected] Total Desks Reserved=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['quantity']}")
         expect(updatedOpp.fetch("Total_Desks_Reserved__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['products'][0]['quantity'].to_i
 
         puts "Checking Opportunity- Total Desks Move Outs..."
@@ -4889,33 +5954,65 @@ end
         puts "\n"
 
         id = @getResponse['result'].split(':')[1].chomp('"').delete(' ')
+        passedLogs = @objRollbar.addLog("[Validate] Does Opportunity Update after hitting Payload?")
+        expect(id).to eq  @opportunity[0].fetch("Id")
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity is successfully updated")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
 
         updatedOpp = @contractEvent.getOpportunityDetails(id)
-        updatedOppReservable = @contractEvent.getOppReservableDetails(updatedOpp[0])
-        updatedOppMoveOuts = @contractEvent.getOppMoveOutsDetails(updatedOpp[0])
-
-        puts "**************************************************************************"
-        puts "Checking Updated Opportunity"
-
-        puts "Checking Opportunity should not null..."
+        passedLogs = @objRollbar.addLog("[Step    ] Fetching Updated Opportunity details")
         expect(updatedOpp.fetch("Id")).to eq @opportunity[0].fetch("Id")
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity fields are successfully fetched")
+        passedLogs =@objRollbar.addLog(" [Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity- Paperwork_Sent_On_Date__c..."
+        passedLogs = @objRollbar.addLog("[Step    ] Fetching Opportunity Reservable details")
+        updatedOppReservable = @contractEvent.getOppReservableDetails(updatedOpp[0])
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity Reservable fields are successfully fetched")
+        passedLogs =@objRollbar.addLog("[Result   ] Success")
+        puts "\n"
+
+        passedLogs = @objRollbar.addLog("[Step    ] Fetching Opportunity Move Outs details")
+        updatedOppMoveOuts = @contractEvent.getOppMoveOutsDetails(updatedOpp[0])
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity Move Outs fields are successfully fetched")
+        passedLogs =@objRollbar.addLog(" [Result  ] Success")
+        puts "\n"
+
+        passedLogs = @objRollbar.addLog("[Step    ] Checking Updated Opportunity Fields")
+        puts "\n"
+
+        passedLogs = @objRollbar.addLog("[Validate] Does Paperwork Sent On Date Update to Contract Date?")
+        passedLogs = @objRollbar.addLog("[Expected] Paperwork sent on Date= '#{@testData['ContractEvent']['Scenarios'][0]['body']['contract_date']}'")
         expect(updatedOpp.fetch("Paperwork_Sent_On_Date__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['contract_date'].to_s
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity- Contract_UUID__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Contract UUID Update to Membership Agreement UUID?")
+        passedLogs = @objRollbar.addLog("[Expected] Contract UUID= #{membershipAgreementUUID}")
         expect(updatedOpp.fetch("Contract_UUID__c")).to eq membershipAgreementUUID
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity- Contract_Stage__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Contract Stage Update to Contract Sent?") 
+        passedLogs = @objRollbar.addLog("[Expected] Contract Stage= Contract Sent") 
         expect(updatedOpp.fetch("Contract_Stage__c")).to eq "Contract Sent"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
-        puts "Checking Opportunity- Send_Paperwork_By__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Paperwork Sent By Update to Contact Id?") 
+        passedLogs = @objRollbar.addLog("[Expected] Paperwork Sent By=#{@recordCreated['contact'][1].fetch("Id")}") 
         expect(updatedOpp.fetch("Send_Paperwork_By__c")).to eq @recordCreated['contact'][1].fetch("Id")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
-        puts "Checking Opportunity- Actual_Start_Date__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Actual Start Date Update to Start Date?") 
+        passedLogs = @objRollbar.addLog("[Expected] Actual Start Date=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['start_date']}") 
         expect(updatedOpp.fetch("Actual_Start_Date__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['start_date'].to_s
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
-        puts "Checking Opportunity- Total Desks Reserved..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Total Desks Reserved Update to Moveins Quantity?") 
+        passedLogs = @objRollbar.addLog("[Expected] Total Desks Reserved=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['quantity']}")
         expect(updatedOpp.fetch("Total_Desks_Reserved__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['products'][0]['quantity'].to_i
 
         puts "Checking Opportunity- Total Desks Move Outs..."
@@ -5014,33 +6111,65 @@ end
         puts "\n"
 
         id = @getResponse['result'].split(':')[1].chomp('"').delete(' ')
+        passedLogs = @objRollbar.addLog("[Validate] Does Opportunity Update after hitting Payload?")
+        expect(id).to eq  @opportunity[0].fetch("Id")
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity is successfully updated")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
 
         updatedOpp = @contractEvent.getOpportunityDetails(id)
-        updatedOppReservable = @contractEvent.getOppReservableDetails(updatedOpp[0])
-        updatedOppMoveOuts = @contractEvent.getOppMoveOutsDetails(updatedOpp[0])
-
-        puts "**************************************************************************"
-        puts "Checking Updated Opportunity"
-
-        puts "Checking Opportunity should not null..."
+        passedLogs = @objRollbar.addLog("[Step    ] Fetching Updated Opportunity details")
         expect(updatedOpp.fetch("Id")).to eq @opportunity[0].fetch("Id")
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity fields are successfully fetched")
+        passedLogs =@objRollbar.addLog(" [Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity- Paperwork_Sent_On_Date__c..."
+        passedLogs = @objRollbar.addLog("[Step    ] Fetching Opportunity Reservable details")
+        updatedOppReservable = @contractEvent.getOppReservableDetails(updatedOpp[0])
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity Reservable fields are successfully fetched")
+        passedLogs =@objRollbar.addLog("[Result   ] Success")
+        puts "\n"
+
+        passedLogs = @objRollbar.addLog("[Step    ] Fetching Opportunity Move Outs details")
+        updatedOppMoveOuts = @contractEvent.getOppMoveOutsDetails(updatedOpp[0])
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity Move Outs fields are successfully fetched")
+        passedLogs =@objRollbar.addLog(" [Result  ] Success")
+        puts "\n"
+
+        passedLogs = @objRollbar.addLog("[Step    ] Checking Updated Opportunity Fields")
+        puts "\n"
+        
+        passedLogs = @objRollbar.addLog("[Validate] Does Paperwork Sent On Date Update to Contract Date?")
+        passedLogs = @objRollbar.addLog("[Expected] Paperwork sent on Date= '#{@testData['ContractEvent']['Scenarios'][0]['body']['contract_date']}'")
         expect(updatedOpp.fetch("Paperwork_Sent_On_Date__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['contract_date'].to_s
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity- Contract_UUID__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Contract UUID Update to Membership Agreement UUID?")
+        passedLogs = @objRollbar.addLog("[Expected] Contract UUID= #{membershipAgreementUUID}")
         expect(updatedOpp.fetch("Contract_UUID__c")).to eq membershipAgreementUUID
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "Checking Opportunity- Contract_Stage__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Contract Stage Update to Contract Sent?") 
+        passedLogs = @objRollbar.addLog("[Expected] Contract Stage= Contract Sent") 
         expect(updatedOpp.fetch("Contract_Stage__c")).to eq "Contract Sent"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
-        puts "Checking Opportunity- Send_Paperwork_By__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Paperwork Sent By Update to Contact Id?") 
+        passedLogs = @objRollbar.addLog("[Expected] Paperwork Sent By=#{@recordCreated['contact'][1].fetch("Id")}") 
         expect(updatedOpp.fetch("Send_Paperwork_By__c")).to eq @recordCreated['contact'][1].fetch("Id")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
-        puts "Checking Opportunity- Actual_Start_Date__c..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Actual Start Date Update to Start Date?") 
+        passedLogs = @objRollbar.addLog("[Expected] Actual Start Date=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['start_date']}") 
         expect(updatedOpp.fetch("Actual_Start_Date__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['start_date'].to_s
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
-        puts "Checking Opportunity- Total Desks Reserved..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Total Desks Reserved Update to Moveins Quantity?") 
+        passedLogs = @objRollbar.addLog("[Expected] Total Desks Reserved=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['quantity']}")
         expect(updatedOpp.fetch("Total_Desks_Reserved__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['products'][0]['quantity'].to_i
 
         puts "Checking Opportunity- Total Desks Move Outs..."
