@@ -33,7 +33,7 @@ end
  describe ContractEvent do
   before(:all) {
     @objRollbar = RollbarUtility.new()    
-    puts "--------------------------------------------------------------------------------"
+    puts "------------------------------------------------------------------------------------------------------------------"
     @config = YAML.load_file(File.expand_path('', Dir.pwd) + '/credentials.yaml')
     @testRailUtility = EnziTestRailUtility::TestRailUtility.new(@config['TestRail']['username'], @config['TestRail']['password'])
     #arrCaseIds = Array.new
@@ -66,14 +66,17 @@ end
   }
   before(:each) {
     puts ""
-    puts "------------------------------------------------------------------------------------------------------------------"
+    puts "----------------------------------------------------------------------------------------------------------------------"
   }
   context 'ContractEvent-->sent', :'72' => true do
     #******************************** upgrade ****************************************
     it 'C:451 In Upgrade event, To check if the membership_agreement_uuid matched with the existing membership_agreement_uuid while hitting payload then existing opportunity should be updated.', :"451" => true do
       begin
         caseInfo = @testRailUtility.getCase('451')
+        #puts caseInfo
         puts 'C:451 In Upgrade event, To check if the membership_agreement_uuid matched with the existing membership_agreement_uuid while hitting payload then existing opportunity should be updated.'
+        puts "\n"
+        puts "------------------------------------------------------------------------------------------------------------------"
         contractUUID = SecureRandom.uuid
         membershipAgreementUUID = contractUUID
         companyUUID = SecureRandom.uuid
@@ -81,164 +84,227 @@ end
         
 
         @opportunity = @contractEvent.createOpportunity(1, 'Closing', 0, contractUUID, nil)
-        passedLogs = @objRollbar.addLog("Opportunity Should be Created With Id #{@opportunity},  Name #{@testData['ContractEvent']['Account'][1]['name']}, StageName 'Closing', Building Name #{@testData['ContractEvent']['Building__c'][0]['Name']}, Contract UUID #{contractUUID}", caseInfo['451'])
+        passedLogs = @objRollbar.addLog("[Step    ] Opportunity Should be Created With Id:#{@opportunity}, Name:#{@testData['ContractEvent']['Account'][1]['name']}, Stage:'Closing', Building:#{@testData['ContractEvent']['Building__c'][0]['Name']}, Contract UUID:#{contractUUID}", caseInfo['id'])
         expect(@opportunity).not_to eq nil
-        puts "[Result  ] Success"
-        puts "--------------------------------------------------------------------------------------------------------------" 
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity is successfully created")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
+        
+        
         @mapOpportunityId["opportunity"] = @opportunity
-        passedLogs = @objRollbar.addLog("Payload Should be Created with EventName 'Contract Sent', Transfer Type 'Upgrade', Search Criteria 'Based on Membership Agreement UUID'")
+        passedLogs = @objRollbar.addLog("[Step    ] Payload Should be Created with EventName:'Contract Sent', Search Criteria:'Based on Membership Agreement UUID'")
         @getResponse = SfRESTService.postData('' + @contractEvent.setUpPayload("Contract Sent", nil, companyUUID, membershipAgreementUUID, nil, 0, 1, "Upgrade").to_json, "#{@testData['ContractEvent']['ServiceUrls'][0]['contractEvent']}", false)
-        puts "Response-->"
-        puts "#{@getResponse}"
         expect(@getResponse['success']).to be true
         expect(@getResponse['result']).to_not eql nil
-        puts "[Result  ] Success"
-        puts "--------------------------------------------------------------------------------------------------------------"
-        #puts "get only id from responce"
+        passedLogs = @objRollbar.addLog("[Expected] Payload is successfully created and hitted")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
+       
         id = @getResponse['result'].split(':')[1].chomp('"').delete(' ')
-        puts "[Step    ] Opportunity Updated after hitting Payload"
+        passedLogs = @objRollbar.addLog("[Validate] Does Opportunity Update after hitting Payload?")
+        expect(id).to eq  @opportunity[0].fetch("Id")
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity is successfully updated")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+
         updatedOpp = @contractEvent.getOpportunityDetails(id)
-
-        puts "Checking Opportunity should not null..."
+       puts updatedOpp 
+        passedLogs = @objRollbar.addLog("[Step    ] Fetching Updated Opportunity details")
         expect(updatedOpp.fetch("Id")).not_to eq nil
-        puts "[Result  ] Success"
-        puts "--------------------------------------------------------------------------------------------------------------"
-        updatedOppReservable = @contractEvent.getOppReservableDetails(updatedOpp.fetch("Id"))
-        updatedOppMoveOuts = @contractEvent.getOppMoveOutsDetails(updatedOpp.fetch("Id"))
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity fields are successfully fetched")
+        passedLogs =@objRollbar.addLog("[Result   ] Success")
+        puts "\n"
         
-        puts "-----------------------Checking Updated Opportunity Fields----------------------------------------------------"
+        passedLogs = @objRollbar.addLog("[Step    ] Fetching Opportunity Reservable details")
+        updatedOppReservable = @contractEvent.getOppReservableDetails(updatedOpp.fetch("Id"))
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity Reservable fields are successfully fetched")
+        passedLogs =@objRollbar.addLog("[Result   ] Success")
+        puts "\n"
 
-        passedLogs = @objRollbar.addLog("[Validate] Should Paperwork Sent On Date Updated to Contract Date?")
-        passedLogs = @objRollbar.addLog("[Expected] Paperwork sent on Date= #{@testData['ContractEvent']['Scenarios'][0]['body']['contract_date']}")
+        passedLogs = @objRollbar.addLog("[Step    ] Fetching Opportunity Move Outs details")
+        updatedOppMoveOuts = @contractEvent.getOppMoveOutsDetails(updatedOpp.fetch("Id"))
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity Move Outs fields are successfully fetched")
+        passedLogs =@objRollbar.addLog("[Result   ] Success")
+        puts "\n"
+
+        passedLogs = @objRollbar.addLog("[Step    ] Checking Updated Opportunity Fields")
+        puts "\n"
+        
+
+        passedLogs = @objRollbar.addLog("[Validate] Does Paperwork Sent On Date Update to Contract Date?")
+        passedLogs = @objRollbar.addLog("[Expected] Paperwork sent on Date= '#{@testData['ContractEvent']['Scenarios'][0]['body']['contract_date']}'")
         expect(updatedOpp.fetch("Paperwork_Sent_On_Date__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['contract_date'].to_s
-        puts "[Result  ] Success"
-        puts "--------------------------------------------------------------------------------------------------------------"
-
-        passedLogs = @objRollbar.addLog("[Validate] Should Contract UUID Updated to Membership Agreement UUID?")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"        
+        
+        passedLogs = @objRollbar.addLog("[Validate] Does Contract UUID Update to Membership Agreement UUID?")
         passedLogs = @objRollbar.addLog("[Expected] Contract UUID= #{membershipAgreementUUID}")
         expect(updatedOpp.fetch("Contract_UUID__c")).to eq membershipAgreementUUID
-        puts "[Result  ] Success"
-        puts "--------------------------------------------------------------------------------------------------------------"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
         
-        puts "[Validate] Should Contract Stage Updated with Contract Sent?"
-        puts "[Expected] Contract Stage= Contract Sent"
+        
+        passedLogs = @objRollbar.addLog("[Validate] Does Contract Stage Update to Contract Sent?") 
+        passedLogs = @objRollbar.addLog("[Expected] Contract Stage= Contract Sent") 
         expect(updatedOpp.fetch("Contract_Stage__c")).to eq "Contract Sent"
-        puts "[Result  ] Success"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
+        
 
-        puts "[Validate] Should Paperwork Sent By Updated With Contact Id?"
-        puts "[Expected] Paperwork Sent By=#{@recordCreated['contact'][1].fetch("Id")}"
+        passedLogs = @objRollbar.addLog("[Validate] Does Paperwork Sent By Update to Contact Id?") 
+        passedLogs = @objRollbar.addLog("[Expected] Paperwork Sent By=#{@recordCreated['contact'][1].fetch("Id")}") 
         expect(updatedOpp.fetch("Send_Paperwork_By__c")).to eq @recordCreated['contact'][1].fetch("Id")
-        puts "[Result  ] Success"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
+        
 
-        puts "[Validate] Should Actual Start Date Updated With Start Date?"
-        puts "[Expected] Actual Start Date=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['start_date']}"
+        passedLogs = @objRollbar.addLog("[Validate] Does Actual Start Date Update to Start Date?") 
+        passedLogs = @objRollbar.addLog("[Expected] Actual Start Date=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['start_date']}") 
         expect(updatedOpp.fetch("Actual_Start_Date__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['start_date'].to_s
-        puts "[Result  ] Success"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
+        
 
-        puts "[Validate] Should Total Desks Reserved Updated With Moveins Quantity?"
-        puts "[Expected] Total Desks Reserved=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['quantity']}"
+        passedLogs = @objRollbar.addLog("[Validate] Does Total Desks Reserved Update to Moveins Quantity?") 
+        passedLogs = @objRollbar.addLog("[Expected] Total Desks Reserved=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['quantity']}")
         expect(updatedOpp.fetch("Total_Desks_Reserved__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['quantity'].to_i
-        puts "[Result  ] Success"
+        passedLogs = @objRollbar.addLog("[Result  ] Success") 
+        puts "\n"
+        
 
-        puts "[Validate] Should Total Desks Moveout Should updated Wssith Moveouts Quantity?"
-        puts "[Expected] Total Desks Move out=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity']}"
+        passedLogs = @objRollbar.addLog("[Validate] Does Total Desks Moveout Should Update to Moveouts Quantity?")
+        passedLogs = @objRollbar.addLog("[Expected] Total Desks Move out=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity']}")
         expect(updatedOpp.fetch("Total_Desks_Move_Outs__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity'].to_i
-        puts "[Result  ] Success"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
+        
 
-        puts "[Validate] Should Total Desks Reserved(net) Updated With Difference Between Opportunity Move ins and Opportunity Move Outs?"
-        puts "[Expected] Total Desks Reserved(Net)=#{(@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['quantity'].to_i)-(@testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity'].to_i)}"
+        passedLogs = @objRollbar.addLog("[Validate] Does Total Desks Reserved(net) Update With Difference Between Opportunity Move ins and Opportunity Move Outs?")
+        passedLogs = @objRollbar.addLog("[Expected] Total Desks Reserved(Net)=#{(@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['quantity'].to_i)-(@testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity'].to_i)}")
         expect(updatedOpp.fetch("Total_Desks_Reserved_net__c").to_i).to eq (@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['quantity'].to_i - @testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity'].to_i)
-        puts "[Result  ] Success"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
+        
 
-        puts "[Validate] Should No of Desks Updated With Sum of Quantity of Product?"
-        puts "[Expected] No of Desks=#{@testData['ContractEvent']['Scenarios'][0]['body']['products'][0]['quantity']}"
+        passedLogs = @objRollbar.addLog("[Validate] Does No of Desks Update to Sum of Quantity of Product?")
+        passedLogs = @objRollbar.addLog("[Expected] No of Desks=#{@testData['ContractEvent']['Scenarios'][0]['body']['products'][0]['quantity']}")
         expect(updatedOpp.fetch("Quantity__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['products'][0]['quantity'].to_i
-        puts "[Result  ] Success"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
+        
 
-        puts "[Validate] No of Desks(Gross) Should Updated With Product Quantity?"
-        puts "[Expected] No of Desks(Gross)=#{@testData['ContractEvent']['Scenarios'][0]['body']['products'][0]['quantity']}"
+        passedLogs = @objRollbar.addLog("[Validate] Does No of Desks(Gross) Update to Product Quantity?")
+        passedLogs = @objRollbar.addLog("[Expected] No of Desks(Gross)=#{@testData['ContractEvent']['Scenarios'][0]['body']['products'][0]['quantity']}")
         expect(updatedOpp.fetch("No_of_Desks_gross__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['products'][0]['quantity'].to_i
-        puts "[Result  ] Success"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
+        
 
-        puts "[Validate] Should Original Contract UUID Updated With Membership Agreement UUID?"
-        puts "[Expected] Original Contract UUID=#{membershipAgreementUUID}"
+        passedLogs = @objRollbar.addLog("[Validate] Does Original Contract UUID Update to Membership Agreement UUID?")
+        passedLogs = @objRollbar.addLog("[Expected] Original Contract UUID=#{membershipAgreementUUID}")
         expect(updatedOpp.fetch("Original_Contract_UUID__c")).to eq membershipAgreementUUID
-        puts "[Result  ] Success"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
+        
 
-        puts "[Validate] Should Opportunity Stage Updated To Closing?"
-        puts "[Expected] Stage Name= Closing"
+        passedLogs = @objRollbar.addLog("[Validate] Does Opportunity Stage Update to Closing?")
+        passedLogs = @objRollbar.addLog("[Expected] Stage Name= Closing")
         expect(updatedOpp.fetch("StageName")).to eq "Closing"
-        puts "[Result  ] Success"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
+        
 
-        puts "[Validate] Should Opportunity Building Updated With Move ins Building Passing through Payload?"
-        puts "[Expected] Building=#{@recordCreated['building'][0].fetch("Id")}"
+        passedLogs = @objRollbar.addLog("[Validate] Does Opportunity Building Update to Move ins Building Passing through Payload?")
+        passedLogs = @objRollbar.addLog("[Expected] Building=#{@recordCreated['building'][0].fetch("Id")}")
         expect(updatedOpp.fetch("Building__c")).to eq @recordCreated['building'][0].fetch("Id")
-        puts "[Result  ] Success"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
+        
 
-        puts "[Validate] Should Move out Building Updated to Building from Which Move Out Occured?"
-        puts "[Expected] Move out Building=#{@recordCreated['building'][0].fetch("Id")}"
+        passedLogs = @objRollbar.addLog("[Validate] Does Move out Building Update to Building from Which Move Out Occured?")
+        passedLogs = @objRollbar.addLog("[Expected] Move out Building=#{@recordCreated['building'][0].fetch("Id")}")
         expect(updatedOpp.fetch("Move_Out_Building__c")).to eq @recordCreated['building'][0].fetch("Id")
-        puts "[Result  ] Success"
- 
-        puts "[Validate] Should No of Desks(Unweighted) Updated?"
-        puts "[Expected] No of Desks(Unweighted)=#{(@testData['ContractEvent']['Scenarios'][0]['body']['products'][0]['quantity'].to_i) - (@testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity'].to_i)}"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
+        
+
+
+        passedLogs = @objRollbar.addLog("[Validate] Does No of Desks(Unweighted) Update?")
+        passedLogs = @objRollbar.addLog("[Expected] No of Desks(Unweighted)=#{(@testData['ContractEvent']['Scenarios'][0]['body']['products'][0]['quantity'].to_i) - (@testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity'].to_i)}")
         expect(updatedOpp.fetch("No_of_Desks_unweighted__c").to_i).to eq (@testData['ContractEvent']['Scenarios'][0]['body']['products'][0]['quantity'].to_i - @testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity'].to_i)
-        puts "[Result  ] Success"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"        
 
-        puts "[Validate] Should No of Desks(Weighted) Updated?"
+        passedLogs = @objRollbar.addLog("[Validate] Does No of Desks(Weighted) Update?")
         weightedDesk = (updatedOpp.fetch("No_of_Desks_unweighted__c").to_f * (updatedOpp.fetch("Probability").to_f / 100.to_f).to_f).round
-        puts "[Expected] No of Desks(Weighted)=#{weightedDesk}"
+        passedlogs = @objRollbar.addLog("[Expected] No of Desks(Weighted)=#{weightedDesk}")
         expect(updatedOpp.fetch("No_of_Desks_weighted__c").to_i).to eq weightedDesk
-        puts "[Result  ] Success"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
         
         
-        puts "[Validate] Should Contract type Updated with Upgrade?"
-        puts "[Expected] Contract Type= Upgrade"
+        passedLogs = @objRollbar.addLog("[Validate] Does Contract type Update to Upgrade?")
+        passedLogs = @objRollbar.addLog("[Expected] Contract Type= Upgrade")
         expect(updatedOpp.fetch("Contract_Type__c")).to eq "Upgrade"
-        puts "[Result  ] Success"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
         
-        puts "*************************************************************************************************"
         
-        puts "Checking Updated Opportunity Reservables"
-
-        puts "Checking Opportunity Reservable Should not null..."
+        passedLogs = @objRollbar.addLog("[Step    ] Checking Updated Opportunity Reservables")
+        puts "\n"
+        passedLogs = @objRollbar.addLog("[Validate] Does Opportunity Reservable not null?")
         expect(updatedOppReservable.fetch("Id")).not_to eq nil
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
+        
 
-        puts "[Validate] Should Pending desks in Opportunity Reservables Updated With Move ins Quantity?"
-        puts "[Expected] Pending Desks in Opportunity reservable=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['quantity']}"
+        passedLogs = @objRollbar.addLog("[Validate] Does Pending desks in Opportunity Reservables Update to Move ins Quantity?")
+        passedLogs = @objRollbar.addLog("[Expected] Pending Desks in Opportunity reservable=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['quantity']}")
         expect(updatedOppReservable.fetch("Pending_Desks__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['quantity'].to_i
-        puts "[Result  ] Success"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "[Validate] Should Start date in Opportunity Reservable Updated With Move ins Start Date?"
-        puts "[Expected] Start Date=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['start_date']}"
+        passedLogs = @objRollbar.addLog("[Validate] Does Start date in Opportunity Reservable Update With Move ins Start Date?")
+        passedLogs = @objRollbar.addLog("[Expected] Start Date=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['start_date']}")
         expect(updatedOppReservable.fetch("Start_Date__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['start_date'].to_s
-        puts "[Result  ] Success"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "[Validate] Should Monthly Price on Opportunity Reservable updated With Move ins price?"
-        puts "[Expected] Monthly Price=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['price']}"
+        passedLogs = @objRollbar.addLog("[Validate] Does Monthly Price on Opportunity Reservable update to Move ins price?")
+        passedLogs = @objRollbar.addLog("[Expected] Monthly Price=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['price']}")
         expect(updatedOppReservable.fetch("Monthly_Price__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['price'].to_s
-        puts "[Result  ] Success"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "**************************************************************************************************"
-        puts "Checking Updated Opportunity Move Outs"
+        passedLogs = @objRollbar.addLog("[Step    ] Checking Updated Opportunity Move Outs")
+        puts "\n"
 
-        puts "Checking Opportunity Move Outs should not null..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Opportunity Move Outs not null?")
         expect(updatedOppMoveOuts.fetch("Id")).not_to eq nil
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "[Validate] Should Pending Desks in Opportunity Move outs updated With Move outs Quantity?"
-        puts "[Expected] Pending Desks=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity']}"
+        passedLogs = @objRollbar.addLog("[Validate] Does Pending Desks in Opportunity Move outs update With Move outs Quantity?")
+        passedLogs = @objRollbar.addLog("[Expected] Pending Desks=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity']}")
         expect(updatedOppMoveOuts.fetch("Pending_Desks__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity'].to_i
-        puts "[Result  ] Success"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        puts "[Validate] Should Move out Date in Opportunity Move out Updated?"
-        puts "[Expected] Move out Date=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['move_out_date']}"
+        passedLogs = @objRollbar.addLog("[Validate] Does Move out Date in Opportunity Move out Update?")
+        passedLogs = @objRollbar.addLog("[Expected] Move out Date=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['move_out_date']}")
         expect(updatedOppMoveOuts.fetch("Move_Out_Date__c")).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['move_out_date'].to_s
-        puts "[Result  ] Success"
-        puts "**************************************************************************************************"
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
+
+        puts "------------------------------------------------------------------------------------------------------------------"
+        passedLogs = @objRollbar.addLog("[Step    ] Adding result in TestRail")
         @testRailUtility.postResult(451, "pass", 1, @run)
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
         rescue Exception => e
-        @objRollbar.postRollbarData(caseInfo['451'], caseInfo['In Upgrade event, To check if the membership_agreement_uuid matched with the existing membership_agreement_uuid while hitting payload then existing opportunity should be updated.'], passedLogs[caseInfo['451']])
-        puts "[Result  ] Failed"
+        #puts passedLogs[caseInfo['id']]
+        passedLogs = @objRollbar.addLog("[Result  ] Failed")
+        @objRollbar.postRollbarData(caseInfo['id'], caseInfo['title'], passedLogs[caseInfo['id']])
+        
+        #Rollbar.log("debug",passedLogs['id'])
         Rollbar.error(e)
         @testRailUtility.postResult(451, e, 5, @run)
         raise e
@@ -248,24 +314,27 @@ end
     it 'C:452 In Upgrade event, To check if opportunity id in the payload is matched with the opportunity_id in the system after hitting payload then existing opportunity in the system will be updated.', :'452'=> 'true' do
       begin
         puts 'C:452 In Upgrade event, To check if opportunity id in the payload is matched with the opportunity_id in the system after hitting payload then existing opportunity in the system will be updated.'
+        puts "\n"
+        puts "------------------------------------------------------------------------------------------------------------------"
         contractUUID = SecureRandom.uuid
         membershipAgreementUUID = SecureRandom.uuid
         companyUUID = SecureRandom.uuid
         @mapOpportunityId = Hash.new
         @opportunity = @contractEvent.createOpportunity(1, "selling", 0, nil, nil)
-        puts "[Step    ] Opportunity Created with Id #{@opportunity} Name  #{@testData['ContractEvent']['Account'][1]['name']}, StageName 'Selling', Building Name #{@testData['ContractEvent']['Building__c'][0]['Name']}"
+        passedLogs = @objRollbar.addLog("[Step    ] Opportunity Should be Created With Id:#{@opportunity}, Name:#{@testData['ContractEvent']['Account'][1]['name']}, Stage:'Closing', Building:#{@testData['ContractEvent']['Building__c'][0]['Name']}, Contract UUID:#{contractUUID}", caseInfo['id'])
         expect(@opportunity).not_to eq nil
-        puts "[result  ] Success"
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity is successfully created")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
         @mapOpportunityId["opportunity"] = @opportunity
-        puts "[step    ] Payload Created With EventName 'Contract Sent', Transfer Type 'Upgrade', Search Criteria 'Based on Opportunity Id'"
+        passedLogs = @objRollbar.addLog("[Step    ] Payload Should be Created with EventName:'Contract Sent', Search Criteria:'Based on Membership Agreement UUID'")
         @getResponse = SfRESTService.postData('' + @contractEvent.setUpPayload("Contract Sent", @opportunity[0].fetch("Id"), companyUUID, membershipAgreementUUID, nil, 0, 1, "Upgrade").to_json, "#{@testData['ContractEvent']['ServiceUrls'][0]['contractEvent']}", false)
-        puts "Response-->"
-        puts @getResponse
-
         expect(@getResponse['success']).to be true
         expect(@getResponse['result']).to_not eql nil
-        puts "[result  ] Success"
+        passedLogs = @objRollbar.addLog("[Expected] Payload is successfully created and hitted")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
         id = @getResponse['result'].split(':')[1].chomp('"').delete(' ')
         updatedOpp = @contractEvent.getOpportunityDetails(id)
@@ -419,6 +488,8 @@ end
     it 'C:453 In Upgrade event, To check if company_uuid in the payload matched with the existing account in the system, there are having open opportunities after hitting payload if building matched with the existing open opportunity then existing opportunity should be updated.', :'453' => true do
       begin
         puts 'C:453 In Upgrade event, To check if company_uuid in the payload matched with the existing account in the system, there are having open opportunities after hitting payload if building matched with the existing open opportunity then existing opportunity should be updated.'
+        puts "\n"
+        puts "------------------------------------------------------------------------------------------------------------------"
         contractUUID = SecureRandom.uuid
         membershipAgreementUUID = SecureRandom.uuid
         companyUUID = SecureRandom.uuid
@@ -426,26 +497,27 @@ end
         
         
         @opportunity1 = @contractEvent.createOpportunity(1, "selling", 0, nil)
-        puts "[Step    ] Opportunity Created with Id #{@opportunity1}, Name #{@testData['ContractEvent']['Account'][1]['name']}, StageName 'Selling', Building Name #{@testData['ContractEvent']['Building__c'][0]['Name']}"
+        passedLogs = @objRollbar.addLog("[Step    ] Opportunity Should be Created With Id:#{@opportunity1}, Name:#{@testData['ContractEvent']['Account'][1]['name']}, Stage:'Closing', Building:#{@testData['ContractEvent']['Building__c'][0]['Name']}, Contract UUID:#{contractUUID}", caseInfo['id'])
         expect(@opportunity1).not_to eq nil
-        puts "[Result  ] Success"
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity is successfully created")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
         @opportunity2 = @contractEvent.createOpportunity(1, "selling", 1, nil)
-        puts "[Step    ] Opportunity Created with Id #{@opportunity2} Name  #{@testData['ContractEvent']['Account'][1]['name']}, StageName 'Selling', Building Name #{@testData['ContractEvent']['Building__c'][1]['Name']}"
+        passedLogs = @objRollbar.addLog("[Step    ] Opportunity Should be Created With Id:#{@opportunity2}, Name:#{@testData['ContractEvent']['Account'][1]['name']}, Stage:'Closing', Building:#{@testData['ContractEvent']['Building__c'][0]['Name']}, Contract UUID:#{contractUUID}", caseInfo['id'])
         expect(@opportunity2).not_to eq nil
-        puts "[Result  ] Success"
-        
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity is successfully created")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
         @mapOpportunityId["opportunity"] = @opportunity1
         @mapOpportunityId["opportunity"] << @opportunity2[0]
-        puts "[Step    ] Payload Created with EventName 'Contract Sent', Transfer Type 'Upgrade', Search Criteria 'Based on Account ID'"
+        passedLogs = @objRollbar.addLog("[Step    ] Payload Should be Created with EventName:'Contract Sent', Search Criteria:'Based on Membership Agreement UUID'")
         @getResponse = SfRESTService.postData('' + @contractEvent.setUpPayload("Contract Sent", nil, "#{@testData['ContractEvent']['Account'][1]['UUID__c']}", membershipAgreementUUID, nil, 0, 1, "Upgrade").to_json, "#{@testData['ContractEvent']['ServiceUrls'][0]['contractEvent']}", false)
-        puts "Response-->"
-        puts @getResponse
-
         expect(@getResponse['success']).to be true
-
         expect(@getResponse['result']).to_not eql nil
-        puts "[Result  ] Success"
+        passedLogs = @objRollbar.addLog("[Expected] Payload is successfully created and hitted")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
         id = @getResponse['result'].split(':')[1].chomp('"').delete(' ')
         updatedOpp = @contractEvent.getOpportunityDetails(id)
@@ -592,6 +664,8 @@ end
     it 'C:726 In Upgrade event, To check if company_uuid in the payload matched with the existing account in the system, there are having open opportunities after hitting payload if building does not matched with the existing open opportunity then latest opportunity will be updated.', :'726' => true do
       begin
         puts 'C:726 In Upgrade event, To check if company_uuid in the payload matched with the existing account in the system, there are having open opportunities after hitting payload if building does not matched with the existing open opportunity then latest opportunity will be updated.'
+        puts "\n"
+        puts "------------------------------------------------------------------------------------------------------------------"
         contractUUID = SecureRandom.uuid
         membershipAgreementUUID = SecureRandom.uuid
         companyUUID = SecureRandom.uuid
@@ -599,28 +673,30 @@ end
         
         #@contractEvent.createOpportunity(stageName = nil, buildingNumber = nil ,contractUUID = nil)
         @opportunity1 = @contractEvent.createOpportunity(1, "selling", 1, nil)
-        puts "[Step] Opportunity Created with Id #{@opportunity1} Name  #{@testData['ContractEvent']['Account'][1]['name']}, StageName 'Selling', #{@testData['ContractEvent']['Building__c'][1]['Name']}"
-        expect(@opportunity1).not_to eq nil
-        puts "[result] success"
+        passedLogs = @objRollbar.addLog("[Step    ] Opportunity Should be Created With Id:#{@opportunity}, Name:#{@testData['ContractEvent']['Account'][1]['name']}, Stage:'Closing', Building:#{@testData['ContractEvent']['Building__c'][0]['Name']}, Contract UUID:#{contractUUID}", caseInfo['id'])
+        expect(@opportunity).not_to eq nil
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity is successfully created")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
         @opportunity2 = @contractEvent.createOpportunity(1, "selling", 2, nil)
-        puts "[Step] Opportunity Created with Id #{@opportunity1} Name  #{@testData['ContractEvent']['Account'][1]['name']}, StageName 'Selling', #{@testData['ContractEvent']['Building__c'][2]['Name']}"
-        expect(@opportunity1).not_to eq nil
-        puts "[result] success"
+        passedLogs = @objRollbar.addLog("[Step    ] Opportunity Should be Created With Id:#{@opportunity}, Name:#{@testData['ContractEvent']['Account'][1]['name']}, Stage:'Closing', Building:#{@testData['ContractEvent']['Building__c'][0]['Name']}, Contract UUID:#{contractUUID}", caseInfo['id'])
+        expect(@opportunity).not_to eq nil
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity is successfully created")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
         @mapOpportunityId["opportunity"] = @opportunity1
         @mapOpportunityId["opportunity"] << @opportunity2[0]
 
-        puts "[step] Payload Created with EventName 'Contract Sent', Transfer Type 'Upgrade', Search Criteria 'Based on Account ID'"
+        passedLogs = @objRollbar.addLog("[Step    ] Payload Should be Created with EventName:'Contract Sent', Search Criteria:'Based on Membership Agreement UUID'")
         @getResponse = SfRESTService.postData('' + @contractEvent.setUpPayload("Contract Sent", nil, "#{@testData['ContractEvent']['Account'][1]['UUID__c']}", membershipAgreementUUID, nil, 0, 1, "Upgrade").to_json, "#{@testData['ContractEvent']['ServiceUrls'][0]['contractEvent']}", false)
-        puts "Response-->"
-        puts @getResponse
-
-        puts "Checking Responce after hitting payload..."
         expect(@getResponse['success']).to be true
-
         expect(@getResponse['result']).to_not eql nil
-        puts "[result] success"
+        passedLogs = @objRollbar.addLog("[Expected] Payload is successfully created and hitted")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
+
         id = @getResponse['result'].split(':')[1].chomp('"').delete(' ')
         updatedOpp = @contractEvent.getOpportunityDetails(id)
         updatedOppReservable = @contractEvent.getOppReservableDetails(updatedOpp[0])
@@ -763,6 +839,8 @@ end
     it 'C:857 In Upgrade event, To check if company_uuid matched with the existing opportunity and for that account there is having opportunity with the stages closed won or closed lost, while hitting payload for a particular building then new opportunity should be created.', :'857' => true do
       begin
         puts 'C:857 In Upgrade event, To check if company_uuid matched with the existing opportunity and for that account there is having opportunity with the stages closed won or closed lost, while hitting payload for a particular building then new opportunity should be created.'
+        puts "\n"
+        puts "------------------------------------------------------------------------------------------------------------------"
         contractUUID = SecureRandom.uuid
         membershipAgreementUUID = SecureRandom.uuid
         companyUUID = SecureRandom.uuid
@@ -771,29 +849,29 @@ end
         
         #@contractEvent.createOpportunity(stageName = nil, buildingNumber = nil ,contractUUID = nil)
         @opportunity1 = @contractEvent.createOpportunity(1, "Closed Won", 1, contractUUID)
-        puts "[Step] Opportunity Created with Id #{@opportunity1} Name  #{@testData['ContractEvent']['Account'][1]['name']}, StageName 'Closed Won', #{@testData['ContractEvent']['Building__c'][1]['Name']}, #{contractUUID}"
-        expect(@opportunity1).not_to eq nil
-        puts "[result] success"
+        passedLogs = @objRollbar.addLog("[Step    ] Opportunity Should be Created With Id:#{@opportunity}, Name:#{@testData['ContractEvent']['Account'][1]['name']}, Stage:'Closing', Building:#{@testData['ContractEvent']['Building__c'][0]['Name']}, Contract UUID:#{contractUUID}", caseInfo['id'])
+        expect(@opportunity).not_to eq nil
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity is successfully created")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
         @opportunity2 = @contractEvent.createOpportunity(1, "Closed Lost", 2, nil)
-        puts "[Step] Opportunity Created with Id #{@opportunity1} Name  #{@testData['ContractEvent']['Account'][1]['name']}, StageName 'Closed Lost', #{@testData['ContractEvent']['Building__c'][2]['Name']}"
-        expect(@opportunity2).not_to eq nil
-        puts "[result] success"
+        passedLogs = @objRollbar.addLog("[Step    ] Opportunity Should be Created With Id:#{@opportunity}, Name:#{@testData['ContractEvent']['Account'][1]['name']}, Stage:'Closing', Building:#{@testData['ContractEvent']['Building__c'][0]['Name']}, Contract UUID:#{contractUUID}", caseInfo['id'])
+        expect(@opportunity).not_to eq nil
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity is successfully created")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
         
         @mapOpportunityId["opportunity"] = @opportunity1
         @mapOpportunityId["opportunity"] << @opportunity2[0]
 
-        puts "[step] Payload Created with EventName 'Contract Sent', Transfer Type 'Upgrade', Search Criteria 'Based on Account ID'"
+        passedLogs = @objRollbar.addLog("[Step    ] Payload Should be Created with EventName:'Contract Sent', Search Criteria:'Based on Membership Agreement UUID'")
         @getResponse = SfRESTService.postData('' + @contractEvent.setUpPayload("Contract Sent", nil, "#{@testData['ContractEvent']['Account'][1]['UUID__c']}", membershipAgreementUUID, nil, 0, 1, "Upgrade").to_json, "#{@testData['ContractEvent']['ServiceUrls'][0]['contractEvent']}", false)
-        puts "Response-->"
-        puts @getResponse
-
-        puts "Checking Responce after hitting payload..."
         expect(@getResponse['success']).to be true
-
-
         expect(@getResponse['result']).to_not eql nil
-        puts "[result] success"
+        passedLogs = @objRollbar.addLog("[Expected] Payload is successfully created and hitted")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
         id = @getResponse['result'].split(':')[1].chomp('"').delete(' ')
 
@@ -954,6 +1032,8 @@ end
     it 'C:858 In Upgrade event, To check if the company_uuid matched with the existing opportunity and for that account there is having opportunity with stages closing and contract stage as sent then new opportunity should be created.', :'858' => true do
       begin
         puts 'C:858 In Upgrade event, To check if the company_uuid matched with the existing opportunity and for that account there is having opportunity with stages closing and contract stage as sent then new opportunity should be created.'
+        puts "\n"
+        puts "------------------------------------------------------------------------------------------------------------------"
         contractUUID = SecureRandom.uuid
         membershipAgreementUUID = SecureRandom.uuid
         companyUUID = SecureRandom.uuid
@@ -961,18 +1041,20 @@ end
         puts "Created Opportunity"
 
         @opportunity = @contractEvent.createOpportunity(1, "Closing", 1, contractUUID, "Contract Sent")
-        puts @opportunity1
+        passedLogs = @objRollbar.addLog("[Step    ] Opportunity Should be Created With Id:#{@opportunity}, Name:#{@testData['ContractEvent']['Account'][1]['name']}, Stage:'Closing', Building:#{@testData['ContractEvent']['Building__c'][0]['Name']}, Contract UUID:#{contractUUID}", caseInfo['id'])
+        expect(@opportunity).not_to eq nil
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity is successfully created")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
         @mapOpportunityId["opportunity"] = @opportunity
-
+        passedLogs = @objRollbar.addLog("[Step    ] Payload Should be Created with EventName:'Contract Sent', Search Criteria:'Based on Membership Agreement UUID'")
         @getResponse = SfRESTService.postData('' + @contractEvent.setUpPayload("Contract Sent", nil, "#{@testData['ContractEvent']['Account'][1]['UUID__c']}", membershipAgreementUUID, nil, 0, 1, "Upgrade").to_json, "#{@testData['ContractEvent']['ServiceUrls'][0]['contractEvent']}", false)
-        puts "Response-->"
-        puts @getResponse
-
-        puts "Checking Responce after hitting payload..."
         expect(@getResponse['success']).to be true
-
         expect(@getResponse['result']).to_not eql nil
+        passedLogs = @objRollbar.addLog("[Expected] Payload is successfully created and hitted")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
         id = @getResponse['result'].split(':')[1].chomp('"').delete(' ')
 
@@ -1084,6 +1166,8 @@ end
     it 'C:862 In Upgrade event, To check if the opportunity stage is closing but the contract stage is blank or other than contract sent or signed then new opportunity Should not be created.', :'862' => true do
       begin
         puts 'C:862 In Upgrade event, To check if the opportunity stage is closing but the contract stage is blank or other than contract sent or signed then new opportunity Should not be created.'
+        puts "\n"
+        puts "------------------------------------------------------------------------------------------------------------------"
         contractUUID = SecureRandom.uuid
         membershipAgreementUUID = SecureRandom.uuid
         companyUUID = SecureRandom.uuid
@@ -1091,19 +1175,19 @@ end
         puts "Created Opportunity"
 
         @opportunity = @contractEvent.createOpportunity(1, "Closing", 1, contractUUID, "Contract Discarded")
-        puts @opportunity
-
+        passedLogs = @objRollbar.addLog("[Step    ] Opportunity Should be Created With Id:#{@opportunity}, Name:#{@testData['ContractEvent']['Account'][1]['name']}, Stage:'Closing', Building:#{@testData['ContractEvent']['Building__c'][0]['Name']}, Contract UUID:#{contractUUID}", caseInfo['id'])
+        expect(@opportunity).not_to eq nil
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity is successfully created")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
         @mapOpportunityId["opportunity"] = @opportunity
-
+        passedLogs = @objRollbar.addLog("[Step    ] Payload Should be Created with EventName:'Contract Sent', Search Criteria:'Based on Membership Agreement UUID'")
         @getResponse = SfRESTService.postData('' + @contractEvent.setUpPayload("Contract Sent", nil, "#{@testData['ContractEvent']['Account'][1]['UUID__c']}", membershipAgreementUUID, nil, 0, 1, "Upgrade").to_json, "#{@testData['ContractEvent']['ServiceUrls'][0]['contractEvent']}", false)
-        puts "Response-->"
-        puts @getResponse
-
-        puts "Checking Responce after hitting payload..."
         expect(@getResponse['success']).to be true
-
-
         expect(@getResponse['result']).to_not eql nil
+        passedLogs = @objRollbar.addLog("[Expected] Payload is successfully created and hitted")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
         id = @getResponse['result'].split(':')[1].chomp('"').delete(' ')
 
@@ -1210,6 +1294,8 @@ end
     it 'C:905 In Downgrade event, To check if the membership_agreement_uuid matched with the existing membership_agreement_uuid while hitting payload then existing opportunity should be updated.', :'905' => true do
       begin
         puts 'C:905 In Downgrade event, To check if the membership_agreement_uuid matched with the existing membership_agreement_uuid while hitting payload then existing opportunity should be updated.'
+        puts "\n"
+        puts "------------------------------------------------------------------------------------------------------------------"
         contractUUID = SecureRandom.uuid
         membershipAgreementUUID = contractUUID
         companyUUID = SecureRandom.uuid
@@ -1217,19 +1303,22 @@ end
         puts 'Created Opportunity'
 
         @opportunity = @contractEvent.createOpportunity(1, 'Closing', 0, contractUUID, nil)
-        puts @opportunity
+        passedLogs = @objRollbar.addLog("[Step    ] Opportunity Should be Created With Id:#{@opportunity}, Name:#{@testData['ContractEvent']['Account'][1]['name']}, Stage:'Closing', Building:#{@testData['ContractEvent']['Building__c'][0]['Name']}, Contract UUID:#{contractUUID}", caseInfo['id'])
+        expect(@opportunity).not_to eq nil
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity is successfully created")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
         #puts (@opportunity == nil)
         @mapOpportunityId["opportunity"] = @opportunity
         #puts "Opportunity in HashMap"
         #puts @mapOpportunityId
+        passedLogs = @objRollbar.addLog("[Step    ] Payload Should be Created with EventName:'Contract Sent', Search Criteria:'Based on Membership Agreement UUID'")
         @getResponse = SfRESTService.postData('' + @contractEvent.setUpPayload("Contract Sent", nil, companyUUID, membershipAgreementUUID, nil, 1, 0, "Downgrade").to_json, "#{@testData['ContractEvent']['ServiceUrls'][0]['contractEvent']}", false)
-        puts "Response-->"
-        puts "#{@getResponse}"
-        puts "Checking Responce after hitting payload..."
         expect(@getResponse['success']).to be true
-
-
         expect(@getResponse['result']).to_not eql nil
+        passedLogs = @objRollbar.addLog("[Expected] Payload is successfully created and hitted")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
         #puts "get only id from responce"
         id = @getResponse['result'].split(':')[1].chomp('"').delete(' ')
@@ -1332,25 +1421,28 @@ end
     it 'C:903 In Downgrade event, To check if opportunity id in the payload is matched with the opportunity_id in the system after hitting payload then existing opportunity in the system will be updated.', :'903' => true do
       begin
         puts 'C:903 In Downgrade event, To check if opportunity id in the payload is matched with the opportunity_id in the system after hitting payload then existing opportunity in the system will be updated.'
+        puts "\n"
+        puts "------------------------------------------------------------------------------------------------------------------"
         contractUUID = SecureRandom.uuid
         membershipAgreementUUID = SecureRandom.uuid
         companyUUID = SecureRandom.uuid
         @mapOpportunityId = Hash.new
         puts "Created Opportunity"
         @opportunity = @contractEvent.createOpportunity(1, "selling", 0, nil, nil)
-        puts @opportunity
+       passedLogs = @objRollbar.addLog("[Step    ] Opportunity Should be Created With Id:#{@opportunity}, Name:#{@testData['ContractEvent']['Account'][1]['name']}, Stage:'Closing', Building:#{@testData['ContractEvent']['Building__c'][0]['Name']}, Contract UUID:#{contractUUID}", caseInfo['id'])
+        expect(@opportunity).not_to eq nil
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity is successfully created")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
         @mapOpportunityId["opportunity"] = @opportunity
-
+        passedLogs = @objRollbar.addLog("[Step    ] Payload Should be Created with EventName:'Contract Sent', Search Criteria:'Based on Membership Agreement UUID'")
         @getResponse = SfRESTService.postData('' + @contractEvent.setUpPayload("Contract Sent", @opportunity[0].fetch("Id"), companyUUID, membershipAgreementUUID, nil, 1, 0, "Downgrade").to_json, "#{@testData['ContractEvent']['ServiceUrls'][0]['contractEvent']}", false)
-        puts "Response-->"
-        puts @getResponse
-
-        puts "Checking Responce after hitting payload..."
         expect(@getResponse['success']).to be true
-
-
         expect(@getResponse['result']).to_not eql nil
+        passedLogs = @objRollbar.addLog("[Expected] Payload is successfully created and hitted")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
         id = @getResponse['result'].split(':')[1].chomp('"').delete(' ')
         updatedOpp = @contractEvent.getOpportunityDetails(id)
@@ -1455,27 +1547,35 @@ end
     it 'C:907 In Downgrade event, To check if company_uuid in the payload matched with the existing account in the system, there are having open opportunities after hitting payload if building matched with the existing open opportunity then existing opportunity should be updated.', :'907' => true do
       begin
         puts 'C:907 In Downgrade event, To check if company_uuid in the payload matched with the existing account in the system, there are having open opportunities after hitting payload if building matched with the existing open opportunity then existing opportunity should be updated.'
+        puts "\n"
+        puts "------------------------------------------------------------------------------------------------------------------"
         contractUUID = SecureRandom.uuid
         membershipAgreementUUID = SecureRandom.uuid
         companyUUID = SecureRandom.uuid
         @mapOpportunityId = Hash.new
         puts "Created Opportunity"
         @opportunity1 = @contractEvent.createOpportunity(1, "selling", 0, nil)
+        passedLogs = @objRollbar.addLog("[Step    ] Opportunity Should be Created With Id:#{@opportunity}, Name:#{@testData['ContractEvent']['Account'][1]['name']}, Stage:'Closing', Building:#{@testData['ContractEvent']['Building__c'][0]['Name']}, Contract UUID:#{contractUUID}", caseInfo['id'])
+        expect(@opportunity).not_to eq nil
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity is successfully created")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
         @opportunity2 = @contractEvent.createOpportunity(1, "selling", 1, nil)
-        puts @opportunity1
-        puts @opportunity2
-
+        passedLogs = @objRollbar.addLog("[Step    ] Opportunity Should be Created With Id:#{@opportunity}, Name:#{@testData['ContractEvent']['Account'][1]['name']}, Stage:'Closing', Building:#{@testData['ContractEvent']['Building__c'][0]['Name']}, Contract UUID:#{contractUUID}", caseInfo['id'])
+        expect(@opportunity).not_to eq nil
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity is successfully created")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
+       
         @mapOpportunityId["opportunity"] = @opportunity1
         @mapOpportunityId["opportunity"] << @opportunity2[0]
-
+        passedLogs = @objRollbar.addLog("[Step    ] Payload Should be Created with EventName:'Contract Sent', Search Criteria:'Based on Membership Agreement UUID'")
         @getResponse = SfRESTService.postData('' + @contractEvent.setUpPayload("Contract Sent", nil, "#{@testData['ContractEvent']['Account'][1]['UUID__c']}", membershipAgreementUUID, nil, 1, 0, "Downgrade").to_json, "#{@testData['ContractEvent']['ServiceUrls'][0]['contractEvent']}", false)
-        puts "Response-->"
-        puts @getResponse
-
-        puts "Checking Responce after hitting payload..."
         expect(@getResponse['success']).to be true
-
         expect(@getResponse['result']).to_not eql nil
+        passedLogs = @objRollbar.addLog("[Expected] Payload is successfully created and hitted")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
         id = @getResponse['result'].split(':')[1].chomp('"').delete(' ')
         updatedOpp = @contractEvent.getOpportunityDetails(id)
@@ -1578,6 +1678,8 @@ end
     it 'C:908 In Downgrade event, To check if company_uuid in the payload matched with the existing account in the system, there are having open opportunities after hitting payload if building does not matched with the existing open opportunity then latest opportunity will be updated.', :'908' => true do
       begin
         puts 'C:908 In Downgrade event, To check if company_uuid in the payload matched with the existing account in the system, there are having open opportunities after hitting payload if building does not matched with the existing open opportunity then latest opportunity will be updated.'
+        puts "\n"
+        puts "------------------------------------------------------------------------------------------------------------------"
         contractUUID = SecureRandom.uuid
         membershipAgreementUUID = SecureRandom.uuid
         companyUUID = SecureRandom.uuid
@@ -1585,21 +1687,28 @@ end
         puts "Created Opportunity"
         #@contractEvent.createOpportunity(stageName = nil, buildingNumber = nil ,contractUUID = nil)
         @opportunity1 = @contractEvent.createOpportunity(1, "selling", 1, nil)
+        passedLogs = @objRollbar.addLog("[Step    ] Opportunity Should be Created With Id:#{@opportunity}, Name:#{@testData['ContractEvent']['Account'][1]['name']}, Stage:'Closing', Building:#{@testData['ContractEvent']['Building__c'][0]['Name']}, Contract UUID:#{contractUUID}", caseInfo['id'])
+        expect(@opportunity).not_to eq nil
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity is successfully created")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
         @opportunity2 = @contractEvent.createOpportunity(1, "selling", 2, nil)
-        puts @opportunity1
-        puts @opportunity2
+        passedLogs = @objRollbar.addLog("[Step    ] Opportunity Should be Created With Id:#{@opportunity}, Name:#{@testData['ContractEvent']['Account'][1]['name']}, Stage:'Closing', Building:#{@testData['ContractEvent']['Building__c'][0]['Name']}, Contract UUID:#{contractUUID}", caseInfo['id'])
+        expect(@opportunity).not_to eq nil
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity is successfully created")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
+        
 
         @mapOpportunityId["opportunity"] = @opportunity1
         @mapOpportunityId["opportunity"] << @opportunity2[0]
-
+        passedLogs = @objRollbar.addLog("[Step    ] Payload Should be Created with EventName:'Contract Sent', Search Criteria:'Based on Membership Agreement UUID'")
         @getResponse = SfRESTService.postData('' + @contractEvent.setUpPayload("Contract Sent", nil, "#{@testData['ContractEvent']['Account'][1]['UUID__c']}", membershipAgreementUUID, nil, 1, 0, "Downgrade").to_json, "#{@testData['ContractEvent']['ServiceUrls'][0]['contractEvent']}", false)
-        puts "Response-->"
-        puts @getResponse
-
-        puts "Checking Responce after hitting payload..."
         expect(@getResponse['success']).to be true
-
         expect(@getResponse['result']).to_not eql nil
+        passedLogs = @objRollbar.addLog("[Expected] Payload is successfully created and hitted")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
         id = @getResponse['result'].split(':')[1].chomp('"').delete(' ')
         updatedOpp = @contractEvent.getOpportunityDetails(id)
@@ -1700,6 +1809,8 @@ end
     it 'C:909 In Downgrade event, To check if company_uuid matched with the existing opportunity and for that account there is having opportunity with the stages closed won or closed lost, while hitting payload for a particular building then new opportunity should be created.', :'909' => true do
       begin
         puts 'C:909 In Downgrade event, To check if company_uuid matched with the existing opportunity and for that account there is having opportunity with the stages closed won or closed lost, while hitting payload for a particular building then new opportunity should be created.'
+        puts "\n"
+        puts "------------------------------------------------------------------------------------------------------------------"
         contractUUID = SecureRandom.uuid
         membershipAgreementUUID = SecureRandom.uuid
         companyUUID = SecureRandom.uuid
@@ -1707,21 +1818,27 @@ end
         puts "Created Opportunity"
         #@contractEvent.createOpportunity(stageName = nil, buildingNumber = nil ,contractUUID = nil)
         @opportunity1 = @contractEvent.createOpportunity(1, "Closed Won", 1, contractUUID)
+        passedLogs = @objRollbar.addLog("[Step    ] Opportunity Should be Created With Id:#{@opportunity}, Name:#{@testData['ContractEvent']['Account'][1]['name']}, Stage:'Closing', Building:#{@testData['ContractEvent']['Building__c'][0]['Name']}, Contract UUID:#{contractUUID}", caseInfo['id'])
+        expect(@opportunity).not_to eq nil
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity is successfully created")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
         @opportunity2 = @contractEvent.createOpportunity(1, "Closed Lost", 2, nil)
-        puts @opportunity1
-        puts @opportunity2
-
+        passedLogs = @objRollbar.addLog("[Step    ] Opportunity Should be Created With Id:#{@opportunity}, Name:#{@testData['ContractEvent']['Account'][1]['name']}, Stage:'Closing', Building:#{@testData['ContractEvent']['Building__c'][0]['Name']}, Contract UUID:#{contractUUID}", caseInfo['id'])
+        expect(@opportunity).not_to eq nil
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity is successfully created")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
+        
         @mapOpportunityId["opportunity"] = @opportunity1
         @mapOpportunityId["opportunity"] << @opportunity2[0]
-
+        passedLogs = @objRollbar.addLog("[Step    ] Payload Should be Created with EventName:'Contract Sent', Search Criteria:'Based on Membership Agreement UUID'")
         @getResponse = SfRESTService.postData('' + @contractEvent.setUpPayload("Contract Sent", nil, "#{@testData['ContractEvent']['Account'][1]['UUID__c']}", membershipAgreementUUID, nil, 1, 0, "Downgrade").to_json, "#{@testData['ContractEvent']['ServiceUrls'][0]['contractEvent']}", false)
-        puts "Response-->"
-        puts @getResponse
-
-        puts "Checking Responce after hitting payload..."
         expect(@getResponse['success']).to be true
-
         expect(@getResponse['result']).to_not eql nil
+        passedLogs = @objRollbar.addLog("[Expected] Payload is successfully created and hitted")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
         id = @getResponse['result'].split(':')[1].chomp('"').delete(' ')
 
@@ -1833,6 +1950,8 @@ end
     it 'C:911 In Downgrade event, To check if the company_uuid matched with the existing opportunity and for that account there is having opportunity with stages closing and contract stage as sent then new opportunity should be created.', :'911' => true do
       begin
         puts 'C:911 In Downgrade event, To check if the company_uuid matched with the existing opportunity and for that account there is having opportunity with stages closing and contract stage as sent then new opportunity should be created.'
+        puts "\n"
+        puts "------------------------------------------------------------------------------------------------------------------"
         contractUUID = SecureRandom.uuid
         membershipAgreementUUID = SecureRandom.uuid
         companyUUID = SecureRandom.uuid
@@ -1840,18 +1959,21 @@ end
         puts "Created Opportunity"
 
         @opportunity = @contractEvent.createOpportunity(1, "Closing", 1, contractUUID, "Contract Sent")
-        puts @opportunity1
+        passedLogs = @objRollbar.addLog("[Step    ] Opportunity Should be Created With Id:#{@opportunity}, Name:#{@testData['ContractEvent']['Account'][1]['name']}, Stage:'Closing', Building:#{@testData['ContractEvent']['Building__c'][0]['Name']}, Contract UUID:#{contractUUID}", caseInfo['id'])
+        expect(@opportunity).not_to eq nil
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity is successfully created")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
+        
 
         @mapOpportunityId["opportunity"] = @opportunity
-
+        passedLogs = @objRollbar.addLog("[Step    ] Payload Should be Created with EventName:'Contract Sent', Search Criteria:'Based on Membership Agreement UUID'")
         @getResponse = SfRESTService.postData('' + @contractEvent.setUpPayload("Contract Sent", nil, "#{@testData['ContractEvent']['Account'][1]['UUID__c']}", membershipAgreementUUID, nil, 1, 0, "Downgrade").to_json, "#{@testData['ContractEvent']['ServiceUrls'][0]['contractEvent']}", false)
-        puts "Response-->"
-        puts @getResponse
-
-        puts "Checking Responce after hitting payload..."
         expect(@getResponse['success']).to be true
-
         expect(@getResponse['result']).to_not eql nil
+        passedLogs = @objRollbar.addLog("[Expected] Payload is successfully created and hitted")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
         id = @getResponse['result'].split(':')[1].chomp('"').delete(' ')
 
@@ -1963,6 +2085,8 @@ end
     it 'C:912 In Downgrade event, To check if the opportunity stage is closing but the contract stage is blank or other than contract sent or signed then new opportunity Should not be created.', :'912' => true do
       begin
         puts 'C:912 In Downgrade event, To check if the opportunity stage is closing but the contract stage is blank or other than contract sent or signed then new opportunity Should not be created.'
+        puts "\n"
+        puts "------------------------------------------------------------------------------------------------------------------"
         contractUUID = SecureRandom.uuid
         membershipAgreementUUID = SecureRandom.uuid
         companyUUID = SecureRandom.uuid
@@ -1970,18 +2094,20 @@ end
         puts "Created Opportunity"
 
         @opportunity = @contractEvent.createOpportunity(1, "Closing", 1, contractUUID, "Contract Discarded")
-        puts @opportunity
-
+        passedLogs = @objRollbar.addLog("[Step    ] Opportunity Should be Created With Id:#{@opportunity}, Name:#{@testData['ContractEvent']['Account'][1]['name']}, Stage:'Closing', Building:#{@testData['ContractEvent']['Building__c'][0]['Name']}, Contract UUID:#{contractUUID}", caseInfo['id'])
+        expect(@opportunity).not_to eq nil
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity is successfully created")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
+        
         @mapOpportunityId["opportunity"] = @opportunity
-
+        passedLogs = @objRollbar.addLog("[Step    ] Payload Should be Created with EventName:'Contract Sent', Search Criteria:'Based on Membership Agreement UUID'")
         @getResponse = SfRESTService.postData('' + @contractEvent.setUpPayload("Contract Sent", nil, "#{@testData['ContractEvent']['Account'][1]['UUID__c']}", membershipAgreementUUID, nil, 1, 0, "Downgrade").to_json, "#{@testData['ContractEvent']['ServiceUrls'][0]['contractEvent']}", false)
-        puts "Response-->"
-        puts @getResponse
-
-        puts "Checking Responce after hitting payload..."
         expect(@getResponse['success']).to be true
-
         expect(@getResponse['result']).to_not eql nil
+        passedLogs = @objRollbar.addLog("[Expected] Payload is successfully created and hitted")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
         id = @getResponse['result'].split(':')[1].chomp('"').delete(' ')
 
@@ -2088,6 +2214,8 @@ end
     it 'C:914 In Transfer event, To check if the membership_agreement_uuid matched with the existing membership_agreement_uuid while hitting payload then existing opportunity should be updated.', :'914' => true do
       begin
         puts 'C:914 In Transfer event, To check if the membership_agreement_uuid matched with the existing membership_agreement_uuid while hitting payload then existing opportunity should be updated.'
+        puts "\n"
+        puts "------------------------------------------------------------------------------------------------------------------"
         contractUUID = SecureRandom.uuid
         membershipAgreementUUID = contractUUID
         companyUUID = SecureRandom.uuid
@@ -2095,18 +2223,21 @@ end
         puts 'Created Opportunity'
 
         @opportunity = @contractEvent.createOpportunity(1, 'Closing', 0, contractUUID, nil)
-        puts @opportunity
-        #puts (@opportunity == nil)
+       passedLogs = @objRollbar.addLog("[Step    ] Opportunity Should be Created With Id:#{@opportunity}, Name:#{@testData['ContractEvent']['Account'][1]['name']}, Stage:'Closing', Building:#{@testData['ContractEvent']['Building__c'][0]['Name']}, Contract UUID:#{contractUUID}", caseInfo['id'])
+        expect(@opportunity).not_to eq nil
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity is successfully created")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
         @mapOpportunityId["opportunity"] = @opportunity
         #puts "Opportunity in HashMap"
         #puts @mapOpportunityId
+        passedLogs = @objRollbar.addLog("[Step    ] Payload Should be Created with EventName:'Contract Sent', Search Criteria:'Based on Membership Agreement UUID'")
         @getResponse = SfRESTService.postData('' + @contractEvent.setUpPayload("Contract Sent", nil, companyUUID, membershipAgreementUUID, nil, 0, 2, "Transfer").to_json, "#{@testData['ContractEvent']['ServiceUrls'][0]['contractEvent']}", false)
-        puts "Response-->"
-        puts "#{@getResponse}"
-        puts "Checking Responce after hitting payload..."
         expect(@getResponse['success']).to be true
-
         expect(@getResponse['result']).to_not eql nil
+        passedLogs = @objRollbar.addLog("[Expected] Payload is successfully created and hitted")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
         #puts "get only id from responce"
         id = @getResponse['result'].split(':')[1].chomp('"').delete(' ')
@@ -2209,24 +2340,28 @@ end
     it 'C:913 In Transfer event, To check if opportunity id in the payload is matched with the opportunity_id in the system after hitting payload then existing opportunity in the system will be updated.', :'913' => true do
       begin
         puts 'C:913 In Transfer event, To check if opportunity id in the payload is matched with the opportunity_id in the system after hitting payload then existing opportunity in the system will be updated.'
+        puts "\n"
+        puts "------------------------------------------------------------------------------------------------------------------"
         contractUUID = SecureRandom.uuid
         membershipAgreementUUID = SecureRandom.uuid
         companyUUID = SecureRandom.uuid
         @mapOpportunityId = Hash.new
         puts "Created Opportunity"
         @opportunity = @contractEvent.createOpportunity(1, "selling", 0, nil, nil)
-        puts @opportunity
+        passedLogs = @objRollbar.addLog("[Step    ] Opportunity Should be Created With Id:#{@opportunity}, Name:#{@testData['ContractEvent']['Account'][1]['name']}, Stage:'Closing', Building:#{@testData['ContractEvent']['Building__c'][0]['Name']}, Contract UUID:#{contractUUID}", caseInfo['id'])
+        expect(@opportunity).not_to eq nil
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity is successfully created")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
         @mapOpportunityId["opportunity"] = @opportunity
-
+        passedLogs = @objRollbar.addLog("[Step    ] Payload Should be Created with EventName:'Contract Sent', Search Criteria:'Based on Membership Agreement UUID'")
         @getResponse = SfRESTService.postData('' + @contractEvent.setUpPayload("Contract Sent", @opportunity[0].fetch("Id"), companyUUID, membershipAgreementUUID, nil, 0, 2, "Transfer").to_json, "#{@testData['ContractEvent']['ServiceUrls'][0]['contractEvent']}", false)
-        puts "Response-->"
-        puts @getResponse
-
-        puts "Checking Responce after hitting payload..."
         expect(@getResponse['success']).to be true
-
         expect(@getResponse['result']).to_not eql nil
+        passedLogs = @objRollbar.addLog("[Expected] Payload is successfully created and hitted")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
         id = @getResponse['result'].split(':')[1].chomp('"').delete(' ')
         updatedOpp = @contractEvent.getOpportunityDetails(id)
@@ -2331,26 +2466,35 @@ end
     it 'C:915 In Transfer event, To check if company_uuid in the payload matched with the existing account in the system, there are having open opportunities after hitting payload if building matched with the existing open opportunity then existing opportunity should be updated.', :'915' => true do
       begin
         puts 'C:915 In Transfer event, To check if company_uuid in the payload matched with the existing account in the system, there are having open opportunities after hitting payload if building matched with the existing open opportunity then existing opportunity should be updated.'
+        puts "\n"
+        puts "------------------------------------------------------------------------------------------------------------------"
         contractUUID = SecureRandom.uuid
         membershipAgreementUUID = SecureRandom.uuid
         companyUUID = SecureRandom.uuid
         @mapOpportunityId = Hash.new
         puts "Created Opportunity"
         @opportunity1 = @contractEvent.createOpportunity(1, "selling", 0, nil)
+        passedLogs = @objRollbar.addLog("[Step    ] Opportunity Should be Created With Id:#{@opportunity}, Name:#{@testData['ContractEvent']['Account'][1]['name']}, Stage:'Closing', Building:#{@testData['ContractEvent']['Building__c'][0]['Name']}, Contract UUID:#{contractUUID}", caseInfo['id'])
+        expect(@opportunity).not_to eq nil
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity is successfully created")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
         @opportunity2 = @contractEvent.createOpportunity(1, "selling", 1, nil)
-        puts @opportunity1
-        puts @opportunity2
-
+        passedLogs = @objRollbar.addLog("[Step    ] Opportunity Should be Created With Id:#{@opportunity}, Name:#{@testData['ContractEvent']['Account'][1]['name']}, Stage:'Closing', Building:#{@testData['ContractEvent']['Building__c'][0]['Name']}, Contract UUID:#{contractUUID}", caseInfo['id'])
+        expect(@opportunity).not_to eq nil
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity is successfully created")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
+    
         @mapOpportunityId["opportunity"] = @opportunity1
         @mapOpportunityId["opportunity"] << @opportunity2[0]
-
+        passedLogs = @objRollbar.addLog("[Step    ] Payload Should be Created with EventName:'Contract Sent', Search Criteria:'Based on Membership Agreement UUID'")
         @getResponse = SfRESTService.postData('' + @contractEvent.setUpPayload("Contract Sent", nil, "#{@testData['ContractEvent']['Account'][1]['UUID__c']}", membershipAgreementUUID, nil, 0, 2, "Transfer").to_json, "#{@testData['ContractEvent']['ServiceUrls'][0]['contractEvent']}", false)
-        puts "Response-->"
-        puts @getResponse
-        puts "Checking Responce after hitting payload..."
         expect(@getResponse['success']).to be true
-
         expect(@getResponse['result']).to_not eql nil
+        passedLogs = @objRollbar.addLog("[Expected] Payload is successfully created and hitted")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
         id = @getResponse['result'].split(':')[1].chomp('"').delete(' ')
         updatedOpp = @contractEvent.getOpportunityDetails(id)
@@ -2453,6 +2597,8 @@ end
     it 'C:916 In Transfer event, To check if company_uuid in the payload matched with the existing account in the system, there are having open opportunities after hitting payload if building does not matched with the existing open opportunity then latest opportunity will be updated.', :'916' => true do
       begin
         puts 'C:916 In Transfer event, To check if company_uuid in the payload matched with the existing account in the system, there are having open opportunities after hitting payload if building does not matched with the existing open opportunity then latest opportunity will be updated.'
+        puts "\n"
+        puts "------------------------------------------------------------------------------------------------------------------"
         contractUUID = SecureRandom.uuid
         membershipAgreementUUID = SecureRandom.uuid
         companyUUID = SecureRandom.uuid
@@ -2460,21 +2606,27 @@ end
         puts "Created Opportunity"
         #@contractEvent.createOpportunity(stageName = nil, buildingNumber = nil ,contractUUID = nil)
         @opportunity1 = @contractEvent.createOpportunity(1, "selling", 1, nil)
+        passedLogs = @objRollbar.addLog("[Step    ] Opportunity Should be Created With Id:#{@opportunity}, Name:#{@testData['ContractEvent']['Account'][1]['name']}, Stage:'Closing', Building:#{@testData['ContractEvent']['Building__c'][0]['Name']}, Contract UUID:#{contractUUID}", caseInfo['id'])
+        expect(@opportunity).not_to eq nil
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity is successfully created")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
         @opportunity2 = @contractEvent.createOpportunity(1, "selling", 2, nil)
-        puts @opportunity1
-        puts @opportunity2
-
+        passedLogs = @objRollbar.addLog("[Step    ] Opportunity Should be Created With Id:#{@opportunity}, Name:#{@testData['ContractEvent']['Account'][1]['name']}, Stage:'Closing', Building:#{@testData['ContractEvent']['Building__c'][0]['Name']}, Contract UUID:#{contractUUID}", caseInfo['id'])
+        expect(@opportunity).not_to eq nil
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity is successfully created")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
+        
         @mapOpportunityId["opportunity"] = @opportunity1
         @mapOpportunityId["opportunity"] << @opportunity2[0]
-
+        passedLogs = @objRollbar.addLog("[Step    ] Payload Should be Created with EventName:'Contract Sent', Search Criteria:'Based on Membership Agreement UUID'")
         @getResponse = SfRESTService.postData('' + @contractEvent.setUpPayload("Contract Sent", nil, "#{@testData['ContractEvent']['Account'][1]['UUID__c']}", membershipAgreementUUID, nil, 0, 2, "Transfer").to_json, "#{@testData['ContractEvent']['ServiceUrls'][0]['contractEvent']}", false)
-        puts "Response-->"
-        puts @getResponse
-
-        puts "Checking Responce after hitting payload..."
         expect(@getResponse['success']).to be true
-
         expect(@getResponse['result']).to_not eql nil
+        passedLogs = @objRollbar.addLog("[Expected] Payload is successfully created and hitted")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
         id = @getResponse['result'].split(':')[1].chomp('"').delete(' ')
         updatedOpp = @contractEvent.getOpportunityDetails(id)
@@ -2575,6 +2727,8 @@ end
     it 'C:917 In Transfer event, To check if company_uuid matched with the existing opportunity and for that account there is having opportunity with the stages closed won or closed lost, while hitting payload for a particular building then new opportunity should be created.', :'917' => true do
       begin
         puts 'C:917 In Transfer event, To check if company_uuid matched with the existing opportunity and for that account there is having opportunity with the stages closed won or closed lost, while hitting payload for a particular building then new opportunity should be created.'
+        puts "\n"
+        puts "------------------------------------------------------------------------------------------------------------------"
         contractUUID = SecureRandom.uuid
         membershipAgreementUUID = SecureRandom.uuid
         companyUUID = SecureRandom.uuid
@@ -2582,21 +2736,27 @@ end
         puts "Created Opportunity"
         #@contractEvent.createOpportunity(stageName = nil, buildingNumber = nil ,contractUUID = nil)
         @opportunity1 = @contractEvent.createOpportunity(1, "Closed Won", 1, contractUUID)
+        passedLogs = @objRollbar.addLog("[Step    ] Opportunity Should be Created With Id:#{@opportunity}, Name:#{@testData['ContractEvent']['Account'][1]['name']}, Stage:'Closing', Building:#{@testData['ContractEvent']['Building__c'][0]['Name']}, Contract UUID:#{contractUUID}", caseInfo['id'])
+        expect(@opportunity).not_to eq nil
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity is successfully created")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
         @opportunity2 = @contractEvent.createOpportunity(1, "Closed Lost", 2, nil)
-        puts @opportunity1
-        puts @opportunity2
-
+        passedLogs = @objRollbar.addLog("[Step    ] Opportunity Should be Created With Id:#{@opportunity}, Name:#{@testData['ContractEvent']['Account'][1]['name']}, Stage:'Closing', Building:#{@testData['ContractEvent']['Building__c'][0]['Name']}, Contract UUID:#{contractUUID}", caseInfo['id'])
+        expect(@opportunity).not_to eq nil
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity is successfully created")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
+        
         @mapOpportunityId["opportunity"] = @opportunity1
         @mapOpportunityId["opportunity"] << @opportunity2[0]
-
+        passedLogs = @objRollbar.addLog("[Step    ] Payload Should be Created with EventName:'Contract Sent', Search Criteria:'Based on Membership Agreement UUID'")
         @getResponse = SfRESTService.postData('' + @contractEvent.setUpPayload("Contract Sent", nil, "#{@testData['ContractEvent']['Account'][1]['UUID__c']}", membershipAgreementUUID, nil, 0, 2, "Transfer").to_json, "#{@testData['ContractEvent']['ServiceUrls'][0]['contractEvent']}", false)
-        puts "Response-->"
-        puts @getResponse
-
-        puts "Checking Responce after hitting payload..."
         expect(@getResponse['success']).to be true
-
         expect(@getResponse['result']).to_not eql nil
+        passedLogs = @objRollbar.addLog("[Expected] Payload is successfully created and hitted")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
         id = @getResponse['result'].split(':')[1].chomp('"').delete(' ')
 
@@ -2708,6 +2868,8 @@ end
     it 'C:918 In Transfer event, To check if the company_uuid matched with the existing opportunity and for that account there is having opportunity with stages closing and contract stage as sent then new opportunity should be created.', :'918' => true do
       begin
         puts 'C:918 In Transfer event, To check if the company_uuid matched with the existing opportunity and for that account there is having opportunity with stages closing and contract stage as sent then new opportunity should be created.'
+        puts "\n"
+        puts "------------------------------------------------------------------------------------------------------------------"
         contractUUID = SecureRandom.uuid
         membershipAgreementUUID = SecureRandom.uuid
         companyUUID = SecureRandom.uuid
@@ -2715,18 +2877,20 @@ end
         puts "Created Opportunity"
 
         @opportunity = @contractEvent.createOpportunity(1, "Closing", 1, contractUUID, "Contract Sent")
-        puts @opportunity1
-
+        passedLogs = @objRollbar.addLog("[Step    ] Opportunity Should be Created With Id:#{@opportunity}, Name:#{@testData['ContractEvent']['Account'][1]['name']}, Stage:'Closing', Building:#{@testData['ContractEvent']['Building__c'][0]['Name']}, Contract UUID:#{contractUUID}", caseInfo['id'])
+        expect(@opportunity).not_to eq nil
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity is successfully created")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
+        
         @mapOpportunityId["opportunity"] = @opportunity
-
+        passedLogs = @objRollbar.addLog("[Step    ] Payload Should be Created with EventName:'Contract Sent', Search Criteria:'Based on Membership Agreement UUID'")
         @getResponse = SfRESTService.postData('' + @contractEvent.setUpPayload("Contract Sent", nil, "#{@testData['ContractEvent']['Account'][1]['UUID__c']}", membershipAgreementUUID, nil, 0, 2, "Transfer").to_json, "#{@testData['ContractEvent']['ServiceUrls'][0]['contractEvent']}", false)
-        puts "Response-->"
-        puts @getResponse
-
-        puts "Checking Responce after hitting payload..."
         expect(@getResponse['success']).to be true
-
         expect(@getResponse['result']).to_not eql nil
+        passedLogs = @objRollbar.addLog("[Expected] Payload is successfully created and hitted")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
         id = @getResponse['result'].split(':')[1].chomp('"').delete(' ')
 
@@ -2838,6 +3002,8 @@ end
     it 'C:919 In Transfer event, To check if the opportunity stage is closing but the contract stage is blank or other than contract sent or signed then new opportunity Should not be created.', :'919' => true do
       begin
         puts 'C:919 In Transfer event, To check if the opportunity stage is closing but the contract stage is blank or other than contract sent or signed then new opportunity Should not be created.'
+        puts "\n"
+        puts "------------------------------------------------------------------------------------------------------------------"
         contractUUID = SecureRandom.uuid
         membershipAgreementUUID = SecureRandom.uuid
         companyUUID = SecureRandom.uuid
@@ -2845,18 +3011,20 @@ end
         puts "Created Opportunity"
 
         @opportunity = @contractEvent.createOpportunity(1, "Closing", 1, contractUUID, "Contract Discarded")
-        puts @opportunity
+        passedLogs = @objRollbar.addLog("[Step    ] Opportunity Should be Created With Id:#{@opportunity}, Name:#{@testData['ContractEvent']['Account'][1]['name']}, Stage:'Closing', Building:#{@testData['ContractEvent']['Building__c'][0]['Name']}, Contract UUID:#{contractUUID}", caseInfo['id'])
+        expect(@opportunity).not_to eq nil
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity is successfully created")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
         @mapOpportunityId["opportunity"] = @opportunity
-
+        passedLogs = @objRollbar.addLog("[Step    ] Payload Should be Created with EventName:'Contract Sent', Search Criteria:'Based on Membership Agreement UUID'")
         @getResponse = SfRESTService.postData('' + @contractEvent.setUpPayload("Contract Sent", nil, "#{@testData['ContractEvent']['Account'][1]['UUID__c']}", membershipAgreementUUID, nil, 0, 2, "Transfer").to_json, "#{@testData['ContractEvent']['ServiceUrls'][0]['contractEvent']}", false)
-        puts "Response-->"
-        puts @getResponse
-
-        puts "Checking Responce after hitting payload..."
         expect(@getResponse['success']).to be true
-
         expect(@getResponse['result']).to_not eql nil
+        passedLogs = @objRollbar.addLog("[Expected] Payload is successfully created and hitted")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
         id = @getResponse['result'].split(':')[1].chomp('"').delete(' ')
 
@@ -2962,6 +3130,8 @@ end
     it 'C:924 In Drop event, To check if the membership_agreement_uuid matched with the existing membership_agreement_uuid while hitting payload then existing opportunity should be updated.', :'924' => true do
       begin
         puts 'C:924 In Drop event, To check if the membership_agreement_uuid matched with the existing membership_agreement_uuid while hitting payload then existing opportunity should be updated.'
+        puts "\n"
+        puts "------------------------------------------------------------------------------------------------------------------"
         contractUUID = SecureRandom.uuid
         membershipAgreementUUID = contractUUID
         companyUUID = SecureRandom.uuid
@@ -2969,20 +3139,23 @@ end
         puts 'Created Opportunity'
 
         @opportunity = @contractEvent.createOpportunity(1, 'Closing', 0, contractUUID, nil)
-        puts @opportunity
+        passedLogs = @objRollbar.addLog("[Step    ] Opportunity Should be Created With Id:#{@opportunity}, Name:#{@testData['ContractEvent']['Account'][1]['name']}, Stage:'Closing', Building:#{@testData['ContractEvent']['Building__c'][0]['Name']}, Contract UUID:#{contractUUID}", caseInfo['id'])
+        expect(@opportunity).not_to eq nil
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity is successfully created")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
         #puts (@opportunity == nil)
         @mapOpportunityId["opportunity"] = @opportunity
         #puts "Opportunity in HashMap"
         #puts @mapOpportunityId
+        passedLogs = @objRollbar.addLog("[Step    ] Payload Should be Created with EventName:'Contract Sent', Search Criteria:'Based on Membership Agreement UUID'")
         @getResponse = SfRESTService.postData('' + @contractEvent.setUpPayload("Contract Sent", nil, companyUUID, membershipAgreementUUID, nil, 0, 2, "Drop").to_json, "#{@testData['ContractEvent']['ServiceUrls'][0]['contractEvent']}", false)
-        puts "Response-->"
-        puts "#{@getResponse}"
-        puts "Checking Responce after hitting payload..."
         expect(@getResponse['success']).to be true
-
         expect(@getResponse['result']).to_not eql nil
+        passedLogs = @objRollbar.addLog("[Expected] Payload is successfully created and hitted")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
-        #puts "get only id from responce"
         id = @getResponse['result'].split(':')[1].chomp('"').delete(' ')
 
         updatedOpp = @contractEvent.getOpportunityDetails(id)
@@ -3075,24 +3248,27 @@ end
     it 'C:921 In Drop event, To check if opportunity id in the payload is matched with the opportunity_id in the system after hitting payload then existing opportunity in the system will be updated.', :'921' => true do
       begin
         puts 'C:921 In Drop event, To check if opportunity id in the payload is matched with the opportunity_id in the system after hitting payload then existing opportunity in the system will be updated.'
+        puts "\n"
+        puts "------------------------------------------------------------------------------------------------------------------"
         contractUUID = SecureRandom.uuid
         membershipAgreementUUID = SecureRandom.uuid
         companyUUID = SecureRandom.uuid
         @mapOpportunityId = Hash.new
         puts "Created Opportunity"
         @opportunity = @contractEvent.createOpportunity(1, "selling", 0, nil, nil)
-        puts @opportunity
-
+        passedLogs = @objRollbar.addLog("[Step    ] Opportunity Should be Created With Id:#{@opportunity}, Name:#{@testData['ContractEvent']['Account'][1]['name']}, Stage:'Closing', Building:#{@testData['ContractEvent']['Building__c'][0]['Name']}, Contract UUID:#{contractUUID}", caseInfo['id'])
+        expect(@opportunity).not_to eq nil
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity is successfully created")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
         @mapOpportunityId["opportunity"] = @opportunity
-
+        passedLogs = @objRollbar.addLog("[Step    ] Payload Should be Created with EventName:'Contract Sent', Search Criteria:'Based on Membership Agreement UUID'")
         @getResponse = SfRESTService.postData('' + @contractEvent.setUpPayload("Contract Sent", @opportunity[0].fetch("Id"), companyUUID, membershipAgreementUUID, nil, 0, 2, "Drop").to_json, "#{@testData['ContractEvent']['ServiceUrls'][0]['contractEvent']}", false)
-        puts "Response-->"
-        puts @getResponse
-
-        puts "Checking Responce after hitting payload..."
         expect(@getResponse['success']).to be true
-
         expect(@getResponse['result']).to_not eql nil
+        passedLogs = @objRollbar.addLog("[Expected] Payload is successfully created and hitted")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
         id = @getResponse['result'].split(':')[1].chomp('"').delete(' ')
         updatedOpp = @contractEvent.getOpportunityDetails(id)
@@ -3188,26 +3364,35 @@ end
     it 'C:927 In Drop event, To check if company_uuid in the payload matched with the existing account in the system, there are having open opportunities after hitting payload if building matched with the existing open opportunity then existing opportunity should be updated.', :'927' => true do
       begin
         puts 'C:927 In Drop event, To check if company_uuid in the payload matched with the existing account in the system, there are having open opportunities after hitting payload if building matched with the existing open opportunity then existing opportunity should be updated.'
+        puts "\n"
+        puts "------------------------------------------------------------------------------------------------------------------"
         contractUUID = SecureRandom.uuid
         membershipAgreementUUID = SecureRandom.uuid
         companyUUID = SecureRandom.uuid
         @mapOpportunityId = Hash.new
         puts "Created Opportunity"
         @opportunity1 = @contractEvent.createOpportunity(1, "selling", 0, nil)
+        passedLogs = @objRollbar.addLog("[Step    ] Opportunity Should be Created With Id:#{@opportunity}, Name:#{@testData['ContractEvent']['Account'][1]['name']}, Stage:'Closing', Building:#{@testData['ContractEvent']['Building__c'][0]['Name']}, Contract UUID:#{contractUUID}", caseInfo['id'])
+        expect(@opportunity).not_to eq nil
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity is successfully created")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
         @opportunity2 = @contractEvent.createOpportunity(1, "selling", 1, nil)
-        puts @opportunity1
-        puts @opportunity2
+        passedLogs = @objRollbar.addLog("[Step    ] Opportunity Should be Created With Id:#{@opportunity}, Name:#{@testData['ContractEvent']['Account'][1]['name']}, Stage:'Closing', Building:#{@testData['ContractEvent']['Building__c'][0]['Name']}, Contract UUID:#{contractUUID}", caseInfo['id'])
+        expect(@opportunity).not_to eq nil
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity is successfully created")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
         @mapOpportunityId["opportunity"] = @opportunity1
         @mapOpportunityId["opportunity"] << @opportunity2[0]
-
+        passedLogs = @objRollbar.addLog("[Step    ] Payload Should be Created with EventName:'Contract Sent', Search Criteria:'Based on Membership Agreement UUID'")
         @getResponse = SfRESTService.postData('' + @contractEvent.setUpPayload("Contract Sent", nil, "#{@testData['ContractEvent']['Account'][1]['UUID__c']}", membershipAgreementUUID, nil, 0, 2, "Drop").to_json, "#{@testData['ContractEvent']['ServiceUrls'][0]['contractEvent']}", false)
-        puts "Response-->"
-        puts @getResponse
-
-        puts "Checking Responce after hitting payload..."
         expect(@getResponse['success']).to be true
         expect(@getResponse['result']).to_not eql nil
+        passedLogs = @objRollbar.addLog("[Expected] Payload is successfully created and hitted")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
         id = @getResponse['result'].split(':')[1].chomp('"').delete(' ')
         updatedOpp = @contractEvent.getOpportunityDetails(id)
@@ -3301,6 +3486,8 @@ end
     it 'C:930 In Drop event, To check if company_uuid in the payload matched with the existing account in the system, there are having open opportunities after hitting payload if building does not matched with the existing open opportunity then latest opportunity will be updated.', :'930' => true do
       begin
         puts 'C:930 In Drop event, To check if company_uuid in the payload matched with the existing account in the system, there are having open opportunities after hitting payload if building does not matched with the existing open opportunity then latest opportunity will be updated.'
+        puts "\n"
+        puts "------------------------------------------------------------------------------------------------------------------"
         contractUUID = SecureRandom.uuid
         membershipAgreementUUID = SecureRandom.uuid
         companyUUID = SecureRandom.uuid
@@ -3308,21 +3495,26 @@ end
         puts "Created Opportunity"
         #@contractEvent.createOpportunity(stageName = nil, buildingNumber = nil ,contractUUID = nil)
         @opportunity1 = @contractEvent.createOpportunity(1, "selling", 1, nil)
+        passedLogs = @objRollbar.addLog("[Step    ] Opportunity Should be Created With Id:#{@opportunity}, Name:#{@testData['ContractEvent']['Account'][1]['name']}, Stage:'Closing', Building:#{@testData['ContractEvent']['Building__c'][0]['Name']}, Contract UUID:#{contractUUID}", caseInfo['id'])
+        expect(@opportunity).not_to eq nil
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity is successfully created")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
         @opportunity2 = @contractEvent.createOpportunity(1, "selling", 2, nil)
-        puts @opportunity1
-        puts @opportunity2
-
+        passedLogs = @objRollbar.addLog("[Step    ] Opportunity Should be Created With Id:#{@opportunity}, Name:#{@testData['ContractEvent']['Account'][1]['name']}, Stage:'Closing', Building:#{@testData['ContractEvent']['Building__c'][0]['Name']}, Contract UUID:#{contractUUID}", caseInfo['id'])
+        expect(@opportunity).not_to eq nil
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity is successfully created")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
         @mapOpportunityId["opportunity"] = @opportunity1
         @mapOpportunityId["opportunity"] << @opportunity2[0]
-
+        passedLogs = @objRollbar.addLog("[Step    ] Payload Should be Created with EventName:'Contract Sent', Search Criteria:'Based on Membership Agreement UUID'")
         @getResponse = SfRESTService.postData('' + @contractEvent.setUpPayload("Contract Sent", nil, "#{@testData['ContractEvent']['Account'][1]['UUID__c']}", membershipAgreementUUID, nil, 0, 2, "Drop").to_json, "#{@testData['ContractEvent']['ServiceUrls'][0]['contractEvent']}", false)
-        puts "Response-->"
-        puts @getResponse
-
-        puts "Checking Responce after hitting payload..."
         expect(@getResponse['success']).to be true
-
         expect(@getResponse['result']).to_not eql nil
+        passedLogs = @objRollbar.addLog("[Expected] Payload is successfully created and hitted")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
         id = @getResponse['result'].split(':')[1].chomp('"').delete(' ')
         updatedOpp = @contractEvent.getOpportunityDetails(id)
@@ -3414,6 +3606,8 @@ end
     it 'C:932 In Drop event, To check if company_uuid matched with the existing opportunity and for that account there is having opportunity with the stages closed won or closed lost, while hitting payload for a particular building then new opportunity should be created.', :'932' => true do
       begin
         puts 'C:932 In Drop event, To check if company_uuid matched with the existing opportunity and for that account there is having opportunity with the stages closed won or closed lost, while hitting payload for a particular building then new opportunity should be created.'
+        puts "\n"
+        puts "------------------------------------------------------------------------------------------------------------------"
         contractUUID = SecureRandom.uuid
         membershipAgreementUUID = SecureRandom.uuid
         companyUUID = SecureRandom.uuid
@@ -3421,21 +3615,27 @@ end
         puts "Created Opportunity"
         #@contractEvent.createOpportunity(stageName = nil, buildingNumber = nil ,contractUUID = nil)
         @opportunity1 = @contractEvent.createOpportunity(1, "Closed Won", 1, contractUUID)
+        passedLogs = @objRollbar.addLog("[Step    ] Opportunity Should be Created With Id:#{@opportunity}, Name:#{@testData['ContractEvent']['Account'][1]['name']}, Stage:'Closing', Building:#{@testData['ContractEvent']['Building__c'][0]['Name']}, Contract UUID:#{contractUUID}", caseInfo['id'])
+        expect(@opportunity).not_to eq nil
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity is successfully created")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
         @opportunity2 = @contractEvent.createOpportunity(1, "Closed Lost", 2, nil)
-        puts @opportunity1
-        puts @opportunity2
+        passedLogs = @objRollbar.addLog("[Step    ] Opportunity Should be Created With Id:#{@opportunity}, Name:#{@testData['ContractEvent']['Account'][1]['name']}, Stage:'Closing', Building:#{@testData['ContractEvent']['Building__c'][0]['Name']}, Contract UUID:#{contractUUID}", caseInfo['id'])
+        expect(@opportunity).not_to eq nil
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity is successfully created")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
         @mapOpportunityId["opportunity"] = @opportunity1
         @mapOpportunityId["opportunity"] << @opportunity2[0]
-
+        passedLogs = @objRollbar.addLog("[Step    ] Payload Should be Created with EventName:'Contract Sent', Search Criteria:'Based on Membership Agreement UUID'")
         @getResponse = SfRESTService.postData('' + @contractEvent.setUpPayload("Contract Sent", nil, "#{@testData['ContractEvent']['Account'][1]['UUID__c']}", membershipAgreementUUID, nil, 0, 2, "Drop").to_json, "#{@testData['ContractEvent']['ServiceUrls'][0]['contractEvent']}", false)
-        puts "Response-->"
-        puts @getResponse
-
-        puts "Checking Responce after hitting payload..."
         expect(@getResponse['success']).to be true
-
         expect(@getResponse['result']).to_not eql nil
+        passedLogs = @objRollbar.addLog("[Expected] Payload is successfully created and hitted")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
         id = @getResponse['result'].split(':')[1].chomp('"').delete(' ')
 
@@ -3539,6 +3739,8 @@ end
     it 'C:935 In Drop event, To check if the company_uuid matched with the existing opportunity and for that account there is having opportunity with stages closing and contract stage as sent then new opportunity should be created.', :drop => true do
       begin
         puts 'C:935 In Drop event, To check if the company_uuid matched with the existing opportunity and for that account there is having opportunity with stages closing and contract stage as sent then new opportunity should be created.'
+        puts "\n"
+        puts "------------------------------------------------------------------------------------------------------------------"
         contractUUID = SecureRandom.uuid
         membershipAgreementUUID = SecureRandom.uuid
         companyUUID = SecureRandom.uuid
@@ -3546,19 +3748,19 @@ end
         puts "Created Opportunity"
 
         @opportunity = @contractEvent.createOpportunity(1, "Closing", 1, contractUUID, "Contract Sent")
-        puts @opportunity1
-
+        passedLogs = @objRollbar.addLog("[Step    ] Opportunity Should be Created With Id:#{@opportunity}, Name:#{@testData['ContractEvent']['Account'][1]['name']}, Stage:'Closing', Building:#{@testData['ContractEvent']['Building__c'][0]['Name']}, Contract UUID:#{contractUUID}", caseInfo['id'])
+        expect(@opportunity).not_to eq nil
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity is successfully created")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
         @mapOpportunityId["opportunity"] = @opportunity
-
+        passedLogs = @objRollbar.addLog("[Step    ] Payload Should be Created with EventName:'Contract Sent', Search Criteria:'Based on Membership Agreement UUID'")
         @getResponse = SfRESTService.postData('' + @contractEvent.setUpPayload("Contract Sent", nil, "#{@testData['ContractEvent']['Account'][1]['UUID__c']}", membershipAgreementUUID, nil, 0, 2, "Drop").to_json, "#{@testData['ContractEvent']['ServiceUrls'][0]['contractEvent']}", false)
-        puts "Response-->"
-        puts @getResponse
-
-        puts "Checking Responce after hitting payload..."
         expect(@getResponse['success']).to be true
-
-
         expect(@getResponse['result']).to_not eql nil
+        passedLogs = @objRollbar.addLog("[Expected] Payload is successfully created and hitted")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
         id = @getResponse['result'].split(':')[1].chomp('"').delete(' ')
 
@@ -3661,6 +3863,8 @@ end
     it 'C:938 In Drop event, To check if the opportunity stage is closing but the contract stage is blank or other than contract sent or signed then new opportunity Should not be created.', :'938' => true do
       begin
         puts 'C:938 In Drop event, To check if the opportunity stage is closing but the contract stage is blank or other than contract sent or signed then new opportunity Should not be created.'
+        puts "\n"
+        puts "------------------------------------------------------------------------------------------------------------------"
         contractUUID = SecureRandom.uuid
         membershipAgreementUUID = SecureRandom.uuid
         companyUUID = SecureRandom.uuid
@@ -3668,18 +3872,20 @@ end
         puts "Created Opportunity"
 
         @opportunity = @contractEvent.createOpportunity(1, "Closing", 1, contractUUID, "Contract Discarded")
-        puts @opportunity
+        passedLogs = @objRollbar.addLog("[Step    ] Opportunity Should be Created With Id:#{@opportunity}, Name:#{@testData['ContractEvent']['Account'][1]['name']}, Stage:'Closing', Building:#{@testData['ContractEvent']['Building__c'][0]['Name']}, Contract UUID:#{contractUUID}", caseInfo['id'])
+        expect(@opportunity).not_to eq nil
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity is successfully created")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
         @mapOpportunityId["opportunity"] = @opportunity
-
+        passedLogs = @objRollbar.addLog("[Step    ] Payload Should be Created with EventName:'Contract Sent', Search Criteria:'Based on Membership Agreement UUID'")
         @getResponse = SfRESTService.postData('' + @contractEvent.setUpPayload("Contract Sent", nil, "#{@testData['ContractEvent']['Account'][1]['UUID__c']}", membershipAgreementUUID, nil, 0, 2, "Drop").to_json, "#{@testData['ContractEvent']['ServiceUrls'][0]['contractEvent']}", false)
-        puts "Response-->"
-        puts @getResponse
-
-        puts "Checking Responce after hitting payload..."
         expect(@getResponse['success']).to be true
-
         expect(@getResponse['result']).to_not eql nil
+        passedLogs = @objRollbar.addLog("[Expected] Payload is successfully created and hitted")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
         id = @getResponse['result'].split(':')[1].chomp('"').delete(' ')
 
@@ -3777,6 +3983,8 @@ end
     it 'C:943 In New Business event, To check if the membership_agreement_uuid matched with the existing membership_agreement_uuid while hitting payload then existing opportunity should be updated.', :'943' => true do
       begin
         puts 'C:943 In New Business event, To check if the membership_agreement_uuid matched with the existing membership_agreement_uuid while hitting payload then existing opportunity should be updated.'
+        puts "\n"
+        puts "------------------------------------------------------------------------------------------------------------------"
         contractUUID = SecureRandom.uuid
         membershipAgreementUUID = contractUUID
         companyUUID = SecureRandom.uuid
@@ -3784,18 +3992,22 @@ end
         puts 'Created Opportunity'
 
         @opportunity = @contractEvent.createOpportunity(1, 'Closing', 0, contractUUID, nil)
-        puts @opportunity
+        passedLogs = @objRollbar.addLog("[Step    ] Opportunity Should be Created With Id:#{@opportunity}, Name:#{@testData['ContractEvent']['Account'][1]['name']}, Stage:'Closing', Building:#{@testData['ContractEvent']['Building__c'][0]['Name']}, Contract UUID:#{contractUUID}", caseInfo['id'])
+        expect(@opportunity).not_to eq nil
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity is successfully created")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
         #puts (@opportunity == nil)
         @mapOpportunityId["opportunity"] = @opportunity
         #puts "Opportunity in HashMap"
         #puts @mapOpportunityId
+        passedLogs = @objRollbar.addLog("[Step    ] Payload Should be Created with EventName:'Contract Sent', Search Criteria:'Based on Membership Agreement UUID'")
         @getResponse = SfRESTService.postData('' + @contractEvent.setUpPayload("Contract Sent", nil, companyUUID, membershipAgreementUUID, nil, 0, 1, "New Business").to_json, "#{@testData['ContractEvent']['ServiceUrls'][0]['contractEvent']}", false)
-        puts "Response-->"
-        puts "#{@getResponse}"
-        puts "Checking Responce after hitting payload..."
         expect(@getResponse['success']).to be true
-
         expect(@getResponse['result']).to_not eql nil
+        passedLogs = @objRollbar.addLog("[Expected] Payload is successfully created and hitted")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
         #puts "get only id from responce"
         id = @getResponse['result'].split(':')[1].chomp('"').delete(' ')
@@ -3892,24 +4104,28 @@ end
     it 'C:939 In New Business event, To check if opportunity id in the payload is matched with the opportunity_id in the system after hitting payload then existing opportunity in the system will be updated.', :'939' => true do
       begin
         puts 'C:939 In New Business event, To check if opportunity id in the payload is matched with the opportunity_id in the system after hitting payload then existing opportunity in the system will be updated.'
+        puts "\n"
+        puts "------------------------------------------------------------------------------------------------------------------"
         contractUUID = SecureRandom.uuid
         membershipAgreementUUID = SecureRandom.uuid
         companyUUID = SecureRandom.uuid
         @mapOpportunityId = Hash.new
         puts "Created Opportunity"
         @opportunity = @contractEvent.createOpportunity(1, "selling", 0, nil, nil)
-        puts @opportunity
+        passedLogs = @objRollbar.addLog("[Step    ] Opportunity Should be Created With Id:#{@opportunity}, Name:#{@testData['ContractEvent']['Account'][1]['name']}, Stage:'Closing', Building:#{@testData['ContractEvent']['Building__c'][0]['Name']}, Contract UUID:#{contractUUID}", caseInfo['id'])
+        expect(@opportunity).not_to eq nil
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity is successfully created")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
         @mapOpportunityId["opportunity"] = @opportunity
-
+        passedLogs = @objRollbar.addLog("[Step    ] Payload Should be Created with EventName:'Contract Sent', Search Criteria:'Based on Membership Agreement UUID'")
         @getResponse = SfRESTService.postData('' + @contractEvent.setUpPayload("Contract Sent", @opportunity[0].fetch("Id"), companyUUID, membershipAgreementUUID, nil, 0, 1, "New Business").to_json, "#{@testData['ContractEvent']['ServiceUrls'][0]['contractEvent']}", false)
-        puts "Response-->"
-        puts @getResponse
-
-        puts "Checking Responce after hitting payload..."
         expect(@getResponse['success']).to be true
-
         expect(@getResponse['result']).to_not eql nil
+        passedLogs = @objRollbar.addLog("[Expected] Payload is successfully created and hitted")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
         id = @getResponse['result'].split(':')[1].chomp('"').delete(' ')
         updatedOpp = @contractEvent.getOpportunityDetails(id)
@@ -4008,27 +4224,34 @@ end
     it 'C:945 In New Business event, To check if company_uuid in the payload matched with the existing account in the system, there are having open opportunities after hitting payload if building matched with the existing open opportunity then existing opportunity should be updated.', :'945' => true do
       begin
         puts 'C:945 In New Business event, To check if company_uuid in the payload matched with the existing account in the system, there are having open opportunities after hitting payload if building matched with the existing open opportunity then existing opportunity should be updated.'
+        puts "\n"
+        puts "------------------------------------------------------------------------------------------------------------------"
         contractUUID = SecureRandom.uuid
         membershipAgreementUUID = SecureRandom.uuid
         companyUUID = SecureRandom.uuid
         @mapOpportunityId = Hash.new
         puts "Created Opportunity"
         @opportunity1 = @contractEvent.createOpportunity(1, "selling", 0, nil)
+        passedLogs = @objRollbar.addLog("[Step    ] Opportunity Should be Created With Id:#{@opportunity}, Name:#{@testData['ContractEvent']['Account'][1]['name']}, Stage:'Closing', Building:#{@testData['ContractEvent']['Building__c'][0]['Name']}, Contract UUID:#{contractUUID}", caseInfo['id'])
+        expect(@opportunity).not_to eq nil
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity is successfully created")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
         @opportunity2 = @contractEvent.createOpportunity(1, "selling", 1, nil)
-        puts @opportunity1
-        puts @opportunity2
-
+        passedLogs = @objRollbar.addLog("[Step    ] Opportunity Should be Created With Id:#{@opportunity}, Name:#{@testData['ContractEvent']['Account'][1]['name']}, Stage:'Closing', Building:#{@testData['ContractEvent']['Building__c'][0]['Name']}, Contract UUID:#{contractUUID}", caseInfo['id'])
+        expect(@opportunity).not_to eq nil
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity is successfully created")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
         @mapOpportunityId["opportunity"] = @opportunity1
         @mapOpportunityId["opportunity"] << @opportunity2[0]
-
+        passedLogs = @objRollbar.addLog("[Step    ] Payload Should be Created with EventName:'Contract Sent', Search Criteria:'Based on Membership Agreement UUID'")
         @getResponse = SfRESTService.postData('' + @contractEvent.setUpPayload("Contract Sent", nil, "#{@testData['ContractEvent']['Account'][1]['UUID__c']}", membershipAgreementUUID, nil, 0, 1, "New Business").to_json, "#{@testData['ContractEvent']['ServiceUrls'][0]['contractEvent']}", false)
-        puts "Response-->"
-        puts @getResponse
-
-        puts "Checking Responce after hitting payload..."
-
         expect(@getResponse['success']).to be true
         expect(@getResponse['result']).to_not eql nil
+        passedLogs = @objRollbar.addLog("[Expected] Payload is successfully created and hitted")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
         id = @getResponse['result'].split(':')[1].chomp('"').delete(' ')
         updatedOpp = @contractEvent.getOpportunityDetails(id)
@@ -4125,6 +4348,8 @@ end
     it 'C:949 In New Business event, To check if company_uuid in the payload matched with the existing account in the system, there are having open opportunities after hitting payload if building does not matched with the existing open opportunity then latest opportunity will be updated.', :'949' => true do
       begin
         puts 'C:949 In New Business event, To check if company_uuid in the payload matched with the existing account in the system, there are having open opportunities after hitting payload if building does not matched with the existing open opportunity then latest opportunity will be updated.'
+        puts "\n"
+        puts "------------------------------------------------------------------------------------------------------------------"
         contractUUID = SecureRandom.uuid
         membershipAgreementUUID = SecureRandom.uuid
         companyUUID = SecureRandom.uuid
@@ -4132,22 +4357,26 @@ end
         puts "Created Opportunity"
         #@contractEvent.createOpportunity(stageName = nil, buildingNumber = nil ,contractUUID = nil)
         @opportunity1 = @contractEvent.createOpportunity(1, "selling", 1, nil)
+        passedLogs = @objRollbar.addLog("[Step    ] Opportunity Should be Created With Id:#{@opportunity}, Name:#{@testData['ContractEvent']['Account'][1]['name']}, Stage:'Closing', Building:#{@testData['ContractEvent']['Building__c'][0]['Name']}, Contract UUID:#{contractUUID}", caseInfo['id'])
+        expect(@opportunity).not_to eq nil
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity is successfully created")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
         @opportunity2 = @contractEvent.createOpportunity(1, "selling", 2, nil)
-        puts @opportunity1
-        puts @opportunity2
-
+        passedLogs = @objRollbar.addLog("[Step    ] Opportunity Should be Created With Id:#{@opportunity}, Name:#{@testData['ContractEvent']['Account'][1]['name']}, Stage:'Closing', Building:#{@testData['ContractEvent']['Building__c'][0]['Name']}, Contract UUID:#{contractUUID}", caseInfo['id'])
+        expect(@opportunity).not_to eq nil
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity is successfully created")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
         @mapOpportunityId["opportunity"] = @opportunity1
         @mapOpportunityId["opportunity"] << @opportunity2[0]
-
+        passedLogs = @objRollbar.addLog("[Step    ] Payload Should be Created with EventName:'Contract Sent', Search Criteria:'Based on Membership Agreement UUID'")
         @getResponse = SfRESTService.postData('' + @contractEvent.setUpPayload("Contract Sent", nil, "#{@testData['ContractEvent']['Account'][1]['UUID__c']}", membershipAgreementUUID, nil, 0, 1, "New Business").to_json, "#{@testData['ContractEvent']['ServiceUrls'][0]['contractEvent']}", false)
-        puts "Response-->"
-        puts @getResponse
-
-        puts "Checking Responce after hitting payload..."
-
         expect(@getResponse['success']).to be true
-
         expect(@getResponse['result']).to_not eql nil
+        passedLogs = @objRollbar.addLog("[Expected] Payload is successfully created and hitted")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
         id = @getResponse['result'].split(':')[1].chomp('"').delete(' ')
         updatedOpp = @contractEvent.getOpportunityDetails(id)
@@ -4242,6 +4471,8 @@ end
     it 'C:950 In New Business event, To check if company_uuid matched with the existing opportunity and for that account there is having opportunity with the stages closed won or closed lost, while hitting payload for a particular building then new opportunity should be created.', :'950' => true do
       begin
         puts 'C:950 In New Business event, To check if company_uuid matched with the existing opportunity and for that account there is having opportunity with the stages closed won or closed lost, while hitting payload for a particular building then new opportunity should be created.'
+        puts "\n"
+        puts "------------------------------------------------------------------------------------------------------------------"
         contractUUID = SecureRandom.uuid
         membershipAgreementUUID = SecureRandom.uuid
         companyUUID = SecureRandom.uuid
@@ -4249,20 +4480,27 @@ end
         puts "Created Opportunity"
         #@contractEvent.createOpportunity(stageName = nil, buildingNumber = nil ,contractUUID = nil)
         @opportunity1 = @contractEvent.createOpportunity(1, "Closed Won", 1, contractUUID)
+        passedLogs = @objRollbar.addLog("[Step    ] Opportunity Should be Created With Id:#{@opportunity}, Name:#{@testData['ContractEvent']['Account'][1]['name']}, Stage:'Closing', Building:#{@testData['ContractEvent']['Building__c'][0]['Name']}, Contract UUID:#{contractUUID}", caseInfo['id'])
+        expect(@opportunity).not_to eq nil
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity is successfully created")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
         @opportunity2 = @contractEvent.createOpportunity(1, "Closed Lost", 2, nil)
-        puts @opportunity1
-        puts @opportunity2
+        passedLogs = @objRollbar.addLog("[Step    ] Opportunity Should be Created With Id:#{@opportunity}, Name:#{@testData['ContractEvent']['Account'][1]['name']}, Stage:'Closing', Building:#{@testData['ContractEvent']['Building__c'][0]['Name']}, Contract UUID:#{contractUUID}", caseInfo['id'])
+        expect(@opportunity).not_to eq nil
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity is successfully created")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
         @mapOpportunityId["opportunity"] = @opportunity1
         @mapOpportunityId["opportunity"] << @opportunity2[0]
-
+        passedLogs = @objRollbar.addLog("[Step    ] Payload Should be Created with EventName:'Contract Sent', Search Criteria:'Based on Membership Agreement UUID'")
         @getResponse = SfRESTService.postData('' + @contractEvent.setUpPayload("Contract Sent", nil, "#{@testData['ContractEvent']['Account'][1]['UUID__c']}", membershipAgreementUUID, nil, 0, 1, "New Business").to_json, "#{@testData['ContractEvent']['ServiceUrls'][0]['contractEvent']}", false)
-        puts "Response-->"
-        puts @getResponse
-
-        puts "Checking Responce after hitting payload..."
         expect(@getResponse['success']).to be true
         expect(@getResponse['result']).to_not eql nil
+        passedLogs = @objRollbar.addLog("[Expected] Payload is successfully created and hitted")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
         id = @getResponse['result'].split(':')[1].chomp('"').delete(' ')
 
@@ -4367,6 +4605,8 @@ end
     it 'C:951 In New Business event, To check if the company_uuid matched with the existing opportunity and for that account there is having opportunity with stages closing and contract stage as sent then new opportunity should be created.', :'951' => true do
       begin
         puts 'C:951 In New Business event, To check if the company_uuid matched with the existing opportunity and for that account there is having opportunity with stages closing and contract stage as sent then new opportunity should be created.'
+        puts "\n"
+        puts "------------------------------------------------------------------------------------------------------------------"
         contractUUID = SecureRandom.uuid
         membershipAgreementUUID = SecureRandom.uuid
         companyUUID = SecureRandom.uuid
@@ -4374,18 +4614,20 @@ end
         puts "Created Opportunity"
 
         @opportunity = @contractEvent.createOpportunity(1, "Closing", 1, contractUUID, "Contract Sent")
-        puts @opportunity1
+        passedLogs = @objRollbar.addLog("[Step    ] Opportunity Should be Created With Id:#{@opportunity}, Name:#{@testData['ContractEvent']['Account'][1]['name']}, Stage:'Closing', Building:#{@testData['ContractEvent']['Building__c'][0]['Name']}, Contract UUID:#{contractUUID}", caseInfo['id'])
+        expect(@opportunity).not_to eq nil
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity is successfully created")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
         @mapOpportunityId["opportunity"] = @opportunity
-
+        passedLogs = @objRollbar.addLog("[Step    ] Payload Should be Created with EventName:'Contract Sent', Search Criteria:'Based on Membership Agreement UUID'")
         @getResponse = SfRESTService.postData('' + @contractEvent.setUpPayload("Contract Sent", nil, "#{@testData['ContractEvent']['Account'][1]['UUID__c']}", membershipAgreementUUID, nil, 0, 1, "New Business").to_json, "#{@testData['ContractEvent']['ServiceUrls'][0]['contractEvent']}", false)
-        puts "Response-->"
-        puts @getResponse
-
-        puts "Checking Responce after hitting payload..."
         expect(@getResponse['success']).to be true
-
         expect(@getResponse['result']).to_not eql nil
+        passedLogs = @objRollbar.addLog("[Expected] Payload is successfully created and hitted")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
         id = @getResponse['result'].split(':')[1].chomp('"').delete(' ')
 
@@ -4489,6 +4731,8 @@ end
     it 'C:952 In New Business event, To check if the opportunity stage is closing but the contract stage is blank or other than contract sent or signed then new opportunity Should not be created.', :'952' => true do
       begin
         puts 'C:952 In New Business event, To check if the opportunity stage is closing but the contract stage is blank or other than contract sent or signed then new opportunity Should not be created.'
+        puts "\n"
+        puts "------------------------------------------------------------------------------------------------------------------"
         contractUUID = SecureRandom.uuid
         membershipAgreementUUID = SecureRandom.uuid
         companyUUID = SecureRandom.uuid
@@ -4496,18 +4740,20 @@ end
         puts "Created Opportunity"
 
         @opportunity = @contractEvent.createOpportunity(1, "Closing", 1, contractUUID, "Contract Discarded")
-        puts @opportunity
+        passedLogs = @objRollbar.addLog("[Step    ] Opportunity Should be Created With Id:#{@opportunity}, Name:#{@testData['ContractEvent']['Account'][1]['name']}, Stage:'Closing', Building:#{@testData['ContractEvent']['Building__c'][0]['Name']}, Contract UUID:#{contractUUID}", caseInfo['id'])
+        expect(@opportunity).not_to eq nil
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity is successfully created")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
         @mapOpportunityId["opportunity"] = @opportunity
-
+        passedLogs = @objRollbar.addLog("[Step    ] Payload Should be Created with EventName:'Contract Sent', Search Criteria:'Based on Membership Agreement UUID'")
         @getResponse = SfRESTService.postData('' + @contractEvent.setUpPayload("Contract Sent", nil, "#{@testData['ContractEvent']['Account'][1]['UUID__c']}", membershipAgreementUUID, nil, 0, 1, "New Business").to_json, "#{@testData['ContractEvent']['ServiceUrls'][0]['contractEvent']}", false)
-        puts "Response-->"
-        puts @getResponse
-
-        puts "Checking Responce after hitting payload..."
         expect(@getResponse['success']).to be true
-
         expect(@getResponse['result']).to_not eql nil
+        passedLogs = @objRollbar.addLog("[Expected] Payload is successfully created and hitted")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
         id = @getResponse['result'].split(':')[1].chomp('"').delete(' ')
 
@@ -4619,25 +4865,28 @@ end
     it 'C:841 To check if the opportunity stage is updated or not when the record type is mid market.', :'841' => true do
       begin
         puts 'C:841 To check if the opportunity stage is updated or not when the record type is mid market.'
+        puts "\n"
+        puts "------------------------------------------------------------------------------------------------------------------"
         contractUUID = SecureRandom.uuid
         membershipAgreementUUID = SecureRandom.uuid
         companyUUID = SecureRandom.uuid
         @mapOpportunityId = Hash.new
         puts "Created Opportunity"
         @opportunity = @contractEvent.createOpportunity(2, "Selling", 0, nil, nil)
-        puts @opportunity
+        passedLogs = @objRollbar.addLog("[Step    ] Opportunity Should be Created With Id:#{@opportunity}, Name:#{@testData['ContractEvent']['Account'][1]['name']}, Stage:'Closing', Building:#{@testData['ContractEvent']['Building__c'][0]['Name']}, Contract UUID:#{contractUUID}", caseInfo['id'])
+        expect(@opportunity).not_to eq nil
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity is successfully created")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
         @mapOpportunityId["opportunity"] = @opportunity
-
+        passedLogs = @objRollbar.addLog("[Step    ] Payload Should be Created with EventName:'Contract Sent', Search Criteria:'Based on Membership Agreement UUID'")
         @getResponse = SfRESTService.postData('' + @contractEvent.setUpPayload("Contract Sent", @opportunity[0].fetch("Id"), companyUUID, membershipAgreementUUID, nil, 0, 1, "Upgrade").to_json, "#{@testData['ContractEvent']['ServiceUrls'][0]['contractEvent']}", false)
-
-        puts "Response-->"
-        puts @getResponse
-
-        puts "Checking Responce after hitting payload..."
         expect(@getResponse['success']).to be true
-
         expect(@getResponse['result']).to_not eql nil
+        passedLogs = @objRollbar.addLog("[Expected] Payload is successfully created and hitted")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
         id = @getResponse['result'].split(':')[1].chomp('"').delete(' ')
 
@@ -4740,6 +4989,8 @@ end
     it 'C:843 To check if the opportunity stage is updated or not when the record type is Enterprise.', :'843' => true do
       begin
         puts 'C:843 To check if the opportunity stage is updated or not when the record type is Enterprise.'
+        puts "\n"
+        puts "------------------------------------------------------------------------------------------------------------------"
         contractUUID = SecureRandom.uuid
         membershipAgreementUUID = SecureRandom.uuid
         companyUUID = SecureRandom.uuid
@@ -4747,18 +4998,21 @@ end
         puts "Created Opportunity"
 
         @opportunity = @contractEvent.createOpportunity(3, "Selling", 0, nil, nil)
-        puts @opportunity
+        passedLogs = @objRollbar.addLog("[Step    ] Opportunity Should be Created With Id:#{@opportunity}, Name:#{@testData['ContractEvent']['Account'][1]['name']}, Stage:'Closing', Building:#{@testData['ContractEvent']['Building__c'][0]['Name']}, Contract UUID:#{contractUUID}", caseInfo['id'])
+        expect(@opportunity).not_to eq nil
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity is successfully created")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
         @mapOpportunityId["opportunity"] = @opportunity
-
+        passedLogs = @objRollbar.addLog("[Step    ] Payload Should be Created with EventName:'Contract Sent', Search Criteria:'Based on Membership Agreement UUID'")
         @getResponse = SfRESTService.postData('' + @contractEvent.setUpPayload("Contract Sent", @opportunity[0].fetch("Id"), companyUUID, membershipAgreementUUID, nil, 0, 1, "Upgrade").to_json, "#{@testData['ContractEvent']['ServiceUrls'][0]['contractEvent']}", false)
-        puts "Response-->"
-        puts @getResponse
-
-        puts "Checking Responce after hitting payload..."
         expect(@getResponse['success']).to be true
-
         expect(@getResponse['result']).to_not eql nil
+        passedLogs = @objRollbar.addLog("[Expected] Payload is successfully created and hitted")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
+
         id = @getResponse['result'].split(':')[1].chomp('"').delete(' ')
 
         updatedOpp = @contractEvent.getOpportunityDetails(id)
@@ -4861,6 +5115,8 @@ end
     it 'C:865 To check if the product in the payload does not matched with the system product i.e (Different from Contract Event Utility sales console setting).', :'865' => true do
       begin
         puts 'C865 To check if the product in the payload does not matched with the system product i.e (Different from Contract Event Utility sales console setting).'
+        puts "\n"
+        puts "------------------------------------------------------------------------------------------------------------------"
         contractUUID = SecureRandom.uuid
         membershipAgreementUUID = SecureRandom.uuid
         companyUUID = SecureRandom.uuid
@@ -4868,19 +5124,21 @@ end
         puts "Created Opportunity"
 
         @opportunity = @contractEvent.createOpportunity(3, "Selling", 0, nil)
-        puts @opportunity
+        passedLogs = @objRollbar.addLog("[Step    ] Opportunity Should be Created With Id:#{@opportunity}, Name:#{@testData['ContractEvent']['Account'][1]['name']}, Stage:'Closing', Building:#{@testData['ContractEvent']['Building__c'][0]['Name']}, Contract UUID:#{contractUUID}", caseInfo['id'])
+        expect(@opportunity).not_to eq nil
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity is successfully created")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
         @mapOpportunityId["opportunity"] = @opportunity
-
+        passedLogs = @objRollbar.addLog("[Step    ] Payload Should be Created with EventName:'Contract Sent', Search Criteria:'Based on Membership Agreement UUID'")
         @getResponse = SfRESTService.postData('' + @contractEvent.setUpPayload("Contract Sent", @opportunity[0].fetch("Id"), companyUUID, membershipAgreementUUID, "PRDE-000204", 0, 1, "Upgrade").to_json, "#{@testData['ContractEvent']['ServiceUrls'][0]['contractEvent']}", false)
-        puts "Response-->"
-        puts @getResponse
-
-        puts "Checking Responce after hitting payload..."
         expect(@getResponse['success']).to be false
-
         expect(@getResponse['result']).to_not eql "Product not found. Contact to your administrator."
-
+        passedLogs = @objRollbar.addLog("[Expected] Payload is successfully created and hitted")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
+        
         @testRailUtility.postResult(865, "pass", 1, @run)
       rescue Exception => e
         @testRailUtility.postResult(865, e, 5, @run)
@@ -4898,13 +5156,13 @@ end
 
   after(:all) {
     puts ""
-    puts "--------------------------------------------------------------------------------"
+    puts "------------------------------------------------------------------------------------------------------------------"
     @contractEvent.deleteCreatedRecord()
     puts "Common Test Data Deleted..."
-    puts "--------------------------------------------------------------------------------"
+    puts "------------------------------------------------------------------------------------------------------------------"
   }
   after(:each) {
     puts ""
-    puts "--------------------------------------------------------------------------------"
+    puts "------------------------------------------------------------------------------------------------------------------"
   }
 end
