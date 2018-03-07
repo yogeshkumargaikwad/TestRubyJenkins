@@ -4857,7 +4857,19 @@ end
         raise e
       end
     end
+      it "Scenario 2.  To check membership agreement uuid is not passed while hitting payload then existing opportunity will not be updated." do
+      @getResponse = SfRESTService.postData('' + @contractEvent.setUpPayload("Contract Sent", nil, "#{@testData['ContractEvent']['Account'][0]['UUID__c']}", nil, nil, 0, 1, "Upgrade").to_json, "#{@testData['ContractEvent']['ServiceUrls'][0]['contractEvent']}", false)
+      puts "Response-->"
+      puts @getResponse
 
+      puts "Checking Responce after hitting payload..."
+      expect(@getResponse['success']).to be false
+
+      expect(@getResponse['result']).to_not eql nil
+
+      result = @getResponse['result']
+      puts result
+    end
     it 'C:865 To check if the product in the payload does not matched with the system product i.e (Different from Contract Event Utility sales console setting).', :'865' => true do
       begin
         puts 'C865 To check if the product in the payload does not matched with the system product i.e (Different from Contract Event Utility sales console setting).'
