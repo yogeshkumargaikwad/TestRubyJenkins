@@ -89,8 +89,9 @@ describe ManageTours do
          passedLogs = @objRollbar.addLog("[Result  ]  Success")
     rescue Exception => excp
 
-        @objRollbar.postRollbarData(caseInfo['id'], caseInfo['title'], passedLogs[caseInfo['id']])
         passedLogs = @objRollbar.addLog("[Result  ]  Failed")
+        @objRollbar.postRollbarData(caseInfo['id'], caseInfo['title'], passedLogs[caseInfo['id']])
+       
         Rollbar.error(excp)
         @testRailUtility.postResult(149,"Result for case 149 is #{excp}",5,@runId)
       raise excp
@@ -116,8 +117,9 @@ describe ManageTours do
         passedLogs = @objRollbar.addLog("[Result  ]  Success")
     rescue Exception => excp
 
+        passedLogs = @objRollbar.addLog("[Result  ]  Failed")
        @objRollbar.postRollbarData(caseInfo['id'], caseInfo['title'], passedLogs[caseInfo['id']])
-       passedLogs = @objRollbar.addLog("[Result  ]  Failed")
+      
         Rollbar.error(excp)
 
         @testRailUtility.postResult(883,"Result for case 883 is #{excp}",5,@runId)
@@ -147,9 +149,9 @@ describe ManageTours do
     rescue Exception => excp
 
    rescue Exception => excp
-
-       @objRollbar.postRollbarData(caseInfo['id'], caseInfo['title'], passedLogs[caseInfo['id']])
        passedLogs = @objRollbar.addLog("[Result  ]  Failed")
+       @objRollbar.postRollbarData(caseInfo['id'], caseInfo['title'], passedLogs[caseInfo['id']])
+       
         Rollbar.error(excp)
 
         @testRailUtility.postResult(7,"Result for case 7 is #{excp}",5,@runId)
@@ -177,9 +179,8 @@ describe ManageTours do
         @testRailUtility.postResult(885 ,"Pass",1,@runId)
         passedLogs = @objRollbar.addLog("[Result  ]  Success")
     rescue Exception => excp
-
-       @objRollbar.postRollbarData(caseInfo['id'], caseInfo['title'], passedLogs[caseInfo['id']])
         passedLogs = @objRollbar.addLog("[Result  ]  Failed")
+       @objRollbar.postRollbarData(caseInfo['id'], caseInfo['title'], passedLogs[caseInfo['id']])
         Rollbar.error(excp)
 
       @testRailUtility.postResult(885 ,"Result for case 885  is #{excp}",5,@runId)
@@ -209,9 +210,9 @@ describe ManageTours do
       @testRailUtility.postResult(1016 ,"Pass",1,@runId)
       passedLogs = @objRollbar.addLog("[Result  ]  Success")
     rescue Exception => excp
-
-       @objRollbar.postRollbarData(caseInfo['id'], caseInfo['title'], passedLogs[caseInfo['id']])
         passedLogs = @objRollbar.addLog("[Result  ]  Failed")
+       @objRollbar.postRollbarData(caseInfo['id'], caseInfo['title'], passedLogs[caseInfo['id']])
+       
         Rollbar.error(excp)
 
       @testRailUtility.postResult(1016 ,"Result for case 1016  is #{excp}",5,@runId)
@@ -245,9 +246,9 @@ describe ManageTours do
         @testRailUtility.postResult(81,"Pass",1,@runId)
         passedLogs = @objRollbar.addLog("[Result  ]  Success")
     rescue Exception => excp
-
+        passedLogs = @objRollbar.addLog("[Result  ]  Failed")
        @objRollbar.postRollbarData(caseInfo['id'], caseInfo['title'], passedLogs[caseInfo['id']])
-       passedLogs = @objRollbar.addLog("[Result  ]  Failed")
+       
         Rollbar.error(excp)
 
       @testRailUtility.postResult(81,"Result for case 81 is #{excp}",5,@runId)
@@ -275,9 +276,9 @@ describe ManageTours do
         @testRailUtility.postResult(887,"Pass",1,@runId)
         passedLogs = @objRollbar.addLog("[Result  ]  Success")
     rescue Exception => excp
-
+        passedLogs = @objRollbar.addLog("[Result  ]  Failed")
        @objRollbar.postRollbarData(caseInfo['id'], caseInfo['title'], passedLogs[caseInfo['id']])
-       passedLogs = @objRollbar.addLog("[Result  ]  Failed")
+      
         Rollbar.error(excp)
 
       @testRailUtility.postResult(887,"Result for case 887 is #{excp}",5,@runId)
@@ -310,9 +311,9 @@ describe ManageTours do
       @testRailUtility.postResult(92,"Pass",1,@runId)
       passedLogs = @objRollbar.addLog("[Result  ]  Success")
     rescue Exception => excp
-
+        passedLogs = @objRollbar.addLog("[Result  ]  Failed")
          @objRollbar.postRollbarData(caseInfo['id'], caseInfo['title'], passedLogs[caseInfo['id']])
-         passedLogs = @objRollbar.addLog("[Result  ]  Failed")
+        
         Rollbar.error(excp)
 
       @testRailUtility.postResult(92,"Result for case 92 is #{excp}",5,@runId)
@@ -372,9 +373,9 @@ describe ManageTours do
       @testRailUtility.postResult(91,"Pass",1,@runId)
        passedLogs = @objRollbar.addLog("[Result  ]  Success")
     rescue Exception => excp
-
-      @objRollbar.postRollbarData(caseInfo['id'], caseInfo['title'], passedLogs[caseInfo['id']])
       passedLogs = @objRollbar.addLog("[Result  ]  Failed")
+      @objRollbar.postRollbarData(caseInfo['id'], caseInfo['title'], passedLogs[caseInfo['id']])
+      
       Rollbar.error(excp)
 
       @testRailUtility.postResult(91,"Result for case 91 is #{excp}",5,@runId)
@@ -409,9 +410,10 @@ describe ManageTours do
         passedLogs = @objRollbar.addLog("[Result  ]  Success")
       #@objManageTours.getAllData(false).values
     rescue Exception => excp
-
+     
+        passedLogs = @objRollbar.addLog("[Result  ]  Failed")
        @objRollbar.postRollbarData(caseInfo['id'], caseInfo['title'], passedLogs[caseInfo['id']])
-       passedLogs = @objRollbar.addLog("[Result  ]  Failed")
+       
       Rollbar.error(excp)
 
       @testRailUtility.postResult(85,"Result for case 85 is #{excp}",5,@runId)
@@ -523,9 +525,9 @@ describe ManageTours do
         passedLogs = @objRollbar.addLog("[Result  ]  Success")
 
       rescue Exception => excp
-
-         @objRollbar.postRollbarData(caseInfo['id'], caseInfo['title'], passedLogs[caseInfo['id']])
          passedLogs = @objRollbar.addLog("[Result  ]  Failed")
+         @objRollbar.postRollbarData(caseInfo['id'], caseInfo['title'], passedLogs[caseInfo['id']])
+        
          Rollbar.error(excp)
 
         @testRailUtility.postResult(86,"Result for case 86 is #{excp}",5,@runId)
@@ -552,9 +554,9 @@ describe ManageTours do
         passedLogs = @objRollbar.addLog("[Result  ]  Success")
      
       rescue Exception => excp
-
+        passedLogs = @objRollbar.addLog("[Result  ]  Failed")
          @objRollbar.postRollbarData(caseInfo['id'], caseInfo['title'], passedLogs[caseInfo['id']])
-          passedLogs = @objRollbar.addLog("[Result  ]  Failed")
+          
          Rollbar.error(excp)
 
         @testRailUtility.postResult(89,"Result for case 89 is #{excp}",5,@runId)
@@ -612,8 +614,9 @@ describe ManageTours do
         @testRailUtility.postResult(96,"Pass",1,@runId)
         passedLogs = @objRollbar.addLog("[Result  ]  Success")
         rescue Exception => excp
+          passedLogs = @objRollbar.addLog("[Result  ]  Failed")
            @objRollbar.postRollbarData(caseInfo['id'], caseInfo['title'], passedLogs[caseInfo['id']])
-           passedLogs = @objRollbar.addLog("[Result  ]  Failed")
+           
           Rollbar.error(excp)
 
           @testRailUtility.postResult(96,"Result for case 96 is #{excp}",5,@runId)
@@ -745,8 +748,9 @@ describe ManageTours do
         passedLogs = @objRollbar.addLog("[Result  ]  Success")
        
       rescue Exception => excp
-         @objRollbar.postRollbarData(caseInfo['id'], caseInfo['title'], passedLogs[caseInfo['id']])
          passedLogs = @objRollbar.addLog("[Result  ]  Failed")
+         @objRollbar.postRollbarData(caseInfo['id'], caseInfo['title'], passedLogs[caseInfo['id']])
+         
          Rollbar.error(excp)
 
         @testRailUtility.postResult(94,"Result for case 94 is #{excp}",5,@runId)
@@ -798,8 +802,9 @@ describe ManageTours do
         passedLogs = @objRollbar.addLog("[Result  ]  Success")
        
       rescue Exception => excp
-         @objRollbar.postRollbarData(caseInfo['id'], caseInfo['title'], passedLogs[caseInfo['id']])
         passedLogs = @objRollbar.addLog("[Result  ]  Failed")
+         @objRollbar.postRollbarData(caseInfo['id'], caseInfo['title'], passedLogs[caseInfo['id']])
+        
          Rollbar.error(excp)
 
         @testRailUtility.postResult(129,"Result for case 129 is #{excp}",5,@runId)
@@ -892,17 +897,17 @@ describe ManageTours do
         passedLogs = @objRollbar.addLog("[Result  ]  Success")
        
       rescue Exception => excp
-
-         @objRollbar.postRollbarData(caseInfo['id'], caseInfo['title'], passedLogs[caseInfo['id']])
          passedLogs = @objRollbar.addLog("[Result  ]  Failed")
+         @objRollbar.postRollbarData(caseInfo['id'], caseInfo['title'], passedLogs[caseInfo['id']])
          Rollbar.error(excp)
         @testRailUtility.postResult(102,"Result for case 102 is #{excp}",5,@runId)
         raise excp
       end
-    end
-     puts "C102 : Checked successfully"
-     puts "---------------------------------------------------------------------------------------------------------------------------"
+       puts "C102 : Checked successfully"
+       puts "---------------------------------------------------------------------------------------------------------------------------"
         
+    end
+    
   end
 
   context "should check reschedule functionality" do
@@ -937,24 +942,21 @@ describe ManageTours do
         #puts "[Result]   Success"
         
         puts "\n"
-        puts "C115 : Checked successfully"
-        puts "---------------------------------------------------------------------------------------------------------------------------"
-        puts "\n"
+        
         passedLogs = @objRollbar.addLog("[Step    ]  Adding result in testrail")
         @testRailUtility.postResult(115,"Pass",1,@runId)
         passedLogs = @objRollbar.addLog("[Result  ]  Success")
         
       rescue Exception => excp
-
+        passedLogs = @objRollbar.addLog("[Result  ]  Failed")
          @objRollbar.postRollbarData(caseInfo['id'], caseInfo['title'], passedLogs[caseInfo['id']])
-         passedLogs = @objRollbar.addLog("[Result  ]  Failed")
+         
          Rollbar.error(excp)
         @testRailUtility.postResult(115,"Result for case 115 is #{excp}",5,@runId)
         raise excp
       end
-    end
-    puts "C115 : Checked successfully"
-    puts "---------------------------------------------------------------------------------------------------------------------------"
-        
+       puts "C115 : Checked successfully"
+       puts "---------------------------------------------------------------------------------------------------------------------------"
+    end     
   end
 end
