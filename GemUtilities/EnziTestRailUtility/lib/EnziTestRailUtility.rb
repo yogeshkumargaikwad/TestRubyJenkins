@@ -124,7 +124,6 @@ end
 		def postResult(caseId,comment,statusId,testRunId)
 			url = "add_result_for_case/#{testRunId}/#{caseId}"
 			@client.send_post(url, { :status_id => statusId, :comment => "#{comment}" })
-			puts "Result added successfully"
 		end
 
 		def getCase(caseId)
