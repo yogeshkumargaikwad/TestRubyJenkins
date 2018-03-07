@@ -209,81 +209,79 @@ class ManageTours
 	end
 	def checkError(errorMessage)
 		 @driver.find_elements(:class,"slds-theme--error")[0].text.eql? "#{errorMessage}"
-		 EnziUIUtility.wait(@driver,:class,"slds-icon slds-icon--small",@timeSettingMap['Wait']['Environment']['Lightening'])
-		 @driver.find_elements(:class,"slds-icon slds-icon--small")[0].click
-  end
-  def getData(onlySelected)
-    #puts "in GetDAta"
-    EnziUIUtility.wait(@driver, nil, nil, 10)
-    EnziUIUtility.wait(@driver, :id, "enzi-data-table-container", 100)
-    arrTable = @driver.find_elements(:id, 'enzi-data-table-container')
-    mapOfDataOnEachPage = nil
-    mapOfDataOnEachPageHashMap = Hash.new
-    arrTable.each do |table|
-      if table.attribute('tag_name') != 'table' then
-        mapOfDataOnEachPage = table
-      end
-    end
-    tBodyEle = mapOfDataOnEachPage.find_element(:tag_name, 'tbody')
-    arrRows = tBodyEle.find_elements(:tag_name, 'tr')
-    totalRows = tBodyEle.find_elements(:tag_name, 'tr').length
-    totalRows -= 1
-    rowCount = 0
-    if onlySelected == true then
-      arrRows.each do |row|
-        if rowCount == totalRows then
-          break
-        end
-        isRowSelected = @driver.find_element(:id, "checkbox:#{rowCount}").selected?
-        if isRowSelected == true then
-          arr = Array.new
-          row.find_elements(:tag_name, 'td').each do |col|
-            if col.text == "Select Row" then
-              arr.push(isRowSelected)
-            else
-              arr.push(col.text)
-            end
-          end
-          mapOfDataOnEachPageHashMap.store("#{rowCount}", arr)
-        end
-        rowCount = rowCount + 1
-      end
-    else
-      arrRows.each do |row|
-        if rowCount == totalRows then
-          break
-        end
-        isRowSelected = @driver.find_element(:id, "checkbox:#{rowCount}").selected?
-        arr = Array.new
-        row.find_elements(:tag_name, 'td').each do |col|
-          arr.push(col.text)
-        end
-        mapOfDataOnEachPageHashMap.store("#{rowCount}", arr)
-        rowCount = rowCount + 1
-      end
-    end
-    return mapOfDataOnEachPageHashMap
-  end
-  def getAllData(onlySelected)
-    pageNumber = 1
-    mapOfAllData = Hash.new
-    clickElement("btnFirst")
-    loop do
-      mapOfDataOnEachPage = getData(onlySelected)
-      if mapOfDataOnEachPage != nil then
-        mapOfAllData.store("#{pageNumber}",mapOfDataOnEachPage)
-      end
-      pageNumber += 1
-      EnziUIUtility.wait(@driver,nil,nil,5)
-      if(@driver.find_element(:id, "btnNext").enabled? == true)
-       #puts "btnNextEnability: #{@driver.find_element(:id, "btnNext").enabled?}"
-        clickElement("btnNext")
-      else
-        break
-      end
-    end
-    return mapOfAllData
-  end
+  	end
+  	def getData(onlySelected)
+	    #puts "in GetDAta"
+	    EnziUIUtility.wait(@driver, nil, nil, 10)
+	    EnziUIUtility.wait(@driver, :id, "enzi-data-table-container", 100)
+	    arrTable = @driver.find_elements(:id, 'enzi-data-table-container')
+	    mapOfDataOnEachPage = nil
+	    mapOfDataOnEachPageHashMap = Hash.new
+	    arrTable.each do |table|
+	      if table.attribute('tag_name') != 'table' then
+	        mapOfDataOnEachPage = table
+	      end
+	    end
+	    tBodyEle = mapOfDataOnEachPage.find_element(:tag_name, 'tbody')
+	    arrRows = tBodyEle.find_elements(:tag_name, 'tr')
+	    totalRows = tBodyEle.find_elements(:tag_name, 'tr').length
+	    totalRows -= 1
+	    rowCount = 0
+	    if onlySelected == true then
+	      arrRows.each do |row|
+	        if rowCount == totalRows then
+	          break
+	        end
+	        isRowSelected = @driver.find_element(:id, "checkbox:#{rowCount}").selected?
+	        if isRowSelected == true then
+	          arr = Array.new
+	          row.find_elements(:tag_name, 'td').each do |col|
+	            if col.text == "Select Row" then
+	              arr.push(isRowSelected)
+	            else
+	              arr.push(col.text)
+	            end
+	          end
+	          mapOfDataOnEachPageHashMap.store("#{rowCount}", arr)
+	        end
+	        rowCount = rowCount + 1
+	      end
+	    else
+	      arrRows.each do |row|
+	        if rowCount == totalRows then
+	          break
+	        end
+	        isRowSelected = @driver.find_element(:id, "checkbox:#{rowCount}").selected?
+	        arr = Array.new
+	        row.find_elements(:tag_name, 'td').each do |col|
+	          arr.push(col.text)
+	        end
+	        mapOfDataOnEachPageHashMap.store("#{rowCount}", arr)
+	        rowCount = rowCount + 1
+	      end
+	    end
+	    return mapOfDataOnEachPageHashMap
+  	end
+  	def getAllData(onlySelected)
+	    pageNumber = 1
+	    mapOfAllData = Hash.new
+	    clickElement("btnFirst")
+	    loop do
+	      mapOfDataOnEachPage = getData(onlySelected)
+	      if mapOfDataOnEachPage != nil then
+	        mapOfAllData.store("#{pageNumber}",mapOfDataOnEachPage)
+	      end
+	      pageNumber += 1
+	      EnziUIUtility.wait(@driver,nil,nil,5)
+	      if(@driver.find_element(:id, "btnNext").enabled? == true)
+	       #puts "btnNextEnability: #{@driver.find_element(:id, "btnNext").enabled?}"
+	        clickElement("btnNext")
+	      else
+	        break
+	      end
+	    end
+	    return mapOfAllData
+  	end
 	def rescheduleTour
 		wait = Selenium::WebDriver::Wait.new(:timeout => @timeSettingMap['Wait']['Environment']['Lightening'])
 		EnziUIUtility.wait(@driver,:id,"enzi-data-table-container",@timeSettingMap['Wait']['Environment']['Lightening'])

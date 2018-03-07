@@ -128,7 +128,7 @@ describe ManageTours do
         puts "\n"
     begin
         caseInfo = @testRailUtility.getCase('7')
-        passedLogs = @objRollbar.addLog("[Step]     Checking 'Book a tour' button when all required fields of form are properly filled", caseInfo['id'])
+        passedLogs = @objRollbar.addLog("[Step]       Checking 'Book a tour' button when all required fields of form are properly filled", caseInfo['id'])
         #puts "[Step]     Checking 'Book a tour' button when all required fields of form are properly filled"
         @objManageTours.bookTour(0,false)
         sleep(@objManageTours.instance_variable_get(:@timeSettingMap)['Sleep']['Environment']['Lightening'])
@@ -187,6 +187,8 @@ describe ManageTours do
         EnziUIUtility.clickElement(@driver,:id,Date.today.prev_day.to_s)
         sleep(@objManageTours.instance_variable_get(:@timeSettingMap)['Sleep']['Environment']['Lightening'])
         expect(EnziUIUtility.checkErrorMessage(@driver,'h2','No times slots available for the selected date')).to be true
+        @driver.find_elements(:class,"slds-button_icon-inverse")[0].click
+        #@driver.find_element(:class,"slds-button slds-button_icon slds-notify__close slds-button_icon-inverse").click
         passedLogs = @objRollbar.addLog("\n[Expected] Previous tour date should not be selected \n[Result]   Success ")
         #puts "[Expected] Previous tour date should not be selected"
         #puts "[Result]   Success"
