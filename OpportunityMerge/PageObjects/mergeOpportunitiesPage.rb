@@ -286,7 +286,7 @@ class MergeOpportunities
   def clickElement(id)
     begin
       #sleep for 5 sec to load page
-      EnziUIUtility.wait(@driver, nil, nil, 20)
+      #EnziUIUtility.wait(@driver, nil, nil, 20)
       #wait untill element found
       EnziUIUtility.wait(@driver, :id, id, 50)
 
@@ -393,7 +393,7 @@ class MergeOpportunities
       mapOfDataOnEachPage = getData(onlySelected)
       puts mapOfDataOnEachPage
       if mapOfDataOnEachPage != nil then
-        puts "#{pageNumber}"
+        #puts "#{pageNumber}"
         mapOfAllData.store("#{pageNumber}", mapOfDataOnEachPage)
       end
       pageNumber += 1
@@ -409,7 +409,7 @@ class MergeOpportunities
 
   def getData(onlySelected)
     puts "in GetDAta"
-    EnziUIUtility.wait(@driver, nil, nil, 10)
+    #EnziUIUtility.wait(@driver, nil, nil, 10)
     EnziUIUtility.wait(@driver, :id, "enzi-data-table-container", 100)
     arrTable = @driver.find_elements(:id, 'enzi-data-table-container')
     mapOfDataOnEachPage = nil
@@ -474,7 +474,7 @@ class MergeOpportunities
 
   def closeErrorMessage
     #puts "Sleep for 5 sec"
-    EnziUIUtility.wait(@driver,nil,nil,5)
+    #EnziUIUtility.wait(@driver,nil,nil,5)
     wait = Selenium::WebDriver::Wait.new(:timeout => 30);
     wait.until {@driver.find_element(:id, "divErrorToaster:btnClose").displayed?}
     if @driver.find_element(:id, "divErrorToaster:btnClose").displayed? then
