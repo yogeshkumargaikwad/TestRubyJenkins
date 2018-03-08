@@ -22,21 +22,21 @@ class ManageTours
 		@mapCredentials = YAML.load_file(Dir.pwd+'/credentials.yaml')
 		@driver.get "https://test.salesforce.com/login.jsp?pw=#{@mapCredentials[sandBoxType]['password']}&un=#{@mapCredentials[sandBoxType]['username']}"
 		@salesforceBulk = Salesforce.login(@mapCredentials["#{sandBoxType}"]['username'],@mapCredentials["#{sandBoxType}"]['password'],true)
-		EnziUIUtility.wait(driver,:id,"tsid",@timeSettingMap['Wait']['Environment']['Classic'])
+		EnziUIUtility.wait(driver,:id,"tsid",@timeSettingMap['Wait']['Environment']['Classic']['Min'])
 	end
 	def openPage(objectRecordId,findBy,value)
 		url = @driver.current_url();
 		newUrl = url.split('/home')
     	@driver.get "#{newUrl[0]}"+"/#{objectRecordId}"
-    	EnziUIUtility.wait(@driver,findBy,"#{value}",@timeSettingMap['Wait']['Environment']['Classic'])
+    	EnziUIUtility.wait(@driver,findBy,"#{value}",@timeSettingMap['Wait']['Environment']['Classic']['Min'])
     	btn = @driver.find_element(findBy,"#{value}")
     	btn.click
     	newWindow = @driver.current_url();
     	EnziUIUtility.switchToWindow(@driver,newWindow)
-    	EnziUIUtility.wait(@driver,:id,"FTE",@timeSettingMap['Wait']['Environment']['Lightening'])
+    	EnziUIUtility.wait(@driver,:id,"FTE",@timeSettingMap['Wait']['Environment']['Lightening']['Min'])
 	end
 	def bookTour(count, bookTour)
-		wait = Selenium::WebDriver::Wait.new(:timeout => @timeSettingMap['Wait']['Environment']['Lightening'])
+		wait = Selenium::WebDriver::Wait.new(:timeout => @timeSettingMap['Wait']['Environment']['Lightening']['Min'])
 		wait.until { !@driver.find_elements(:id ,"FTE").empty? }
     	if !@driver.find_elements(:id,"Phone").empty? && @driver.find_element(:id,"Phone").attribute('value').eql?("") then
     		EnziUIUtility.setValue(@driver,:id,"Phone","#{@records[1]['tour'][count]['phone']}")
@@ -71,13 +71,14 @@ class ManageTours
     	wait.until {!@driver.find_element(:id ,"spinner").displayed?}
     	if bookTour then
    			EnziUIUtility.selectElement(@driver,"Book Tours","button")
+
    			newWindow = @driver.current_url();
     		EnziUIUtility.switchToWindow(@driver,newWindow)
-    		EnziUIUtility.wait(@driver,:id,"enzi-data-table-container",@timeSettingMap['Wait']['Environment']['Lightening'])
+    		EnziUIUtility.wait(@driver,:id,"enzi-data-table-container",@timeSettingMap['Wait']['Environment']['Lightening']['Max'])
     	end
 	end
 	def self.selectBuilding(container,value,waitTime)
-		wait = Selenium::WebDriver::Wait.new(:timeout => waitTime['Wait']['Environment']['Lightening'])
+		wait = Selenium::WebDriver::Wait.new(:timeout => waitTime['Wait']['Environment']['Lightening']['Min'])
 		innerDiv = container.find_elements(:class,"building")
 		innerFields = innerDiv[0].find_elements(:class,"cEnziField")
 		innerFieldDivContainer = innerFields[3].find_elements(:tag_name,"div")
@@ -90,21 +91,22 @@ class ManageTours
       	inputFieldInnerDiv[9].find_elements(:tag_name,"input")[0].clear
 		inputFieldInnerDiv[9].find_elements(:tag_name,"input")[0].send_keys "#{value}"
 		wait.until { inputFieldInnerDiv[11].find_elements(:class,"slds-lookup__list")}
-    sleep(waitTime['Sleep']['Environment']['Lightening'])
+
+    	sleep(waitTime['Sleep']['Environment']['Lightening']['Min'])
 		list = inputFieldInnerDiv[11].find_elements(:tag_name,"ul")
 		value = list[0].find_elements(:tag_name,"li")
 		wait.until {value[1].displayed?}
 		value[1].click
 	end
 	def self.selectTourDate(container,waitTime)
-		wait = Selenium::WebDriver::Wait.new(:timeout => waitTime['Wait']['Environment']['Lightening'])
+		wait = Selenium::WebDriver::Wait.new(:timeout => waitTime['Wait']['Environment']['Lightening']['Min'])
 		innerDiv = container.find_elements(:class,"tourDate")
 		innerFields = innerDiv[0].find_elements(:class,"cEnziField")
 		innerFieldDivContainer = innerFields[3].find_elements(:tag_name,"div")
 		inputFieldOuterDiv = innerFieldDivContainer[4].find_elements(:tag_name,"div")
 		inputFieldInnerDiv = inputFieldOuterDiv[0].find_elements(:tag_name,"div")
 		wait.until { inputFieldInnerDiv[7].displayed? }
-    sleep(waitTime['Sleep']['Environment']['Lightening'])
+    	sleep(waitTime['Sleep']['Environment']['Lightening']['Min'])
 		if inputFieldInnerDiv[7].displayed? then
       wait.until { inputFieldInnerDiv[7].displayed? }
 			inputFieldInnerDiv[7].click
@@ -138,14 +140,14 @@ class ManageTours
 		return childFound
 	end
 	def duplicateAccountSelector(option,account)
-		wait = Selenium::WebDriver::Wait.new(:timeout => @timeSettingMap['Wait']['Environment']['Lightening'])
+		wait = Selenium::WebDriver::Wait.new(:timeout => @timeSettingMap['Wait']['Environment']['Lightening']['Max'])
 		if account.eql? nil then
-			EnziUIUtility.wait(@driver,:id,"header43",@timeSettingMap['Wait']['Environment']['Lightening'])
+			EnziUIUtility.wait(@driver,:id,"header43",@timeSettingMap['Wait']['Environment']['Lightening']['Max'])
 			EnziUIUtility.selectElement(@driver,"#{option}","button")
 			wait.until { !@driver.find_element(:id ,"spinner").displayed? }
-			EnziUIUtility.wait(@driver,:id,"enzi-data-table-container",@timeSettingMap['Wait']['Environment']['Lightening'])
+			EnziUIUtility.wait(@driver,:id,"enzi-data-table-container",@timeSettingMap['Wait']['Environment']['Lightening']['Min'])
 			wait.until { !@driver.find_element(:id ,"spinner").displayed? }
-			sleep(@timeSettingMap['Sleep']['Environment']['Lightening'])
+			sleep(@timeSettingMap['Sleep']['Environment']['Lightening']['Min'])
 		else
 			if !@driver.find_elements(:class ,"slds-radio_faux").empty? then
 				@driver.find_elements(:class ,"slds-radio_faux")[0].click
@@ -167,9 +169,9 @@ class ManageTours
 		return @disabled
 	end
 	def numberOfTourBooked
-		EnziUIUtility.wait(@driver,:id,"enzi-data-table-container",@timeSettingMap['Wait']['Environment']['Lightening'])
+		EnziUIUtility.wait(@driver,:id,"enzi-data-table-container",@timeSettingMap['Wait']['Environment']['Lightening']['Max'])
 		tourBookedtable = EnziUIUtility.selectChild(@driver,:id,"enzi-data-table-container",nil,"table")
-		puts tourBookedtable[0].find_elements(:tag_name,"tr").size
+		#puts tourBookedtable[0].find_elements(:tag_name,"tr").size
 		tourBookedtable[0].find_elements(:tag_name,"tr").size
 	end
 	def childDisabled?(parent,child)
@@ -187,16 +189,16 @@ class ManageTours
 			@@recordInsertedIds["Lead1"] = result.result.records[0]
 			#puts "Lead created => #{@@recordInsertedIds['Lead1']}"
 		end
-    Salesforce.addRecordsToDelete(object,result.result.records[0].fetch('Id'))
+    	Salesforce.addRecordsToDelete(object,result.result.records[0].fetch('Id'))
 		#puts "#{object} created => #{@@recordInsertedIds[object]}"
 		result.result.records
 	end
 	def bookNewTour
-		EnziUIUtility.wait(@driver,:class,"visible",@timeSettingMap['Wait']['Environment']['Lightening'])
-    	EnziUIUtility.wait(@driver,:class,"visible",@timeSettingMap['Wait']['Environment']['Lightening'])
+		EnziUIUtility.wait(@driver,:class,"visible",@timeSettingMap['Wait']['Environment']['Lightening']['Min'])
+    	#EnziUIUtility.wait(@driver,:class,"visible",@timeSettingMap['Wait']['Environment']['Lightening'])
 		newButtonContainer = @driver.find_element(:class,"visible")
-		EnziUIUtility.wait(@driver,:class,"lightningPrimitiveIcon",@timeSettingMap['Wait']['Environment']['Lightening'])
-    	EnziUIUtility.wait(@driver,:class,"lightningPrimitiveIcon",@timeSettingMap['Wait']['Environment']['Lightening'])
+		EnziUIUtility.wait(@driver,:class,"lightningPrimitiveIcon",@timeSettingMap['Wait']['Environment']['Lightening']['Min'])
+    	#EnziUIUtility.wait(@driver,:class,"lightningPrimitiveIcon",@timeSettingMap['Wait']['Environment']['Lightening'])
     	newButtonContainer.find_elements(:class,"lightningPrimitiveIcon")[0].click
 	end
 	def openPageForLead(id)
@@ -209,7 +211,7 @@ class ManageTours
 	end
 	def checkError(errorMessage)
 		 @driver.find_elements(:class,"slds-theme--error")[0].text.eql? "#{errorMessage}"
-		 EnziUIUtility.wait(@driver,:class,"slds-icon slds-icon--small",@timeSettingMap['Wait']['Environment']['Lightening'])
+		 EnziUIUtility.wait(@driver,:class,"slds-icon slds-icon--small",@timeSettingMap['Wait']['Environment']['Lightening']['Min'])
 		 @driver.find_elements(:class,"slds-icon slds-icon--small")[0].click
   end
   def getData(onlySelected)
@@ -285,10 +287,11 @@ class ManageTours
     return mapOfAllData
   end
 	def rescheduleTour
-		wait = Selenium::WebDriver::Wait.new(:timeout => @timeSettingMap['Wait']['Environment']['Lightening'])
-		EnziUIUtility.wait(@driver,:id,"enzi-data-table-container",@timeSettingMap['Wait']['Environment']['Lightening'])
+		wait = Selenium::WebDriver::Wait.new(:timeout => @timeSettingMap['Wait']['Environment']['Lightening']['Max'])
+		#lEnziUIUtility.wait(@driver,:id,"enzi-data-table-container",@timeSettingMap['Wait']['Environment']['Lightening']['Max'])
+		wait.until { @driver.find_element(:id ,"enzi-data-table-container").displayed? }
 		EnziUIUtility.selectElement(@driver,"Reschedule","button")
-		EnziUIUtility.wait(@driver,:id,"header43",@timeSettingMap['Wait']['Environment']['Lightening'])
+		EnziUIUtility.wait(@driver,:id,"header43",@timeSettingMap['Wait']['Environment']['Lightening']['Min'])
 		wait.until { @driver.find_element(:id ,"StartTime").displayed? }
 		EnziUIUtility.clickElement(@driver,:id,"StartTime")
 		EnziUIUtility.selectChild(@driver,:id,"StartTime",nil,"option")[4].click
@@ -298,7 +301,7 @@ class ManageTours
 		#res.fetch('Status__c').eql?("Scheduled") && res.fetch('Original_Tour__c').eql?("#{@@recordInsertedIds['Tour_Outcome__c']['Id']}")
 	end
 	def tourStatusChecked?(statusToCheck,primaryMember)
-		wait = Selenium::WebDriver::Wait.new(:timeout => @timeSettingMap['Wait']['Environment']['Lightening'])
+		wait = Selenium::WebDriver::Wait.new(:timeout => @timeSettingMap['Wait']['Environment']['Lightening']['Min'])
     wait.until {!@driver.find_element(:id ,"spinner").displayed?}
 		tourStatusChecked = false
 		rescheduledTours = Salesforce.getRecords(@salesforceBulk,"Tour_Outcome__c","SELECT id,Status__c,Original_Tour__c FROM Tour_Outcome__c WHERE Primary_Member__r.email = '#{primaryMember}'",nil)
