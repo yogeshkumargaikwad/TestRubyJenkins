@@ -44,6 +44,7 @@ class ContractEvent
 		#puts "accountJSON"
 		#puts accountJSON
 		accountId = Salesforce.createRecords(@sfBulk,"Account",accountJSON)
+		puts "1)Account Created"
 #puts "Account created"
 #puts accountId.inspect
 		@recordToDelete.store("account",accountId)
@@ -55,11 +56,13 @@ class ContractEvent
 		contactJSON[2]["AccountId"] = accountId[2].fetch("Id")
 		contactJSON[3]["AccountId"] = accountId[3].fetch("Id")
 		contactId = Salesforce.createRecords(@sfBulk,"Contact",contactJSON)
+		puts "2)Contact Created"
 #puts "contact created"
 		@recordToDelete.store("contact",contactId)
 #puts contactId.inspect
 
 		buildingIds = Salesforce.createRecords(@sfBulk,"Building__c",@sObjectRecords['ContractEvent']['Building__c'])
+		puts "3)Building Created"
 #puts "Building__c created"
 		@recordToDelete.store("building",buildingIds)
 #puts buildingIds.inspect
@@ -71,6 +74,7 @@ class ContractEvent
 		@reservableJSON[1]["Building__c"] = buildingIds[0].fetch("Id")
 		@reservableJSON[2]["Building__c"] = buildingIds[0].fetch("Id")
 		reservableId  = Salesforce.createRecords(@sfBulk,"Reservable__c",@reservableJSON)
+		puts "4)Reservable Created"
 #puts "reservable__c created"
 #puts reservableId.inspect
 		@recordToDelete.store("reservable__c",reservableId)
@@ -96,7 +100,9 @@ class ContractEvent
 	end
 
 	def deleteCreatedOpportunities(opportunityIds)
-		Salesforce.deleteRecords(@sfBulk,"Opportunity",opportunityIds)
+		allRecordIds = Salesforce.class_variable_get(:@@createdRecordsIds)
+		puts allRecordIds
+		Salesforce.deleteRecords(@sfBulk,"Opportunity",allRecordIds['Opportunity'])
 	end
 
 	def setUpPayload(eventName,opportunity_id = nil,company_uuid = nil,membership_agreement_uuid = nil,productCode = nil,reservableNumberForMoveIn= nil,reservableNumberForMoveOuts = nil,transferType= nil,downgradeReason = nil,downgradeNotes = nil)
@@ -143,12 +149,17 @@ class ContractEvent
 	end
 
 	def deleteCreatedRecord()
+		allRecordIds = Salesforce.class_variable_get(:@@createdRecordsIds)
+		puts allRecordIds
 		#Reservable automatically deleted when we delete building
 		#Salesforce.deleteRecords(@sfBulk,"Reservable__c",@recordToDelete["reservable__c"])
-		Salesforce.deleteRecords(@sfBulk,"Building__c",@recordToDelete["building"])
+		#Salesforce.deleteRecords(@sfBulk,"Building__c",@recordToDelete["building"])
+		Salesforce.deleteRecords(@sfBulk,"Building__c",allRecordIds['Building__c'])
 		#contact automatically deleted when we delete account
-		Salesforce.deleteRecords(@sfBulk,"Contact",@recordToDelete["contact"])
-		Salesforce.deleteRecords(@sfBulk,"Account",@recordToDelete["account"])
+		#Salesforce.deleteRecords(@sfBulk,"Contact",@recordToDelete["contact"])
+		#Salesforce.deleteRecords(@sfBulk,"Account",@recordToDelete["account"])
+		Salesforce.deleteRecords(@sfBulk,"Contact",allRecordIds['Contact'])
+		Salesforce.deleteRecords(@sfBulk,"Account",allRecordIds['Account'])
 	end
 
 	def getOpportunityDetails(id)

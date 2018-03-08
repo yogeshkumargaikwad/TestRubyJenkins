@@ -1156,12 +1156,12 @@ end
         puts "\n" 
 
         passedLogs = @objRollbar.addLog("[Validate] Does No of Desks(Weighted) Update?")
-        weightedDesk = (updatedOpp.fetch("No_of_Desks_unweighted__c").to_f * (createdOpp.fetch("Probability").to_f / 100.to_f).to_f).round
+        weightedDesk = (createdOpp.fetch("No_of_Desks_unweighted__c").to_f * (createdOpp.fetch("Probability").to_f / 100.to_f).to_f).round
         passedlogs = @objRollbar.addLog("[Expected] No of Desks(Weighted)=#{weightedDesk}")
         expect(createdOpp.fetch("No_of_Desks_weighted__c").to_i).to eq weightedDesk
         passedLogs = @objRollbar.addLog("[Result  ] Success")
         puts "\n" 
-        
+
         passedLogs = @objRollbar.addLog("[Validate] Does Contract type Update to Upgrade?")
         passedLogs = @objRollbar.addLog("[Expected] Contract Type= Upgrade")
         expect(createdOpp.fetch("Contract_Type__c")).to eq "Upgrade"
@@ -1231,6 +1231,7 @@ end
 
     it 'C:858 In Upgrade event, To check if the company_uuid matched with the existing opportunity and for that account there is having opportunity with stages closing and contract stage as sent then new opportunity should be created.', :'858' => true do
       begin
+        caseInfo = @testRailUtility.getCase('858')
         puts 'C:858 In Upgrade event, To check if the company_uuid matched with the existing opportunity and for that account there is having opportunity with stages closing and contract stage as sent then new opportunity should be created.'
         puts "\n"
         puts "------------------------------------------------------------------------------------------------------------------"
@@ -1238,17 +1239,15 @@ end
         membershipAgreementUUID = SecureRandom.uuid
         companyUUID = SecureRandom.uuid
         @mapOpportunityId = Hash.new
-        puts "Created Opportunity"
-
+        passedLogs = @objRollbar.addLog("[Step    ] Opportunity Should be Created With Name:'#{@testData['ContractEvent']['Account'][1]['name']}', Stage:'Closing', Building:'#{@testData['ContractEvent']['Building__c'][1]['Name']},Contract UUID:'#{contractUUID}', Contract Stage 'Contract Sent'",caseInfo['id'])
         @opportunity = @contractEvent.createOpportunity(1, "Closing", 1, contractUUID, "Contract Sent")
-        passedLogs = @objRollbar.addLog("[Step    ] Opportunity Should be Created With Id:#{@opportunity}, Name:#{@testData['ContractEvent']['Account'][1]['name']}, Stage:'Closing', Building:#{@testData['ContractEvent']['Building__c'][0]['Name']}, Contract UUID:#{contractUUID}", caseInfo['id'])
         expect(@opportunity).not_to eq nil
         passedLogs = @objRollbar.addLog("[Expected] Opportunity is successfully created")
         passedLogs = @objRollbar.addLog("[Result  ] Success")
         puts "\n"
 
         @mapOpportunityId["opportunity"] = @opportunity
-        passedLogs = @objRollbar.addLog("[Step    ] Payload Should be Created with EventName:'Contract Sent', Search Criteria:'Based on Membership Agreement UUID'")
+        passedLogs = @objRollbar.addLog("[Step    ] Payload Should be Created with EventName:'Contract Sent', Search Criteria:'Based on Company UUID'")
         @getResponse = SfRESTService.postData('' + @contractEvent.setUpPayload("Contract Sent", nil, "#{@testData['ContractEvent']['Account'][1]['UUID__c']}", membershipAgreementUUID, nil, 0, 1, "Upgrade").to_json, "#{@testData['ContractEvent']['ServiceUrls'][0]['contractEvent']}", false)
         expect(@getResponse['success']).to be true
         expect(@getResponse['result']).to_not eql nil
@@ -1257,28 +1256,30 @@ end
         puts "\n"
 
         id = @getResponse['result'].split(':')[1].chomp('"').delete(' ')
-
+        passedLogs = @objRollbar.addLog("[Validate] Does New Opportunity created after hitting Payload?")
+        createdOpp = @contractEvent.getOpportunityDetails(id)
+        expect(createdOpp.fetch("Id")).not_to eq nil
+        passedLogs = @objRollbar.addLog("[Expected] Opportunity is successfully created")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n"
 
         @mapOpportunityId["opportunity"] << Hash["Id" => id]
 
-        createdOpp = @contractEvent.getOpportunityDetails(id)
+        
         passedLogs = @objRollbar.addLog("[Step    ] Fetching Opportunity Reservable details")
         updatedOppReservable = @contractEvent.getOppReservableDetails(createdOpp[0])
         passedLogs = @objRollbar.addLog("[Expected] Opportunity Reservable fields are successfully fetched")
-        passedLogs =@objRollbar.addLog("[Result   ] Success")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
         puts "\n"
 
         passedLogs = @objRollbar.addLog("[Step    ] Fetching Opportunity Move Outs details")
         updatedOppMoveOuts = @contractEvent.getOppMoveOutsDetails(createdOpp[0])
         passedLogs = @objRollbar.addLog("[Expected] Opportunity Move Outs fields are successfully fetched")
-        passedLogs =@objRollbar.addLog(" [Result  ] Success")
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
         puts "\n"
 
         passedLogs = @objRollbar.addLog("[Step    ] Checking Updated Opportunity Fields")
         puts "\n"
-
-        puts "Checking Opportunity should not null..."
-        expect(createdOpp.fetch("Id")).not_to eq nil
 
         passedLogs = @objRollbar.addLog("[Validate] Does Paperwork Sent On Date Update to Contract Date?")
         passedLogs = @objRollbar.addLog("[Expected] Paperwork sent on Date= '#{@testData['ContractEvent']['Scenarios'][0]['body']['contract_date']}'")
@@ -1312,7 +1313,7 @@ end
 
         passedLogs = @objRollbar.addLog("[Validate] Does Total Desks Reserved Update to Moveins Quantity?") 
         passedLogs = @objRollbar.addLog("[Expected] Total Desks Reserved=#{@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['quantity']}")
-        expect(createdOpp.fetch("Total_Desks_Reserved__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['products'][0]['quantity'].to_i
+        expect(createdOpp.fetch("Total_Desks_Reserved__c").to_i).to eq @testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['quantity'].to_i
         passedLogs = @objRollbar.addLog("[Result  ] Success")
         puts "\n" 
 
@@ -1323,7 +1324,7 @@ end
         puts "\n" 
 
         passedLogs = @objRollbar.addLog("[Validate] Does Total Desks Reserved(net) Update With Difference Between Opportunity Move ins and Opportunity Move Outs?")
-        passedLogs = @objRollbar.addLog("[Expected] Total Desks Reserved(Net)=#{(@testData['ContractEvent']['Scenarios'][0]['body']['move_ins'][0]['quantity'].to_i)-(@testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity'].to_i)}")
+        passedLogs = @objRollbar.addLog("[Expected] Total Desks Reserved(Net)=#{(@testData['ContractEvent']['Scenarios'][0]['body']['products'][0]['quantity'].to_i)-(@testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity'].to_i)}")
         expect(createdOpp.fetch("Total_Desks_Reserved_net__c").to_i).to eq (@testData['ContractEvent']['Scenarios'][0]['body']['products'][0]['quantity'].to_i - @testData['ContractEvent']['Scenarios'][0]['body']['move_outs'][0]['quantity'].to_i)
         passedLogs = @objRollbar.addLog("[Result  ] Success")
         puts "\n" 
@@ -1341,7 +1342,7 @@ end
         puts "\n" 
 
         passedLogs = @objRollbar.addLog("[Validate] Does Original Contract UUID Update to Membership Agreement UUID?")
-        passedLogs = @objRollbar.addLog("[Expected] Original Contract UUID=#{membershipAgreementUUID}")
+        passedLogs = @objRollbar.addLog("[Expected] Original Contract UUID= ")
         expect(createdOpp.fetch("Original_Contract_UUID__c")).to eq ""
         passedLogs = @objRollbar.addLog("[Result  ] Success")
         puts "\n" 
@@ -1364,9 +1365,12 @@ end
         passedLogs = @objRollbar.addLog("[Result  ] Success")
         puts "\n" 
 
-        puts "Checking Opportunity- Close Date..."
+        passedLogs = @objRollbar.addLog("[Validate] Does Close date updated to One monthe forward?")
         d = Date.today
+        passedLogs = @objRollbar.addLog("[Expected] Close Date=#{(d + 30).to_s}")
         expect(createdOpp.fetch("CloseDate")).to eq (d + 30).to_s
+        passedLogs = @objRollbar.addLog("[Result  ] Success")
+        puts "\n" 
 
         puts "Checking Opportunity- Owner..."
         expect(createdOpp.fetch("Owner.Username")).to eq @config['Staging']['username']
@@ -1378,9 +1382,9 @@ end
         puts "\n" 
 
         passedLogs = @objRollbar.addLog("[Validate] Does No of Desks(Weighted) Update?")
-        weightedDesk = (updatedOpp.fetch("No_of_Desks_unweighted__c").to_f * (updatedOpp.fetch("Probability").to_f / 100.to_f).to_f).round
+        weightedDesk = (createdOpp.fetch("No_of_Desks_unweighted__c").to_f * (createdOpp.fetch("Probability").to_f / 100.to_f).to_f).round
         passedlogs = @objRollbar.addLog("[Expected] No of Desks(Weighted)=#{weightedDesk}")
-        expect(updatedOpp.fetch("No_of_Desks_weighted__c").to_i).to eq weightedDesk
+        expect(createdOpp.fetch("No_of_Desks_weighted__c").to_i).to eq weightedDesk
         passedLogs = @objRollbar.addLog("[Result  ] Success")
         puts "\n" 
 
@@ -7949,7 +7953,7 @@ end
     after(:each) {
       if @mapOpportunityId != nil then
         passedLogs = @objRollbar.addLog("[Step    ] Deleting Opportunity Test Data")
-        puts @mapOpportunityId['opportunity']
+        #puts @mapOpportunityId['opportunity']
         @contractEvent.deleteCreatedOpportunities(@mapOpportunityId['opportunity'])
         passedLogs = @objRollbar.addLog("[Expected] Opportunity Test Data should be deleted.")
         passedLogs = @objRollbar.addLog("[Result  ] Success")
@@ -7962,6 +7966,7 @@ end
   after(:all) {
     puts ""
     puts "------------------------------------------------------------------------------------------------------------------"
+
     passedLogs = @objRollbar.addLog("[Step    ] Deleting Test Data")
     @contractEvent.deleteCreatedRecord()
     passedLogs = @objRollbar.addLog("[Expected] Test Data should be deleted.")
