@@ -16,11 +16,10 @@ describe MergeOpportunities do
 
 	it "C167 : To check if opportunities is able to merge for admin profile." do
 		puts "C167 : To check if opportunities is able to merge for admin profile."
-
+		opportunityTab = @objMergeOpportunities.getTab("Opportunity_Tab","Opportunity Merge")
 		puts "checking Opportunity Merge button in opportunity list view"
-    opportunityTab = @objMergeOpportunities.getTab("Opportunity_Tab","Opportunity Merge")
 		expect(opportunityTab.displayed?).to eq true
-
+		puts "Clicking on Opportunity Tab"
 		opportunityTab.click
 		puts "checking OpportunityMergePage title"
 		#wait for page to load
@@ -28,32 +27,32 @@ describe MergeOpportunities do
 		expect(@objMergeOpportunities.getDriver.title).to eq "Merge Opportunities"
 
 		#puts "Checking actual record in salesforce and opportunities displayed in table"
-    #puts @objMergeOpportunities.numberOfOpportunitiesInSalesforce()
-    #puts  @objMergeOpportunities.calculateNumberOfRows(false)
+    	#puts @objMergeOpportunities.numberOfOpportunitiesInSalesforce()
+    	#puts  @objMergeOpportunities.calculateNumberOfRows(false)
 		#expect(@objMergeOpportunities.numberOfOpportunitiesInSalesforce() == @objMergeOpportunities.calculateNumberOfRows(false)).to eq true
 
 		puts "Checking progress bar"
-    puts  @objMergeOpportunities.getProgress
+    	puts  @objMergeOpportunities.getProgress
 		#expect(@objMergeOpportunities.getProgress).to eq "0%"
 
 		@objMergeOpportunities.searchText("test_EnzigmaSoft")
-		EnziUIUtility.wait(@driver,nil,nil,10)
+		EnziUIUtility.wait(@driver,nil,nil,5)
 
 		puts "Checking for opportunity 0 selected"
 		@driver.execute_script("return arguments[0].parentNode.parentNode;" , @driver.find_element(:id ,'checkbox:0')).click
-    expect(@objMergeOpportunities.isSelected("checkbox:0")).to eq true
+    	expect(@objMergeOpportunities.isSelected("checkbox:0")).to eq true
 
 		puts "Checking for opportunity 1 selected"
-    @driver.execute_script("return arguments[0].parentNode.parentNode;" , @driver.find_element(:id ,'checkbox:1')).click
-    expect(@objMergeOpportunities.isSelected("checkbox:1")).to eq true
+    	@driver.execute_script("return arguments[0].parentNode.parentNode;" , @driver.find_element(:id ,'checkbox:1')).click
+    	expect(@objMergeOpportunities.isSelected("checkbox:1")).to eq true
 
 		numOfSelectedOpportunityOnFirstPage=@objMergeOpportunities.calculateNumberOfRows(true)
-    puts "number of opp selected on 1st page"
-    puts numOfSelectedOpportunityOnFirstPage
+	    puts numOfSelectedOpportunityOnFirstPage
 		puts "Click on next button"
-		EnziUIUtility.wait(@driver,nil,nil,10)
+		#EnziUIUtility.wait(@driver,nil,nil,10)
 		puts @objMergeOpportunities.getElementByAttribute(:tag_name,"button","id","next").click
-    numberOfRowsOnSecondPage=@objMergeOpportunities.calculateNumberOfRows(false)
+		EnziUIUtility.wait(@driver, :id, 'checkbox:1', 30)
+    	numberOfRowsOnSecondPage=@objMergeOpportunities.calculateNumberOfRows(false)
 		puts "number of opp on 2nd page"
 		puts numberOfRowsOnSecondPage
 		puts "Checking SelectedOppFromFirstPage = OppOnSecondPage"
@@ -73,6 +72,8 @@ describe MergeOpportunities do
 		expect(@objMergeOpportunities.isSelected("checkbox:0")).to eq true
 
 		opportunityData = @objMergeOpportunities.getAllData(false)
+		puts "opportunityData"
+		puts opportunityData.size
 		puts "Primary Opportunity"
 		puts opportunityData["1"]["0"][1]
 		puts "Secondary Opportunity"
