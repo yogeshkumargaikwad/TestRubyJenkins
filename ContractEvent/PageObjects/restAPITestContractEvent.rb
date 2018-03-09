@@ -101,7 +101,7 @@ class ContractEvent
 
 	def deleteCreatedOpportunities(opportunityIds)
 		allRecordIds = Salesforce.class_variable_get(:@@createdRecordsIds)
-		puts allRecordIds
+		#puts allRecordIds
 		Salesforce.deleteRecords(@sfBulk,"Opportunity",allRecordIds['Opportunity'])
 	end
 
