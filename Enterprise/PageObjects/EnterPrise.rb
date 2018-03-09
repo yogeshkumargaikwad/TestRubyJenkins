@@ -22,7 +22,7 @@ class EnterPrise
 		@timeSetting = YAML.load(file.read())
 
 		#EnziUIUtility.wait(@driver,:id,"phSearchInput",100)
-		EnziUIUtility.wait(@driver,:id,"phSearchInput",@timeSetting['Wait']['Environment']['Classic'])
+		EnziUIUtility.wait(@driver,:id,"phSearchInput",@timeSetting['Wait']['Environment']['Classic']['Max'])
 		#@driver.find_element(id: 'Contact_Tab').click
 	end
 
@@ -72,7 +72,7 @@ class EnterPrise
 
 	#Use:This function is use to set the date
 	def setMoveInDate(date)
-		EnziUIUtility.wait(@driver,:id,'Term__c',@timeSetting['Wait']['Environment']['Lightening'])
+		EnziUIUtility.wait(@driver,:id,'Term__c',@timeSetting['Wait']['Environment']['Lightening']['Max'])
 		#@driver.find_element(:name,'Move_In_Date__c').click
 		arr_date = date.split('-')
 		year_to_select = arr_date[0]
@@ -141,28 +141,28 @@ class EnterPrise
 
 	#Use: This function is Used to Navigate To Create Opportunity
 	def navigateToCreateOpportunity()
-		EnziUIUtility.wait(@driver,:class,"globalCreateTrigger",@timeSetting['Wait']['Environment']['Lightening'])
+		EnziUIUtility.wait(@driver,:class,"globalCreateTrigger",@timeSetting['Wait']['Environment']['Lightening']['Max'])
 		@driver.find_element(:class,'globalCreateTrigger').click
 		@driver.find_element(:link, 'Create Opportunity').click
 	end
 
 	def createNewOrganization(orgName, noOfEmployees = nil)
-		EnziUIUtility.wait(@driver,:id,'GlobalActionManager:New_Organization',@timeSetting['Wait']['Environment']['Lightening'])
+		EnziUIUtility.wait(@driver,:id,'GlobalActionManager:New_Organization',@timeSetting['Wait']['Environment']['Lightening']['Max'])
 		EnziUIUtility.clickElement(@driver,:id,"GlobalActionManager:New_Organization")
-		EnziUIUtility.wait(@driver,:id,'Name',@timeSetting['Wait']['Environment']['Lightening'])
+		EnziUIUtility.wait(@driver,:id,'Name',@timeSetting['Wait']['Environment']['Lightening']['Max'])
 		EnziUIUtility.setValue(@driver,:id,'Name',"#{orgName}")
 		if noOfEmployees != nil
 			EnziUIUtility.setValue(@driver,:id,'Number_of_Full_Time_Employees__c',"#{noOfEmployees}")
 		end
 		selectElement(@driver,"Save","button")
 		#expect(@objEnterPrise.checkStage("div","Account created.")).to eq true
-		EnziUIUtility.wait(@driver,:id, "Budget_Monthly__c",@timeSetting['Wait']['Environment']['Lightening'])
+		EnziUIUtility.wait(@driver,:id, "Budget_Monthly__c",@timeSetting['Wait']['Environment']['Lightening']['Max'])
 	end
 
 	def createNewContact(accountName, contactName, emailId)
 		@driver.navigate.refresh
 		navigateToCreateOpportunity()
-		EnziUIUtility.wait(@driver,:id,'Budget_Monthly__c',@timeSetting['Wait']['Environment']['Lightening'])
+		EnziUIUtility.wait(@driver,:id,'Budget_Monthly__c',@timeSetting['Wait']['Environment']['Lightening']['Max'])
 		selectElement(@driver,"Maximize","button")
 		EnziUIUtility.setValue(@driver,:id,"AccountRec","#{accountName}")
 		sleep(10)
@@ -175,10 +175,10 @@ class EnterPrise
 				list.click
 			end
 		end
-		EnziUIUtility.wait(@driver,:id,'actionManager:New_Decision_Maker',@timeSetting['Wait']['Environment']['Lightening'])
+		EnziUIUtility.wait(@driver,:id,'actionManager:New_Decision_Maker',@timeSetting['Wait']['Environment']['Lightening']['Max'])
 		sleep(5)
 		EnziUIUtility.clickElement(@driver,:id,"actionManager:New_Decision_Maker")
-		EnziUIUtility.wait(@driver,:id,'Name',@timeSetting['Wait']['Environment']['Lightening'])
+		EnziUIUtility.wait(@driver,:id,'Name',@timeSetting['Wait']['Environment']['Lightening']['Max'])
 		EnziUIUtility.setValue(@driver,:id,'Name',"#{contactName}")
 		EnziUIUtility.setValue(@driver,:id,'Email',"#{emailId}")
 		selectElement(@driver,"Save","button")
@@ -186,7 +186,7 @@ class EnterPrise
 
 	#Use: This function is Used to check button Enability
 	def buttonEnabled?(buttonId)
-		EnziUIUtility.wait(@driver,:id,"#{buttonId}",@timeSetting['Wait']['Environment']['Lightening'])
+		EnziUIUtility.wait(@driver,:id,"#{buttonId}",@timeSetting['Wait']['Environment']['Lightening']['Max'])
 		buttonEnability = @driver.find_element(:id, "#{buttonId}").enabled?
 		#puts "button Enability?: #{buttonEnability}"
 		return buttonEnability
@@ -211,7 +211,7 @@ class EnterPrise
 	#Use: This function is Used to Navigate To AccountDetails
 	def navigateToAccountDetails(tab_name)
 		@driver.find_element(:link, "#{tab_name}").click
-		EnziUIUtility.wait(@driver,nil,nil,@timeSetting['Sleep']['Environment']['Lightening'])
+		EnziUIUtility.wait(@driver,nil,nil,@timeSetting['Sleep']['Environment']['Lightening']['Max'])
 		arrTable = @driver.find_elements(:tag_name,'table')
 		accountTable = nil
 		#puts "tables: #{arrTable}"
@@ -285,9 +285,9 @@ class EnterPrise
 	def switchToLightening()
 		if !(driver.current_url().include? "lightning")
 			#puts "String not 'lightning'"
-			EnziUIUtility.wait(driver,:id,"userNav-arrow",@timeSetting['Wait']['Environment']['Classic'])
+			EnziUIUtility.wait(driver,:id,"userNav-arrow",@timeSetting['Wait']['Environment']['Classic']['Max'])
 			driver.find_element(:id, "userNav-arrow").click
-			EnziUIUtility.wait(driver,:id,"userNav-arrow",@timeSetting['Wait']['Environment']['Classic'])
+			EnziUIUtility.wait(driver,:id,"userNav-arrow",@timeSetting['Wait']['Environment']['Classic']['Max'])
 			driver.find_element(:link , "Switch to Lightning Experience").click
 		else
 			puts "You are already on lightening..."
@@ -298,9 +298,9 @@ class EnterPrise
 	def switchToClassic()
 		if (@driver.current_url().include? "lightning")
 			#puts "String 'lightning'"
-			EnziUIUtility.wait(@driver,:class,"oneUserProfileCardTrigger",@timeSetting['Wait']['Environment']['Lightening'])
+			EnziUIUtility.wait(@driver,:class,"oneUserProfileCardTrigger",@timeSetting['Wait']['Environment']['Lightening']['Max'])
 			@driver.find_element(:class, "oneUserProfileCardTrigger").click
-			EnziUIUtility.wait(@driver,:class,"profile-card-footer",@timeSetting['Wait']['Environment']['Lightening'])
+			EnziUIUtility.wait(@driver,:class,"profile-card-footer",@timeSetting['Wait']['Environment']['Lightening']['Max'])
 			@driver.find_element(:link , "Switch to Salesforce Classic").click
 		else
 			puts "You are already on Classic..."
@@ -368,7 +368,7 @@ class EnterPrise
 	def createOpportunity(opportunityRole, oppRoleContact, buildingName, accountName, noOfFTE = nil, noOfDeskInterestedIn = nil, monthlyBudget = nil, location = nil, officeFormat = nil, moveInDate = nil, sqFeet = nil, term = nil, useCase = nil)
 		@driver.navigate.refresh
 		navigateToCreateOpportunity()
-		EnziUIUtility.wait(@driver,:id,'Budget_Monthly__c',@timeSetting['Wait']['Environment']['Lightening'])
+		EnziUIUtility.wait(@driver,:id,'Budget_Monthly__c',@timeSetting['Wait']['Environment']['Lightening']['Max'])
 		selectElement(@driver,"Maximize","button")
 
 		EnziUIUtility.setValue(@driver,:id,"AccountRec","#{accountName}")
@@ -382,7 +382,7 @@ class EnterPrise
 				list.click
 			end
 		end
-		EnziUIUtility.wait(@driver,nil,nil,@timeSetting['Sleep']['Environment']['Lightening'])
+		EnziUIUtility.wait(@driver,nil,nil,@timeSetting['Sleep']['Environment']['Lightening']['Max'])
 		if(noOfFTE != nil)
 			EnziUIUtility.setValue(@driver,:id,"Number_of_Full_Time_Employees__c","#{noOfFTE}")
 		end
@@ -408,7 +408,7 @@ class EnterPrise
 				list.click
 			end
 		end
-		EnziUIUtility.wait(@driver,nil,nil,@timeSetting['Sleep']['Environment']['Lightening'])
+		EnziUIUtility.wait(@driver,nil,nil,@timeSetting['Sleep']['Environment']['Lightening']['Max'])
 		@driver.execute_script("arguments[0].scrollIntoView();" , @driver.find_element(:id ,"Term__c"))
 
 		EnziUIUtility.setValue(@driver,:id,"Building","#{buildingName}")
@@ -423,13 +423,13 @@ class EnterPrise
 				list.click
 			end
 		end
-		EnziUIUtility.wait(@driver,nil,nil,@timeSetting['Sleep']['Environment']['Lightening'])
+		EnziUIUtility.wait(@driver,nil,nil,@timeSetting['Sleep']['Environment']['Lightening']['Max'])
 		if(officeFormat != nil)
 			EnziUIUtility.selectOption(@driver,:id,"OfficeFormat","#{officeFormat}")
 		end
 
 		if(moveInDate != nil)
-			EnziUIUtility.wait(@driver,:id,'Move_In_Date__c',@timeSetting['Wait']['Environment']['Lightening'])
+			EnziUIUtility.wait(@driver,:id,'Move_In_Date__c',@timeSetting['Wait']['Environment']['Lightening']['Max'])
 			@driver.find_element(:id,'Move_In_Date__c').click
 			setMoveInDate(moveInDate)
 		end
