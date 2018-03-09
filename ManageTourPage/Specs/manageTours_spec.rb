@@ -807,18 +807,9 @@ describe ManageTours do
         caseInfo = @testRailUtility.getCase('115')
         passedLogs = @objRollbar.addLog("[Step    ]  Check status of tour after tour rescheduling \n[Validate]  Status of tour should be updated as Rescheduled", caseInfo['id'])
         puts "\n"
-        @leadsTestData[0]['email'] = "test_enzigmaPre#{rand(9999)}@example.com"
-        @leadsTestData[0]['company'] = "Test_Enzigma#{rand(1111)}"
-        @objManageTours.openPageForLead(Salesforce.createRecords(@objManageTours.instance_variable_get(:@salesforceBulk),'Lead',@leadsTestData)[0]['Id'])
-        @objManageTours.checkRecordCreated("Journey__c","SELECT id FROM Journey__c WHERE Primary_Email__c = '#{@leadsTestData[0]['email']}'")
-        @objManageTours.bookTour(0,true)
-        @objManageTours.duplicateAccountSelector("Create Account and Don't Merge",nil)
-        passedLogs = @objRollbar.addLog("[Step    ]  Check status of tour after rescheduling \n[Validate]  Does status of tour updated as Rescheduled ?", caseInfo['id'])
-        puts "\n"
         @objManageTours.rescheduleTour
         sleep(@objManageTours.instance_variable_get(:@timeSettingMap)['Sleep']['Environment']['Lightening']['Max'])
         expect(@objManageTours.tourStatusChecked?("Rescheduled" , @leadsTestData[0]['email'])).to be true
-        passedLogs = @objRollbar.addLog("[Expected]  Status = Rescheduled \n[Result  ]  Success") 
         passedLogs = @objRollbar.addLog("[Expected]  Status = Rescheduled \n[Result  ]  Success")  
         puts "\n"
         
