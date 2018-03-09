@@ -624,7 +624,7 @@ describe ManageTours do
         passedLogs = @objRollbar.addLog("[Validate]   Records of booked tour should be displayed")
         expect(@objManageTours.numberOfTourBooked == 3).to be true
         passedLogs = @objRollbar.addLog("[Expected]  Booked tours records are available on manage tour page \n[Result  ]  Success")
-        puts "\n"s
+        puts "\n"
         passedLogs = @objRollbar.addLog("[Step    ]  Contact should be created with name #{leadName}")
         expect(@objManageTours.checkRecordCreated("Contact","SELECT id,total_Scheduled_Tours__c FROM Contact WHERE Email = '#{@leadsTestData[0]['email']}'")[0].fetch("Id")).to_not eql nil
         passedLogs = @objRollbar.addLog("[Expected]  Contact created successfully \n[[Result  ]  Success")
