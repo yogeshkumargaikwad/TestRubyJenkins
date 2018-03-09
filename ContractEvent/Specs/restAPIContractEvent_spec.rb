@@ -2757,9 +2757,9 @@ end
         puts "\n" 
 
         passedLogs = @objRollbar.addLog("[Validate] Does No of Desks(Weighted) Update?")
-        weightedDesk = (updatedOpp.fetch("No_of_Desks_unweighted__c").to_f * (updatedOpp.fetch("Probability").to_f / 100.to_f).to_f).round
+        weightedDesk = (createdOpp.fetch("No_of_Desks_unweighted__c").to_f * (createdOpp.fetch("Probability").to_f / 100.to_f).to_f).round
         passedlogs = @objRollbar.addLog("[Expected] No of Desks(Weighted)=#{weightedDesk}")
-        expect(updatedOpp.fetch("No_of_Desks_weighted__c").to_i).to eq weightedDesk
+        expect(createdOpp.fetch("No_of_Desks_weighted__c").to_i).to eq weightedDesk
         passedLogs = @objRollbar.addLog("[Result  ] Success")
         puts "\n" 
 
