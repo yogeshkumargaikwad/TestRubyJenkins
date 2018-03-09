@@ -663,9 +663,9 @@ describe ManageTours do
       puts "\n"
       begin
         caseInfo = @testRailUtility.getCase('129')
-        passedLogs = @objRollbar.addLog("[Step    ]  User can fill cancellation reason", caseInfo['id'])
-        passedLogs = @objRollbar.addLog("[Validate]  Cancel tour pop-up should accept cancellation reason")
-        passedLogs = @objRollbar.addLog("[Step    ]  User can fill cancellation reason \n[validate]  Does cancel tour pop-up accept cancellation reason ? ", caseInfo['id'])
+        passedLogs = @objRollbar.addLog("[Step    ]  User should fill cancellation reason", caseInfo['id'])
+        passedLogs = @objRollbar.addLog("[Validate]  Cancel tour pop-up should accept cancellation reason \n[Result  ]  Success" )
+       
         EnziUIUtility.selectElement(@driver,"Cancel","button")
         EnziUIUtility.wait(@driver,:id,"header43",@objManageTours.instance_variable_get(:@timeSettingMap)['Wait']['Environment']['Lightening']['Min'])
         EnziUIUtility.selectChild(@driver,:id,"Cancellation_Reason__c","No reason (didn't provide)","option")
@@ -705,7 +705,7 @@ describe ManageTours do
         caseInfo = @testRailUtility.getCase('102')
         passedLogs = @objRollbar.addLog("[Step    ]  Click on 'Use Selector Account' button",caseInfo['id'])
         
-        passedLogs = @objRollbar.addLog("[Validate]  Lead should be created"
+        passedLogs = @objRollbar.addLog("[Validate]  Lead should be created")
         @leadsTestData[0]['email'] = "test_enzigmaPre#{rand(9999)}@example.com"
         @objManageTours.openPageForLead(Salesforce.createRecords(@objManageTours.instance_variable_get(:@salesforceBulk),'Lead',@leadsTestData)[0]['Id'])
         passedLogs = @objRollbar.addLog("[Expected] Lead created sucessfully \n[Result  ]  Success")
