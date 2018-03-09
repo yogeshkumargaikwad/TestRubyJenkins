@@ -240,12 +240,13 @@ describe ManageTours do
     	
         caseInfo = @testRailUtility.getCase('81')
         passedLogs = @objRollbar.addLog("[Step]  Start Time field should be selectable",caseInfo['id'])
-        ManageTours.selectBuilding(@driver.find_element(:id,"BookTours0"),"LA-Santa Monica",@objManageTours.instance_variable_get(:@timeSettingMap))
+        ManageTours.selectBuilding(@driver.find_element(:id,"BookTours0"),"LON-Soho - Sheraton H",@objManageTours.instance_variable_get(:@timeSettingMap))
         ManageTours.selectTourDate(@driver.find_element(:id,"BookTours0"),@objManageTours.instance_variable_get(:@timeSettingMap))
       if Date.today.saturday? || Date.today.sunday? then
         EnziUIUtility.clickElement(@driver,:id,Date.today.next_day(2).to_s)
       else
-        EnziUIUtility.selectElement(@driver.find_element(:id,"BookTours0"),"Today","a")
+        EnziUIUtility.clickElement(@driver,:id,Date.today.next_day(3).to_s)
+        #EnziUIUtility.selectElement(@driver.find_element(:id,"BookTours0"),"Today","a")
       end
         expect(@objManageTours.childDisabled?(ManageTours.selectTourDate(@driver.find_element(:id,"BookTours0"),@objManageTours.instance_variable_get(:@timeSettingMap)),ManageTours.setElementValue(@driver.find_element(:id,"BookTours0"),"startTime",nil))).to be false
     	passedLogs = @objRollbar.addLog("[Expected]  Start Time field should be selected after selecting Building Name and Tour Date fields \n[Result  ]  Success ")
