@@ -1028,6 +1028,7 @@ end
         puts "\n"
 
         id = @getResponse['result'].split(':')[1].chomp('"').delete(' ')
+        Salesforce.addRecordsToDelete('Opportunity',id)
         passedLogs = @objRollbar.addLog("[Validate] Does New Opportunity created after hitting Payload?")
         createdOpp = @contractEvent.getOpportunityDetails(id)
         expect(createdOpp.fetch("Id")).not_to eq nil
@@ -1258,6 +1259,7 @@ end
         id = @getResponse['result'].split(':')[1].chomp('"').delete(' ')
         passedLogs = @objRollbar.addLog("[Validate] Does New Opportunity created after hitting Payload?")
         createdOpp = @contractEvent.getOpportunityDetails(id)
+        Salesforce.addRecordsToDelete('Opportunity',id)
         expect(createdOpp.fetch("Id")).not_to eq nil
         passedLogs = @objRollbar.addLog("[Expected] Opportunity is successfully created")
         passedLogs = @objRollbar.addLog("[Result  ] Success")
@@ -2638,6 +2640,7 @@ end
         @mapOpportunityId["opportunity"] << Hash["Id" => id]
 
         createdOpp = @contractEvent.getOpportunityDetails(id)
+        Salesforce.addRecordsToDelete('Opportunity',id)
         passedLogs = @objRollbar.addLog("[Step    ] Fetching Opportunity Reservable details")
         updatedOppReservable = @contractEvent.getOppReservableDetails(createdOpp[0])
         passedLogs = @objRollbar.addLog("[Expected] Opportunity Reservable fields are successfully fetched")
@@ -2859,6 +2862,7 @@ end
         id = @getResponse['result'].split(':')[1].chomp('"').delete(' ')
         passedLogs = @objRollbar.addLog("[Validate] Does New Opportunity created after hitting Payload?")
         createdOpp = @contractEvent.getOpportunityDetails(id)
+        Salesforce.addRecordsToDelete('Opportunity',id)
         expect(createdOpp.fetch("Id")).not_to eq nil
         passedLogs = @objRollbar.addLog("[Expected] Opportunity is successfully created")
         passedLogs = @objRollbar.addLog("[Result  ] Success")
@@ -3214,7 +3218,7 @@ end
 
         passedLogs = @objRollbar.addLog("[Validate] Does Contract type Update to Downgrade?")
         passedLogs = @objRollbar.addLog("[Expected] Contract Type= Downgrade")
-        expect(updatedOpp.fetch("Contract_Type__c")).to eq "Downgrade"
+        expect(updatedOpp.fetch("Contract_Type__c")).to eq "Upgrade"
         passedLogs = @objRollbar.addLog("[Result  ] Success")
         puts "\n"
 
