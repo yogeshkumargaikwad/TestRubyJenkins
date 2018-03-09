@@ -150,7 +150,7 @@ class ContractEvent
 
 	def deleteCreatedRecord()
 		allRecordIds = Salesforce.class_variable_get(:@@createdRecordsIds)
-		puts allRecordIds
+		#puts allRecordIds
 		#Reservable automatically deleted when we delete building
 		#Salesforce.deleteRecords(@sfBulk,"Reservable__c",@recordToDelete["reservable__c"])
 		#Salesforce.deleteRecords(@sfBulk,"Building__c",@recordToDelete["building"])
