@@ -577,7 +577,7 @@ describe ManageTours do
         @leadsTestData[0]['email'] = "test_enzigmaPre#{rand(9999)}@example.com"
         @leadsTestData[0]['company'] = "Test_Enzigma#{rand(1111)}"
         puts "\n"
-        passedLogs = @objRollbar.addLog("[Validate]  Lead should be created"
+        passedLogs = @objRollbar.addLog("[Validate]  Lead should be created")
         @objManageTours.openPageForLead(Salesforce.createRecords(@objManageTours.instance_variable_get(:@salesforceBulk),'Lead',@leadsTestData)[0]['Id'])
         passedLogs = @objRollbar.addLog("[Expected] Lead created sucessfully \n[Result  ]  Success")
         puts "\n"
