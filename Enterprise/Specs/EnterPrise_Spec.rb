@@ -34,7 +34,7 @@ describe "Enterprise" do
         puts "-----------------------------------------------------------------------------------------------"
       }
       it 'Login by user' do
-        EnziUIUtility.wait(@driver, :id, 'phSearchInput', @timeSetting['Wait']['Environment']['Classic']['Min'])
+        EnziUIUtility.wait(@driver, :id, 'phSearchInput', @timeSetting['Wait']['Environment']['Classic']['Max'])
         @objEnterPrise.loginForUser(@testRecords['profile'][index])
         #EnziUIUtility.wait(@driver, nil, nil, @timeSetting['Sleep']['Environment']['Classic'])
         EnziUIUtility.switchToWindow(@driver, "Home | Salesforce")
@@ -44,7 +44,7 @@ describe "Enterprise" do
       it 'C1012: To check "New Organization" button is enable on create opportunity page' do
         begin
           @objEnterPrise.navigateToCreateOpportunity()
-          EnziUIUtility.wait(@driver, :id, 'Budget_Monthly__c', @timeSetting['Wait']['Environment']['Lightening']['Min'])
+          EnziUIUtility.wait(@driver, :id, 'Budget_Monthly__c', @timeSetting['Wait']['Environment']['Lightening']['Max'])
           @objEnterPrise.selectElement(@driver, "Maximize", "button")
           expect(@objEnterPrise.buttonEnabled?("GlobalActionManager:New_Organization")).to eq true
           puts "New Organization button is enabled in create Opportunity with Global Action"
@@ -81,7 +81,7 @@ describe "Enterprise" do
           #@objEnterPrise.selectElement(@driver,"Close","button")
           @driver.navigate.refresh
           @objEnterPrise.navigateToCreateOpportunity()
-          EnziUIUtility.wait(@driver, :id, 'Budget_Monthly__c', @timeSetting['Wait']['Environment']['Lightening']['Min'])
+          EnziUIUtility.wait(@driver, :id, 'Budget_Monthly__c', @timeSetting['Wait']['Environment']['Lightening']['Max'])
           @objEnterPrise.selectElement(@driver, "Maximize", "button")
           @objEnterPrise.createNewOrganization(@testRecords['account'][0], "5")
           expect(@objEnterPrise.checkError("div", "You can't create duplicate Organization.")).to eq true
