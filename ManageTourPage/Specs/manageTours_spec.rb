@@ -380,13 +380,13 @@ describe ManageTours do
     puts "\n"
     begin
         caseInfo = @testRailUtility.getCase('85')
-        passedLogs = @objRollbar.addLog("[Step    ]  Duplicate account selector pop-up should be opened", caseInfo['id'])
+        
        
         @objManageTours.bookTour(0,true)
         EnziUIUtility.wait(@driver,:id,"enzi-data-table-container",@objManageTours.instance_variable_get(:@timeSettingMap)['Wait']['Environment']['Lightening']['Max'])
-       
-        puts "#{@driver.find_element(:id,"header43").text} opened successfully"
-        puts "\n"
+        #puts "#{@driver.find_element(:id,"header43").text} opened successfully"
+        #puts "\n"
+        passedLogs = @objRollbar.addLog("[Step    ]  Duplicate account selector pop-up should be opened", caseInfo['id'])
         EnziUIUtility.wait(@driver,:id,"header43",@objManageTours.instance_variable_get(:@timeSettingMap)['Sleep']['Environment']['Lightening']['Min'])
         expect(@driver.find_element(:id,"header43").text.eql? "Duplicate Account Selector").to be true
         
@@ -577,7 +577,11 @@ describe ManageTours do
         @leadsTestData[0]['email'] = "test_enzigmaPre#{rand(9999)}@example.com"
         @leadsTestData[0]['company'] = "Test_Enzigma#{rand(1111)}"
         puts "\n"
+        passedLogs = @objRollbar.addLog("[Validate]  Lead should be created"
         @objManageTours.openPageForLead(Salesforce.createRecords(@objManageTours.instance_variable_get(:@salesforceBulk),'Lead',@leadsTestData)[0]['Id'])
+        passedLogs = @objRollbar.addLog("[Expected] Lead created sucessfully \n[Result  ]  Success")
+        puts "\n"
+
         @objManageTours.checkRecordCreated("Journey__c","SELECT id FROM Journey__c WHERE Primary_Email__c = '#{@leadsTestData[0]['email']}'")[0].fetch('Id')
         @objManageTours.bookTour(0,true)
         @objManageTours.duplicateAccountSelector("Create Account and Merge",nil)
@@ -701,14 +705,15 @@ describe ManageTours do
         caseInfo = @testRailUtility.getCase('102')
         passedLogs = @objRollbar.addLog("[Step    ]  Click on 'Use Selector Account' button",caseInfo['id'])
         
-        passedLogs = @objRollbar.addLog("[Validate]  Lead with #{@leadsTestData[0]['email']} email id should be converted")
+        passedLogs = @objRollbar.addLog("[Validate]  Lead should be created"
         @leadsTestData[0]['email'] = "test_enzigmaPre#{rand(9999)}@example.com"
         @objManageTours.openPageForLead(Salesforce.createRecords(@objManageTours.instance_variable_get(:@salesforceBulk),'Lead',@leadsTestData)[0]['Id'])
-        
-        @objManageTours.checkRecordCreated("Journey__c","SELECT id FROM Journey__c WHERE Primary_Email__c = '#{@leadsTestData[0]['email']}'")[0].fetch('Id')
+        passedLogs = @objRollbar.addLog("[Expected] Lead created sucessfully \n[Result  ]  Success")
 
+        @objManageTours.checkRecordCreated("Journey__c","SELECT id FROM Journey__c WHERE Primary_Email__c = '#{@leadsTestData[0]['email']}'")[0].fetch('Id')
         @objManageTours.bookTour(0,true)
         @objManageTours.duplicateAccountSelector("Use Selected Account","Yes")
+        passedLogs = @objRollbar.addLog("[Validate]  Lead with #{@leadsTestData[0]['email']} email id should be converted")
         expect(@objManageTours.checkRecordCreated("Lead","SELECT id,isConverted FROM Lead WHERE Email = '#{@leadsTestData[0]['email']}'")[0].fetch("IsConverted").eql? 'true').to be true
         passedLogs = @objRollbar.addLog("[Expected]  Lead converted Sucessfully \n[Result  ]  Success")
         puts "\n"
