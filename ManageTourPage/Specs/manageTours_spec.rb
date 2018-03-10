@@ -14,6 +14,7 @@ describe ManageTours do
     #SauceLab will read env variable and accordingly set browser
     #@driver = SauceLabs.selenium_driver()
     @objRollbar = RollbarUtility.new()
+    #@driver = Selenium::WebDriver.for :chrome
     @driver = Selenium::WebDriver.for ENV['BROWSER'].to_sym
     @objManageTours = ManageTours.new(@driver,"Staging")
     @leadsTestData = @objManageTours.instance_variable_get(:@records)[0]['lead']
@@ -66,7 +67,7 @@ describe ManageTours do
     puts "Test data deleted successfully"
     puts "\n"
     puts "Deleting created test data of Lead"
-    Salesforce.deleteRecords(@objManageTours.instance_variable_get(:@salesforceBulk),"Lead",allRecordIds['Lead'].uniq)
+    Salesforce.deleteRecords(@objManageTours.instance_variable_get(:@salesforceBulk),"Lead",allRecordIds['Lead'])
     puts "Test data deleted successfully"
     puts "\n"
     puts "Deleting created test data of Account"
@@ -122,7 +123,7 @@ describe ManageTours do
      puts "---------------------------------------------------------------------------------------------------------------------------"
   end
    
-  it "C883 : To check book tour button is disabled" do
+  it "C883 : To check book tour button is disabled" , :"883" => true do
     puts "C883 : To check Book tour button is disabled"
     begin
         puts "\n"
@@ -149,7 +150,7 @@ describe ManageTours do
      puts "---------------------------------------------------------------------------------------------------------------------------"
   end
      
-  it "C7 : To check book tour button get enable" do
+  it "C7 : To check book tour button get enable" , :"7" => true do
         puts "C7 : To check Book tour button get enable"
         puts "\n"
     begin
@@ -178,7 +179,7 @@ describe ManageTours do
      puts "---------------------------------------------------------------------------------------------------------------------------"
   end
 
-  it "C885 : To check user can select tour date without building name", :regression => true do
+  it "C885 : To check user can select tour date without building name", :"885" => true do
         puts "C885  : To check user can select tour date without building name"
         puts "\n"
     begin
@@ -203,7 +204,7 @@ describe ManageTours do
      puts "C885 : Checked successfully"
      puts "---------------------------------------------------------------------------------------------------------------------------"
   end
-  it "C1016: To check user can select previous date" do
+  it "C1016: To check user can select previous date", :"1016" => true do
     puts "C1016: To check user can select previous date"
     begin
         puts "\n"
@@ -233,7 +234,7 @@ describe ManageTours do
      puts "C1016: Checked successfully"
      puts "---------------------------------------------------------------------------------------------------------------------------"
   end
-  it "C81 : To check user can select start time"  do
+  it "C81 : To check user can select start time", :"81" => true  do
     puts "C81 : To check user can select start time"
     puts "\n"
     begin
@@ -266,7 +267,7 @@ describe ManageTours do
      puts "C81 : Checked successfully"
      puts "---------------------------------------------------------------------------------------------------------------------------"
   end
-  it "C887 : To check user can get end time automatically after entering start time" do
+  it "C887 : To check user can get end time automatically after entering start time", :"887" => true do
     puts "C887 : To check user can get end time automatically after entering start time"
     puts "\n"
     begin
@@ -292,7 +293,7 @@ describe ManageTours do
      puts "C887 : Checked successfully"
      puts "---------------------------------------------------------------------------------------------------------------------------"
   end
-  it "C92 : To check proper error message is displayed when user enter single character in building field" do
+  it "C92 : To check proper error message is displayed when user enter single character in building field", :"92" => true do
     puts "C92 : To check proper error message is displayed when user enter single character in building field"
     puts "\n"
     begin
@@ -323,7 +324,7 @@ describe ManageTours do
      puts "C92 : Checked successfully"
      puts "---------------------------------------------------------------------------------------------------------------------------"
   end
-  it "C91 : To check proper lead information is displayed on manage tour page" do
+  it "C91 : To check proper lead information is displayed on manage tour page", :"91" => true do
     puts "C91 : To check proper lead information is displayed on manage tour page"
     puts "\n"
     begin
@@ -370,7 +371,7 @@ describe ManageTours do
      puts "C91 : Checked successfully"
      puts "---------------------------------------------------------------------------------------------------------------------------"
   end
-  it "C85: To check user can view duplicate account selector page while booking a tour" do
+  it "C85: To check user can view duplicate account selector page while booking a tour", :"85" => true do
    puts "C85: To check user can view duplicate account selector page while booking a tour and user can book a tour"
     puts "\n"
     begin
@@ -404,7 +405,7 @@ describe ManageTours do
   end
 
   context "should test duplicate account selector functionality" do
-    it "C86 : To check tour is booked, when user clicks on 'create account and don't merge' button" do
+    it "C86 : To check tour is booked, when user clicks on 'create account and don't merge' button", :"86" => true do
       puts "C86 : To check tour is booked, when user clicks on 'create account and don't merge' button"
       puts "\n"
       begin
@@ -484,7 +485,7 @@ describe ManageTours do
        puts "C86 : Checked successfully"
        puts "---------------------------------------------------------------------------------------------------------------------------"
     end
-    it "C89 : To check user can view booked tours information" do
+    it "C89 : To check user can view booked tours information", :"89" => true do
       puts "C89 : To check user can view booked tours information"
       puts "\n"
       begin
@@ -511,7 +512,7 @@ describe ManageTours do
        puts "---------------------------------------------------------------------------------------------------------------------------"
     end
     context "check multiple tour booking" do
-      it "C96 : To check user can book multiple tour" do
+      it "C96 : To check user can book multiple tour", :"96" => true do
         puts "C96 : To check user can book multiple tour"
         puts "\n"
         begin
@@ -561,7 +562,7 @@ describe ManageTours do
         
       end   
     end
-    it "C94 : To check tour is booked, when user clicks on 'create account and merge' button" do
+    it "C94 : To check tour is booked, when user clicks on 'create account and merge' button", :"94" => true do
       puts "C94 : To check tour is booked, when user clicks on 'create account and merge' button"
       puts "\n"
       begin
@@ -652,7 +653,7 @@ describe ManageTours do
         puts "---------------------------------------------------------------------------------------------------------------------------"
        
     end
-    it "C129 : to check user can cancel a tour"  , :test => true do
+    it "C129 : to check user can cancel a tour"  , :"129" => true do
       puts "C129 : to check user can cancel a tour"
       puts "\n"
       begin
@@ -694,7 +695,7 @@ describe ManageTours do
       puts "---------------------------------------------------------------------------------------------------------------------------"
         
     end
-    it "C102 : To check tour is booked, when user clicks on 'Use Selector Account' button" , :test => true do
+    it "C102 : To check tour is booked, when user clicks on 'Use Selector Account' button" , :"102" => true do
       puts "C102 : To check tour is booked, when user clicks on 'Use Selector Account' button"
       puts "\n"
       begin
@@ -763,7 +764,7 @@ describe ManageTours do
   end
 
   context "should check reschedule functionality" do
-    it "C115 : To check user can reschedule a tour" , :test => true do
+    it "C115 : To check user can reschedule a tour" , :"115" => true do
       puts "C115 : To check user can reschedule a tour"
       puts "\n"
       begin
