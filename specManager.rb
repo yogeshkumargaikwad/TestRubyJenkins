@@ -132,7 +132,9 @@ if !ARGV.empty? then
             #puts [spec['path']]
             RSpec::Core::Runner.run([spec['path']], $stderr, $stdout)
             RSpec.clear_examples
-            RSpec.reset
+            RSpec.clear_examples
+            RSpec.clear_examples
+            RSpec.clear_examples
 =begin
             if !RSpec.configuration.reporter.failed_examples.empty? then
               out_file = File.new("exceptions.txt", "w")
