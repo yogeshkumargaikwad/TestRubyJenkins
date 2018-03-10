@@ -130,12 +130,9 @@ if !ARGV.empty? then
           specMap.fetch('browser')[0].split(" ").each do |browser|
             ENV['BROWSER'] = browser
             #puts [spec['path']]
-            RSpec::Core::Runner.disable_autorun!
             RSpec::Core::Runner.run([spec['path']], $stderr, $stdout)
             RSpec.clear_examples
-
-            
-            
+            RSpec.reset
 =begin
             if !RSpec.configuration.reporter.failed_examples.empty? then
               out_file = File.new("exceptions.txt", "w")
