@@ -131,7 +131,8 @@ if !ARGV.empty? then
             ENV['BROWSER'] = browser
             #puts [spec['path']]
             RSpec::Core::Runner.run([spec['path']], $stderr, $stdout)
-
+            RSpec.clear_examples
+            RSpec.clear_examples
             
 =begin
             if !RSpec.configuration.reporter.failed_examples.empty? then
@@ -144,10 +145,9 @@ if !ARGV.empty? then
               puts "Successfully tested"
             end
 =end
-            RSpec.clear_examples
-            RSpec.reset
+            
           end
-
+          RSpec.reset
         else
           #puts [spec['path']]
           RSpec::Core::Runner.run([spec['path']], $stderr, $stdout)
