@@ -132,7 +132,7 @@ if !ARGV.empty? then
             #puts [spec['path']]
             RSpec::Core::Runner.run([spec['path']], $stderr, $stdout)
             RSpec.clear_examples
-            RSpec.disable_autorun!
+            RSpec::Core::Runner.disable_autorun!
             
 =begin
             if !RSpec.configuration.reporter.failed_examples.empty? then
