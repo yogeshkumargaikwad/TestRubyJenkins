@@ -145,9 +145,9 @@ if !ARGV.empty? then
             end
 =end
             RSpec.clear_examples
-            #RSpec.reset
+            RSpec.reset
           end
-          RSpec.reset
+
         else
           #puts [spec['path']]
           RSpec::Core::Runner.run([spec['path']], $stderr, $stdout)
