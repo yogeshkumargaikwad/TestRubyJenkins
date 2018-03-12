@@ -16,10 +16,10 @@ if !ARGV.empty? then
   ARGV.each do |input|
     containerInfo = input.split(":")
     if specMap.key?(containerInfo[0]) && containerInfo.size > 1 then
-      specMap[containerInfo[0]] << containerInfo[1].split(",")
+      specMap[containerInfo[0]] << containerInfo[1].split(",").uniq
     else
       if containerInfo.size > 1 then
-        specMap[containerInfo[0]] = containerInfo[1].split(",")
+        specMap[containerInfo[0]] = containerInfo[1].split(",").uniq
       end
     end
   end
@@ -151,6 +151,10 @@ if !ARGV.empty? then
         else
           #puts [spec['path']]
           RSpec::Core::Runner.run([spec['path']], $stderr, $stdout)
+          RSpec.clear_examples
+          RSpec.clear_examples
+          RSpec.clear_examples
+          RSpec.clear_examples
           #puts "Errors are :: #{RSpec.configuration.formatters[0].inspect}"
           #puts "Failed examples are :: #{RSpec.configuration.reporter.failed_examples}"
 =begin
@@ -164,7 +168,7 @@ if !ARGV.empty? then
               puts "Successfully tested"
             end
 =end
-            RSpec.clear_examples
+           
             #RSpec.reset
         end
       end
