@@ -98,7 +98,7 @@ if !ARGV.empty? then
               puts "Successfully Logged In with #{profile} "
               ::RSpec::Core::Runner.run([spec['path']], $stderr, $stdout)
               RSpec.clear_examples
-            endss
+            end
           end
         else
           ::RSpec::Core::Runner.run([spec['path']], $stderr, $stdout)
