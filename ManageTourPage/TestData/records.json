@@ -6,8 +6,8 @@
 	}, 
 	{"tour" :  
 			[
-				{"productLine":"WeWork","bookedBySalesLead":"Yes","phone":"+91-9975839755","email":"test1_enzi@gmail.com","company":"test1_enzi","name":"test1_name","companySize":"12" , "numberOfDesks":"12" , "building":"LA-Santa Monica" , "opportunity" : "test1"},
-				{"productLine":"WeWork","bookedBySalesLead":"Yes","phone":"+91-9975839755","email":"test2_enzi@gmail.com","company":"test2_enzi","name":"test2_name","companySize":"2" , "numberOfDesks":"2" , "building":"BL-Potsdamer Platz" , "opportunity" : "test2"}
+				{"productLine":"WeWork","bookedBySalesLead":"Yes","phone":"+91-9975839755","email":"test1_enzi@gmail.com","company":"test1_enzi","name":"test1_name","companySize":"12" , "numberOfDesks":"12" , "building":"NY-524 Broadway" , "opportunity" : "test1"},
+				{"productLine":"WeWork","bookedBySalesLead":"Yes","phone":"+91-9975839755","email":"test2_enzi@gmail.com","company":"test2_enzi","name":"test2_name","companySize":"2" , "numberOfDesks":"2" , "building":"LON-Soho - Sheraton H" , "opportunity" : "test2"}
 			]
 	},
 	{"contact" : [{"lastName":"test_Pingale1C","firstName":"test_Monika1C","email":"test_enzi@examplegmail.com","accountId":""}]	

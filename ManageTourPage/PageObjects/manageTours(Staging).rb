@@ -63,7 +63,8 @@ class ManageTours
 				if Date.today.saturday? || Date.today.sunday? then
 					EnziUIUtility.clickElement(@driver,:id,Date.today.next_day(2).to_s)
 				else
-					EnziUIUtility.selectElement(@driver.find_element(:id,"BookTours#{count}"),"Today","a")
+					EnziUIUtility.clickElement(@driver,:id,Date.today.next_day(3).to_s)
+					#EnziUIUtility.selectElement(@driver.find_element(:id,"BookTours#{count}"),"Today","a")
 				end
     		wait.until {!@driver.find_element(:id ,"spinner").displayed?}
     		ManageTours.setElementValue(container,"startTime",nil)

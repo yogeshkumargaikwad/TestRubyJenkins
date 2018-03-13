@@ -14,6 +14,7 @@ describe ManageTours do
     #SauceLab will read env variable and accordingly set browser
     #@driver = SauceLabs.selenium_driver()
     @objRollbar = RollbarUtility.new()
+    #@driver = Selenium::WebDriver.for :chrome
     @driver = Selenium::WebDriver.for ENV['BROWSER'].to_sym
     @objManageTours = ManageTours.new(@driver,"Staging")
     @leadsTestData = @objManageTours.instance_variable_get(:@records)[0]['lead']
@@ -66,7 +67,7 @@ describe ManageTours do
     puts "Test data deleted successfully"
     puts "\n"
     puts "Deleting created test data of Lead"
-    Salesforce.deleteRecords(@objManageTours.instance_variable_get(:@salesforceBulk),"Lead",allRecordIds['Lead'].uniq)
+    Salesforce.deleteRecords(@objManageTours.instance_variable_get(:@salesforceBulk),"Lead",allRecordIds['Lead'])
     puts "Test data deleted successfully"
     puts "\n"
     puts "Deleting created test data of Account"
@@ -88,22 +89,27 @@ describe ManageTours do
         @leadsTestData[0]['email'] = "test_enzigmaPre#{rand(9999)}@example.com"
         @leadsTestData[0]['company'] = "Test_Enzigma#{rand(1111)}"
         puts "\n"
+
         passedLogs = @objRollbar.addLog("[Validate]  Lead should be created")
         @objManageTours.openPage(Salesforce.createRecords(@objManageTours.instance_variable_get(:@salesforceBulk),'Lead',@leadsTestData)[0]['Id'],:name,"lightning_manage_tours")
         leadName = "#{@objManageTours.instance_variable_get(:@records)[0]['lead'][0]['firstName']}#{@objManageTours.instance_variable_get(:@records)[0]['lead'][0]['lastName']}"
-        passedLogs = @objRollbar.addLog("[Expected]  Lead created successfully with leadname #{leadName}")
-        passedLogs = @objRollbar.addLog("[Step    ]  Checking Journey is created after creating lead")
+        passedLogs = @objRollbar.addLog("[Expected]  Lead created successfully with leadname #{leadName} \n[Result  ]  Success ")
+        puts "\n"
+
+        passedLogs = @objRollbar.addLog("[Validate]  Checking Journey is created after creating lead")
         @objManageTours.checkRecordCreated("Journey__c","SELECT id FROM Journey__c WHERE Primary_Email__c = '#{@leadsTestData[0]['email']}'")[0].fetch('Id')
         passedLogs = @objRollbar.addLog("[Result  ]  Success")
         @objManageTours.checkRecordCreated("Journey__c","SELECT id FROM Journey__c WHERE Primary_Email__c = '#{@leadsTestData[0]['email']}'")[0].fetch('Id')
-       
+        puts "\n"
+
         passedLogs = @objRollbar.addLog("[Validate]  Checking Title of page when user click on 'Manage/book tour' button")
         expect(@driver.title).to eql "Manage Tours"
         passedLogs = @objRollbar.addLog("[Expected]  Manage tour page opened successfully with Page Title= Manage Tours \n[Result  ]  Success")
         puts "\n"
-         passedLogs = @objRollbar.addLog("[Step    ]  Adding result in testrail")
-         @testRailUtility.postResult(149,"Pass",1,@runId)
-         passedLogs = @objRollbar.addLog("[Result  ]  Success")
+
+        passedLogs = @objRollbar.addLog("[Step    ]  Adding result in testrail")
+        @testRailUtility.postResult(149,"Pass",1,@runId)
+        passedLogs = @objRollbar.addLog("[Result  ]  Success")
     rescue Exception => excp
 
         passedLogs = @objRollbar.addLog("[Result  ]  Failed")
@@ -117,18 +123,17 @@ describe ManageTours do
      puts "---------------------------------------------------------------------------------------------------------------------------"
   end
    
-  it "C883 : To check book tour button is disabled" do
+  it "C883 : To check book tour button is disabled" , :"883" => true do
     puts "C883 : To check Book tour button is disabled"
     begin
         puts "\n"
         caseInfo = @testRailUtility.getCase('883')
         passedLogs = @objRollbar.addLog("[Step    ]  Checking 'Book a tour' button ", caseInfo['id'])
-        
         expect(@objManageTours.buttonDisabled?).to be true
         passedLogs = @objRollbar.addLog("[Expected]  'Book a tour' button is disable \n[Result  ]  Success")
-       
         puts "\n"
-         passedLogs = @objRollbar.addLog("[Step    ]  Adding result in testrail")
+
+        passedLogs = @objRollbar.addLog("[Step    ]  Adding result in testrail")
         @testRailUtility.postResult(883,"Pass",1,@runId)
         passedLogs = @objRollbar.addLog("[Result  ]  Success")
     rescue Exception => excp
@@ -145,19 +150,18 @@ describe ManageTours do
      puts "---------------------------------------------------------------------------------------------------------------------------"
   end
      
-  it "C7 : To check book tour button get enable" do
+  it "C7 : To check book tour button get enable" , :"7" => true do
         puts "C7 : To check Book tour button get enable"
         puts "\n"
     begin
         caseInfo = @testRailUtility.getCase('7')
         passedLogs = @objRollbar.addLog("[Step    ]  Checking 'Book a tour' button when all required fields of form are properly filled", caseInfo['id'])
-        
         @objManageTours.bookTour(0,false)
         sleep(@objManageTours.instance_variable_get(:@timeSettingMap)['Sleep']['Environment']['Lightening']['Min'])
         expect(@objManageTours.buttonDisabled?).to be true
         passedLogs = @objRollbar.addLog("[Expected]  'Book a Tour' button is enabled \n[Result  ]  Success")
-       
         puts "\n"
+
         passedLogs = @objRollbar.addLog("[Step    ]  Adding result in testrail")
         @testRailUtility.postResult(7,"Pass",1,@runId)
         passedLogs = @objRollbar.addLog("[Result  ]  Success")
@@ -175,18 +179,17 @@ describe ManageTours do
      puts "---------------------------------------------------------------------------------------------------------------------------"
   end
 
-  it "C885 : To check user can select tour date without building name", :regression => true do
+  it "C885 : To check user can select tour date without building name", :"885" => true do
         puts "C885  : To check user can select tour date without building name"
         puts "\n"
     begin
         caseInfo = @testRailUtility.getCase('885')
         passedLogs = @objRollbar.addLog("[Step    ]  Checking Building Name and Tour Date fields", caseInfo['id'])
-       
         sleep(@objManageTours.instance_variable_get(:@timeSettingMap)['Sleep']['Environment']['Lightening']['Min'])
         expect(@objManageTours.childDisabled?(ManageTours.selectBuilding(@driver.find_element(:id,"BookTours0"),nil,@objManageTours.instance_variable_get(:@timeSettingMap)),ManageTours.selectTourDate(@driver.find_element(:id,"BookTours0"),@objManageTours.instance_variable_get(:@timeSettingMap)))).to be false
         passedLogs = @objRollbar.addLog("[Expected]  Tour date field should be disabled as building name field is not filled out \n[Result  ]  Success ")
-        
         puts "\n"
+
         passedLogs = @objRollbar.addLog("[Step    ]  Adding result in testrail")
         @testRailUtility.postResult(885 ,"Pass",1,@runId)
         passedLogs = @objRollbar.addLog("[Result  ]  Success")
@@ -201,28 +204,24 @@ describe ManageTours do
      puts "C885 : Checked successfully"
      puts "---------------------------------------------------------------------------------------------------------------------------"
   end
-  it "C1016: To check user can select previous date" do
+  it "C1016: To check user can select previous date", :"1016" => true do
     puts "C1016: To check user can select previous date"
     begin
         puts "\n"
         caseInfo = @testRailUtility.getCase('1016')
         passedLogs = @objRollbar.addLog("[Step    ]  Checking previous date selection for field tour date",caseInfo['id'])
         passedLogs = @objRollbar.addLog("[Validate]  Checking Tour date field")
-       
         ManageTours.selectTourDate(@driver.find_element(:id,"BookTours0"),@objManageTours.instance_variable_get(:@timeSettingMap))
         EnziUIUtility.clickElement(@driver,:id,Date.today.prev_day.to_s)
         @wait.until {!@driver.find_element(:id ,"spinner").displayed?}
-
-        
         expect(EnziUIUtility.checkErrorMessage(@driver,'h2','No times slots available for the selected date')).to be true
         @driver.find_elements(:class,"slds-button_icon-inverse")[0].click
         passedLogs = @objRollbar.addLog("[Expected]  Previous tour date should not be selected \n[Result  ]  Success ")
-       
         puts "\n"
      
-      passedLogs = @objRollbar.addLog("[Step    ]  Adding result in testrail")
-      @testRailUtility.postResult(1016 ,"Pass",1,@runId)
-      passedLogs = @objRollbar.addLog("[Result  ]  Success")
+        passedLogs = @objRollbar.addLog("[Step    ]  Adding result in testrail")
+        @testRailUtility.postResult(1016 ,"Pass",1,@runId)
+        passedLogs = @objRollbar.addLog("[Result  ]  Success")
     rescue Exception => excp
         passedLogs = @objRollbar.addLog("[Result  ]  Failed")
        @objRollbar.postRollbarData(caseInfo['id'], caseInfo['title'], passedLogs[caseInfo['id']])
@@ -235,32 +234,31 @@ describe ManageTours do
      puts "C1016: Checked successfully"
      puts "---------------------------------------------------------------------------------------------------------------------------"
   end
-  it "C81 : To check user can select start time"  do
+  it "C81 : To check user can select start time", :"81" => true  do
     puts "C81 : To check user can select start time"
     puts "\n"
     begin
     	
         caseInfo = @testRailUtility.getCase('81')
         passedLogs = @objRollbar.addLog("[Step]  Start Time field should be selectable",caseInfo['id'])
-       
-        ManageTours.selectBuilding(@driver.find_element(:id,"BookTours0"),"LA-Santa Monica",@objManageTours.instance_variable_get(:@timeSettingMap))
+        ManageTours.selectBuilding(@driver.find_element(:id,"BookTours0"),"LON-Soho - Sheraton H",@objManageTours.instance_variable_get(:@timeSettingMap))
         ManageTours.selectTourDate(@driver.find_element(:id,"BookTours0"),@objManageTours.instance_variable_get(:@timeSettingMap))
       if Date.today.saturday? || Date.today.sunday? then
         EnziUIUtility.clickElement(@driver,:id,Date.today.next_day(2).to_s)
       else
-        EnziUIUtility.selectElement(@driver.find_element(:id,"BookTours0"),"Today","a")
+        EnziUIUtility.clickElement(@driver,:id,Date.today.next_day(3).to_s)
+        #EnziUIUtility.selectElement(@driver.find_element(:id,"BookTours0"),"Today","a")
       end
-        
         expect(@objManageTours.childDisabled?(ManageTours.selectTourDate(@driver.find_element(:id,"BookTours0"),@objManageTours.instance_variable_get(:@timeSettingMap)),ManageTours.setElementValue(@driver.find_element(:id,"BookTours0"),"startTime",nil))).to be false
     	passedLogs = @objRollbar.addLog("[Expected]  Start Time field should be selected after selecting Building Name and Tour Date fields \n[Result  ]  Success ")
         puts "\n"
+
         passedLogs = @objRollbar.addLog("[Step    ]  Adding result in testrail")
         @testRailUtility.postResult(81,"Pass",1,@runId)
         passedLogs = @objRollbar.addLog("[Result  ]  Success")
     rescue Exception => excp
         passedLogs = @objRollbar.addLog("[Result  ]  Failed")
        @objRollbar.postRollbarData(caseInfo['id'], caseInfo['title'], passedLogs[caseInfo['id']])
-       
         Rollbar.error(excp)
 
       @testRailUtility.postResult(81,"Result for case 81 is #{excp}",5,@runId)
@@ -269,7 +267,7 @@ describe ManageTours do
      puts "C81 : Checked successfully"
      puts "---------------------------------------------------------------------------------------------------------------------------"
   end
-  it "C887 : To check user can get end time automatically after entering start time" do
+  it "C887 : To check user can get end time automatically after entering start time", :"887" => true do
     puts "C887 : To check user can get end time automatically after entering start time"
     puts "\n"
     begin
@@ -279,6 +277,7 @@ describe ManageTours do
         expect(ManageTours.getElement("input","endTime",@driver.find_element(:id,"BookTours0"))).to_not eql nil
         passedLogs = @objRollbar.addLog("[Expected]  End Time field should be updated after selecting Start Time \n[Result  ]  Success ")
         puts "\n"
+
         passedLogs = @objRollbar.addLog("[Step    ]  Adding result in testrail")
         @testRailUtility.postResult(887,"Pass",1,@runId)
         passedLogs = @objRollbar.addLog("[Result  ]  Success")
@@ -294,7 +293,7 @@ describe ManageTours do
      puts "C887 : Checked successfully"
      puts "---------------------------------------------------------------------------------------------------------------------------"
   end
-  it "C92 : To check proper error message is displayed when user enter single character in building field" do
+  it "C92 : To check proper error message is displayed when user enter single character in building field", :"92" => true do
     puts "C92 : To check proper error message is displayed when user enter single character in building field"
     puts "\n"
     begin
@@ -325,7 +324,7 @@ describe ManageTours do
      puts "C92 : Checked successfully"
      puts "---------------------------------------------------------------------------------------------------------------------------"
   end
-  it "C91 : To check proper lead information is displayed on manage tour page" do
+  it "C91 : To check proper lead information is displayed on manage tour page", :"91" => true do
     puts "C91 : To check proper lead information is displayed on manage tour page"
     puts "\n"
     begin
@@ -334,11 +333,9 @@ describe ManageTours do
       if !@driver.find_elements(:id,"Name").empty? then
         expect(@driver.find_element(:id,"Name").attribute('value').eql? "").to be false
         leadName = "#{@objManageTours.instance_variable_get(:@records)[0]['lead'][0]['firstName']}#{@objManageTours.instance_variable_get(:@records)[0]['lead'][0]['lastName']}"
-        
         passedLogs = @objRollbar.addLog("[Validate]  Name field of manage tour page should contain lead name")
         expect(@driver.find_element(:id,"Name").attribute('value').eql? "#{leadName}")
         passedLogs = @objRollbar.addLog("[Expected]  Lead.Name= #{leadName} \n[Result  ]  Success")
-        
         puts "\n"
       end
       
@@ -361,38 +358,34 @@ describe ManageTours do
       end
 
        passedLogs = @objRollbar.addLog("[Step    ]  Adding result in testrail")
-      @testRailUtility.postResult(91,"Pass",1,@runId)
+       @testRailUtility.postResult(91,"Pass",1,@runId)
        passedLogs = @objRollbar.addLog("[Result  ]  Success")
     rescue Exception => excp
-      passedLogs = @objRollbar.addLog("[Result  ]  Failed")
-      @objRollbar.postRollbarData(caseInfo['id'], caseInfo['title'], passedLogs[caseInfo['id']])
-      
-      Rollbar.error(excp)
-      @testRailUtility.postResult(91,"Result for case 91 is #{excp}",5,@runId)
+       passedLogs = @objRollbar.addLog("[Result  ]  Failed")
+       @objRollbar.postRollbarData(caseInfo['id'], caseInfo['title'], passedLogs[caseInfo['id']])
+       Rollbar.error(excp)
+       @testRailUtility.postResult(91,"Result for case 91 is #{excp}",5,@runId)
 
       raise excp
     end
      puts "C91 : Checked successfully"
      puts "---------------------------------------------------------------------------------------------------------------------------"
   end
-  it "C85: To check user can view duplicate account selector page while booking a tour" do
+  it "C85: To check user can view duplicate account selector page while booking a tour", :"85" => true do
    puts "C85: To check user can view duplicate account selector page while booking a tour and user can book a tour"
     puts "\n"
     begin
         caseInfo = @testRailUtility.getCase('85')
-        
-       
         @objManageTours.bookTour(0,true)
         EnziUIUtility.wait(@driver,:id,"enzi-data-table-container",@objManageTours.instance_variable_get(:@timeSettingMap)['Wait']['Environment']['Lightening']['Max'])
         #puts "#{@driver.find_element(:id,"header43").text} opened successfully"
-        #puts "\n"
+        
         passedLogs = @objRollbar.addLog("[Step    ]  Duplicate account selector pop-up should be opened", caseInfo['id'])
         EnziUIUtility.wait(@driver,:id,"header43",@objManageTours.instance_variable_get(:@timeSettingMap)['Sleep']['Environment']['Lightening']['Min'])
         expect(@driver.find_element(:id,"header43").text.eql? "Duplicate Account Selector").to be true
-        
         passedLogs = @objRollbar.addLog("[Expected]  Duplicate account selector pop up is displayed \n[Result  ]  Success")
-       
         puts "\n"
+
         passedLogs = @objRollbar.addLog("[Step    ]  Adding result in testrail")
         @testRailUtility.postResult(85,"Result for case 85 is #{"success"}",1,@runId)
         passedLogs = @objRollbar.addLog("[Result  ]  Success")
@@ -412,7 +405,7 @@ describe ManageTours do
   end
 
   context "should test duplicate account selector functionality" do
-    it "C86 : To check tour is booked, when user clicks on 'create account and don't merge' button" do
+    it "C86 : To check tour is booked, when user clicks on 'create account and don't merge' button", :"86" => true do
       puts "C86 : To check tour is booked, when user clicks on 'create account and don't merge' button"
       puts "\n"
       begin
@@ -429,6 +422,7 @@ describe ManageTours do
         expect(@objManageTours.checkRecordCreated("Lead","SELECT id,isConverted FROM Lead WHERE Email = '#{@leadsTestData[0]['email']}'")[0].fetch("IsConverted").eql? 'true').to be true
         passedLogs = @objRollbar.addLog("[Expected]  Successfully lead is converted \n[Result  ]  Success")
         puts "\n"
+
         passedLogs = @objRollbar.addLog("[Validate]  Contact Should be created with name #{leadName}")
         expect(@objManageTours.checkRecordCreated("Contact","SELECT id,total_Scheduled_Tours__c FROM Contact WHERE Email = '#{@leadsTestData[0]['email']}'")[0].fetch("Id")).to_not eql nil
         passedLogs = @objRollbar.addLog("[Expected]  Successfully contact is created \n[Result  ]  Success")
@@ -491,7 +485,7 @@ describe ManageTours do
        puts "C86 : Checked successfully"
        puts "---------------------------------------------------------------------------------------------------------------------------"
     end
-    it "C89 : To check user can view booked tours information" do
+    it "C89 : To check user can view booked tours information", :"89" => true do
       puts "C89 : To check user can view booked tours information"
       puts "\n"
       begin
@@ -518,7 +512,7 @@ describe ManageTours do
        puts "---------------------------------------------------------------------------------------------------------------------------"
     end
     context "check multiple tour booking" do
-      it "C96 : To check user can book multiple tour" do
+      it "C96 : To check user can book multiple tour", :"96" => true do
         puts "C96 : To check user can book multiple tour"
         puts "\n"
         begin
@@ -532,6 +526,7 @@ describe ManageTours do
         passedLogs = @objRollbar.addLog("[Step    ]  To book second tour enter values in fields")
         @objManageTours.bookTour(1,true)
         passedLogs = @objRollbar.addLog("[Expected]  Fields should accept all valid values\n[Result  ]  Success ")
+        puts "\n"
 
         passedLogs = @objRollbar.addLog("[Step    ]  Multiple tours should be booked")
         @objManageTours.duplicateAccountSelector("Create Account and Don't Merge",nil)
@@ -545,6 +540,7 @@ describe ManageTours do
         expect(@objManageTours.checkRecordCreated('Task',"SELECT id FROM Task WHERE whatId = '#{bookedTours[1].fetch('Id')}'")[0].fetch('Id')).to_not eql nil
         passedLogs = @objRollbar.addLog("[Expected]  Open activities are created for multiple tours \n[Result  ]  Success")
         puts "\n"
+
         @wait.until {!@driver.find_element(:id ,"spinner").displayed?}
         passedLogs = @objRollbar.addLog("[Validate]  Records of booked tour should be displayed")
         expect(@objManageTours.numberOfTourBooked > 3).to be true
@@ -556,10 +552,8 @@ describe ManageTours do
         passedLogs = @objRollbar.addLog("[Result  ]  Success")
         rescue Exception => excp
           passedLogs = @objRollbar.addLog("[Result  ]  Failed")
-           @objRollbar.postRollbarData(caseInfo['id'], caseInfo['title'], passedLogs[caseInfo['id']])
-           
+           @objRollbar.postRollbarData(caseInfo['id'], caseInfo['title'], passedLogs[caseInfo['id']]) 
           Rollbar.error(excp)
-
           @testRailUtility.postResult(96,"Result for case 96 is #{excp}",5,@runId)
           raise excp
         end
@@ -568,7 +562,7 @@ describe ManageTours do
         
       end   
     end
-    it "C94 : To check tour is booked, when user clicks on 'create account and merge' button" do
+    it "C94 : To check tour is booked, when user clicks on 'create account and merge' button", :"94" => true do
       puts "C94 : To check tour is booked, when user clicks on 'create account and merge' button"
       puts "\n"
       begin
@@ -577,6 +571,7 @@ describe ManageTours do
         @leadsTestData[0]['email'] = "test_enzigmaPre#{rand(9999)}@example.com"
         @leadsTestData[0]['company'] = "Test_Enzigma#{rand(1111)}"
         puts "\n"
+
         passedLogs = @objRollbar.addLog("[Validate]  Lead should be created")
         @objManageTours.openPageForLead(Salesforce.createRecords(@objManageTours.instance_variable_get(:@salesforceBulk),'Lead',@leadsTestData)[0]['Id'])
         passedLogs = @objRollbar.addLog("[Expected] Lead created sucessfully \n[Result  ]  Success")
@@ -658,7 +653,7 @@ describe ManageTours do
         puts "---------------------------------------------------------------------------------------------------------------------------"
        
     end
-    it "C129 : to check user can cancel a tour"  , :test => true do
+    it "C129 : to check user can cancel a tour"  , :"129" => true do
       puts "C129 : to check user can cancel a tour"
       puts "\n"
       begin
@@ -671,11 +666,13 @@ describe ManageTours do
         EnziUIUtility.selectChild(@driver,:id,"Cancellation_Reason__c","No reason (didn't provide)","option")
         passedLogs = @objRollbar.addLog("[Expected]  Cancellation Reason= No reason \n[Result  ]  Success")
         puts "\n"
+
         passedLogs = @objRollbar.addLog("[Validate]  Save button should be enabled after filling out cancellation reason")
         EnziUIUtility.selectElement(@driver,"Save","button")
         sleep(@objManageTours.instance_variable_get(:@timeSettingMap)['Sleep']['Environment']['Lightening']['Max'])
         passedLogs = @objRollbar.addLog("[Expected]  Save button get enabled \n[Result  ]  Success")
         puts "\n"
+
         passedLogs = @objRollbar.addLog("[Validate]  Status of tour should be changed after cancellation of tour")
         expect(@objManageTours.tourStatusChecked?("Cancelled" , @leadsTestData[0]['email'])).to be true
         passedLogs = @objRollbar.addLog("[Expected]  Tour status=Cancelled \n[Result  ]  Success")
@@ -698,7 +695,7 @@ describe ManageTours do
       puts "---------------------------------------------------------------------------------------------------------------------------"
         
     end
-    it "C102 : To check tour is booked, when user clicks on 'Use Selector Account' button" , :test => true do
+    it "C102 : To check tour is booked, when user clicks on 'Use Selector Account' button" , :"102" => true do
       puts "C102 : To check tour is booked, when user clicks on 'Use Selector Account' button"
       puts "\n"
       begin
@@ -709,6 +706,7 @@ describe ManageTours do
         @leadsTestData[0]['email'] = "test_enzigmaPre#{rand(9999)}@example.com"
         @objManageTours.openPageForLead(Salesforce.createRecords(@objManageTours.instance_variable_get(:@salesforceBulk),'Lead',@leadsTestData)[0]['Id'])
         passedLogs = @objRollbar.addLog("[Expected] Lead created sucessfully \n[Result  ]  Success")
+        puts "\n"
 
         @objManageTours.checkRecordCreated("Journey__c","SELECT id FROM Journey__c WHERE Primary_Email__c = '#{@leadsTestData[0]['email']}'")[0].fetch('Id')
         @objManageTours.bookTour(0,true)
@@ -722,25 +720,31 @@ describe ManageTours do
         expect(@objManageTours.checkRecordCreated("Contact","SELECT id,Account.name FROM Contact WHERE Email = '#{@leadsTestData[0]['email']}'")[0].fetch("Id")).to_not eql nil
         passedLogs = @objRollbar.addLog("[Expected]  Contact created successfully \n[Result  ]  Success")
         puts "\n"
+
         passedLogs = @objRollbar.addLog("[Validate]  Tour should be created")
         expect(@objManageTours.checkRecordCreated("Tour_Outcome__c","SELECT id,Status__c FROM Tour_Outcome__c WHERE Primary_Member__r.email = '#{@leadsTestData[0]['email']}'")[0].fetch("Id")).to_not eql nil
         passedLogs = @objRollbar.addLog("[Expected]  Tour created successfully \n[Result  ]  Success")
         puts "\n"
+
         passedLogs = @objRollbar.addLog("[Validate]  Success message for booked tour should be displayed \n[Expected]  Success Message as 'Tour booked successfully and will be synced shortly' and 'Tours synced successfully' should be displayed \n[Result  ]  Success")
         puts "\n"
+
         passedLogs = @objRollbar.addLog("[Validate]  To check status of booked tour")
         expect(ManageTours.class_variable_get(:@@recordInsertedIds)['Tour_Outcome__c'].fetch('Status__c').eql? "Scheduled").to be true
         passedLogs = @objRollbar.addLog("[Expected]  Status = #{ManageTours.class_variable_get(:@@recordInsertedIds)["Tour_Outcome__c"].fetch("Status__c")} \n[Result  ]  Success")
         puts "\n"
+
         sleep(@objManageTours.instance_variable_get(:@timeSettingMap)['Sleep']['Environment']['Lightening']['Min'])
         passedLogs = @objRollbar.addLog("[Validate]  Checking open activities")
         expect(@objManageTours.checkRecordCreated('Task',"SELECT id FROM Task WHERE whatId = '#{ManageTours.class_variable_get(:@@recordInsertedIds)['Tour_Outcome__c'].fetch('Id')}'")[0].fetch('Id')).to_not eql nil
         passedLogs = @objRollbar.addLog("[Expected]  'Book a tour' named open activity created successfully \n[Result  ]  Success")
         puts "\n"
+
         passedLogs = @objRollbar.addLog("[Validate]  Records of booked tour should be displayed")
         expect(@objManageTours.numberOfTourBooked == 3).to be true
         passedLogs = @objRollbar.addLog("[Expected]  Booked tours records are available on manage tour page \n[Result  ]  Success")
         puts "\n"
+
         passedLogs = @objRollbar.addLog("[Step    ]  Adding result in testrail")
         @testRailUtility.postResult(102,"Pass",1,@runId)
         passedLogs = @objRollbar.addLog("[Result  ]  Success")
@@ -760,13 +764,12 @@ describe ManageTours do
   end
 
   context "should check reschedule functionality" do
-    it "C115 : To check user can reschedule a tour" , :test => true do
+    it "C115 : To check user can reschedule a tour" , :"115" => true do
       puts "C115 : To check user can reschedule a tour"
       puts "\n"
       begin
         caseInfo = @testRailUtility.getCase('115')
         passedLogs = @objRollbar.addLog("[Step    ]  Check status of tour after tour rescheduling \n[Validate]  Status of tour should be updated as Rescheduled", caseInfo['id'])
-        puts "\n"
         @objManageTours.rescheduleTour
         sleep(@objManageTours.instance_variable_get(:@timeSettingMap)['Sleep']['Environment']['Lightening']['Max'])
         expect(@objManageTours.tourStatusChecked?("Rescheduled" , @leadsTestData[0]['email'])).to be true

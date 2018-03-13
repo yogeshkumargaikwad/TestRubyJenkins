@@ -16,17 +16,17 @@ if !ARGV.empty? then
   ARGV.each do |input|
     containerInfo = input.split(":")
     if specMap.key?(containerInfo[0]) && containerInfo.size > 1 then
-      specMap[containerInfo[0]] << containerInfo[1].split(",")
+      specMap[containerInfo[0]] << containerInfo[1].split(",").uniq
     else
       if containerInfo.size > 1 then
-        specMap[containerInfo[0]] = containerInfo[1].split(",")
+        specMap[containerInfo[0]] = containerInfo[1].split(",").uniq
       end
     end
   end
   specs = Array.new
   if !specMap.empty? && !specMap.values.empty? then
     if specMap.key?('case') && specMap.fetch('case').size > 0 then
-      RSpec.configuration.filter_run_including specMap.fetch('case')[0].to_sym
+      RSpec.configuration.filter_runs_including(specMap.fetch('case'))
       if specMap.key?('case') && specMap.key?('section') && specMap.key?('suit') && specMap.key?('project') then
         specMap.fetch('case').each do |caseId|
           specs.concat(testRailUtility.getSpecLocations(caseId,specMap.fetch('case'),specMap.fetch('suit'),nil,specMap.fetch('project')))
@@ -131,8 +131,10 @@ if !ARGV.empty? then
             ENV['BROWSER'] = browser
             #puts [spec['path']]
             RSpec::Core::Runner.run([spec['path']], $stderr, $stdout)
-
-            
+            RSpec.clear_examples
+            RSpec.clear_examples
+            RSpec.clear_examples
+            RSpec.clear_examples
 =begin
             if !RSpec.configuration.reporter.failed_examples.empty? then
               out_file = File.new("exceptions.txt", "w")
@@ -144,12 +146,15 @@ if !ARGV.empty? then
               puts "Successfully tested"
             end
 =end
-            RSpec.clear_examples
-            #RSpec.reset
+            
           end
         else
           #puts [spec['path']]
           RSpec::Core::Runner.run([spec['path']], $stderr, $stdout)
+          RSpec.clear_examples
+          RSpec.clear_examples
+          RSpec.clear_examples
+          RSpec.clear_examples
           #puts "Errors are :: #{RSpec.configuration.formatters[0].inspect}"
           #puts "Failed examples are :: #{RSpec.configuration.reporter.failed_examples}"
 =begin
@@ -163,7 +168,7 @@ if !ARGV.empty? then
               puts "Successfully tested"
             end
 =end
-            RSpec.clear_examples
+           
             #RSpec.reset
         end
       end
