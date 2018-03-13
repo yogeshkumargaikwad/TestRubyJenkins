@@ -4,6 +4,8 @@
 require 'yaml'
 require 'rspec'
 require 'json'
+require "selenium-webdriver"
+require 'enziUIUtility'
 require_relative File.expand_path(Dir.pwd+"/GemUtilities/EnziTestRailUtility/lib/EnziTestRailUtility.rb")
 specMap = Hash.new
 mapSuitRunId = Hash.new
@@ -50,38 +52,10 @@ if !ARGV.empty? then
     if !specMap.key?('case') &&!(specMap.key?('section')) && specMap.key?('suit') then
       if specMap.key?('project') then
         specMap.fetch('suit').each do |suitId|
-=begin
-          arrCaseIds = Array.new
-          suitInfo = testRailUtility.getSuite(suitId)
-          testRailUtility.getSections(suitInfo['id'],suitInfo['project_id']).each do |section|
-            testRailUtility.getCases(suitInfo['project_id'],suitId,section['id']).each do |testCase|
-              if testCase.key?('custom_spec_location') && !testCase.fetch('custom_spec_location').nil? then
-                arrCaseIds.push(testCase['id'])
-              end
-            end
-          end
-          if arrCaseIds.size > 0 then
-            ENV['RUN_ID'] = testRailUtility.addRun(suitInfo['name'],specMap.fetch('project')[0],suitId,arrCaseIds)['id'].to_s
-          end
-=end
           specs.concat(testRailUtility.getSpecLocations(nil,nil,suitId,nil,specMap.fetch('project')[0]))
         end
       else
         specMap.fetch('suit').each do |suitId|
-=begin
-          arrCaseIds = Array.new
-          suitInfo = testRailUtility.getSuite(suitId)
-          testRailUtility.getSections(suitInfo['id'],suitInfo['project_id']).each do |section|
-            testRailUtility.getCases(suitInfo['project_id'],suitId,section['id']).each do |testCase|
-              if testCase.key?('custom_spec_location') && !testCase.fetch('custom_spec_location').nil? then
-                arrCaseIds.push(testCase['id'])
-              end
-            end
-          end
-          if arrCaseIds.size > 0 then
-            ENV['RUN_ID'] = testRailUtility.addRun(suitInfo['name'],specMap.fetch('project')[0],suitId,arrCaseIds)['id'].to_s
-          end
-=end
           specs.concat(testRailUtility.getSpecLocations(nil,nil,suitId,nil,suitInfo['project_id']))
         end
       end
@@ -94,120 +68,44 @@ if !ARGV.empty? then
     if  !(specMap.key?('suit') || specMap.key?('section')) && specMap.key?('project') then
       specMap.fetch('project').each do |projectId|
         specs.concat(testRailUtility.getSpecLocations(nil,nil,nil,nil,projectId))
-=begin
-        ENV['RUN_ID'].split(",").each do |runId|
-          puts "Run Id :: #{runId}"
-          mapSuitRunId[testRailUtility.getSpecLocations(nil,nil,testRailUtility.getRun(runId)['suite_id'],nil,ENV['PROJECT_ID'])[0]['path']] = runId
-        end
-=end
       end
     end
   end
   
   if !ENV['PROJECT_ID'].nil? && ENV['SUIT_ID'].nil? && ENV['SECTION_ID'].nil? then
-    #puts "Run Id :: #{ENV['RUN_ID'].split(",")}"
     ENV['RUN_ID'].split(",").each do |runId|
-      #puts "Run Id :: #{runId}"
       mapSuitRunId[testRailUtility.getSpecLocations(nil,nil,testRailUtility.getRun(runId)['suite_id'],nil,ENV['PROJECT_ID'])[0]['path']] = runId
     end
-    #puts "Map :: #{mapSuitRunId}"
-    #puts "Map :: #{mapSuitRunId}"
   end
   if !specs.empty? then
     specs.uniq.each do |spec|
       #Run spec in multiple browsers
       if !spec.nil? then
-        #puts "spec to run :: #{spec}"
-=begin
-        if !ENV['PROJECT_ID'].nil? && ENV['SUIT_ID'].nil? && ENV['SECTION_ID'].nil? then
-          ENV['RUN_ID'] = spec['runId']
-        end
-=end
         if !ENV['PROJECT_ID'].nil? && ENV['SUIT_ID'].nil? && ENV['SECTION_ID'].nil? then
           ENV['RUN_ID'] = mapSuitRunId[spec['path']]
         end
         if spec['isBrowserDependent'] then
           specMap.fetch('browser')[0].split(" ").each do |browser|
-            ENV['BROWSER'] = browser
-            #puts [spec['path']]
-            RSpec::Core::Runner.run([spec['path']], $stderr, $stdout)
-            RSpec.clear_examples
-            RSpec.clear_examples
-            RSpec.clear_examples
-            RSpec.clear_examples
-=begin
-            if !RSpec.configuration.reporter.failed_examples.empty? then
-              out_file = File.new("exceptions.txt", "w")
-              out_file.puts(RSpec.configuration.reporter.failed_examples.to_s)
-              out_file.close
-              mailUtility = MailUtility.new("monika.pingale@enzigma.in","arya@1994")
-              mailUtility.sendMail('monika.pingale@enzigma.in',"exceptions.txt")
-            else
-              puts "Successfully tested"
-            end
-=end
-            
+            #ENV['BROWSER'] = browser
+            ARGV[0] = Selenium::WebDriver.for browser.to_sym
+            ARGV[0].get "https://test.salesforce.com/login.jsp?pw=#{config['Staging']['password']}&un=#{config['Staging']['username']}"
+            EnziUIUtility.wait(ARGV[0], :id, 'phSearchInput', YAML.load_file('timeSettings.yaml')['Wait']['Environment']['Classic']['Max'])
+            ARGV[0].get "#{ARGV[0].current_url().split('/home')[0]}/005?isUserEntityOverride=1&retURL=/ui/setup/Setup?setupid=Users&setupid=ManageUsers"
+            EnziUIUtility.wait(ARGV[0], :name, 'new', YAML.load_file('timeSettings.yaml')['Wait']['Environment']['Classic']['Min'])
+            YAML.load_file(Dir.pwd+'/UserSettings.yaml')['profile'].each do |profile|
+              EnziUIUtility.loginForUser(ARGV[0],profile)
+              EnziUIUtility.switchToWindow(ARGV[0],ARGV[0].current_url())
+              puts "Successfully Logged In with #{profile} "
+              ::RSpec::Core::Runner.run([spec['path']], $stderr, $stdout)
+              RSpec.clear_examples
+            endss
           end
         else
-          #puts [spec['path']]
-          RSpec::Core::Runner.run([spec['path']], $stderr, $stdout)
+          ::RSpec::Core::Runner.run([spec['path']], $stderr, $stdout)
           RSpec.clear_examples
-          RSpec.clear_examples
-          RSpec.clear_examples
-          RSpec.clear_examples
-          #puts "Errors are :: #{RSpec.configuration.formatters[0].inspect}"
-          #puts "Failed examples are :: #{RSpec.configuration.reporter.failed_examples}"
-=begin
-            if !RSpec.configuration.reporter.failed_examples.empty? then
-              out_file = File.new("exceptions.txt", "w")
-              out_file.puts(RSpec.configuration.reporter.failed_examples.to_s)
-              out_file.close
-              mailUtility = MailUtility.new("monika.pingale@enzigma.in","arya@1994")
-              mailUtility.sendMail('monika.pingale@enzigma.in',"exceptions.txt")
-            else
-              puts "Successfully tested"
-            end
-=end
-           
-            #RSpec.reset
         end
       end
     end
   end
 end
-=begin
-if !ARGV.empty? then
-  specMapping = JSON.parse(File.read("specMapping.json"))
-
-  ARGV.each do |input|
-    type = input.split(":")
-    #Select spec to run by given input
-    specMapping[''+type[0]].each do |inputType|
-      type[1].split(",").each do |id|
-        if inputType.has_key?(id) then
-          inputType.fetch(id).each do |spec|
-            specs.push(spec)
-          end
-        end
-      end
-    end
-  end
-  if !specs.empty? then
-    specs.each do |spec|
-      #Run spec in multiple browsers
-      puts spec
-      if spec['isBrowserDependent'] then
-        specMapping['BrowserCapabilities'].each do |browser|
-          puts browser
-          ENV['BROWSER'] = browser['Name']
-          RSpec::Core::Runner.run([spec['path']], $stderr, $stdout)
-          RSpec.clear_examples
-      end
-      else
-        RSpec::Core::Runner.run([spec['path']], $stderr, $stdout)
-      end
-    end
-  end
-end
-=end
 

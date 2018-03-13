@@ -11,11 +11,13 @@ require 'date'
 #require_relative "helper.rb"
 describe ManageTours do
   before(:all){
+    
     #SauceLab will read env variable and accordingly set browser
     #@driver = SauceLabs.selenium_driver()
     @objRollbar = RollbarUtility.new()
     #@driver = Selenium::WebDriver.for :chrome
-    @driver = Selenium::WebDriver.for ENV['BROWSER'].to_sym
+    #@driver = Selenium::WebDriver.for ENV['BROWSER'].to_sym
+    @driver = ARGV[0]
     @objManageTours = ManageTours.new(@driver,"Staging")
     @leadsTestData = @objManageTours.instance_variable_get(:@records)[0]['lead']
     @testRailUtility = EnziTestRailUtility::TestRailUtility.new(@objManageTours.instance_variable_get(:@mapCredentials)['TestRail']['username'],@objManageTours.instance_variable_get(:@mapCredentials)['TestRail']['password'])
@@ -51,8 +53,6 @@ describe ManageTours do
     puts "---------------------------------------------------------------------------------------------------------------------------"
   }
   after(:all){
-
-    
     allRecordIds = Salesforce.class_variable_get(:@@createdRecordsIds)
     puts "Deleting created test data of Journey"
     Salesforce.deleteRecords(@objManageTours.instance_variable_get(:@salesforceBulk),"Journey__c",allRecordIds['Journey__c'])
@@ -99,7 +99,7 @@ describe ManageTours do
         passedLogs = @objRollbar.addLog("[Validate]  Checking Journey is created after creating lead")
         @objManageTours.checkRecordCreated("Journey__c","SELECT id FROM Journey__c WHERE Primary_Email__c = '#{@leadsTestData[0]['email']}'")[0].fetch('Id')
         passedLogs = @objRollbar.addLog("[Result  ]  Success")
-        @objManageTours.checkRecordCreated("Journey__c","SELECT id FROM Journey__c WHERE Primary_Email__c = '#{@leadsTestData[0]['email']}'")[0].fetch('Id')
+        
         puts "\n"
 
         passedLogs = @objRollbar.addLog("[Validate]  Checking Title of page when user click on 'Manage/book tour' button")
@@ -241,12 +241,12 @@ describe ManageTours do
     	
         caseInfo = @testRailUtility.getCase('81')
         passedLogs = @objRollbar.addLog("[Step]  Start Time field should be selectable",caseInfo['id'])
-        ManageTours.selectBuilding(@driver.find_element(:id,"BookTours0"),"LON-Soho - Sheraton H",@objManageTours.instance_variable_get(:@timeSettingMap))
+        ManageTours.selectBuilding(@driver.find_element(:id,"BookTours0"),"#{@objManageTours.instance_variable_get(:@records)[1]['tour'][count]['building']}",@objManageTours.instance_variable_get(:@timeSettingMap))
         ManageTours.selectTourDate(@driver.find_element(:id,"BookTours0"),@objManageTours.instance_variable_get(:@timeSettingMap))
-      if Date.today.saturday? || Date.today.sunday? then
+      if Date.today.next_day(1).saturday? then
         EnziUIUtility.clickElement(@driver,:id,Date.today.next_day(2).to_s)
       else
-        EnziUIUtility.clickElement(@driver,:id,Date.today.next_day(3).to_s)
+        EnziUIUtility.clickElement(@driver,:id,Date.today.next_day(1).to_s)
         #EnziUIUtility.selectElement(@driver.find_element(:id,"BookTours0"),"Today","a")
       end
         expect(@objManageTours.childDisabled?(ManageTours.selectTourDate(@driver.find_element(:id,"BookTours0"),@objManageTours.instance_variable_get(:@timeSettingMap)),ManageTours.setElementValue(@driver.find_element(:id,"BookTours0"),"startTime",nil))).to be false
@@ -573,7 +573,11 @@ describe ManageTours do
         puts "\n"
 
         passedLogs = @objRollbar.addLog("[Validate]  Lead should be created")
-        @objManageTours.openPageForLead(Salesforce.createRecords(@objManageTours.instance_variable_get(:@salesforceBulk),'Lead',@leadsTestData)[0]['Id'])
+        if @driver.title.eql? "Manage Tours" then
+          @objManageTours.openPageForLead(Salesforce.createRecords(@objManageTours.instance_variable_get(:@salesforceBulk),'Lead',@leadsTestData)[0]['Id'])
+        else
+          @objManageTours.openPage(Salesforce.createRecords(@objManageTours.instance_variable_get(:@salesforceBulk),'Lead',@leadsTestData)[0]['Id'],:name,"lightning_manage_tours")
+        end
         passedLogs = @objRollbar.addLog("[Expected] Lead created sucessfully \n[Result  ]  Success")
         puts "\n"
 
@@ -704,7 +708,11 @@ describe ManageTours do
         
         passedLogs = @objRollbar.addLog("[Validate]  Lead should be created")
         @leadsTestData[0]['email'] = "test_enzigmaPre#{rand(9999)}@example.com"
-        @objManageTours.openPageForLead(Salesforce.createRecords(@objManageTours.instance_variable_get(:@salesforceBulk),'Lead',@leadsTestData)[0]['Id'])
+        if @driver.title.eql? "Manage Tours"
+          @objManageTours.openPageForLead(Salesforce.createRecords(@objManageTours.instance_variable_get(:@salesforceBulk),'Lead',@leadsTestData)[0]['Id'])
+        else
+          @objManageTours.openPage(Salesforce.createRecords(@objManageTours.instance_variable_get(:@salesforceBulk),'Lead',@leadsTestData)[0]['Id'],:name,"lightning_manage_tours")
+        end
         passedLogs = @objRollbar.addLog("[Expected] Lead created sucessfully \n[Result  ]  Success")
         puts "\n"
 

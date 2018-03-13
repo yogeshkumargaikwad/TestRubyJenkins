@@ -172,6 +172,49 @@ class EnziUIUtility
     return false
   end
 
- end
+  #Use: This function is Used to switching to lightening from classic
+  def self.switchToLightening(driver)
+    if !(driver.current_url().include? "lightning")
+      #puts "String not 'lightning'"
+      driver.find_element(:id, "userNav-arrow").click
+      driver.find_element(:link , "Switch to Lightning Experience").click
+    else
+      puts "You are already on lightening..."
+    end
+  end
+
+  #Use: This function is Used to switching to classic from lightening
+  def self.switchToClassic(driver)
+    if (driver.current_url().include? "lightning")
+      #puts "String 'lightning'"
+      driver.find_element(:class, "oneUserProfileCardTrigger").click
+      driver.find_element(:link , "Switch to Salesforce Classic").click
+    else
+      puts "You are already on Classic..."
+    end
+  end
+  def self.loginForUser(driver,profile_name)
+    allTables = driver.find_elements(:tag_name,"table")
+    loginTable = nil
+    allTables.each do |tab|
+      if tab.attribute('class') == "list"
+        loginTable = tab
+        break
+      end
+    end
+    tBodyEle = loginTable.find_element(:tag_name,'tbody')
+    arrRows = tBodyEle.find_elements(:tag_name,'tr')
+    arrRows.each do |row|
+      row.find_elements(:tag_name,'td').each do |col|
+        if(col.text == "#{profile_name}")
+          row.find_element(:tag_name,'th').text
+          row.find_element(:link, 'Login').click
+          return nil
+        end
+      end
+    end
+  end
+
+end
 
 
