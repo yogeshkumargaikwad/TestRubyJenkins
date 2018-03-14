@@ -54,7 +54,7 @@ class EnziUIUtility
       if textToselect != nil then
         if element.text == textToselect then
           element.click
-        break
+          return element
         end
       end
     end
@@ -229,6 +229,6 @@ class EnziUIUtility
       EnziUIUtility.selectElement(driver,"Log Out","a")
     end
   end
-end
+ end
 
 
