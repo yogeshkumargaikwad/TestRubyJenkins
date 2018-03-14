@@ -90,13 +90,16 @@ if !ARGV.empty? then
             ARGV[0] = Selenium::WebDriver.for browser.to_sym
             ARGV[0].get "https://test.salesforce.com/login.jsp?pw=#{config['Staging']['password']}&un=#{config['Staging']['username']}"
             EnziUIUtility.wait(ARGV[0], :id, 'phSearchInput', YAML.load_file('timeSettings.yaml')['Wait']['Environment']['Classic']['Max'])
+            EnziUIUtility.switchToClassic(ARGV[0])
             ARGV[0].get "#{ARGV[0].current_url().split('/home')[0]}/005?isUserEntityOverride=1&retURL=/ui/setup/Setup?setupid=Users&setupid=ManageUsers"
             EnziUIUtility.wait(ARGV[0], :name, 'new', YAML.load_file('timeSettings.yaml')['Wait']['Environment']['Classic']['Min'])
             YAML.load_file(Dir.pwd+'/UserSettings.yaml')['profile'].each do |profile|
               EnziUIUtility.loginForUser(ARGV[0],profile)
               EnziUIUtility.switchToWindow(ARGV[0],ARGV[0].current_url())
-              puts "Successfully Logged In with #{profile} "
+              puts "Successfully Logged In with #{profile} ape is #{spec['path']}"
               ::RSpec::Core::Runner.run([spec['path']], $stderr, $stdout)
+              EnziUIUtility.logout(ARGV[0])
+              EnziUIUtility.wait(ARGV[0], :name, 'new', YAML.load_file('timeSettings.yaml')['Wait']['Environment']['Classic']['Max'])
               RSpec.clear_examples
             end
           end

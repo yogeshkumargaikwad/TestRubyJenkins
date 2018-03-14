@@ -88,7 +88,7 @@ class EnziUIUtility
         allWindows.each do |window|
           #if isMainWindow && @@mainWindow != window then
             driver.switch_to.window(window)
-          	#puts driver.title
+            puts driver.title
             if(titleName == driver.title) then
               break
             end
@@ -123,8 +123,8 @@ class EnziUIUtility
   end
 
   def self.switchToDefault(driver)
-  	#driver.switch_to.default_content
-  	driver.switch_to.window((driver.window_handles)[0])
+    #driver.switch_to.default_content
+    driver.switch_to.window((driver.window_handles)[0])
   end
 
 
@@ -171,7 +171,6 @@ class EnziUIUtility
     end
     return false
   end
-
   #Use: This function is Used to switching to lightening from classic
   def self.switchToLightening(driver)
     if !(driver.current_url().include? "lightning")
@@ -186,8 +185,11 @@ class EnziUIUtility
   #Use: This function is Used to switching to classic from lightening
   def self.switchToClassic(driver)
     if (driver.current_url().include? "lightning")
+      switchToWindow(driver,driver.current_url)
+      self.wait(driver,:class,"oneUserProfileCardTrigger",10)
       #puts "String 'lightning'"
       driver.find_element(:class, "oneUserProfileCardTrigger").click
+      self.wait(driver,:class,"oneUserProfileCardTrigger",10)
       driver.find_element(:link , "Switch to Salesforce Classic").click
     else
       puts "You are already on Classic..."
@@ -214,7 +216,19 @@ class EnziUIUtility
       end
     end
   end
-
+  def self.logout(driver)
+    if !(driver.current_url().include? "lightning") then
+      driver.navigate().back()
+      EnziUIUtility.clickElement(driver,:id,"userNavButton")
+      EnziUIUtility.selectElement(driver,"Logout","a")
+    else
+      switchToWindow(driver,driver.current_url)
+      self.wait(driver,:class,"oneUserProfileCardTrigger",10)
+      EnziUIUtility.clickElement(driver,:class,"oneUserProfileCardTrigger")
+      self.wait(driver,:class,"uiOutputURL",10)
+      EnziUIUtility.selectElement(driver,"Log Out","a")
+    end
+  end
 end
 
 

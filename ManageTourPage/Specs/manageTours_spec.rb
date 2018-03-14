@@ -77,7 +77,7 @@ describe ManageTours do
     puts "Deleting created test data of Contact"
     Salesforce.deleteRecords(@objManageTours.instance_variable_get(:@salesforceBulk),"Contact",allRecordIds['Contact'])
     puts "Test data deleted successfully"
-    @driver.quit
+    #@driver.quit
   }
    puts "---------------------------------------------------------------------------------------------------------------------------"
   it "C149 : To check manage tour page is displayed" , :"149" => true do
@@ -86,8 +86,8 @@ describe ManageTours do
         puts "\n"
         caseInfo = @testRailUtility.getCase('149')
         passedLogs = @objRollbar.addLog("[Step    ]  Checking manage tour page ", caseInfo['id'])
-        @leadsTestData[0]['email'] = "test_enzigmaPre#{rand(9999)}@example.com"
-        @leadsTestData[0]['company'] = "Test_Enzigma#{rand(1111)}"
+        @leadsTestData[0]['email'] = "test_enzigmaPre#{rand(99999999999999)}@example.com"
+        @leadsTestData[0]['company'] = "Test_Enzigma#{rand(99999999999999)}"
         puts "\n"
 
         passedLogs = @objRollbar.addLog("[Validate]  Lead should be created")
@@ -103,7 +103,7 @@ describe ManageTours do
         puts "\n"
 
         passedLogs = @objRollbar.addLog("[Validate]  Checking Title of page when user click on 'Manage/book tour' button")
-        expect(@driver.title).to eql "Manage Tours"
+        expect(@driver.title).to match("Manage Tours")
         passedLogs = @objRollbar.addLog("[Expected]  Manage tour page opened successfully with Page Title= Manage Tours \n[Result  ]  Success")
         puts "\n"
 
@@ -238,10 +238,9 @@ describe ManageTours do
     puts "C81 : To check user can select start time"
     puts "\n"
     begin
-    	
         caseInfo = @testRailUtility.getCase('81')
         passedLogs = @objRollbar.addLog("[Step]  Start Time field should be selectable",caseInfo['id'])
-        ManageTours.selectBuilding(@driver.find_element(:id,"BookTours0"),"#{@objManageTours.instance_variable_get(:@records)[1]['tour'][count]['building']}",@objManageTours.instance_variable_get(:@timeSettingMap))
+        ManageTours.selectBuilding(@driver.find_element(:id,"BookTours0"),"#{@objManageTours.instance_variable_get(:@records)[1]['tour'][0]['building']}",@objManageTours.instance_variable_get(:@timeSettingMap))
         ManageTours.selectTourDate(@driver.find_element(:id,"BookTours0"),@objManageTours.instance_variable_get(:@timeSettingMap))
       if Date.today.next_day(1).saturday? then
         EnziUIUtility.clickElement(@driver,:id,Date.today.next_day(2).to_s)
@@ -249,8 +248,12 @@ describe ManageTours do
         EnziUIUtility.clickElement(@driver,:id,Date.today.next_day(1).to_s)
         #EnziUIUtility.selectElement(@driver.find_element(:id,"BookTours0"),"Today","a")
       end
-        expect(@objManageTours.childDisabled?(ManageTours.selectTourDate(@driver.find_element(:id,"BookTours0"),@objManageTours.instance_variable_get(:@timeSettingMap)),ManageTours.setElementValue(@driver.find_element(:id,"BookTours0"),"startTime",nil))).to be false
-    	passedLogs = @objRollbar.addLog("[Expected]  Start Time field should be selected after selecting Building Name and Tour Date fields \n[Result  ]  Success ")
+      if @driver.manage.window.size.width < 1025 then
+          expect(@objManageTours.childDisabled?(ManageTours.selectTourDate(@driver.find_element(:id,"BookTours0"),@objManageTours.instance_variable_get(:@timeSettingMap)),ManageTours.setElementValue(@driver.find_element(:id,"BookTours0"),"startTime",nil))).to be false
+    	else
+        expect(@objManageTours.childDisabled?(ManageTours.selectTourDate(@driver.find_element(:id,"BookTours0"),@objManageTours.instance_variable_get(:@timeSettingMap)),ManageTours.setElementValue(@driver.find_element(:id,"BookTours0"),"startTime2",nil))).to be false
+      end
+      passedLogs = @objRollbar.addLog("[Expected]  Start Time field should be selected after selecting Building Name and Tour Date fields \n[Result  ]  Success ")
         puts "\n"
 
         passedLogs = @objRollbar.addLog("[Step    ]  Adding result in testrail")
@@ -273,8 +276,14 @@ describe ManageTours do
     begin
         caseInfo = @testRailUtility.getCase('887')
         passedLogs = @objRollbar.addLog("[Step    ]  Checking Start Time and End Time fields", caseInfo['id'])
-        ManageTours.setElementValue(@driver.find_element(:id,"BookTours0"),"startTime",nil)
-        expect(ManageTours.getElement("input","endTime",@driver.find_element(:id,"BookTours0"))).to_not eql nil
+        if @driver.manage.window.size.width < 1025 then
+          ManageTours.setElementValue(@driver.find_element(:id,"BookTours0"),"startTime",nil)
+          expect(ManageTours.getElement("input","endTime",@driver.find_element(:id,"BookTours0"))).to_not eql nil
+        else
+          ManageTours.setElementValue(@driver.find_element(:id,"BookTours0"),"startTime2",nil)
+          expect(ManageTours.getElement("input","endTime",@driver.find_element(:id,"BookTours0"))).to_not eql nil
+        end
+        
         passedLogs = @objRollbar.addLog("[Expected]  End Time field should be updated after selecting Start Time \n[Result  ]  Success ")
         puts "\n"
 
@@ -568,8 +577,8 @@ describe ManageTours do
       begin
         caseInfo = @testRailUtility.getCase('94')
         passedLogs = @objRollbar.addLog("[Step    ]  Click on 'Create Account and merge' button",caseInfo['id'])
-        @leadsTestData[0]['email'] = "test_enzigmaPre#{rand(9999)}@example.com"
-        @leadsTestData[0]['company'] = "Test_Enzigma#{rand(1111)}"
+        @leadsTestData[0]['email'] = "test_enzigmaPre#{rand(99999999999999)}@example.com"
+        @leadsTestData[0]['company'] = "Test_Enzigma#{rand(99999999999999)}"
         puts "\n"
 
         passedLogs = @objRollbar.addLog("[Validate]  Lead should be created")
@@ -707,7 +716,7 @@ describe ManageTours do
         passedLogs = @objRollbar.addLog("[Step    ]  Click on 'Use Selector Account' button",caseInfo['id'])
         
         passedLogs = @objRollbar.addLog("[Validate]  Lead should be created")
-        @leadsTestData[0]['email'] = "test_enzigmaPre#{rand(9999)}@example.com"
+        @leadsTestData[0]['email'] = "test_enzigmaPre#{rand(99999999999999)}@example.com"
         if @driver.title.eql? "Manage Tours"
           @objManageTours.openPageForLead(Salesforce.createRecords(@objManageTours.instance_variable_get(:@salesforceBulk),'Lead',@leadsTestData)[0]['Id'])
         else
