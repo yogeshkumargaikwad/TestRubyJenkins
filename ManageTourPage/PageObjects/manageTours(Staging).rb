@@ -63,14 +63,17 @@ class ManageTours
     		EnziUIUtility.wait(@driver,:id,"BookTours#{count}",@timeSettingMap['Wait']['Environment']['Lightening']['Max'])
 		    container = @driver.find_element(:id,"BookTours#{count}")
     		#ManageTours.setElementValue(container,"tourBySalesLead","#{@records[1]['tour'][count]['bookedBySalesLead']}")
+    		puts @driver.manage.window.size.width
     		if @driver.manage.window.size.width < 1025 then
+    			puts "p1"
     			ManageTours.setElementValue(container,"productLine","#{@records[1]['tour'][count]['productLine']}")
     		else
+    			puts "p2"
     			ManageTours.setElementValue(container,"productLine2","#{@records[1]['tour'][count]['productLine']}")
     		end
-    		ManageTours.selectBuilding(container,"#{@records[1]['tour'][count]['building']}",@timeSettingMap)
+    		ManageTours.selectBuilding(container,"#{@records[1]['tour'][count]['building']}",@timeSettingMap,@driver)
     		wait.until {!@driver.find_element(:id ,"spinner").displayed?}
-    		ManageTours.selectTourDate(container,@timeSettingMap)
+    		ManageTours.selectTourDate(container,@timeSettingMap,@driver)
     		wait.until {!@driver.find_element(:id ,"spinner").displayed?}
     		#EnziUIUtility.clickElement(@driver,:id,"1515349800000")
     		wait.until {!@driver.find_element(:id ,"spinner").displayed?}
@@ -95,11 +98,14 @@ class ManageTours
     		EnziUIUtility.wait(@driver,:id,"header43",@timeSettingMap['Wait']['Environment']['Lightening']['Max'])
     	end
 	end
-	def self.selectBuilding(container,value,waitTime)
+	def self.selectBuilding(container,value,waitTime,driver)
 		wait = Selenium::WebDriver::Wait.new(:timeout => waitTime['Wait']['Environment']['Lightening']['Min'])
-		if @driver.manage.window.size.width < 1025 then
+		puts driver.manage.window.size.width
+		if driver.manage.window.size.width < 1025 then
+			puts "b1"
 			innerDiv = container.find_elements(:class,"building")
 		else
+			puts "b2"
 			innerDiv = container.find_elements(:class,"building2")
 		end
 		
@@ -121,9 +127,9 @@ class ManageTours
 		wait.until {value[1].displayed?}
 		value[1].click
 	end
-	def self.selectTourDate(container,waitTime)
+	def self.selectTourDate(container,waitTime,driver)
 		wait = Selenium::WebDriver::Wait.new(:timeout => waitTime['Wait']['Environment']['Lightening']['Min'])
-		if @driver.manage.window.size.width < 1025 then
+		if driver.manage.window.size.width < 1025 then
 			innerDiv = container.find_elements(:class,"tourDate")
 		else
 			innerDiv = container.find_elements(:class,"tourDate2")
