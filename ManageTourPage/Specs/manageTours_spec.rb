@@ -391,6 +391,7 @@ describe ManageTours do
         
         passedLogs = @objRollbar.addLog("[Step    ]  Duplicate account selector pop-up should be opened", caseInfo['id'])
         EnziUIUtility.wait(@driver,:id,"header43",@objManageTours.instance_variable_get(:@timeSettingMap)['Wait']['Environment']['Lightening']['Min'])
+        @wait.until {@driver.find_element(:id ,"header43").displayed?}  
         expect(@driver.find_element(:id,"header43").text.eql? "Duplicate Account Selector").to be true
         passedLogs = @objRollbar.addLog("[Expected]  Duplicate account selector pop up is displayed \n[Result  ]  Success")
         puts "\n"
