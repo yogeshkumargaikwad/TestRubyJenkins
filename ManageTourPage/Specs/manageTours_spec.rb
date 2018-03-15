@@ -186,7 +186,7 @@ describe ManageTours do
         caseInfo = @testRailUtility.getCase('885')
         passedLogs = @objRollbar.addLog("[Step    ]  Checking Building Name and Tour Date fields", caseInfo['id'])
         sleep(@objManageTours.instance_variable_get(:@timeSettingMap)['Sleep']['Environment']['Lightening']['Min'])
-        expect(@objManageTours.childDisabled?(ManageTours.selectBuilding(@driver.find_element(:id,"BookTours0"),nil,@objManageTours.instance_variable_get(:@timeSettingMap),@objManageTours.instance_variable_get(:@selectorSettingMap)),ManageTours.selectTourDate(@driver.find_element(:id,"BookTours0"),@objManageTours.instance_variable_get(:@timeSettingMap),@objManageTours.instance_variable_get(:@selectorSettingMap)))).to be false
+        expect(@objManageTours.childDisabled?(ManageTours.selectBuilding(@driver.find_element(:id,"BookTours0"),nil,@objManageTours.instance_variable_get(:@timeSettingMap),@driver,@objManageTours.instance_variable_get(:@selectorSettingMap)),ManageTours.selectTourDate(@driver.find_element(:id,"BookTours0"),@objManageTours.instance_variable_get(:@timeSettingMap),@driver,@objManageTours.instance_variable_get(:@selectorSettingMap)))).to be false
         passedLogs = @objRollbar.addLog("[Expected]  Tour date field should be disabled as building name field is not filled out \n[Result  ]  Success ")
         puts "\n"
 
@@ -211,7 +211,7 @@ describe ManageTours do
         caseInfo = @testRailUtility.getCase('1016')
         passedLogs = @objRollbar.addLog("[Step    ]  Checking previous date selection for field tour date",caseInfo['id'])
         passedLogs = @objRollbar.addLog("[Validate]  Checking Tour date field")
-        ManageTours.selectTourDate(@driver.find_element(:id,"BookTours0"),@objManageTours.instance_variable_get(:@timeSettingMap),@objManageTours.instance_variable_get(:@selectorSettingMap))
+        ManageTours.selectTourDate(@driver.find_element(:id,"BookTours0"),@objManageTours.instance_variable_get(:@timeSettingMap),@driver,@objManageTours.instance_variable_get(:@selectorSettingMap))
         EnziUIUtility.clickElement(@driver,:id,Date.today.prev_day.to_s)
         @wait.until {!@driver.find_element(:id ,"spinner").displayed?}
         expect(EnziUIUtility.checkErrorMessage(@driver,'h2','No times slots available for the selected date')).to be true
@@ -240,18 +240,18 @@ describe ManageTours do
     begin
         caseInfo = @testRailUtility.getCase('81')
         passedLogs = @objRollbar.addLog("[Step]  Start Time field should be selectable",caseInfo['id'])
-        ManageTours.selectBuilding(@driver.find_element(:id,"BookTours0"),"#{@objManageTours.instance_variable_get(:@records)[1]['tour'][0]['building']}",@objManageTours.instance_variable_get(:@timeSettingMap),@objManageTours.instance_variable_get(:@selectorSettingMap))
-        ManageTours.selectTourDate(@driver.find_element(:id,"BookTours0"),@objManageTours.instance_variable_get(:@timeSettingMap),@objManageTours.instance_variable_get(:@selectorSettingMap))
+        ManageTours.selectBuilding(@driver.find_element(:id,"BookTours0"),"#{@objManageTours.instance_variable_get(:@records)[1]['tour'][0]['building']}",@objManageTours.instance_variable_get(:@timeSettingMap),@driver,@objManageTours.instance_variable_get(:@selectorSettingMap))
+        ManageTours.selectTourDate(@driver.find_element(:id,"BookTours0"),@objManageTours.instance_variable_get(:@timeSettingMap),@driver,@objManageTours.instance_variable_get(:@selectorSettingMap))
       if Date.today.next_day(1).saturday? then
         EnziUIUtility.clickElement(@driver,:id,Date.today.next_day(2).to_s)
       else
         EnziUIUtility.clickElement(@driver,:id,Date.today.next_day(1).to_s)
         #EnziUIUtility.selectElement(@driver.find_element(:id,"BookTours0"),"Today","a")
       end
-      if @driver.manage.window.size.width < 1025 then
-          expect(@objManageTours.childDisabled?(ManageTours.selectTourDate(@driver.find_element(:id,"BookTours0"),@objManageTours.instance_variable_get(:@timeSettingMap),@objManageTours.instance_variable_get(:@selectorSettingMap)),ManageTours.setElementValue(@driver.find_element(:id,"BookTours0"),"startTime",nil))).to be false
+      if @driver.find_elements(:class,"startTime").size > 0 then
+          expect(@objManageTours.childDisabled?(ManageTours.selectTourDate(@driver.find_element(:id,"BookTours0"),@objManageTours.instance_variable_get(:@timeSettingMap),@driver,@objManageTours.instance_variable_get(:@selectorSettingMap)),ManageTours.setElementValue(@driver.find_element(:id,"BookTours0"),"startTime",nil))).to be false
     	else
-        expect(@objManageTours.childDisabled?(ManageTours.selectTourDate(@driver.find_element(:id,"BookTours0"),@objManageTours.instance_variable_get(:@timeSettingMap),@objManageTours.instance_variable_get(:@selectorSettingMap)),ManageTours.setElementValue(@driver.find_element(:id,"BookTours0"),"startTime2",nil))).to be false
+        expect(@objManageTours.childDisabled?(ManageTours.selectTourDate(@driver.find_element(:id,"BookTours0"),@objManageTours.instance_variable_get(:@timeSettingMap),@driver,@objManageTours.instance_variable_get(:@selectorSettingMap)),ManageTours.setElementValue(@driver.find_element(:id,"BookTours0"),"startTime2",nil))).to be false
       end
       passedLogs = @objRollbar.addLog("[Expected]  Start Time field should be selected after selecting Building Name and Tour Date fields \n[Result  ]  Success ")
         puts "\n"
@@ -276,7 +276,7 @@ describe ManageTours do
     begin
         caseInfo = @testRailUtility.getCase('887')
         passedLogs = @objRollbar.addLog("[Step    ]  Checking Start Time and End Time fields", caseInfo['id'])
-        if @driver.manage.window.size.width < 1025 then
+        if @driver.find_elements(:class,"startTime").size > 0 then
           ManageTours.setElementValue(@driver.find_element(:id,"BookTours0"),"startTime",nil)
           expect(ManageTours.getElement("input","endTime",@driver.find_element(:id,"BookTours0"))).to_not eql nil
         else
@@ -308,8 +308,8 @@ describe ManageTours do
     begin
       caseInfo = @testRailUtility.getCase('92')
         passedLogs = @objRollbar.addLog("[Step    ]  Checking error message after entering single character in Building Name field", caseInfo['id'])
-      ManageTours.selectBuilding(@driver.find_element(:id,"BookTours0"),nil,@objManageTours.instance_variable_get(:@timeSettingMap),@objManageTours.instance_variable_get(:@selectorSettingMap)).clear
-      if ManageTours.selectBuilding(@driver.find_element(:id,"BookTours0"),nil,@objManageTours.instance_variable_get(:@timeSettingMap),@objManageTours.instance_variable_get(:@selectorSettingMap)).attribute('value').length > 2 then
+      ManageTours.selectBuilding(@driver.find_element(:id,"BookTours0"),nil,@objManageTours.instance_variable_get(:@timeSettingMap),@driver,@objManageTours.instance_variable_get(:@selectorSettingMap)).clear
+      if ManageTours.selectBuilding(@driver.find_element(:id,"BookTours0"),nil,@objManageTours.instance_variable_get(:@timeSettingMap),@driver,@objManageTours.instance_variable_get(:@selectorSettingMap)).attribute('value').length > 2 then
         expect(@driver.find_element(:xpath ,"//span[starts-with(@id, 'lookup-option')]").text).to eql nil
         passedLogs = @objRollbar.addLog("[Expected]  Error message as 'Enter at least 2 characters to search' should be displayed \n[Result  ]  Success ")
         puts "\n"
