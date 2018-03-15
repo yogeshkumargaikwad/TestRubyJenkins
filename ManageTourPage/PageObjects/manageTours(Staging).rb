@@ -18,6 +18,8 @@ class ManageTours
 		@records = JSON.parse(File.read(Dir.pwd+"/ManageTourPage/TestData/records.json"))
 		@timeSettingMap = YAML.load_file(Dir.pwd+'/timeSettings.yaml')
 		@mapCredentials = YAML.load_file(Dir.pwd+'/credentials.yaml')
+		@selectorSettingMap = YAML.load_file(Dir.pwd+'/ManageTourPage/TestData/selectorSetting.yaml')
+		@selectorSettingMap['screenSize']['actual'] = @driver.manage.window.size.width
 		#@driver.get "https://test.salesforce.com/login.jsp?pw=#{@mapCredentials[sandBoxType]['password']}&un=#{@mapCredentials[sandBoxType]['username']}"
 		@salesforceBulk = Salesforce.login(@mapCredentials["#{sandBoxType}"]['username'],@mapCredentials["#{sandBoxType}"]['password'],true)
 		#EnziUIUtility.wait(driver,:id,"tsid",@timeSettingMap['Wait']['Environment']['Classic']['Min'])
@@ -63,17 +65,14 @@ class ManageTours
     		EnziUIUtility.wait(@driver,:id,"BookTours#{count}",@timeSettingMap['Wait']['Environment']['Lightening']['Max'])
 		    container = @driver.find_element(:id,"BookTours#{count}")
     		#ManageTours.setElementValue(container,"tourBySalesLead","#{@records[1]['tour'][count]['bookedBySalesLead']}")
-    		puts @driver.manage.window.size.width
-    		if @driver.manage.window.size.width < 1025 then
-    			puts "p1"
+    		if @selectorSettingMap['screenSize']['actual'] < @selectorSettingMap['screenSize']['expected'] then
     			ManageTours.setElementValue(container,"productLine","#{@records[1]['tour'][count]['productLine']}")
     		else
-    			puts "p2"
     			ManageTours.setElementValue(container,"productLine2","#{@records[1]['tour'][count]['productLine']}")
     		end
-    		ManageTours.selectBuilding(container,"#{@records[1]['tour'][count]['building']}",@timeSettingMap,@driver)
+    		ManageTours.selectBuilding(container,"#{@records[1]['tour'][count]['building']}",@timeSettingMap,@selectorSettingMap)
     		wait.until {!@driver.find_element(:id ,"spinner").displayed?}
-    		ManageTours.selectTourDate(container,@timeSettingMap,@driver)
+    		ManageTours.selectTourDate(container,@timeSettingMap,@selectorSettingMap)
     		wait.until {!@driver.find_element(:id ,"spinner").displayed?}
     		#EnziUIUtility.clickElement(@driver,:id,"1515349800000")
     		wait.until {!@driver.find_element(:id ,"spinner").displayed?}
@@ -84,7 +83,7 @@ class ManageTours
 					#EnziUIUtility.selectElement(@driver.find_element(:id,"BookTours#{count}"),"Today","a")
 				end
     		wait.until {!@driver.find_element(:id ,"spinner").displayed?}
-    		if @driver.manage.window.size.width < 1025  then
+    		if @selectorSettingMap['screenSize']['actual'] < @selectorSettingMap['screenSize']['expected'] then
     			ManageTours.setElementValue(container,"startTime",nil)
     		else
     			ManageTours.setElementValue(container,"startTime2",nil)
@@ -98,14 +97,11 @@ class ManageTours
     		EnziUIUtility.wait(@driver,:id,"header43",@timeSettingMap['Wait']['Environment']['Lightening']['Max'])
     	end
 	end
-	def self.selectBuilding(container,value,waitTime,driver)
+	def self.selectBuilding(container,value,waitTime,selector)
 		wait = Selenium::WebDriver::Wait.new(:timeout => waitTime['Wait']['Environment']['Lightening']['Min'])
-		puts driver.manage.window.size.width
-		if driver.manage.window.size.width < 1025 then
-			puts "b1"
+		if selector['screenSize']['actual'] < selector['screenSize']['expected'] then
 			innerDiv = container.find_elements(:class,"building")
 		else
-			puts "b2"
 			innerDiv = container.find_elements(:class,"building2")
 		end
 		
@@ -127,14 +123,13 @@ class ManageTours
 		wait.until {value[1].displayed?}
 		value[1].click
 	end
-	def self.selectTourDate(container,waitTime,driver)
+	def self.selectTourDate(container,waitTime,selector)
 		wait = Selenium::WebDriver::Wait.new(:timeout => waitTime['Wait']['Environment']['Lightening']['Min'])
-		if driver.manage.window.size.width < 1025 then
+		if selector['screenSize']['actual'] < selector['screenSize']['expected'] then
 			innerDiv = container.find_elements(:class,"tourDate")
 		else
 			innerDiv = container.find_elements(:class,"tourDate2")
 		end
-		
 		innerFields = innerDiv[0].find_elements(:class,"cEnziField")
 		innerFieldDivContainer = innerFields[3].find_elements(:tag_name,"div")
 		inputFieldOuterDiv = innerFieldDivContainer[4].find_elements(:tag_name,"div")
