@@ -65,14 +65,17 @@ class ManageTours
     		EnziUIUtility.wait(@driver,:id,"BookTours#{count}",@timeSettingMap['Wait']['Environment']['Lightening']['Max'])
 		    container = @driver.find_element(:id,"BookTours#{count}")
     		#ManageTours.setElementValue(container,"tourBySalesLead","#{@records[1]['tour'][count]['bookedBySalesLead']}")
-    		if @selectorSettingMap['screenSize']['actual'] < @selectorSettingMap['screenSize']['expected'] then
+    		puts @driver.manage.window.size.width
+    		if @driver.find_elements(:class,"productLine").size > 0 then
+    			puts "p1"
     			ManageTours.setElementValue(container,"productLine","#{@records[1]['tour'][count]['productLine']}")
     		else
+    			puts "p2"
     			ManageTours.setElementValue(container,"productLine2","#{@records[1]['tour'][count]['productLine']}")
     		end
-    		ManageTours.selectBuilding(container,"#{@records[1]['tour'][count]['building']}",@timeSettingMap,@selectorSettingMap)
+    		ManageTours.selectBuilding(container,"#{@records[1]['tour'][count]['building']}",@timeSettingMap,@driver,@selectorSettingMap)
     		wait.until {!@driver.find_element(:id ,"spinner").displayed?}
-    		ManageTours.selectTourDate(container,@timeSettingMap,@selectorSettingMap)
+    		ManageTours.selectTourDate(container,@timeSettingMap,@driver,@selectorSettingMap)
     		wait.until {!@driver.find_element(:id ,"spinner").displayed?}
     		#EnziUIUtility.clickElement(@driver,:id,"1515349800000")
     		wait.until {!@driver.find_element(:id ,"spinner").displayed?}
@@ -83,7 +86,7 @@ class ManageTours
 					#EnziUIUtility.selectElement(@driver.find_element(:id,"BookTours#{count}"),"Today","a")
 				end
     		wait.until {!@driver.find_element(:id ,"spinner").displayed?}
-    		if @selectorSettingMap['screenSize']['actual'] < @selectorSettingMap['screenSize']['expected'] then
+    		if  @driver.find_elements(:class,"startTime").size > 0 then
     			ManageTours.setElementValue(container,"startTime",nil)
     		else
     			ManageTours.setElementValue(container,"startTime2",nil)
@@ -97,11 +100,13 @@ class ManageTours
     		EnziUIUtility.wait(@driver,:id,"header43",@timeSettingMap['Wait']['Environment']['Lightening']['Max'])
     	end
 	end
-	def self.selectBuilding(container,value,waitTime,selector)
+	def self.selectBuilding(container,value,waitTime,driver,selector)
 		wait = Selenium::WebDriver::Wait.new(:timeout => waitTime['Wait']['Environment']['Lightening']['Min'])
-		if selector['screenSize']['actual'] < selector['screenSize']['expected'] then
+		if driver.find_elements(:class,"building").size > 0 then
+			puts "b1"
 			innerDiv = container.find_elements(:class,"building")
 		else
+			puts "b2"
 			innerDiv = container.find_elements(:class,"building2")
 		end
 		
@@ -123,9 +128,9 @@ class ManageTours
 		wait.until {value[1].displayed?}
 		value[1].click
 	end
-	def self.selectTourDate(container,waitTime,selector)
+	def self.selectTourDate(container,waitTime,driver,selector)
 		wait = Selenium::WebDriver::Wait.new(:timeout => waitTime['Wait']['Environment']['Lightening']['Min'])
-		if selector['screenSize']['actual'] < selector['screenSize']['expected'] then
+		if driver.find_elements(:class,"tourDate").size > 0 then
 			innerDiv = container.find_elements(:class,"tourDate")
 		else
 			innerDiv = container.find_elements(:class,"tourDate2")
