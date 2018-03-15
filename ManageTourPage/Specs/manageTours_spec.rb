@@ -21,7 +21,6 @@ describe ManageTours do
     @objManageTours = ManageTours.new(@driver,"Staging")
     @leadsTestData = @objManageTours.instance_variable_get(:@records)[0]['lead']
     @testRailUtility = EnziTestRailUtility::TestRailUtility.new(@objManageTours.instance_variable_get(:@mapCredentials)['TestRail']['username'],@objManageTours.instance_variable_get(:@mapCredentials)['TestRail']['password'])
-    @wait = Selenium::WebDriver::Wait.new(:timeout => @objManageTours.instance_variable_get(:@timeSettingMap)['Wait']['Environment']['Lightening']['Min'])
 =begin
     arrCaseIds = Array.new
     if !ENV['SECTION_ID'].nil? && ENV['CASE_ID'].nil? then
@@ -213,7 +212,7 @@ describe ManageTours do
         passedLogs = @objRollbar.addLog("[Validate]  Checking Tour date field")
         ManageTours.selectTourDate(@driver.find_element(:id,"BookTours0"),@objManageTours.instance_variable_get(:@timeSettingMap),@driver,@objManageTours.instance_variable_get(:@selectorSettingMap))
         EnziUIUtility.clickElement(@driver,:id,Date.today.prev_day.to_s)
-        @wait.until {!@driver.find_element(:id ,"spinner").displayed?}
+        @objManageTours.instance_variable_get(:@wait).until {!@driver.find_element(:id ,"spinner").displayed?}
         expect(EnziUIUtility.checkErrorMessage(@driver,'h2','No times slots available for the selected date')).to be true
         @driver.find_elements(:class,"slds-button_icon-inverse")[0].click
         passedLogs = @objRollbar.addLog("[Expected]  Previous tour date should not be selected \n[Result  ]  Success ")
@@ -388,10 +387,9 @@ describe ManageTours do
         @objManageTours.bookTour(0,true)
         EnziUIUtility.wait(@driver,:id,"enzi-data-table-container",@objManageTours.instance_variable_get(:@timeSettingMap)['Wait']['Environment']['Lightening']['Max'])
         #puts "#{@driver.find_element(:id,"header43").text} opened successfully"
-        
         passedLogs = @objRollbar.addLog("[Step    ]  Duplicate account selector pop-up should be opened", caseInfo['id'])
-        EnziUIUtility.wait(@driver,:id,"header43",@objManageTours.instance_variable_get(:@timeSettingMap)['Wait']['Environment']['Lightening']['Min'])
-        @wait.until {@driver.find_element(:id ,"header43").displayed?}  
+        EnziUIUtility.wait(@driver,:id,"header43",@objManageTours.instance_variable_get(:@timeSettingMap)['Wait']['Environment']['Lightening']['Max'])
+        @objManageTours.instance_variable_get(:@wait).until {@driver.find_element(:id ,"header43").displayed?}
         expect(@driver.find_element(:id,"header43").text.eql? "Duplicate Account Selector").to be true
         passedLogs = @objRollbar.addLog("[Expected]  Duplicate account selector pop up is displayed \n[Result  ]  Success")
         puts "\n"
@@ -550,8 +548,7 @@ describe ManageTours do
         expect(@objManageTours.checkRecordCreated('Task',"SELECT id FROM Task WHERE whatId = '#{bookedTours[1].fetch('Id')}'")[0].fetch('Id')).to_not eql nil
         passedLogs = @objRollbar.addLog("[Expected]  Open activities are created for multiple tours \n[Result  ]  Success")
         puts "\n"
-
-        @wait.until {!@driver.find_element(:id ,"spinner").displayed?}
+        @objManageTours.instance_variable_get(:@wait).until {!@driver.find_element(:id ,"spinner").displayed?}
         passedLogs = @objRollbar.addLog("[Validate]  Records of booked tour should be displayed")
         expect(@objManageTours.numberOfTourBooked > 3).to be true
         passedLogs = @objRollbar.addLog("[Expected]  Booked tours records are available on manage tour page \n[Result  ]  Success")
