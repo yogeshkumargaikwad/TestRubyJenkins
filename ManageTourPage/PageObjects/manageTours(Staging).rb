@@ -38,10 +38,10 @@ class ManageTours
     		EnziUIUtility.wait(@driver,:class,"oneActionsDropDown",@timeSettingMap['Wait']['Environment']['Lightening']['Max'])
     		@driver.find_elements(:class,"oneActionsDropDown")[0].click
     		EnziUIUtility.wait(@driver,:class,"forceActionLink",@timeSettingMap['Wait']['Environment']['Lightening']['Max'])
-    		EnziUIUtility.selectElement(@driver,"Manage/Book a Tour","a")
+    		EnziUIUtility.selectElement(@driver,"Manage/Book a Tour","a").click
     		if !(@driver.find_elements(:xpath ,"//iframe[starts-with(@id,'vfFrameId')]").size > 0)
     			EnziUIUtility.wait(@driver,:class,"uiMenuItem",@timeSettingMap['Wait']['Environment']['Lightening']['Max'])
-    			EnziUIUtility.selectElement(@driver,"Manage/Book a Tour","a")
+    			EnziUIUtility.selectElement(@driver,"Manage/Book a Tour","a").click
     		end
     	end
     	EnziUIUtility.switchToWindow(@driver,@driver.current_url())
@@ -99,7 +99,7 @@ class ManageTours
     	end
     	@wait.until {!@driver.find_element(:id ,"spinner").displayed?}
     	if bookTour then
-   			EnziUIUtility.selectElement(@driver,"Book Tours","button")
+   			EnziUIUtility.selectElement(@driver,"Book Tours","button").click
     		#EnziUIUtility.switchToWindow(@driver,@driver.current_url())
     		EnziUIUtility.wait(@driver,:id,"header43",@timeSettingMap['Wait']['Environment']['Lightening']['Max'])
     	end
@@ -158,7 +158,7 @@ class ManageTours
 	def self.setElementValue(container,elementToset,value)
 		dropdown = 	ManageTours.getElement("select",elementToset,container)
 		if value != nil then
-			EnziUIUtility.selectElement(dropdown[0],"#{value}","option")
+			EnziUIUtility.selectElement(dropdown[0],"#{value}","option").click
 		end
 		if dropdown[0].find_elements(:tag_name,"option").size > 1 then
 			dropdown[0].find_elements(:tag_name,"option")[1].click
@@ -178,9 +178,9 @@ class ManageTours
 	def duplicateAccountSelector(option,account)
 		if account.eql? nil then
 			EnziUIUtility.wait(@driver,:id,"header43",@timeSettingMap['Wait']['Environment']['Lightening']['Max'])
-			EnziUIUtility.selectElement(@driver,"#{option}","button")
+			EnziUIUtility.selectElement(@driver,"#{option}","button").click
 			if @driver.find_elements(:id ,"header43").size > 0
-				EnziUIUtility.selectElement(@driver,"#{option}","button")
+				EnziUIUtility.selectElement(@driver,"#{option}","button").click
 			end
 
 			@wait.until { !@driver.find_element(:id ,"spinner").displayed? }
@@ -192,7 +192,7 @@ class ManageTours
 			if !@driver.find_elements(:class ,"slds-radio_faux").empty? then
 				@driver.find_elements(:class ,"slds-radio_faux")[0].click
 				@driver.find_elements(:class ,"slds-radio_faux")[0].click
-				EnziUIUtility.selectElement(@driver,"#{option}","button")
+				EnziUIUtility.selectElement(@driver,"#{option}","button").click
 			end
       		
       		@wait.until { !@driver.find_element(:id ,"spinner").displayed? }
@@ -331,12 +331,12 @@ class ManageTours
 	def rescheduleTour
 		#lEnziUIUtility.wait(@driver,:id,"enzi-data-table-container",@timeSettingMap['Wait']['Environment']['Lightening']['Max'])
 		@wait.until { @driver.find_element(:id ,"enzi-data-table-container").displayed? }
-		EnziUIUtility.selectElement(@driver,"Reschedule","button")
+		EnziUIUtility.selectElement(@driver,"Reschedule","button").click
 		EnziUIUtility.wait(@driver,:id,"header43",@timeSettingMap['Wait']['Environment']['Lightening']['Min'])
 		@wait.until { @driver.find_element(:id ,"StartTime").displayed? }
 		EnziUIUtility.clickElement(@driver,:id,"StartTime")
 		EnziUIUtility.selectChild(@driver,:id,"StartTime",nil,"option")[4].click
-		EnziUIUtility.selectElement(@driver,"Save","button")
+		EnziUIUtility.selectElement(@driver,"Save","button").click
 		#EnziUIUtility.wait(@driver,:id,"Reschedule",1000)
 		@wait.until { @driver.find_element(:id ,"enzi-data-table-container").displayed? }
 		#res.fetch('Status__c').eql?("Scheduled") && res.fetch('Original_Tour__c').eql?("#{@@recordInsertedIds['Tour_Outcome__c']['Id']}")
