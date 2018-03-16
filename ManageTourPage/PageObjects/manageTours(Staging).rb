@@ -40,12 +40,14 @@ class ManageTours
     		EnziUIUtility.wait(@driver,:class,"forceActionLink",@timeSettingMap['Wait']['Environment']['Lightening']['Max'])
     		EnziUIUtility.selectElement(@driver,"Manage/Book a Tour","a")
     		if !(@driver.find_elements(:xpath ,"//iframe[starts-with(@id,'vfFrameId')]").size > 0)
+    			EnziUIUtility.wait(@driver,:class,"uiMenuItem",@timeSettingMap['Wait']['Environment']['Lightening']['Max'])
     			EnziUIUtility.selectElement(@driver,"Manage/Book a Tour","a")
     		end
     	end
     	EnziUIUtility.switchToWindow(@driver,@driver.current_url())
     	if @driver.current_url().include? "lightning" then
 			EnziUIUtility.wait(@driver,:class,"panelSlide",@timeSettingMap['Wait']['Environment']['Lightening']['Max'])
+			EnziUIUtility.wait(@driver,:xpath,"//iframe[starts-with(@id,'vfFrameId')]",@timeSettingMap['Wait']['Environment']['Lightening']['Max'])
 			EnziUIUtility.switchToFrame(@driver,@driver.find_element(:xpath ,"//iframe[starts-with(@id,'vfFrameId')]").attribute('name'))
 		end
     	#EnziUIUtility.wait(@driver,:id,"FTE",@timeSettingMap['Wait']['Environment']['Lightening']['Min'])
@@ -353,4 +355,3 @@ class ManageTours
 		return tourStatusChecked
 	end
 end
-
