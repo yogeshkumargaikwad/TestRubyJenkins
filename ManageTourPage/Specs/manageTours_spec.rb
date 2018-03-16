@@ -673,14 +673,14 @@ describe ManageTours do
         passedLogs = @objRollbar.addLog("[Step    ]  User should fill cancellation reason", caseInfo['id'])
         passedLogs = @objRollbar.addLog("[Validate]  Cancel tour pop-up should accept cancellation reason \n[Result  ]  Success" )
        
-        EnziUIUtility.selectElement(@driver,"Cancel","button")
+        EnziUIUtility.selectElement(@driver,"Cancel","button").click
         EnziUIUtility.wait(@driver,:id,"header43",@objManageTours.instance_variable_get(:@timeSettingMap)['Wait']['Environment']['Lightening']['Min'])
         EnziUIUtility.selectChild(@driver,:id,"Cancellation_Reason__c","No reason (didn't provide)","option")
         passedLogs = @objRollbar.addLog("[Expected]  Cancellation Reason= No reason \n[Result  ]  Success")
         puts "\n"
 
         passedLogs = @objRollbar.addLog("[Validate]  Save button should be enabled after filling out cancellation reason")
-        EnziUIUtility.selectElement(@driver,"Save","button")
+        EnziUIUtility.selectElement(@driver,"Save","button").click
         sleep(@objManageTours.instance_variable_get(:@timeSettingMap)['Sleep']['Environment']['Lightening']['Max'])
         passedLogs = @objRollbar.addLog("[Expected]  Save button get enabled \n[Result  ]  Success")
         puts "\n"
