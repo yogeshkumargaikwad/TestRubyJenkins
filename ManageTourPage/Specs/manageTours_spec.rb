@@ -54,6 +54,7 @@ describe ManageTours do
   after(:all){
     allRecordIds = Salesforce.class_variable_get(:@@createdRecordsIds)
     puts "Deleting created test data of Journey"
+    puts allRecordIds
     Salesforce.deleteRecords(@objManageTours.instance_variable_get(:@salesforceBulk),"Journey__c",allRecordIds['Journey__c'])
     puts "Test data deleted successfully"
     puts "\n"
