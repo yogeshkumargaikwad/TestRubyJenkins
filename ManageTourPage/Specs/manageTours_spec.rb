@@ -242,7 +242,7 @@ describe ManageTours do
         ManageTours.selectBuilding(@driver.find_element(:id,"BookTours0"),"#{@objManageTours.instance_variable_get(:@records)[1]['tour'][0]['building']}",@objManageTours.instance_variable_get(:@timeSettingMap),@driver,@objManageTours.instance_variable_get(:@selectorSettingMap))
         ManageTours.selectTourDate(@driver.find_element(:id,"BookTours0"),@objManageTours.instance_variable_get(:@timeSettingMap),@driver,@objManageTours.instance_variable_get(:@selectorSettingMap))
       if Date.today.next_day(1).saturday? then
-        EnziUIUtility.clickElement(@driver,:id,Date.today.next_day(2).to_s)
+        EnziUIUtility.clickElement(@driver,:id,Date.today.next_day(3).to_s)
       else
         EnziUIUtility.clickElement(@driver,:id,Date.today.next_day(1).to_s)
         #EnziUIUtility.selectElement(@driver.find_element(:id,"BookTours0"),"Today","a")
