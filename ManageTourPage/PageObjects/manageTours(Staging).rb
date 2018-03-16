@@ -80,9 +80,11 @@ class ManageTours
     		#EnziUIUtility.clickElement(@driver,:id,"1515349800000")
     		@wait.until {!@driver.find_element(:id ,"spinner").displayed?}
 				if Date.today.next_day(1).saturday? then
-					EnziUIUtility.clickElement(@driver,:id,Date.today.next_day(2).to_s)
+					@wait.until {container.find_element(:id ,Date.today.next_day(3).to_s)}
+					container.find_element(:id ,Date.today.next_day(3).to_s).click
 				else
-					EnziUIUtility.clickElement(@driver,:id,Date.today.next_day(1).to_s)
+					@wait.until {container.find_element(:id ,Date.today.next_day(1).to_s)}
+					container.find_element(:id ,Date.today.next_day(1).to_s).click
 					#EnziUIUtility.selectElement(@driver.find_element(:id,"BookTours#{count}"),"Today","a")
 				end
     		@wait.until {!@driver.find_element(:id ,"spinner").displayed?}
@@ -175,15 +177,22 @@ class ManageTours
 		if account.eql? nil then
 			EnziUIUtility.wait(@driver,:id,"header43",@timeSettingMap['Wait']['Environment']['Lightening']['Max'])
 			EnziUIUtility.selectElement(@driver,"#{option}","button")
+			if @driver.find_elements(:id ,"header43").size > 0
+				EnziUIUtility.selectElement(@driver,"#{option}","button")
+			end
+
 			@wait.until { !@driver.find_element(:id ,"spinner").displayed? }
 			EnziUIUtility.wait(@driver,:id,"enzi-data-table-container",@timeSettingMap['Wait']['Environment']['Lightening']['Min'])
 			@wait.until { !@driver.find_element(:id ,"spinner").displayed? }
 			sleep(@timeSettingMap['Sleep']['Environment']['Lightening']['Min'])
 		else
+			@wait.until { @driver.find_element(:class ,"slds-radio_faux").displayed? }
 			if !@driver.find_elements(:class ,"slds-radio_faux").empty? then
 				@driver.find_elements(:class ,"slds-radio_faux")[0].click
+				@driver.find_elements(:class ,"slds-radio_faux")[0].click
 				EnziUIUtility.selectElement(@driver,"#{option}","button")
-      		end
+			end
+      		
       		@wait.until { !@driver.find_element(:id ,"spinner").displayed? }
 		end
 	end
