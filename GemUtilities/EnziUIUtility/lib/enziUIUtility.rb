@@ -178,7 +178,6 @@ class EnziUIUtility
       driver.find_element(:id, "userNav-arrow").click
       driver.find_element(:link , "Switch to Lightning Experience").click
     else
-      puts "You are already on lightening..."
     end
   end
 
@@ -192,19 +191,11 @@ class EnziUIUtility
       self.wait(driver,:class,"oneUserProfileCardTrigger",10)
       driver.find_element(:link , "Switch to Salesforce Classic").click
     else
-      puts "You are already on Classic..."
     end
   end
   def self.loginForUser(driver,profile_name)
-    allTables = driver.find_elements(:tag_name,"table")
-    loginTable = nil
-    allTables.each do |tab|
-      if tab.attribute('class') == "list"
-        loginTable = tab
-        break
-      end
-    end
-    tBodyEle = loginTable.find_element(:tag_name,'tbody')
+   
+    tBodyEle = driver.find_element(:class,"list").find_element(:tag_name,'tbody')
     arrRows = tBodyEle.find_elements(:tag_name,'tr')
     arrRows.each do |row|
       row.find_elements(:tag_name,'td').each do |col|
@@ -223,12 +214,10 @@ class EnziUIUtility
       EnziUIUtility.selectElement(driver,"Logout","a")
     else
       switchToWindow(driver,driver.current_url)
-      self.wait(driver,:class,"oneUserProfileCardTrigger",10)
+      self.wait(driver,:class,"oneUserProfileCardTrigger",20)
       EnziUIUtility.clickElement(driver,:class,"oneUserProfileCardTrigger")
-      self.wait(driver,:class,"uiOutputURL",10)
+      self.wait(driver,:class,"uiOutputURL",20)
       EnziUIUtility.selectElement(driver,"Log Out","a")
     end
   end
  end
-
-
