@@ -39,10 +39,10 @@ class ManageTours
     		@driver.find_elements(:class,"oneActionsDropDown")[0].click
     		EnziUIUtility.wait(@driver,:class,"forceActionLink",@timeSettingMap['Wait']['Environment']['Lightening']['Max'])
     		EnziUIUtility.selectElement(@driver,"Manage/Book a Tour","a").click
-    		if !(@driver.find_elements(:xpath ,"//iframe[starts-with(@id,'vfFrameId')]").size > 0)
-    			EnziUIUtility.wait(@driver,:class,"uiMenuItem",@timeSettingMap['Wait']['Environment']['Lightening']['Max'])
-    			EnziUIUtility.selectElement(@driver,"Manage/Book a Tour","a").click
-    		end
+    		#if !(@driver.find_elements(:xpath ,"//iframe[starts-with(@id,'vfFrameId')]").size > 0)
+    			#EnziUIUtility.wait(@driver,:class,"uiMenuItem",@timeSettingMap['Wait']['Environment']['Lightening']['Max'])
+    			#EnziUIUtility.selectElement(@driver,"Manage/Book a Tour","a").click
+    		#end
     	end
     	EnziUIUtility.switchToWindow(@driver,@driver.current_url())
     	if @driver.current_url().include? "lightning" then
