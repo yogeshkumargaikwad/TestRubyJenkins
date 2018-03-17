@@ -81,7 +81,7 @@ class ManageTours
     		@wait.until {!@driver.find_element(:id ,"spinner").displayed?}
     		#EnziUIUtility.clickElement(@driver,:id,"1515349800000")
     		@wait.until {!@driver.find_element(:id ,"spinner").displayed?}
-				if Date.today.next_day(1).saturday? then
+				if Date.today.next_day(1).saturday? || Date.today.saturday? then
 					@wait.until {container.find_element(:id ,Date.today.next_day(3).to_s)}
 					container.find_element(:id ,Date.today.next_day(3).to_s).click
 				else
