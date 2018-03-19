@@ -6,6 +6,7 @@ require 'rspec'
 require 'json'
 require "selenium-webdriver"
 require 'enziUIUtility'
+require 'salesforce'
 require_relative File.expand_path(Dir.pwd+"/GemUtilities/EnziTestRailUtility/lib/EnziTestRailUtility.rb")
 specMap = Hash.new
 mapSuitRunId = Hash.new
@@ -84,28 +85,30 @@ if !ARGV.empty? then
         if !ENV['PROJECT_ID'].nil? && ENV['SUIT_ID'].nil? && ENV['SECTION_ID'].nil? then
           ENV['RUN_ID'] = mapSuitRunId[spec['path']]
         end
-        if spec['isBrowserDependent'] then
+        YAML.load_file(Dir.pwd+'/UserSettings.yaml')['profile'].each do |profile|
+          ARGV[1] = Salesforce.login(config['Staging']["#{profile}"]['username'],config['Staging']["#{profile}"]['password'],true)
+          if spec['isBrowserDependent'] then
           specMap.fetch('browser')[0].split(" ").each do |browser|
             #ENV['BROWSER'] = browser
             ARGV[0] = Selenium::WebDriver.for browser.to_sym
-            ARGV[0].get "https://test.salesforce.com/login.jsp?pw=#{config['Staging']['password']}&un=#{config['Staging']['username']}"
+            ARGV[0].get "https://test.salesforce.com/login.jsp?pw=#{config['Staging']["#{profile}"]['password']}&un=#{config['Staging']["#{profile}"]['username']}"
             EnziUIUtility.wait(ARGV[0], :id, 'phSearchInput', YAML.load_file('timeSettings.yaml')['Wait']['Environment']['Classic']['Max'])
-            EnziUIUtility.switchToClassic(ARGV[0])
-            ARGV[0].get "#{ARGV[0].current_url().split('/home')[0]}/005?isUserEntityOverride=1&retURL=/ui/setup/Setup?setupid=Users&setupid=ManageUsers"
-            EnziUIUtility.wait(ARGV[0], :name, 'new', YAML.load_file('timeSettings.yaml')['Wait']['Environment']['Classic']['Min'])
-            YAML.load_file(Dir.pwd+'/UserSettings.yaml')['profile'].each do |profile|
-              EnziUIUtility.loginForUser(ARGV[0],profile)
-              EnziUIUtility.switchToWindow(ARGV[0],ARGV[0].current_url())
-              puts "Successfully Logged In with #{profile} ape is #{spec['path']}"
+
+            #EnziUIUtility.switchToClassic(ARGV[0])
+            #ARGV[0].get "#{ARGV[0].current_url().split('/home')[0]}/005?isUserEntityOverride=1&retURL=/ui/setup/Setup?setupid=Users&setupid=ManageUsers"
+            #EnziUIUtility.wait(ARGV[0], :name, 'new', YAML.load_file('timeSettings.yaml')['Wait']['Environment']['Classic']['Min'])
+            #EnziUIUtility.loginForUser(ARGV[0],profile)
+              #EnziUIUtility.switchToWindow(ARGV[0],ARGV[0].current_url())
+              puts "Successfully Logged In with #{profile} spec is #{spec['path']}"
               ::RSpec::Core::Runner.run([spec['path']], $stderr, $stdout)
-              EnziUIUtility.logout(ARGV[0])
-              EnziUIUtility.wait(ARGV[0], :name, 'new', YAML.load_file('timeSettings.yaml')['Wait']['Environment']['Classic']['Max'])
+              #EnziUIUtility.logout(ARGV[0])
+              #EnziUIUtility.wait(ARGV[0], :name, 'new', YAML.load_file('timeSettings.yaml')['Wait']['Environment']['Classic']['Max'])
               RSpec.clear_examples
             end
+          else
+            ::RSpec::Core::Runner.run([spec['path']], $stderr, $stdout)
+            RSpec.clear_examples
           end
-        else
-          ::RSpec::Core::Runner.run([spec['path']], $stderr, $stdout)
-          RSpec.clear_examples
         end
       end
     end

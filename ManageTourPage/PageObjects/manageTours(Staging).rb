@@ -12,7 +12,7 @@ class ManageTours
 	@records = nil
 	@recordsInJson = nil
 	@@recordInsertedIds = nil
-	def initialize(driver,sandBoxType)
+	def initialize(driver)
 		@driver = driver
 		@@recordInsertedIds = Hash.new
 		@records = JSON.parse(File.read(Dir.pwd+"/ManageTourPage/TestData/records.json"))
@@ -23,7 +23,7 @@ class ManageTours
 		@wait = Selenium::WebDriver::Wait.new(:timeout => @timeSettingMap['Wait']['Environment']['Lightening']['Min'])
 
 		#@driver.get "https://test.salesforce.com/login.jsp?pw=#{@mapCredentials[sandBoxType]['password']}&un=#{@mapCredentials[sandBoxType]['username']}"
-		@salesforceBulk = Salesforce.login(@mapCredentials["#{sandBoxType}"]['username'],@mapCredentials["#{sandBoxType}"]['password'],true)
+		@salesforceBulk = ARGV[1]
 		#EnziUIUtility.wait(driver,:id,"tsid",@timeSettingMap['Wait']['Environment']['Classic']['Min'])
 	end
 	def openPage(objectRecordId,findBy,value)
@@ -46,10 +46,10 @@ class ManageTours
     	end
     	EnziUIUtility.switchToWindow(@driver,@driver.current_url())
     	if @driver.current_url().include? "lightning" then
-			EnziUIUtility.wait(@driver,:class,"panelSlide",@timeSettingMap['Wait']['Environment']['Lightening']['Max'])
-			EnziUIUtility.wait(@driver,:xpath,"//iframe[starts-with(@id,'vfFrameId')]",@timeSettingMap['Wait']['Environment']['Lightening']['Max'])
-			EnziUIUtility.switchToFrame(@driver,@driver.find_element(:xpath ,"//iframe[starts-with(@id,'vfFrameId')]").attribute('name'))
-		end
+				EnziUIUtility.wait(@driver,:class,"panelSlide",@timeSettingMap['Wait']['Environment']['Lightening']['Max'])
+				EnziUIUtility.wait(@driver,:xpath,"//iframe[starts-with(@id,'vfFrameId')]",@timeSettingMap['Wait']['Environment']['Lightening']['Max'])
+				EnziUIUtility.switchToFrame(@driver,@driver.find_element(:xpath ,"//iframe[starts-with(@id,'vfFrameId')]").attribute('name'))
+			end
     	#EnziUIUtility.wait(@driver,:id,"FTE",@timeSettingMap['Wait']['Environment']['Lightening']['Min'])
 	end
 	def bookTour(count, bookTour)

@@ -18,7 +18,7 @@ describe ManageTours do
     #@driver = Selenium::WebDriver.for :chrome
     #@driver = Selenium::WebDriver.for ENV['BROWSER'].to_sym
     @driver = ARGV[0]
-    @objManageTours = ManageTours.new(@driver,"Staging")
+    @objManageTours = ManageTours.new(@driver)
     @leadsTestData = @objManageTours.instance_variable_get(:@records)[0]['lead']
     @testRailUtility = EnziTestRailUtility::TestRailUtility.new(@objManageTours.instance_variable_get(:@mapCredentials)['TestRail']['username'],@objManageTours.instance_variable_get(:@mapCredentials)['TestRail']['password'])
 =begin
