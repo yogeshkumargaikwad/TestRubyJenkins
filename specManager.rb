@@ -85,7 +85,7 @@ if !ARGV.empty? then
         if !ENV['PROJECT_ID'].nil? && ENV['SUIT_ID'].nil? && ENV['SECTION_ID'].nil? then
           ENV['RUN_ID'] = mapSuitRunId[spec['path']]
         end
-        YAML.load_file(Dir.pwd+'/UserSettings.yaml')['profile'].each do |profile|
+        config['Staging'].keys.each do |profile|
           ARGV[1] = Salesforce.login(config['Staging']["#{profile}"]['username'],config['Staging']["#{profile}"]['password'],true)
           if spec['isBrowserDependent'] then
           specMap.fetch('browser')[0].split(" ").each do |browser|
@@ -104,8 +104,10 @@ if !ARGV.empty? then
               #EnziUIUtility.logout(ARGV[0])
               #EnziUIUtility.wait(ARGV[0], :name, 'new', YAML.load_file('timeSettings.yaml')['Wait']['Environment']['Classic']['Max'])
               RSpec.clear_examples
+              ARGV[0].quit
             end
           else
+            ARGV[0] = "Staging,#{profile}"
             ::RSpec::Core::Runner.run([spec['path']], $stderr, $stdout)
             RSpec.clear_examples
           end

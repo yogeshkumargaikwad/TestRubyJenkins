@@ -5,35 +5,26 @@
 require 'httparty'
 require 'yaml'
 class SfRESTService
-  @@response = nil
-  @@postedData = nil
-  @@credentails = nil
-  def self.loginRequest
-    @@credentails = YAML.load_file('credentials.yaml')
-    data = {"grant_type"=>@@credentails['QAAuto']['grant_type'],"client_id"=>@@credentails['QAAuto']['client_id'],"client_secret"=>@@credentails['QAAuto']['client_secret'], "username"=>@@credentails['QAAuto']['username'],"password"=>"#{@@credentails['QAAuto']['password']}"}
-    @@response = HTTParty.post("https://test.salesforce.com/services/oauth2/token",
+  def initialize(grant_type,client_id,client_secret,username,password)
+    #@@credentails = YAML.load_file('credentials.yaml')
+    #data = {"grant_type"=>@@credentails['QAAuto']['grant_type'],"client_id"=>@@credentails['QAAuto']['client_id'],"client_secret"=>@@credentails['QAAuto']['client_secret'], "username"=>@@credentails['QAAuto']['username'],"password"=>"#{@@credentails['QAAuto']['password']}"}
+    data = {"grant_type"=>grant_type,"client_id"=>client_id,"client_secret"=>client_secret, "username"=>username,"password"=>"#{password}"}
+    @response = HTTParty.post("https://test.salesforce.com/services/oauth2/token",
                               :body => data,
                               :headers => {"Content-Type":'application/x-www-form-urlencoded'} , verify: false)
-     @@response
   end
 
-  def self.getData(id,serviceUrl,loggedIn)
-    if !loggedIn then
-       @@response = SfRESTService.loginRequest
-    end
-    url = @@response['instance_url'] + "#{serviceUrl}/#{id}"
-    getResponse = HTTParty.get(url,:headers => {"Content-Type":"application/json","Authorization" => "Bearer #{ @@response['access_token']}"} , verify: false)
+  def getData(id,serviceUrl)
+    url = @response['instance_url'] + "#{serviceUrl}/#{id}"
+    getResponse = HTTParty.get(url,:headers => {"Content-Type":"application/json","Authorization" => "Bearer #{@response['access_token']}"} , verify: false)
     return getResponse
   end
 
-  def self.postData(data,serviceUrl,loggedIn) 
-    if !loggedIn then
-       @@response = SfRESTService.loginRequest
-    end
-    url = "#{@@response['instance_url']}#{serviceUrl}"
-    postResponse = HTTParty.post(url,:body => data,:headers => {"Content-Type":"application/json","Authorization" => "Bearer #{@@response['access_token']}"} , verify: false)
+  def postData(data,serviceUrl)
+    url = "#{@response['instance_url']}#{serviceUrl}"
+    postResponse = HTTParty.post(url,:body => data,:headers => {"Content-Type":"application/json","Authorization" => "Bearer #{@response['access_token']}"} , verify: false)
     puts postResponse
-      @@postedData = postResponse['result']
+      @postedData = postResponse['result']
     return postResponse
   end
 end

@@ -11,15 +11,16 @@ require_relative File.expand_path("GemUtilities/EnziTestRailUtility/lib/EnziTest
 describe SfRESTService do
 
 	before(:all){
-
+		#{"grant_type"=>@@credentails['QAAuto']['grant_type'],"client_id"=>@@credentails['QAAuto']['client_id'],"client_secret"=>@@credentails['QAAuto']['client_secret'], "username"=>@@credentails['QAAuto']['username'],"password"=>"#{@@credentails['QAAuto']['password']}"}
 		@executionResult =  RSpec::Core::Example::ExecutionResult.new
 		testDataFile = File.open(File.expand_path(Dir.pwd+"/CustomRESTAPI/TestData/testData.json"), "r")
 		testDataInJson = testDataFile.read()
 		@testData = JSON.parse(testDataInJson)
-		SfRESTService.loginRequest
 		@salesforceBulk = ARGV[1]
 		#@salesforceBulk = Salesforce.login(SfRESTService.class_variable_get(:@@credentails)['QAAuto']['username'],SfRESTService.class_variable_get(:@@credentails)['QAAuto']['password'],true)
 		config = YAML.load_file('credentials.yaml')
+		profileAndSandBoxType = ARGV[0].split(',')
+		@objSFRest = SfRESTService.new(config[profileAndSandBoxType[0]][profileAndSandBoxType[1]]['grant_type'],config[profileAndSandBoxType[0]][profileAndSandBoxType[1]]['client_id'],config[profileAndSandBoxType[0]][profileAndSandBoxType[1]]['client_secret'],config[profileAndSandBoxType[0]][profileAndSandBoxType[1]]['username'],config[profileAndSandBoxType[0]][profileAndSandBoxType[1]]['password'])
 		@testRailUtility = EnziTestRailUtility::TestRailUtility.new(config['TestRail']['username'],config['TestRail']['password'])
 		@timeSettingMap = YAML.load_file(Dir.pwd+'/timeSettings.yaml')
 =begin
@@ -59,9 +60,9 @@ describe SfRESTService do
 			buildingTestData = @testData['Building']
 			buildingTestData[0]['uuid__c'] = SecureRandom.uuid
 			payloadHash['body']['buildings_interested_uuids'][0] = Salesforce.getRecords(@salesforceBulk,"Building__c","SELECT UUID__c FROM Building__c WHERE id = '#{Salesforce.createRecords(@salesforceBulk,"Building__c",@testData['Building'])[0]['Id']}'",nil).result.records[0].fetch('UUID__c')
-			getResponse = SfRESTService.postData(''+payloadHash.to_json,"#{@testData['ServiceUrls'][1]['inboundLead']}",true)
+			getResponse = @objSFRest.postData(''+payloadHash.to_json,"#{@testData['ServiceUrls'][1]['inboundLead']}")
 			puts "\n"
-			sleep(@timeSettingMap['Sleep']['Environment']['Lightening'])
+			sleep(@timeSettingMap['Sleep']['Environment']['Lightening']['Max'])
 			puts "Checking service call response..."
 			expect(getResponse['success']).to be true
 			expect(getResponse['lead_sfid']).to_not eql nil
@@ -117,9 +118,9 @@ describe SfRESTService do
 			payloadHash = JSON.parse(@testRailUtility.getPayloadsFromSteps(@testRailUtility.getCase(364)['custom_steps_separated'])[0]['expected'])
 			payloadHash['body']['email'] = "test_Bond#{rand(900000)}@example.com"
 			payloadHash['body']['buildings_interested_uuids'][0] = Salesforce.getRecords(@salesforceBulk,"Building__c","SELECT UUID__c FROM Building__c WHERE id = '#{Salesforce.class_variable_get(:@@createdRecordsIds)['Building__c'][0]['Id']}'").result.records[0].fetch('UUID__c')
-			getResponse = SfRESTService.postData(''+payloadHash.to_json,"#{@testData['ServiceUrls'][1]['inboundLead']}",true)
+			getResponse = @objSFRest.postData(''+payloadHash.to_json,"#{@testData['ServiceUrls'][1]['inboundLead']}")
 			puts "\n"
-			sleep(@timeSettingMap['Sleep']['Environment']['Lightening'])
+			sleep(@timeSettingMap['Sleep']['Environment']['Lightening']['Max'])
 			puts "Checking service call response..."
 			expect(getResponse['success']).to be true
 			expect(getResponse['lead_sfid']).to_not  eql nil
@@ -164,9 +165,9 @@ describe SfRESTService do
 			payloadHash = JSON.parse(@testRailUtility.getPayloadsFromSteps(@testRailUtility.getCase(365)['custom_steps_separated'])[0]['expected'])
 			payloadHash['body']['email'] = "test_Bond#{rand(900000)}@example.com"
 			payloadHash['body']['buildings_interested_uuids'][0] = Salesforce.getRecords(@salesforceBulk,"Building__c","SELECT UUID__c FROM Building__c WHERE id = '#{Salesforce.class_variable_get(:@@createdRecordsIds)['Building__c'][0]['Id']}'").result.records[0].fetch('UUID__c')
-			getResponse = SfRESTService.postData(''+payloadHash.to_json,"#{@testData['ServiceUrls'][1]['inboundLead']}",true)
+			getResponse = @objSFRest.postData(''+payloadHash.to_json,"#{@testData['ServiceUrls'][1]['inboundLead']}")
 			puts "\n"
-			sleep(@timeSettingMap['Sleep']['Environment']['Lightening'])
+			sleep(@timeSettingMap['Sleep']['Environment']['Lightening']['Max'])
 			puts "Checking service call response..."
 			expect(getResponse['success']).to be true
 			expect(getResponse['lead_sfid']).to_not  eql nil
@@ -199,7 +200,7 @@ describe SfRESTService do
 			puts "Active journey is :: #{createdLead.fetch('Has_Active_Journey__c')}"
 			puts "Active journey checked successfully"
 			puts "\n"
-			sleep(@timeSettingMap['Sleep']['Environment']['Lightening'])
+			sleep(@timeSettingMap['Sleep']['Environment']['Lightening']['Max'])
 			puts "Checking open activities..."
 			puts Salesforce.getRecords(@salesforceBulk,'Task',"SELECT id FROM Task WHERE WhoId = '#{getResponse['lead_sfid']}'",nil).result.inspect
 			expect(Salesforce.getRecords(@salesforceBulk,'Task',"SELECT id FROM Task WHERE WhoId = '#{getResponse['lead_sfid']}'",nil).result.records[0].fetch('Id')).to_not eql nil
@@ -232,9 +233,9 @@ describe SfRESTService do
 			puts "Checking contact insertion..."
 			expect(referrer[0]['Id']).to_not eql nil
 			puts "Contact created successfully"
-			getResponse = SfRESTService.postData(''+payloadHash.to_json,"#{@testData['ServiceUrls'][1]['inboundLead']}",true)
+			getResponse = @objSFRest.postData(''+payloadHash.to_json,"#{@testData['ServiceUrls'][1]['inboundLead']}")
 			puts "\n"
-			sleep(@timeSettingMap['Sleep']['Environment']['Lightening'])
+			sleep(@timeSettingMap['Sleep']['Environment']['Lightening']['Max'])
 			puts "Checking service call response..."
 			expect(getResponse['success']).to be true
 			expect(getResponse['lead_sfid']).to_not  eql nil
@@ -283,9 +284,9 @@ describe SfRESTService do
 			payloadHash['body']['email'] = "test_Bond#{rand(900000)}@example.com"
 			payloadHash['body']['campaign_sfid'] = campaign[0]['Id']
 			payloadHash['body']['buildings_interested_uuids'][0] =  Salesforce.getRecords(@salesforceBulk,"Building__c","SELECT UUID__c FROM Building__c WHERE id = '#{Salesforce.class_variable_get(:@@createdRecordsIds)['Building__c'][0]['Id']}'").result.records[0].fetch('UUID__c')
-			getResponse = SfRESTService.postData(''+payloadHash.to_json,"#{@testData['ServiceUrls'][1]['inboundLead']}",true)
+			getResponse = @objSFRest.postData(''+payloadHash.to_json,"#{@testData['ServiceUrls'][1]['inboundLead']}")
 			puts "\n"
-			sleep(@timeSettingMap['Sleep']['Environment']['Lightening'])
+			sleep(@timeSettingMap['Sleep']['Environment']['Lightening']['Max'])
 			puts "Checking service call response..."
 			expect(getResponse['success']).to be true
 			expect(getResponse['lead_sfid']).to_not eql nil
@@ -326,9 +327,9 @@ describe SfRESTService do
 			payloadHash['body']['email'] = "test_Bond#{rand(900000)}@example.com"
 			payloadHash['body']['referrer_sfid'] = referrer[0]['Id']
 			payloadHash['body']['buildings_interested_uuids'][0] = Salesforce.getRecords(@salesforceBulk,"Building__c","SELECT UUID__c FROM Building__c WHERE id = '#{Salesforce.class_variable_get(:@@createdRecordsIds)['Building__c'][0]['Id']}'").result.records[0].fetch('UUID__c')
-			getResponse = SfRESTService.postData(''+payloadHash.to_json,"#{@testData['ServiceUrls'][1]['inboundLead']}",true)
+			getResponse = @objSFRest.postData(''+payloadHash.to_json,"#{@testData['ServiceUrls'][1]['inboundLead']}")
 			puts "\n"
-			sleep(@timeSettingMap['Sleep']['Environment']['Lightening'])
+			sleep(@timeSettingMap['Sleep']['Environment']['Lightening']['Max'])
 			puts "Checking service call response..."
 			expect(getResponse['success']).to be true
 			expect(getResponse['lead_sfid']).to_not eql nil
@@ -364,15 +365,15 @@ describe SfRESTService do
 			payloadHash = JSON.parse(@testRailUtility.getPayloadsFromSteps(@testRailUtility.getCase(727)['custom_steps_separated'])[0]['expected'])
 			payloadHash['body']['email'] = "test_Bond#{rand(900000)}@example.com"
 			payloadHash['body']['buildings_interested_uuids'][0] = Salesforce.getRecords(@salesforceBulk,"Building__c","SELECT UUID__c FROM Building__c WHERE id = '#{Salesforce.class_variable_get(:@@createdRecordsIds)['Building__c'][0]['Id']}'").result.records[0].fetch('UUID__c')
-			getResponse = SfRESTService.postData(''+payloadHash.to_json,"#{@testData['ServiceUrls'][1]['inboundLead']}",true)
+			getResponse = @objSFRest.postData(''+payloadHash.to_json,"#{@testData['ServiceUrls'][1]['inboundLead']}")
 			puts "\n"
-			sleep(@timeSettingMap['Sleep']['Environment']['Lightening'])
+			sleep(@timeSettingMap['Sleep']['Environment']['Lightening']['Max'])
 			puts "Checking service call response..."
 			expect(getResponse['success']).to be true
 			expect(getResponse['lead_sfid']).to_not eql nil
 			Salesforce.addRecordsToDelete('Lead',getResponse['lead_sfid'])
 			puts "Service call response is #{getResponse['success']}"
-			getResponse2 = SfRESTService.postData(''+payloadHash.to_json,"#{@testData['ServiceUrls'][1]['inboundLead']}",true)
+			getResponse2 = @objSFRest.postData(''+payloadHash.to_json,"#{@testData['ServiceUrls'][1]['inboundLead']}")
 			puts "\n"
 			puts "Checking number of open activities..."
 			puts Salesforce.getRecords(@salesforceBulk,'Task',"SELECT id FROM Task WHERE WhoId = '#{getResponse['lead_sfid']}'",nil).result.inspect
@@ -392,9 +393,9 @@ describe SfRESTService do
 			payloadHash = JSON.parse(@testRailUtility.getPayloadsFromSteps(@testRailUtility.getCase(728)['custom_steps_separated'])[0]['expected'])
 			payloadHash['body']['email'] = "test_Bond#{rand(900000)}@example.com"
 			payloadHash['body']['buildings_interested_uuids'][0] = Salesforce.getRecords(@salesforceBulk,"Building__c","SELECT UUID__c FROM Building__c WHERE id = '#{Salesforce.class_variable_get(:@@createdRecordsIds)['Building__c'][0]['Id']}'").result.records[0].fetch('UUID__c')
-			getResponse = SfRESTService.postData(''+payloadHash.to_json,"#{@testData['ServiceUrls'][1]['inboundLead']}",true)
+			getResponse = @objSFRest.postData(''+payloadHash.to_json,"#{@testData['ServiceUrls'][1]['inboundLead']}")
 			puts "\n"
-			sleep(@timeSettingMap['Sleep']['Environment']['Lightening'])
+			sleep(@timeSettingMap['Sleep']['Environment']['Lightening']['Max'])
 			puts "Checking service call response..."
 			expect(getResponse['success']).to be true
 			expect(getResponse['lead_sfid']).to_not eql nil
@@ -403,7 +404,7 @@ describe SfRESTService do
 			puts "\n"
 			payloadHash2 = JSON.parse(@testRailUtility.getPayloadsFromSteps(@testRailUtility.getCase(728)['custom_steps_separated'])[1]['expected'])
 			payloadHash2['body']['email'] = payloadHash['body']['email']
-			getResponse2 = SfRESTService.postData(''+payloadHash2.to_json,"#{@testData['ServiceUrls'][1]['inboundLead']}",true)
+			getResponse2 = @objSFRest.postData(''+payloadHash2.to_json,"#{@testData['ServiceUrls'][1]['inboundLead']}")
 			Salesforce.addRecordsToDelete('Lead',getResponse['lead_sfid'])
 			puts "Checking journey creation..."
 			createdJourney = Salesforce.getRecords(@salesforceBulk,"Journey__c","SELECT id FROM Journey__c WHERE email__c = '#{payloadHash['body']['email']}'",nil).result.records[0].fetch('Id')
