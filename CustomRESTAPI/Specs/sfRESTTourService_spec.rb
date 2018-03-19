@@ -62,7 +62,7 @@ describe SfRESTService do
       payloadHash['body']['tour_building_uuid'] = Salesforce.getRecords(@salesforceBulk,"Building__c","SELECT UUID__c FROM Building__c WHERE id = '#{Salesforce.createRecords(@salesforceBulk,"Building__c",@testData['Building'])[0]['Id']}'",nil).result.records[0].fetch('UUID__c')
       getResponse = @objSFRest.postData(''+payloadHash.to_json,"#{@testData['ServiceUrls'][0]['tour']}")
       puts "\n"
-      sleep(@timeSettingMap['Sleep']['Environment']['Classic'])
+      sleep(@timeSettingMap['Sleep']['Environment']['Lightening']['Max'])
       puts "Checking service call response..."
       expect(getResponse['success']).to be true
       expect(getResponse['result']).to_not eql nil
@@ -92,7 +92,7 @@ describe SfRESTService do
       payloadHash['body']['account_uuid'] = createdAccount.fetch('UUID__c')
       getResponse = @objSFRest.postData(''+payloadHash.to_json,"#{@testData['ServiceUrls'][0]['tour']}")
       puts "\n"
-      sleep(@timeSettingMap['Sleep']['Environment']['Classic'])
+      sleep(@timeSettingMap['Sleep']['Environment']['Lightening']['Max'])
       puts "Checking service call response..."
       expect(getResponse['success']).to be true
       expect(getResponse['result']).to_not eql nil
@@ -151,7 +151,7 @@ describe SfRESTService do
 
       getResponse = @objSFRest.postData(''+payloadHash.to_json,"#{@testData['ServiceUrls'][0]['tour']}",)
       puts "\n"
-      sleep(@timeSettingMap['Sleep']['Environment']['Classic'])
+      sleep(@timeSettingMap['Sleep']['Environment']['Lightening']['Max'])
       puts "Checking service call response..."
       expect(getResponse['success']).to be true
       expect(getResponse['result']).to_not eql nil
@@ -209,7 +209,7 @@ describe SfRESTService do
       payloadHash['body']['contact_uuid'] = createdContact.fetch('UUID__c')
       getResponse = @objSFRest.postData(''+payloadHash.to_json,"#{@testData['ServiceUrls'][0]['tour']}")
       puts "\n"
-      sleep(@timeSettingMap['Sleep']['Environment']['Classic'])
+      sleep(@timeSettingMap['Sleep']['Environment']['Lightening']['Max'])
       puts "Checking service call response..."
       expect(getResponse['success']).to be true
       expect(getResponse['result']).to_not eql nil
@@ -262,7 +262,7 @@ describe SfRESTService do
       payloadHash['body']['tour_building_uuid'] = Salesforce.getRecords(@salesforceBulk,"Building__c","SELECT UUID__c FROM Building__c WHERE name = 'LA-Santa Monica'",nil).result.records[0]
       getResponse = @objSFRest.postData(''+payloadHash.to_json,"#{@testData['ServiceUrls'][0]['tour']}")
       puts "\n"
-      sleep(@timeSettingMap['Sleep']['Environment']['Classic'])
+      sleep(@timeSettingMap['Sleep']['Environment']['Lightening']['Max'])
       puts "Checking service call response..."
       expect(getResponse['success']).to be true
       expect(getResponse['result']).to_not eql nil
@@ -320,7 +320,7 @@ describe SfRESTService do
 
       getResponse = @objSFRest.postData(''+payloadHash.to_json,"#{@testData['ServiceUrls'][0]['tour']}")
       puts "\n"
-      sleep(@timeSettingMap['Sleep']['Environment']['Classic'])
+      sleep(@timeSettingMap['Sleep']['Environment']['Lightening']['Max'])
       puts "Checking service call response..."
       expect(getResponse['success']).to be true
       expect(getResponse['result']).to_not eql nil
@@ -394,7 +394,7 @@ describe SfRESTService do
       payloadHash['body']['tour_building_uuid'] = Salesforce.getRecords(@salesforceBulk,"Building__c","SELECT UUID__c FROM Building__c WHERE name = 'LA-Santa Monica'",nil).result.records[0]
       getResponse = @objSFRest.postData(''+payloadHash.to_json,"#{@testData['ServiceUrls'][0]['tour']}",)
       puts "\n"
-      sleep(@timeSettingMap['Sleep']['Environment']['Classic'])
+      sleep(@timeSettingMap['Sleep']['Environment']['Lightening']['Max'])
       puts "Checking service call response..."
       expect(getResponse['success']).to be true
       expect(getResponse['result']).to_not eql nil
@@ -461,7 +461,7 @@ describe SfRESTService do
       payloadHash['body']['booked_by_contact_id'] = primaryMember[0]['Id']
       getResponse = @objSFRest.postData(''+payloadHash.to_json,"#{@testData['ServiceUrls'][0]['tour']}")
       puts "\n"
-      sleep(@timeSettingMap['Sleep']['Environment']['Classic'])
+      sleep(@timeSettingMap['Sleep']['Environment']['Lightening']['Max'])
       puts "Checking service call response..."
       expect(getResponse['success']).to be true
       expect(getResponse['result']).to_not eql nil
@@ -513,7 +513,7 @@ describe SfRESTService do
       payloadHash['body']['account_uuid'] = createdAccount.fetch('UUID__c')
       getResponse = @objSFRest.postData(''+payloadHash.to_json,"#{@testData['ServiceUrls'][0]['tour']}")
       puts "\n"
-      sleep(@timeSettingMap['Sleep']['Environment']['Classic'])
+      sleep(@timeSettingMap['Sleep']['Environment']['Lightening']['Max'])
       puts "Checking service call response..."
       expect(getResponse['success']).to be true
       expect(getResponse['result']).to_not eql nil
@@ -557,7 +557,7 @@ describe SfRESTService do
       payloadHash['body']['sf_journey_uuid'] = Salesforce.class_variable_get(:@@createdRecordsIds)['JourneyUUID'][0]['Id']
       getResponse = @objSFRest.postData(''+payloadHash.to_json,"#{@testData['ServiceUrls'][0]['tour']}")
       puts "\n"
-      sleep(@timeSettingMap['Sleep']['Environment']['Classic'])
+      sleep(@timeSettingMap['Sleep']['Environment']['Lightening']['Max'])
       puts "Checking service call response..."
       expect(getResponse['success']).to be true
       expect(getResponse['result']).to_not eql nil
@@ -595,7 +595,7 @@ describe SfRESTService do
       payloadHash['body']['original_tour_uuid'] = Salesforce.class_variable_get(:@@createdRecordsIds)['TourUUID'][0]['Id']
       getResponse = @objSFRest.postData(''+payloadHash.to_json,"#{@testData['ServiceUrls'][0]['tour']}")
       puts "\n"
-      sleep(@timeSettingMap['Sleep']['Environment']['Classic'])
+      sleep(@timeSettingMap['Sleep']['Environment']['Lightening']['Max'])
       puts "Checking service call response..."
       expect(getResponse['success']).to be true
       expect(getResponse['result']).to_not eql nil
