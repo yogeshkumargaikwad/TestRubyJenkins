@@ -79,6 +79,7 @@ if !ARGV.empty? then
     end
   end
   if !specs.empty? then
+    ARGV[1] = Salesforce.login(config['Staging']["WeWork System Administrator"]['username'],config['Staging']["WeWork System Administrator"]['password'],true)
     specs.uniq.each do |spec|
       #Run spec in multiple browsers
       if !spec.nil? then
@@ -86,7 +87,6 @@ if !ARGV.empty? then
           ENV['RUN_ID'] = mapSuitRunId[spec['path']]
         end
         config['Staging'].keys.each do |profile|
-          ARGV[1] = Salesforce.login(config['Staging']["#{profile}"]['username'],config['Staging']["#{profile}"]['password'],true)
           if spec['isBrowserDependent'] then
           specMap.fetch('browser')[0].split(" ").each do |browser|
             #ENV['BROWSER'] = browser
